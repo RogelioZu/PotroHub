@@ -31,7 +31,7 @@ El contexto actual en la Facultad de Ingeniería de la UAEMéx refleja un área 
 
 PotroPath se presentará como un Producto Mínimo Viable (MVP) sin fricción de entrada (sin sistema de registro de usuarios), enfocado en la entrega de valor inmediato. Incluye:
 
-- **Motor de Diagnóstico Situacional:** cuestionario de 25 preguntas (5 por área de especialización) basadas en escenarios prácticos de la industria, evaluando afinidad hacia Software, Hardware, Redes, Bases de Datos y Administración.
+- **Motor de Diagnóstico Situacional:** cuestionario de 50 preguntas (10 por área de especialización) basadas en escenarios prácticos de la industria, evaluando afinidad hacia Software, Hardware, Redes, Bases de Datos y Administración.
 - **Dashboard de Resultados y Ruta:** interfaz dinámica que, tras finalizar el test, muestra la rama de mayor compatibilidad, habilidades demandadas en el mercado laboral y materias afines de la facultad.
 - **Sección de Inmersión Universitaria (IEEE):** apartado dedicado a conectar al estudiante con la Rama Estudiantil IEEE UAEMéx, visibilizando los capítulos técnicos y eventos presenciales de la facultad.
 - **Módulo de Comunidad Segura:** integración con un servidor de Discord estructurado por canales de especialidad para fomentar el networking técnico y la formación de equipos, garantizando la privacidad de los datos personales.
@@ -56,6 +56,7 @@ Para la construcción del MVP se optó por un enfoque orientado a la velocidad d
 | UI / Frontend             | [React](https://react.dev/)                | ✅ Configurado    |
 | Build tool                | [Vite](https://vite.dev/)                  | ✅ Configurado    |
 | Estilos                   | [Tailwind CSS](https://tailwindcss.com/)   | ✅ Configurado    |
+| Enrutamiento               | [React Router](https://reactrouter.com/)   | ✅ Configurado    |
 | Estado global              | [Zustand](https://zustand.docs.pmnd.rs/)   | ✅ Configurado    |
 | Backend / DB analítica    | [Supabase](https://supabase.com/)          | ⏳ Pendiente      |
 
