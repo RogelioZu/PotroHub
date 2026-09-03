@@ -17,7 +17,7 @@ function VitralBackdrop({ scrimClassName = 'bg-ink/75' }) {
         <div className="vitral-accent h-full w-full" />
       ) : (
         <img
-          src="/images/vitral-biblioteca.jpg"
+          src="/images/vitral-biblioteca.png"
           alt=""
           className="h-full w-full object-cover"
           onError={() => setImageFailed(true)}

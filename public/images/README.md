@@ -1,8 +1,10 @@
 # Imágenes institucionales
 
-Coloca aquí la fotografía real del vitral de la biblioteca de la Facultad de
-Ingeniería (UAEMéx) con el nombre `vitral-biblioteca.jpg`.
+`vitral-biblioteca.png` es la fotografía real del vitral de la biblioteca de
+la Facultad de Ingeniería (UAEMéx): un panorámico muy ancho (~8.9:1) de los
+cuatro paneles de vidrio.
 
-`src/components/ui/VitralShowcase.jsx` la consume desde
-`/images/vitral-biblioteca.jpg`. Mientras el archivo no exista, el componente
-muestra un placeholder con el acento decorativo `vitral-accent`.
+La consumen `VitralBackdrop` (fondo de header/footer) y `VitralShowcase`
+(tarjeta del vitral en Inicio) desde `/images/vitral-biblioteca.png`. Si el
+archivo llegara a faltar, ambos componentes caen a un placeholder con el
+acento decorativo `vitral-accent` en vez de romper el layout.
