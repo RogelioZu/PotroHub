@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 
 const links = [
   { to: '/', label: 'Inicio', end: true },
@@ -10,22 +10,29 @@ const links = [
 
 function Navbar() {
   return (
-    <header className="border-b border-potro-gold/20 bg-potro-black/95 backdrop-blur">
-      <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-        <NavLink to="/" className="font-display text-xl font-semibold text-potro-white">
-          Potro<span className="text-gradient-gold">Path</span>
-        </NavLink>
-        <ul className="flex flex-wrap items-center gap-1 text-sm">
+    <header className="bg-paper">
+      <div className="border-b border-ink/10 py-4">
+        <Link to="/" className="flex flex-col items-center gap-1">
+          <span className="font-sans text-2xl font-bold text-ink">
+            Potro<span className="text-gold-dark">Path</span>
+          </span>
+          <span className="text-xs tracking-widest text-ink-soft uppercase">
+            Facultad de Ingeniería · UAEMéx
+          </span>
+        </Link>
+      </div>
+      <nav className="border-b border-ink/10">
+        <ul className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-8 px-6 py-3 text-sm">
           {links.map(({ to, label, end }) => (
             <li key={to}>
               <NavLink
                 to={to}
                 end={end}
                 className={({ isActive }) =>
-                  `rounded-full px-3 py-1.5 transition-colors ${
+                  `border-b-2 pb-1 font-medium transition-colors ${
                     isActive
-                      ? 'bg-potro-green text-potro-white'
-                      : 'text-potro-white-soft hover:text-potro-gold-light'
+                      ? 'border-gold text-green-mid'
+                      : 'border-transparent text-ink-soft hover:border-gold/50 hover:text-green-mid'
                   }`
                 }
               >
