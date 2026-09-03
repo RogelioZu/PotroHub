@@ -1,1 +1,64 @@
 @import "tailwindcss";
+
+@theme {
+  /* Paleta institucional inspirada en los vitrales de la Facultad de Ingeniería
+     (biblioteca UAEM): blanco, verde y oro sobre negro, sin el resto de
+     colores del vitral original. */
+  --color-potro-black: #0d0f0d;
+  --color-potro-black-soft: #16181a;
+  --color-potro-white: #faf9f4;
+  --color-potro-white-soft: #f0efe6;
+  --color-potro-green: #0b5d3b;
+  --color-potro-green-dark: #073b26;
+  --color-potro-green-light: #2f8f63;
+  --color-potro-gold: #c6a15b;
+  --color-potro-gold-light: #e2c384;
+  --color-potro-gold-dark: #8f7333;
+
+  --font-display: "Fraunces", "Georgia", serif;
+  --font-body: "Inter", "system-ui", sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-potro-black font-body text-potro-white antialiased;
+  }
+}
+
+@layer utilities {
+  /* Acento decorativo que evoca el mosaico de vitral (formas irregulares en
+     verde/oro/negro) sin reproducir el vitral real. El vitral fotográfico
+     tiene su propio espacio dedicado, ver src/components/ui/VitralShowcase.jsx */
+  .vitral-accent {
+    background-image:
+      conic-gradient(
+        from 45deg at 20% 30%,
+        var(--color-potro-green) 0deg,
+        var(--color-potro-green-dark) 90deg,
+        transparent 90deg
+      ),
+      conic-gradient(
+        from 200deg at 80% 70%,
+        var(--color-potro-gold) 0deg,
+        var(--color-potro-gold-dark) 100deg,
+        transparent 100deg
+      ),
+      radial-gradient(
+        circle at 50% 50%,
+        var(--color-potro-green-light) 0%,
+        transparent 60%
+      );
+    background-color: var(--color-potro-black);
+  }
+
+  .text-gradient-gold {
+    background: linear-gradient(
+      90deg,
+      var(--color-potro-gold-light),
+      var(--color-potro-gold)
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
