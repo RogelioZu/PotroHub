@@ -13,9 +13,13 @@ function Navbar() {
     <header className="relative overflow-hidden text-paper">
       <VitralBackdrop />
 
-      <div className="relative z-10">
-        <nav className="border-b border-paper/20">
-          <ul className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-8 px-6 py-3 text-sm">
+      <div className="relative z-10 mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 py-4">
+        <Link to="/" className="text-2xl font-bold text-paper">
+          Potro<span className="text-gold-light">Path</span>
+        </Link>
+
+        <nav>
+          <ul className="flex flex-wrap items-center gap-8 text-sm">
             {links.map(({ to, label, end }) => (
               <li key={to}>
                 <NavLink
@@ -35,17 +39,6 @@ function Navbar() {
             ))}
           </ul>
         </nav>
-
-        <div className="py-6 text-center">
-          <Link to="/" className="inline-flex flex-col items-center gap-1">
-            <span className="text-2xl font-bold text-paper">
-              Potro<span className="text-gold-light">Path</span>
-            </span>
-            <span className="text-xs tracking-widest text-paper/70 uppercase">
-              Facultad de Ingeniería · UAEMéx
-            </span>
-          </Link>
-        </div>
       </div>
     </header>
   )
