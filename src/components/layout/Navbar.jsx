@@ -11,10 +11,13 @@ const links = [
 function Navbar() {
   return (
     <header className="relative overflow-hidden text-paper">
-      <VitralBackdrop />
+      <VitralBackdrop scrimClassName="" />
 
-      <div className="relative z-10 mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 py-4">
-        <Link to="/" className="text-2xl font-bold text-paper">
+      <div className="relative z-10 mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 py-10 md:py-14">
+        <Link
+          to="/"
+          className="text-3xl font-bold text-paper [text-shadow:0_2px_10px_rgb(0_0_0/70%)] md:text-4xl"
+        >
           Potro<span className="text-gold-light">Path</span>
         </Link>
 
@@ -26,10 +29,10 @@ function Navbar() {
                   to={to}
                   end={end}
                   className={({ isActive }) =>
-                    `border-b-2 pb-1 font-medium transition-colors ${
+                    `border-b-2 pb-1 font-medium [text-shadow:0_1px_6px_rgb(0_0_0/75%)] transition-colors ${
                       isActive
                         ? 'border-gold text-gold-light'
-                        : 'border-transparent text-paper/80 hover:border-gold/60 hover:text-gold-light'
+                        : 'border-transparent text-paper hover:border-gold/60 hover:text-gold-light'
                     }`
                   }
                 >
