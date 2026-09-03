@@ -34,10 +34,10 @@ function Home() {
               Comenzar diagnóstico
             </Link>
             <Link
-              to="/ieee"
+              to="/comunidad"
               className="rounded-full bg-green-mid px-6 py-3 font-semibold text-paper shadow-sm transition-colors hover:bg-green"
             >
-              Conoce IEEE UAEMéx
+              Conoce la comunidad
             </Link>
           </div>
         </div>
