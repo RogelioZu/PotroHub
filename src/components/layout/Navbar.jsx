@@ -13,16 +13,16 @@ function Navbar() {
     <header className="relative overflow-hidden text-paper">
       <VitralBackdrop scrimClassName="" />
 
-      <div className="relative z-10 mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 py-10 md:py-14">
+      <div className="relative z-10 mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 py-10 md:py-10">
         <Link
           to="/"
-          className="text-3xl font-bold text-paper [text-shadow:0_2px_10px_rgb(0_0_0/70%)] md:text-4xl"
+          className="text-3xl font-bold text-paper [text-shadow:0_2px_10px_rgb(0_0_0/70%)] md:text-5xl"
         >
           Potro<span className="text-gold-light">Path</span>
         </Link>
 
         <nav>
-          <ul className="flex flex-wrap items-center gap-8 text-sm">
+          <ul className="flex flex-wrap items-center gap-8 text-lg md:text-xl font-semibold">
             {links.map(({ to, label, end }) => (
               <li key={to}>
                 <NavLink
