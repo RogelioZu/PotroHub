@@ -65,7 +65,7 @@ function Results() {
         ))}
       </div>
 
-      <div className="mt-12 grid gap-6 sm:grid-cols-3">
+      <div className="mt-12 grid gap-6 sm:grid-cols-2">
         <div className="rounded-xl bg-paper-alt p-5">
           <h2 className="text-lg font-bold text-green-mid">Habilidades demandadas</h2>
           <ul className="mt-3 space-y-1 text-sm text-ink-soft">
@@ -79,14 +79,6 @@ function Results() {
           <ul className="mt-3 space-y-1 text-sm text-ink-soft">
             {topRoadmap.certifications.map((cert) => (
               <li key={cert}>· {cert}</li>
-            ))}
-          </ul>
-        </div>
-        <div className="rounded-xl bg-paper-alt p-5">
-          <h2 className="text-lg font-bold text-green-mid">Materias relacionadas</h2>
-          <ul className="mt-3 space-y-1 text-sm text-ink-soft">
-            {topRoadmap.subjects.map((subject) => (
-              <li key={subject}>· {subject}</li>
             ))}
           </ul>
         </div>

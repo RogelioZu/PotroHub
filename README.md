@@ -1,6 +1,6 @@
 # PotroPath
 
-Plataforma interactiva diseñada para acelerar el desarrollo profesional de los estudiantes de Ingeniería en Computación. Mediante un cuestionario de perfilamiento vocacional, el sistema identifica la afinidad del alumno con las áreas tecnológicas de mayor demanda actual. A partir de este diagnóstico, se genera una ruta de crecimiento personalizada que conecta la academia con la industria: muestra las exigencias del mercado laboral para ese perfil, certificaciones clave, recursos recomendados por la comunidad y las materias del plan de estudios relacionadas al área de interés. Finalmente, la plataforma fomenta una cultura de ingeniería activa integrando a los estudiantes en comunidades moderadas por mentores, impulsando la colaboración en proyectos, la participación en hackathones y la transformación de un interés genuino en perfiles de egreso altamente competitivos.
+Plataforma interactiva diseñada para acelerar el desarrollo profesional de los estudiantes de Ingeniería en Computación. Mediante un cuestionario de perfilamiento vocacional, el sistema identifica la afinidad del alumno con las áreas tecnológicas de mayor demanda actual. A partir de este diagnóstico, se genera una ruta de crecimiento personalizada que conecta la academia con la industria: muestra las exigencias del mercado laboral para ese perfil, certificaciones clave y recursos recomendados por la comunidad. Finalmente, la plataforma fomenta una cultura de ingeniería activa integrando a los estudiantes en comunidades moderadas por mentores, impulsando la colaboración en proyectos, la participación en hackathones y la transformación de un interés genuino en perfiles de egreso altamente competitivos.
 
 ## Datos generales
 
@@ -31,14 +31,14 @@ El contexto actual en la Facultad de Ingeniería de la UAEMéx refleja un área 
 
 PotroPath se presentará como un Producto Mínimo Viable (MVP) sin fricción de entrada (sin sistema de registro de usuarios), enfocado en la entrega de valor inmediato. Incluye:
 
-- **Motor de Diagnóstico Situacional:** cuestionario de 50 preguntas (10 por área de especialización) basadas en escenarios prácticos de la industria, evaluando afinidad hacia Software, Hardware, Redes, Bases de Datos y Administración.
-- **Dashboard de Resultados y Ruta:** interfaz dinámica que, tras finalizar el test, muestra la rama de mayor compatibilidad, habilidades demandadas en el mercado laboral y materias afines de la facultad.
+- **Motor de Diagnóstico Situacional:** cuestionario de 50 preguntas (10 por área de especialización) basadas en escenarios prácticos de la industria, evaluando afinidad hacia Inteligencia Artificial, Ciberseguridad, Cloud Computing, Ciencia de Datos y Desarrollo de Software.
+- **Dashboard de Resultados y Ruta:** interfaz dinámica que, tras finalizar el test, muestra la rama de mayor compatibilidad, habilidades demandadas en el mercado laboral y certificaciones clave para ese perfil.
 - **Sección de Inmersión Universitaria (IEEE):** apartado dedicado a conectar al estudiante con la Rama Estudiantil IEEE UAEMéx, visibilizando los capítulos técnicos y eventos presenciales de la facultad.
 - **Módulo de Comunidad Segura:** integración con un servidor de Discord estructurado por canales de especialidad para fomentar el networking técnico y la formación de equipos, garantizando la privacidad de los datos personales.
 
 ### 3. Propuesta de valor
 
-A diferencia de los test vocacionales tradicionales que se enfocan en elegir una carrera universitaria, PotroPath es una herramienta de micro-orientación especializada dentro de la Ingeniería en Computación. Su valor radica en la hiper-personalización local: no solo dice "qué estudiar", sino que vincula el resultado directamente con el plan de estudios específico de la UAEMéx y fomenta la acción inmediata mediante la integración a comunidades activas de desarrollo.
+A diferencia de los test vocacionales tradicionales que se enfocan en elegir una carrera universitaria, PotroPath es una herramienta de micro-orientación especializada dentro de la Ingeniería en Computación. Su valor radica en la hiper-personalización local: no solo dice "qué estudiar", sino que vincula el resultado directamente con las habilidades y certificaciones que pide la industria hoy, y fomenta la acción inmediata mediante la integración a comunidades activas de desarrollo.
 
 ### 4. Arquitectura y stack tecnológico
 

@@ -1,13 +1,6 @@
 import { Link } from 'react-router-dom'
 import VitralShowcase from '../components/ui/VitralShowcase'
-
-const areas = [
-  { name: 'Software', description: 'Desarrollo de aplicaciones, ingeniería de software y arquitectura de sistemas.', tone: 'from-green to-green-mid' },
-  { name: 'Hardware', description: 'Diseño de sistemas embebidos, electrónica digital y prototipado.', tone: 'from-gold-dark to-gold' },
-  { name: 'Redes', description: 'Infraestructura, telecomunicaciones y administración de redes.', tone: 'from-green-mid to-green' },
-  { name: 'Bases de datos', description: 'Modelado, administración y explotación de datos.', tone: 'from-gold to-gold-dark' },
-  { name: 'Administración TI', description: 'Gestión de proyectos, procesos e infraestructura tecnológica.', tone: 'from-green to-gold-dark' },
-]
+import { AREAS } from '../data/areas'
 
 function Home() {
   return (
@@ -23,8 +16,8 @@ function Home() {
           </h1>
           <p className="mt-5 text-ink-soft">
             Un diagnóstico de 50 preguntas basadas en escenarios reales de la industria identifica tu afinidad
-            hacia Software, Hardware, Redes, Bases de Datos o Administración, y te conecta con materias,
-            certificaciones y comunidades para avanzar de inmediato.
+            hacia Inteligencia Artificial, Ciberseguridad, Cloud Computing, Ciencia de Datos o Desarrollo de
+            Software, y te conecta con habilidades, certificaciones y comunidades para avanzar de inmediato.
           </p>
           <div className="mt-8 flex flex-wrap gap-4">
             <Link
@@ -53,8 +46,8 @@ function Home() {
             El diagnóstico evalúa tu afinidad con cada una de estas cinco áreas.
           </p>
           <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
-            {areas.map((area) => (
-              <div key={area.name} className="overflow-hidden rounded-xl bg-paper shadow-sm shadow-ink/5">
+            {AREAS.map((area) => (
+              <div key={area.id} className="overflow-hidden rounded-xl bg-paper shadow-sm shadow-ink/5">
                 <div className={`relative aspect-video bg-linear-to-br ${area.tone}`}>
                   <span className="absolute bottom-3 left-3 rounded-md bg-ink/70 px-3 py-1.5 text-sm font-medium text-paper">
                     {area.name}
