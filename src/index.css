@@ -94,3 +94,55 @@
     transform-origin: left;
   }
 }
+
+@layer components {
+  /**
+   * Escala tipográfica y ritmo compartidos. Antes de esto cada página fijaba
+   * su propio tamaño de encabezado a mano y el sitio se sentía plano: un
+   * `<h1>` de 4xl aquí, uno de 3xl allá, sin motivo. Estas clases son el
+   * único lugar donde se decide "qué tan grande es un encabezado de página",
+   * y una página nunca debe pisar estos valores con un tamaño suelto.
+   */
+  .eyebrow {
+    @apply text-sm font-semibold tracking-widest text-gold-dark uppercase;
+  }
+  /** Titular de página: el momento de mayor peso visual (hero, resultado, portada de sección). */
+  .h1 {
+    @apply text-4xl leading-tight font-bold text-ink md:text-5xl;
+  }
+  /** Encabezado de sección dentro de una página. */
+  .h2 {
+    @apply text-2xl font-bold text-ink;
+  }
+  /** Título de tarjeta o bloque; el color lo decide quien lo usa. */
+  .h3 {
+    @apply text-lg font-bold;
+  }
+  /** Párrafo de entrada bajo un `.h1`: un paso arriba del cuerpo normal. */
+  .lead {
+    @apply text-lg text-ink-soft;
+  }
+
+  /** Ritmo vertical de una sección de página completa (no de estados vacíos, que son más generosos a propósito). */
+  .section-py {
+    @apply py-16 md:py-24;
+  }
+
+  /**
+   * Botones de decisión (CTAs de cambio de vista: hero, resultados,
+   * comunidad). Los controles compactos del cuestionario son otro contexto
+   * — aparecen 50 veces por sesión — y se quedan fuera a propósito.
+   */
+  .btn-gold {
+    @apply inline-block rounded-full bg-gold px-6 py-3 font-semibold text-ink shadow-sm transition-colors hover:bg-gold-dark hover:text-paper;
+  }
+  .btn-green {
+    @apply inline-block rounded-full bg-green-mid px-6 py-3 font-semibold text-paper shadow-sm transition-colors hover:bg-green;
+  }
+  .btn-outline {
+    @apply inline-block rounded-full border border-gold/50 px-6 py-3 font-semibold text-ink-soft transition-colors hover:border-gold hover:text-gold-dark;
+  }
+  .btn-disabled {
+    @apply inline-block cursor-not-allowed rounded-full bg-paper-alt px-6 py-3 font-semibold text-ink-soft/60;
+  }
+}

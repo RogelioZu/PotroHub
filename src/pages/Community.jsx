@@ -24,12 +24,10 @@ const moreCommunity = [
 
 function Community() {
   return (
-    <section className="mx-auto max-w-6xl px-6 py-16">
-      <p className="text-sm font-semibold tracking-widest text-gold-dark uppercase">
-        Comunidad universitaria
-      </p>
-      <h1 className="mt-2 text-4xl font-bold text-ink">Comunidad Facultad de Ingeniería</h1>
-      <p className="mt-4 max-w-2xl text-ink-soft">
+    <section className="section-py mx-auto max-w-6xl px-6">
+      <p className="eyebrow">Comunidad universitaria</p>
+      <h1 className="mt-2 h1">Comunidad Facultad de Ingeniería</h1>
+      <p className="mt-4 max-w-2xl lead">
         El punto de encuentro entre el servidor de Discord de PotroPath, la Rama Estudiantil IEEE
         UAEMéx y, poco a poco, el resto de espacios estudiantiles de la facultad: un solo lugar para
         conectar, participar y formar equipo.
@@ -37,7 +35,7 @@ function Community() {
 
       {/* Discord */}
       <SectionDivider className="mt-14">
-        <h2 className="shrink-0 text-2xl font-bold text-ink">Servidor de Discord</h2>
+        <h2 className="shrink-0 h2">Servidor de Discord</h2>
       </SectionDivider>
       <p className="mt-4 max-w-2xl text-ink-soft">
         Un espacio moderado, organizado por canales de especialidad, para conectar con otros
@@ -47,7 +45,7 @@ function Community() {
       <Reveal className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         {AREAS.map((area) => (
           <div key={area.id} className="rounded-xl bg-paper-alt p-5">
-            <h3 className="font-bold text-green-mid">#{area.id}</h3>
+            <h3 className="h3 text-green-mid">#{area.id}</h3>
             <p className="mt-2 text-sm text-ink-soft">{area.description}</p>
           </div>
         ))}
@@ -61,20 +59,11 @@ function Community() {
       </div>
       <div className="mt-6">
         {DISCORD_INVITE_URL ? (
-          <a
-            href={DISCORD_INVITE_URL}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-block rounded-full bg-green-mid px-6 py-3 font-semibold text-paper hover:bg-green"
-          >
+          <a href={DISCORD_INVITE_URL} target="_blank" rel="noreferrer" className="btn-green">
             Unirme al servidor
           </a>
         ) : (
-          <button
-            type="button"
-            disabled
-            className="inline-block rounded-full bg-paper-alt px-6 py-3 font-semibold text-ink-soft/60"
-          >
+          <button type="button" disabled className="btn-disabled">
             Enlace de invitación próximamente
           </button>
         )}
@@ -82,7 +71,7 @@ function Community() {
 
       {/* IEEE */}
       <SectionDivider className="mt-16">
-        <h2 className="shrink-0 text-2xl font-bold text-ink">Rama Estudiantil IEEE UAEMéx</h2>
+        <h2 className="shrink-0 h2">Rama Estudiantil IEEE UAEMéx</h2>
       </SectionDivider>
       <p className="mt-4 max-w-2xl text-ink-soft">
         Conecta con capítulos técnicos, eventos y una red profesional internacional a través de sus
@@ -91,7 +80,7 @@ function Community() {
       <Reveal className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {chapters.map((chapter) => (
           <div key={chapter.name} className="rounded-xl bg-paper-alt p-5">
-            <h3 className="text-lg font-bold text-green-mid">{chapter.name}</h3>
+            <h3 className="h3 text-green-mid">{chapter.name}</h3>
             <p className="mt-2 text-sm text-ink-soft">{chapter.focus}</p>
           </div>
         ))}
@@ -115,7 +104,7 @@ function Community() {
 
       {/* Más comunidad */}
       <SectionDivider className="mt-16">
-        <h2 className="shrink-0 text-2xl font-bold text-ink">Más comunidad universitaria</h2>
+        <h2 className="shrink-0 h2">Más comunidad universitaria</h2>
       </SectionDivider>
       <p className="mt-4 max-w-2xl text-ink-soft">
         Espacio reservado para seguir integrando la vida estudiantil de la facultad: sociedad de
@@ -124,7 +113,7 @@ function Community() {
       <Reveal className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {moreCommunity.map((item) => (
           <div key={item.name} className="rounded-xl border border-dashed border-ink/15 p-5">
-            <h3 className="font-bold text-ink">{item.name}</h3>
+            <h3 className="h3 text-ink">{item.name}</h3>
             <p className="mt-2 text-sm text-ink-soft">{item.description}</p>
             <p className="mt-3 text-xs font-medium text-gold-dark uppercase">Próximamente</p>
           </div>

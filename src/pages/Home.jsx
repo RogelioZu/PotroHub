@@ -116,38 +116,29 @@ function Home() {
     <>
       <section
         ref={hero}
-        className="mx-auto grid max-w-6xl gap-10 px-6 py-16 md:grid-cols-2 md:items-center md:py-24"
+        className="section-py mx-auto grid max-w-6xl gap-10 px-6 md:grid-cols-2 md:items-center"
       >
         <div>
-          <p
-            data-hero-eyebrow
-            className="text-sm font-semibold tracking-widest text-gold-dark uppercase"
-          >
+          <p data-hero-eyebrow className="eyebrow">
             Facultad de Ingeniería · UAEMéx
           </p>
-          <h1 ref={heading} className="mt-3 text-4xl leading-tight font-bold text-ink md:text-5xl">
+          <h1 ref={heading} className="mt-3 h1">
             Encuentra tu{' '}
             <span data-sweep className="text-sweep-gold">
               ruta
             </span>{' '}
             dentro de la Ingeniería en Computación
           </h1>
-          <p data-hero-body className="mt-5 text-ink-soft">
+          <p data-hero-body className="mt-5 lead">
             Un diagnóstico de 50 preguntas basadas en escenarios reales de la industria identifica tu afinidad
             hacia Inteligencia Artificial, Ciberseguridad, Cloud Computing, Ciencia de Datos o Desarrollo de
             Software, y te conecta con habilidades, certificaciones y comunidades para avanzar de inmediato.
           </p>
           <div data-hero-cta className="mt-8 flex flex-wrap gap-4">
-            <Link
-              to="/quiz"
-              className="rounded-full bg-gold px-6 py-3 font-semibold text-ink shadow-sm transition-colors hover:bg-gold-dark hover:text-paper"
-            >
+            <Link to="/quiz" className="btn-gold">
               Comenzar diagnóstico
             </Link>
-            <Link
-              to="/comunidad"
-              className="rounded-full bg-green-mid px-6 py-3 font-semibold text-paper shadow-sm transition-colors hover:bg-green"
-            >
+            <Link to="/comunidad" className="btn-green">
               Conoce la comunidad
             </Link>
           </div>
@@ -155,10 +146,10 @@ function Home() {
         <VitralShowcase />
       </section>
 
-      <section className="border-t border-ink/5 bg-paper-alt py-16">
+      <section className="section-py border-t border-ink/5 bg-paper-alt">
         <div className="mx-auto max-w-6xl px-6">
           <SectionDivider>
-            <h2 className="shrink-0 text-2xl font-bold text-ink">Áreas de especialización</h2>
+            <h2 className="shrink-0 h2">Áreas de especialización</h2>
           </SectionDivider>
           <p className="mt-4 text-ink-soft">
             El diagnóstico evalúa tu afinidad con cada una de estas cinco áreas.

@@ -128,7 +128,7 @@ function Quiz() {
   )
 
   return (
-    <section ref={root} className="mx-auto max-w-2xl px-6 py-16">
+    <section ref={root} className="section-py mx-auto max-w-2xl px-6">
       <div className="mb-8">
         <div className="flex items-center justify-between text-xs text-ink-soft">
           <span>
@@ -146,7 +146,7 @@ function Quiz() {
       </div>
 
       <div ref={panel}>
-        <h1 className="text-2xl font-bold text-ink">{question.prompt}</h1>
+        <h1 className="h2">{question.prompt}</h1>
 
         <div className="mt-8 flex flex-col gap-2">
           {SCALE.map(({ value, label }) => (

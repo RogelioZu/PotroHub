@@ -15,10 +15,7 @@ function EmptyState() {
         Responde el diagnóstico de 50 preguntas para descubrir tu ruta de crecimiento dentro de la
         Ingeniería en Computación.
       </p>
-      <Link
-        to="/quiz"
-        className="rounded-full bg-green-mid px-6 py-3 font-semibold text-paper hover:bg-green"
-      >
+      <Link to="/quiz" className="btn-green">
         Ir al diagnóstico
       </Link>
     </section>
@@ -139,7 +136,7 @@ function ResultsView({ results, onRetake }) {
   )
 
   return (
-    <section ref={root} className="relative mx-auto max-w-4xl px-6 py-16">
+    <section ref={root} className="section-py relative mx-auto max-w-4xl px-6">
       <img
         data-mascot
         src="/images/potro-mascota.png"
@@ -148,16 +145,16 @@ function ResultsView({ results, onRetake }) {
         className="pointer-events-none absolute top-12 right-6 hidden h-24 w-auto rounded-xl bg-paper p-1.5 shadow-lg ring-1 ring-ink/10 md:block"
       />
 
-      <p data-eyebrow className="text-sm font-semibold tracking-widest text-gold-dark uppercase">
+      <p data-eyebrow className="eyebrow">
         Tu resultado
       </p>
-      <h1 data-heading className="mt-2 text-4xl font-bold text-ink">
+      <h1 data-heading className="mt-2 h1">
         Tu mayor afinidad es{' '}
         <span data-sweep className="text-sweep-gold">
           {topArea.name}
         </span>
       </h1>
-      <p data-description className="mt-3 text-ink-soft">
+      <p data-description className="mt-3 lead">
         {topArea.description}
       </p>
 
@@ -183,7 +180,7 @@ function ResultsView({ results, onRetake }) {
 
       <div className="mt-12 grid gap-6 sm:grid-cols-2">
         <div data-card className="rounded-xl bg-paper-alt p-5">
-          <h2 className="text-lg font-bold text-green-mid">Habilidades demandadas</h2>
+          <h2 className="h3 text-green-mid">Habilidades demandadas</h2>
           <ul className="mt-3 space-y-1 text-sm text-ink-soft">
             {topRoadmap.skills.map((skill) => (
               <li key={skill}>· {skill}</li>
@@ -191,7 +188,7 @@ function ResultsView({ results, onRetake }) {
           </ul>
         </div>
         <div data-card className="rounded-xl bg-paper-alt p-5">
-          <h2 className="text-lg font-bold text-green-mid">Certificaciones clave</h2>
+          <h2 className="h3 text-green-mid">Certificaciones clave</h2>
           <ul className="mt-3 space-y-1 text-sm text-ink-soft">
             {topRoadmap.certifications.map((cert) => (
               <li key={cert}>· {cert}</li>
@@ -201,17 +198,10 @@ function ResultsView({ results, onRetake }) {
       </div>
 
       <div data-cta className="mt-12 flex flex-wrap gap-4">
-        <Link
-          to="/comunidad"
-          className="rounded-full bg-green-mid px-6 py-3 font-semibold text-paper hover:bg-green"
-        >
+        <Link to="/comunidad" className="btn-green">
           Unirme a la comunidad
         </Link>
-        <button
-          type="button"
-          onClick={onRetake}
-          className="rounded-full border border-gold/50 px-6 py-3 font-semibold text-ink-soft hover:border-gold hover:text-gold-dark"
-        >
+        <button type="button" onClick={onRetake} className="btn-outline">
           Repetir diagnóstico
         </button>
       </div>
