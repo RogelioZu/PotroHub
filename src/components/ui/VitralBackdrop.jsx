@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { refreshScrollTriggers } from '../../lib/gsap'
 
 /**
  * Fondo fotográfico del vitral de la biblioteca de la Facultad de
@@ -22,6 +23,10 @@ function VitralBackdrop({ scrimClassName = 'bg-ink/75' }) {
           alt=""
           className="h-full w-full object-cover"
           onError={() => setImageFailed(true)}
+          // El vitral llega después del primer render y cambia el alto del
+          // header y del footer; sin esto los disparadores de scroll quedan
+          // midiendo una página que ya no existe.
+          onLoad={refreshScrollTriggers}
         />
       )}
       <div className={`absolute inset-0 ${scrimClassName}`} />

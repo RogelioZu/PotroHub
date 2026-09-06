@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import Reveal from '../motion/Reveal'
 import VitralBackdrop from '../ui/VitralBackdrop'
 
 const links = [
@@ -12,7 +13,7 @@ function Footer() {
     <footer className="relative overflow-hidden border-t-2 border-gold text-paper [text-shadow:0_1px_6px_rgb(0_0_0/75%)]">
       <VitralBackdrop scrimClassName="" />
 
-      <div className="relative z-10 mx-auto grid max-w-6xl gap-10 px-6 py-10 sm:grid-cols-3">
+      <Reveal className="relative z-10 mx-auto grid max-w-6xl gap-10 px-6 py-10 sm:grid-cols-3">
         <div>
           <p className="text-lg font-bold text-paper">
             Potro<span className="text-gold-light">Path</span>
@@ -40,7 +41,7 @@ function Footer() {
             Facultad de Ingeniería.
           </p>
         </div>
-      </div>
+      </Reveal>
     </footer>
   )
 }

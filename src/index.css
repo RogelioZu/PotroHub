@@ -49,20 +49,48 @@
     background-color: var(--color-green);
   }
 
-  .text-gradient-gold {
-    background: linear-gradient(90deg, var(--color-gold), var(--color-gold-dark));
+  /* Palabra clave en oro, preparada para el barrido de luz del vitral: el
+     degradado es tres veces más ancho que el texto y esconde una banda clara
+     en el centro. En reposo (`background-position: 0% 0`) sólo se ve el tercio
+     izquierdo, que lee como un degradado oro → oro oscuro; GSAP anima la
+     posición desde `100% 0` y esa banda cruza la palabra una sola vez.
+     Ver src/pages/Home.jsx y src/pages/Results.jsx */
+  .text-sweep-gold {
+    background-image: linear-gradient(
+      100deg,
+      var(--color-gold) 0%,
+      var(--color-gold-dark) 33%,
+      var(--color-gold-light) 50%,
+      var(--color-gold-dark) 67%,
+      var(--color-gold) 100%
+    );
+    background-repeat: no-repeat;
+    background-size: 300% 100%;
+    background-position: 0% 0;
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
 
-  /* Separador de sección: línea dorada delgada, como en uaemex.mx. */
+  /* Separador de sección: línea dorada delgada, como en uaemex.mx. Las líneas
+     son pseudoelementos y no se pueden animar directamente, así que heredan
+     `--divider-scale` del contenedor y GSAP anima esa variable para que se
+     dibujen hacia afuera desde el encabezado.
+     Ver src/components/motion/SectionDivider.jsx */
   .section-divider {
     @apply flex items-center gap-4 text-gold-dark;
+    --divider-scale: 1;
   }
   .section-divider::before,
   .section-divider::after {
     content: "";
     @apply h-px flex-1 bg-gold/40;
+    transform: scaleX(var(--divider-scale));
+  }
+  .section-divider::before {
+    transform-origin: right;
+  }
+  .section-divider::after {
+    transform-origin: left;
   }
 }

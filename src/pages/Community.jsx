@@ -1,3 +1,5 @@
+import Reveal from '../components/motion/Reveal'
+import SectionDivider from '../components/motion/SectionDivider'
 import { AREAS } from '../data/areas'
 
 const DISCORD_INVITE_URL = null // TODO: colocar el enlace de invitación real del servidor
@@ -34,22 +36,22 @@ function Community() {
       </p>
 
       {/* Discord */}
-      <div className="section-divider mt-14">
+      <SectionDivider className="mt-14">
         <h2 className="shrink-0 text-2xl font-bold text-ink">Servidor de Discord</h2>
-      </div>
+      </SectionDivider>
       <p className="mt-4 max-w-2xl text-ink-soft">
         Un espacio moderado, organizado por canales de especialidad, para conectar con otros
         estudiantes, formar equipos para hackathones y proyectos, y resolver dudas técnicas. No se
         solicitan datos personales para participar.
       </p>
-      <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+      <Reveal className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         {AREAS.map((area) => (
           <div key={area.id} className="rounded-xl bg-paper-alt p-5">
             <h3 className="font-bold text-green-mid">#{area.id}</h3>
             <p className="mt-2 text-sm text-ink-soft">{area.description}</p>
           </div>
         ))}
-      </div>
+      </Reveal>
       <div className="mt-6 rounded-xl bg-green-soft p-6">
         <h3 className="text-lg font-bold text-green">Moderación y privacidad</h3>
         <p className="mt-2 text-sm text-ink-soft">
@@ -79,21 +81,21 @@ function Community() {
       </div>
 
       {/* IEEE */}
-      <div className="section-divider mt-16">
+      <SectionDivider className="mt-16">
         <h2 className="shrink-0 text-2xl font-bold text-ink">Rama Estudiantil IEEE UAEMéx</h2>
-      </div>
+      </SectionDivider>
       <p className="mt-4 max-w-2xl text-ink-soft">
         Conecta con capítulos técnicos, eventos y una red profesional internacional a través de sus
         actividades presenciales dentro de la facultad.
       </p>
-      <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <Reveal className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {chapters.map((chapter) => (
           <div key={chapter.name} className="rounded-xl bg-paper-alt p-5">
             <h3 className="text-lg font-bold text-green-mid">{chapter.name}</h3>
             <p className="mt-2 text-sm text-ink-soft">{chapter.focus}</p>
           </div>
         ))}
-      </div>
+      </Reveal>
       <p className="mt-3 text-xs text-ink-soft/70">
         Lista de referencia — pendiente de confirmar contra los capítulos activos actuales de la rama.
       </p>
@@ -112,14 +114,14 @@ function Community() {
       )}
 
       {/* Más comunidad */}
-      <div className="section-divider mt-16">
+      <SectionDivider className="mt-16">
         <h2 className="shrink-0 text-2xl font-bold text-ink">Más comunidad universitaria</h2>
-      </div>
+      </SectionDivider>
       <p className="mt-4 max-w-2xl text-ink-soft">
         Espacio reservado para seguir integrando la vida estudiantil de la facultad: sociedad de
         alumnos, clubes, voluntariado, movilidad y más.
       </p>
-      <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <Reveal className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {moreCommunity.map((item) => (
           <div key={item.name} className="rounded-xl border border-dashed border-ink/15 p-5">
             <h3 className="font-bold text-ink">{item.name}</h3>
@@ -127,7 +129,7 @@ function Community() {
             <p className="mt-3 text-xs font-medium text-gold-dark uppercase">Próximamente</p>
           </div>
         ))}
-      </div>
+      </Reveal>
     </section>
   )
 }
