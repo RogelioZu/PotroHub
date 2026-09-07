@@ -35,7 +35,7 @@ function Community() {
 
       {/* Discord */}
       <SectionDivider className="mt-14">
-        <h2 className="shrink-0 h2">Servidor de Discord</h2>
+        <h2 className="min-w-0 h2 sm:shrink-0">Servidor de Discord</h2>
       </SectionDivider>
       <p className="mt-4 max-w-2xl text-ink-soft">
         Un espacio moderado, organizado por canales de especialidad, para conectar con otros
@@ -71,7 +71,7 @@ function Community() {
 
       {/* IEEE */}
       <SectionDivider className="mt-16">
-        <h2 className="shrink-0 h2">Rama Estudiantil IEEE UAEMéx</h2>
+        <h2 className="min-w-0 h2 sm:shrink-0">Rama Estudiantil IEEE UAEMéx</h2>
       </SectionDivider>
       <p className="mt-4 max-w-2xl text-ink-soft">
         Conecta con capítulos técnicos, eventos y una red profesional internacional a través de sus
@@ -104,7 +104,7 @@ function Community() {
 
       {/* Más comunidad */}
       <SectionDivider className="mt-16">
-        <h2 className="shrink-0 h2">Más comunidad universitaria</h2>
+        <h2 className="min-w-0 h2 sm:shrink-0">Más comunidad universitaria</h2>
       </SectionDivider>
       <p className="mt-4 max-w-2xl text-ink-soft">
         Espacio reservado para seguir integrando la vida estudiantil de la facultad: sociedad de

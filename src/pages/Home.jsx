@@ -149,7 +149,7 @@ function Home() {
       <section className="section-py border-t border-ink/5 bg-paper-alt">
         <div className="mx-auto max-w-6xl px-6">
           <SectionDivider>
-            <h2 className="shrink-0 h2">Áreas de especialización</h2>
+            <h2 className="min-w-0 h2 sm:shrink-0">Áreas de especialización</h2>
           </SectionDivider>
           <p className="mt-4 text-ink-soft">
             El diagnóstico evalúa tu afinidad con cada una de estas cinco áreas.
