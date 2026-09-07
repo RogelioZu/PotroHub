@@ -60,7 +60,7 @@ function Navbar() {
     <header className="relative overflow-hidden text-paper">
       <VitralBackdrop scrimClassName="" />
 
-      <div className="relative z-10 mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 py-10 md:py-10">
+      <div className="relative z-10 mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 py-6 sm:py-8 md:py-10">
         <Link
           to="/"
           className="text-3xl font-bold text-paper [text-shadow:0_2px_10px_rgb(0_0_0/70%)] md:text-5xl"
@@ -74,7 +74,7 @@ function Navbar() {
             aria-hidden="true"
             className="pointer-events-none absolute top-0 left-0 h-0.5 w-[100px] origin-left rounded-full bg-gold opacity-0 shadow-[0_1px_6px_rgb(0_0_0/60%)]"
           />
-          <ul className="flex flex-wrap items-center gap-8 text-lg font-semibold md:text-xl">
+          <ul className="flex flex-wrap items-center gap-x-6 gap-y-2 text-lg font-semibold sm:gap-8 md:text-xl">
             {links.map(({ to, label, end }) => (
               <li key={to}>
                 <NavLink
