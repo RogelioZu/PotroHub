@@ -1,22 +1,23 @@
 @import "tailwindcss";
 
 @theme {
-  /* Paleta institucional clara, inspirada en el sitio de la UAEMéx
-     (fondo blanco, verde y oro como acentos, tipografía sans limpia),
-     con el vitral de la Facultad de Ingeniería reservado como pieza
-     fotográfica dentro de este lenguaje visual. */
+  /* Paleta oficial de la UAEMéx (manual de identidad de la Administración
+     Universitaria): dos colores principales y tres secundarios. --color-ink,
+     --color-ink-soft, --color-paper, --color-green-soft y --color-gold-light
+     no vienen del manual — son tintes/textos derivados de esos cinco para
+     tener superficies y texto secundario, y deben seguir siendo variaciones
+     de la paleta oficial, nunca colores sueltos. */
+  --color-green-mid: #526855; /* Principal */
+  --color-gold: #ca9e52; /* Principal */
+  --color-paper-alt: #f2f2f2; /* Secundaria */
+  --color-green: #384033; /* Secundaria */
+  --color-gold-dark: #a15c17; /* Secundaria */
+
   --color-ink: #252525;
   --color-ink-soft: #5c5c5c;
   --color-paper: #ffffff;
-  --color-paper-alt: #f4f3ee;
-
-  --color-green: #344435;
-  --color-green-mid: #526855;
-  --color-green-soft: #e7ece7;
-
-  --color-gold: #c28e3a;
-  --color-gold-light: #e3b768;
-  --color-gold-dark: #8f6a26;
+  --color-green-soft: #e8ece7;
+  --color-gold-light: #e3c48a;
 
   --font-sans: "DM Sans", "Inter", "system-ui", sans-serif;
 }
