@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -11,6 +11,37 @@
       rel="stylesheet"
     />
     <title>PotroPath</title>
+
+    <!--
+      Tarjeta de vista previa para el enlace compartido en frío (WhatsApp,
+      Discord): una de las tres escenas de llegada reales del producto. El
+      `<title>` de arriba es sólo el estado inicial — cada vista fija el suyo
+      con `useDocumentTitle` (src/lib/useDocumentTitle.js).
+
+      PENDIENTE — `og:image` es una ruta relativa porque el dominio de
+      despliegue todavía no está decidido. Muchos scrapers (Facebook, WhatsApp,
+      LinkedIn) exigen una URL absoluta y descartan la imagen si no la
+      encuentran: cuando exista el dominio hay que cambiar el `content` a
+      `https://<dominio>/images/og-potropath.png` y añadir `og:url`. No se pone
+      un dominio inventado mientras tanto.
+    -->
+    <meta
+      name="description"
+      content="Diagnóstico de 50 preguntas que identifica tu afinidad con Inteligencia Artificial, Ciberseguridad, Cloud Computing, Ciencia de Datos o Desarrollo de Software, y la convierte en habilidades, certificaciones y comunidad. Facultad de Ingeniería, UAEMéx."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="PotroPath" />
+    <meta property="og:locale" content="es_MX" />
+    <meta
+      property="og:title"
+      content="PotroPath — Encuentra tu ruta en Ingeniería en Computación"
+    />
+    <meta
+      property="og:description"
+      content="Diagnóstico de 50 preguntas que identifica tu afinidad con Inteligencia Artificial, Ciberseguridad, Cloud Computing, Ciencia de Datos o Desarrollo de Software, y la convierte en habilidades, certificaciones y comunidad. Facultad de Ingeniería, UAEMéx."
+    />
+    <meta property="og:image" content="/images/og-potropath.png" />
+    <meta name="twitter:card" content="summary_large_image" />
   </head>
   <body>
     <div id="root"></div>

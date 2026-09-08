@@ -50,29 +50,6 @@
     background-color: var(--color-green);
   }
 
-  /* Palabra clave en oro, preparada para el barrido de luz del vitral: el
-     degradado es tres veces más ancho que el texto y esconde una banda clara
-     en el centro. En reposo (`background-position: 0% 0`) sólo se ve el tercio
-     izquierdo, que lee como un degradado oro → oro oscuro; GSAP anima la
-     posición desde `100% 0` y esa banda cruza la palabra una sola vez.
-     Ver src/pages/Home.jsx y src/pages/Results.jsx */
-  .text-sweep-gold {
-    background-image: linear-gradient(
-      100deg,
-      var(--color-gold) 0%,
-      var(--color-gold-dark) 33%,
-      var(--color-gold-light) 50%,
-      var(--color-gold-dark) 67%,
-      var(--color-gold) 100%
-    );
-    background-repeat: no-repeat;
-    background-size: 300% 100%;
-    background-position: 0% 0;
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-
   /* Separador de sección: línea dorada delgada, como en uaemex.mx. Las líneas
      son pseudoelementos y no se pueden animar directamente, así que heredan
      `--divider-scale` del contenedor y GSAP anima esa variable para que se
@@ -133,15 +110,18 @@
    * Botones de decisión (CTAs de cambio de vista: hero, resultados,
    * comunidad). Los controles compactos del cuestionario son otro contexto
    * — aparecen 50 veces por sesión — y se quedan fuera a propósito.
+   *
+   * Todos son verdes por la regla del Oro que Firma (ver DESIGN.md): el oro
+   * marca dónde habla la marca — eyebrows, separadores, la palabra en oro
+   * del titular, la navegación sobre el vitral — y el verde se queda con lo que
+   * responde a un clic. Hubo un `.btn-gold`; se eliminó al no quedarle un uso
+   * que la regla permitiera.
    */
-  .btn-gold {
-    @apply inline-block rounded-full bg-gold px-6 py-3 font-semibold text-ink shadow-sm transition-colors hover:bg-gold-dark hover:text-paper;
-  }
   .btn-green {
     @apply inline-block rounded-full bg-green-mid px-6 py-3 font-semibold text-paper shadow-sm transition-colors hover:bg-green;
   }
   .btn-outline {
-    @apply inline-block rounded-full border border-gold/50 px-6 py-3 font-semibold text-ink-soft transition-colors hover:border-gold hover:text-gold-dark;
+    @apply inline-block rounded-full border border-green-mid/40 px-6 py-3 font-semibold text-ink-soft transition-colors hover:border-green-mid hover:text-green-mid;
   }
   .btn-disabled {
     @apply inline-block cursor-not-allowed rounded-full bg-paper-alt px-6 py-3 font-semibold text-ink-soft/60;

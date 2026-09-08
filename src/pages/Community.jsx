@@ -1,6 +1,7 @@
 import Reveal from '../components/motion/Reveal'
 import SectionDivider from '../components/motion/SectionDivider'
 import { AREAS } from '../data/areas'
+import { useDocumentTitle } from '../lib/useDocumentTitle'
 
 const DISCORD_INVITE_URL = null // TODO: colocar el enlace de invitación real del servidor
 
@@ -23,6 +24,8 @@ const moreCommunity = [
 ]
 
 function Community() {
+  useDocumentTitle('Comunidad Facultad de Ingeniería — PotroPath')
+
   return (
     <section className="section-py mx-auto max-w-6xl px-6">
       <p className="eyebrow">Comunidad universitaria</p>

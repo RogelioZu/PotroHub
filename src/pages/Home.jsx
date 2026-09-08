@@ -6,14 +6,17 @@ import VitralShowcase from '../components/ui/VitralShowcase'
 import { AREAS } from '../data/areas'
 import { gsap, SplitText, useGSAP } from '../lib/gsap'
 import { DUR, EASE, FULL_MOTION, STAGGER } from '../lib/motion'
+import { useDocumentTitle } from '../lib/useDocumentTitle'
 
 function Home() {
   const hero = useRef(null)
   const heading = useRef(null)
 
+  useDocumentTitle('PotroPath — Encuentra tu ruta en Ingeniería en Computación')
+
   // Momento focal del sitio. La columna de texto se arma por palabras dentro
-  // de una máscara por líneas y la palabra "ruta" recibe el barrido de luz
-  // dorada; en paralelo, VitralShowcase descubre su propia tarjeta.
+  // de una máscara por líneas —"ruta" entra escalonada con las demás, sin
+  // tratamiento propio— y en paralelo VitralShowcase descubre su tarjeta.
   useGSAP(
     () => {
       const mm = gsap.matchMedia()
@@ -40,22 +43,6 @@ function Home() {
 
           split = SplitText.create(heading.current, { type: 'lines,words', mask: 'lines' })
 
-          // Los elementos del barrido se buscan DESPUÉS de partir: SplitText
-          // reconstruye el interior del titular y deja el `span` original
-          // vacío junto a la copia que sí lleva la palabra. Animar los dos
-          // evita depender de cuál es cuál.
-          const sweeps = gsap.utils.toArray('[data-sweep]', heading.current)
-
-          // Cuándo empieza a subir esa palabra dentro del escalonado, para que
-          // la luz la cruce en cuanto aterriza y no al final de la frase.
-          const wordIndex = split.words.findIndex((word) =>
-            sweeps.some((el) => el === word || el.contains(word) || word.contains(el)),
-          )
-          const wordDelay =
-            wordIndex > 0
-              ? (STAGGER.words.amount * wordIndex) / Math.max(split.words.length - 1, 1)
-              : 0
-
           // Al terminar se deshace la partición: el DOM vuelve a su forma
           // normal y los cambios de línea al redimensionar son los del navegador.
           tl = gsap.timeline({ onComplete: () => split.revert() })
@@ -68,21 +55,11 @@ function Home() {
               { yPercent: 110, duration: DUR.focal, ease: EASE.enter, stagger: STAGGER.words },
               'words',
             )
-
-          if (sweeps.length) {
-            tl.fromTo(
-              sweeps,
-              { backgroundPosition: '100% 0' },
-              { backgroundPosition: '0% 0', duration: DUR.sweep, ease: EASE.sweep },
-              `words+=${wordDelay}`,
+            .from(
+              [body, ...ctas],
+              { opacity: 0, y: 16, duration: DUR.view, ease: EASE.enter, stagger: STAGGER.tight },
+              'words+=0.35',
             )
-          }
-
-          tl.from(
-            [body, ...ctas],
-            { opacity: 0, y: 16, duration: DUR.view, ease: EASE.enter, stagger: STAGGER.tight },
-            'words+=0.35',
-          )
         }
 
         // Partir antes de que cargue la fuente produce saltos de línea que no
@@ -123,11 +100,8 @@ function Home() {
             Facultad de Ingeniería · UAEMéx
           </p>
           <h1 ref={heading} className="mt-3 h1">
-            Encuentra tu{' '}
-            <span data-sweep className="text-sweep-gold">
-              ruta
-            </span>{' '}
-            dentro de la Ingeniería en Computación
+            Encuentra tu <span className="text-gold-dark">ruta</span> dentro de la Ingeniería en
+            Computación
           </h1>
           <p data-hero-body className="mt-5 lead">
             Un diagnóstico de 50 preguntas basadas en escenarios reales de la industria identifica tu afinidad
@@ -135,10 +109,10 @@ function Home() {
             Software, y te conecta con habilidades, certificaciones y comunidades para avanzar de inmediato.
           </p>
           <div data-hero-cta className="mt-8 flex flex-wrap gap-4">
-            <Link to="/quiz" className="btn-gold">
+            <Link to="/quiz" className="btn-green">
               Comenzar diagnóstico
             </Link>
-            <Link to="/comunidad" className="btn-green">
+            <Link to="/comunidad" className="btn-outline">
               Conoce la comunidad
             </Link>
           </div>

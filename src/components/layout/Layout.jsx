@@ -14,7 +14,13 @@ function Layout() {
     <SmoothScroller>
       <div className="flex min-h-svh flex-col">
         <Navbar />
-        <main className="flex-1">
+        {/*
+          `main` es columna flexible, no sólo `flex-1`: así una vista corta
+          —el 404, el estado vacío de resultados— puede pedir `flex-1` y
+          centrarse en el alto disponible en vez de flotar en el tercio
+          superior. Las vistas largas no crecen y quedan exactamente igual.
+        */}
+        <main className="flex flex-1 flex-col">
           <RouteTransition />
         </main>
         <Footer />

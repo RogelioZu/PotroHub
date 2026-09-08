@@ -4,6 +4,7 @@ import { AREA_BY_ID } from '../data/areas'
 import { QUESTIONS, SCALE } from '../data/questions'
 import { gsap, prefersReducedMotion, useGSAP } from '../lib/gsap'
 import { DUR, EASE } from '../lib/motion'
+import { useDocumentTitle } from '../lib/useDocumentTitle'
 import { useQuizStore } from '../store/quizStore'
 
 /** Puntos donde el avance merece acuse: son 50 preguntas. */
@@ -22,6 +23,10 @@ function Quiz() {
   const selectedValue = answers[question.id]
   const isLast = currentIndex === QUESTIONS.length - 1
   const progress = Math.round(((currentIndex + 1) / QUESTIONS.length) * 100)
+
+  // El avance viaja en el título: la sesión persiste en `localStorage`, y una
+  // pestaña olvidada a media prueba dice en cuál pregunta se quedó.
+  useDocumentTitle(`Diagnóstico · Pregunta ${currentIndex + 1} de ${QUESTIONS.length} — PotroPath`)
 
   const root = useRef(null)
   const panel = useRef(null)
@@ -157,8 +162,8 @@ function Quiz() {
               onClick={() => answerCurrent(value)}
               className={`relative overflow-hidden rounded-xl border px-4 py-3 text-left text-sm transition-colors ${
                 selectedValue === value
-                  ? 'border-gold text-ink'
-                  : 'border-ink/10 text-ink-soft hover:border-gold/50'
+                  ? 'border-green-mid text-ink'
+                  : 'border-ink/10 text-ink-soft hover:border-green-mid/50'
               }`}
             >
               <span
@@ -186,7 +191,7 @@ function Quiz() {
             type="button"
             onClick={handleFinish}
             disabled={!selectedValue}
-            className="rounded-full bg-gold px-6 py-2 text-sm font-semibold text-ink transition-opacity duration-200 disabled:opacity-30"
+            className="rounded-full bg-green px-6 py-2 text-sm font-semibold text-paper transition-opacity duration-200 disabled:opacity-30"
           >
             Ver resultados
           </button>

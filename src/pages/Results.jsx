@@ -1,15 +1,18 @@
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { AREA_BY_ID } from '../data/areas'
 import { QUESTIONS } from '../data/questions'
 import { ROADMAP } from '../data/roadmap'
-import { gsap, useGSAP } from '../lib/gsap'
+import { gsap, ScrollTrigger, useGSAP } from '../lib/gsap'
 import { DUR, EASE, FULL_MOTION, STAGGER } from '../lib/motion'
+import { useDocumentTitle } from '../lib/useDocumentTitle'
 import { useQuizStore } from '../store/quizStore'
 
 function EmptyState() {
+  useDocumentTitle('Aún no tienes resultados — PotroPath')
+
   return (
-    <section className="mx-auto flex max-w-2xl flex-col items-center gap-4 px-6 py-24 text-center">
+    <section className="mx-auto flex max-w-2xl flex-1 flex-col items-center justify-center gap-4 px-6 py-24 text-center">
       <h1 className="text-3xl font-bold text-ink">Aún no tienes resultados</h1>
       <p className="text-ink-soft">
         Responde el diagnóstico de 50 preguntas para descubrir tu ruta de crecimiento dentro de la
@@ -25,6 +28,55 @@ function EmptyState() {
 /** Duración de una barra de afinidad llenándose. */
 const BAR_FILL = 0.8
 
+/** Cuánto espera armado el botón destructivo antes de desarmarse solo (ms). */
+const CONFIRM_WINDOW = 6000
+
+/**
+ * "Repetir diagnóstico" borra las 50 respuestas, y en teléfono queda a 16px de
+ * "Unirme a la comunidad": un pulgar mal puesto cuesta ocho minutos de trabajo.
+ *
+ * La confirmación ocurre en el propio botón y no en un modal — la tarea no
+ * necesita foco protegido ni interrumpe nada — y se desarma sola por tiempo,
+ * al perder el foco o al tocar fuera, para que nunca quede un control cargado
+ * esperando un segundo toque que el usuario ya olvidó.
+ */
+function RetakeButton({ onConfirm }) {
+  const [armed, setArmed] = useState(false)
+  const button = useRef(null)
+
+  useEffect(() => {
+    if (!armed) return
+
+    const disarm = () => setArmed(false)
+    const onPointerDown = (event) => {
+      if (!button.current?.contains(event.target)) disarm()
+    }
+
+    const timer = setTimeout(disarm, CONFIRM_WINDOW)
+    document.addEventListener('pointerdown', onPointerDown)
+
+    return () => {
+      clearTimeout(timer)
+      document.removeEventListener('pointerdown', onPointerDown)
+    }
+  }, [armed])
+
+  return (
+    <button
+      ref={button}
+      type="button"
+      onClick={() => (armed ? onConfirm() : setArmed(true))}
+      onBlur={() => setArmed(false)}
+      // El propio control es la región viva: el cambio de etiqueta es todo el
+      // anuncio que hay que dar, y darlo aparte lo diría dos veces.
+      aria-live="polite"
+      className={armed ? 'btn-outline border-green-mid text-green-mid' : 'btn-outline'}
+    >
+      {armed ? '¿Seguro? Se borran tus 50 respuestas' : 'Repetir diagnóstico'}
+    </button>
+  )
+}
+
 /**
  * La vista con resultados vive en su propio componente para que sus hooks
  * corran siempre: `Results` decide antes si hay algo que mostrar, y un hook
@@ -32,13 +84,16 @@ const BAR_FILL = 0.8
  */
 function ResultsView({ results, onRetake }) {
   const root = useRef(null)
+  const mascot = useRef(null)
   const top = results[0]
   const topArea = AREA_BY_ID[top.areaId]
   const topRoadmap = ROADMAP[top.areaId]
 
-  // El pago de 50 preguntas. Es la única secuencia larga del sitio: el nombre
-  // del área ganadora recibe el barrido de luz y las cinco barras se llenan
-  // con su porcentaje contando en sincronía.
+  useDocumentTitle(`Tu ruta: ${topArea.name} — PotroPath`)
+
+  // El pago de 50 preguntas. Es la única secuencia larga del sitio: el titular
+  // anuncia el área ganadora y las cinco barras se llenan con su porcentaje
+  // contando en sincronía.
   useGSAP(
     () => {
       const mm = gsap.matchMedia()
@@ -55,20 +110,19 @@ function ResultsView({ results, onRetake }) {
 
         const tl = gsap.timeline()
 
+        // Los offsets relativos se miden contra el FIN de la línea de tiempo, no
+        // contra el tween anterior. Al quitar el barrido dorado —que terminaba
+        // en 0.95s— hubo que reescribir los dos offsets siguientes para que la
+        // secuencia caiga exactamente donde caía: eyebrow 0s, titular y
+        // descripción 0.2s, y la etiqueta `bars` en 0.55s.
         tl.from('[data-eyebrow]', { opacity: 0, y: 12, duration: DUR.view, ease: EASE.enter })
           .from('[data-heading]', { opacity: 0, y: 16, duration: DUR.view, ease: EASE.enter }, '-=0.25')
-          .fromTo(
-            '[data-sweep]',
-            { backgroundPosition: '100% 0' },
-            { backgroundPosition: '0% 0', duration: DUR.sweep, ease: EASE.sweep },
-            '-=0.3',
-          )
           .from(
             '[data-description]',
             { opacity: 0, y: 14, duration: DUR.view, ease: EASE.enter },
-            '-=0.75',
+            '-=0.45',
           )
-          .addLabel('bars', '-=0.4')
+          .addLabel('bars', '-=0.1')
 
         const step = STAGGER.bars.amount / Math.max(bars.length - 1, 1)
 
@@ -108,7 +162,7 @@ function ResultsView({ results, onRetake }) {
             '-=0.3',
           )
           .from(
-            '[data-mascot]',
+            mascot.current,
             {
               opacity: 0,
               scale: 0.6,
@@ -120,8 +174,31 @@ function ResultsView({ results, onRetake }) {
             '-=0.5',
           )
 
+        // El mismo bucle que la insignia de Inicio: el potro se queda flotando
+        // en vez de clavarse donde aterrizó.
+        const idle = gsap.to(mascot.current, {
+          y: -5,
+          duration: 2.4,
+          ease: 'sine.inOut',
+          yoyo: true,
+          repeat: -1,
+          paused: true,
+        })
+
+        tl.add(() => idle.play())
+
+        // Un bucle que nadie ve no debe seguir corriendo.
+        const visibility = ScrollTrigger.create({
+          trigger: mascot.current,
+          start: 'top bottom',
+          end: 'bottom top',
+          onToggle: (self) => (self.isActive ? idle.play() : idle.pause()),
+        })
+
         return () => {
           tl.kill()
+          idle.kill()
+          visibility.kill()
           // React no vuelve a renderizar estos textos, así que se devuelven a
           // su valor real al desmontar.
           labels.forEach((label) => {
@@ -136,27 +213,37 @@ function ResultsView({ results, onRetake }) {
   )
 
   return (
-    <section ref={root} className="section-py relative mx-auto max-w-4xl px-6">
-      <img
-        data-mascot
-        src="/images/potro-mascota.png"
-        alt=""
-        aria-hidden="true"
-        className="pointer-events-none absolute top-12 right-6 hidden h-24 w-auto rounded-xl bg-paper p-1.5 shadow-lg ring-1 ring-ink/10 md:block"
-      />
+    <section ref={root} className="section-py mx-auto max-w-4xl px-6">
+      {/*
+        El potro comparte fila con el titular en vez de flotar en `absolute`
+        sobre él: superpuesto, un área de nombre largo —"Desarrollo de
+        Software"— se metía debajo de la insignia en escritorio, y en teléfono
+        el elemento estaba escondido, que es justo donde esta pantalla es el
+        pago de cincuenta preguntas. En columna se apoya arriba a la derecha y
+        el titular conserva el ancho completo; desde `md` pasa a la derecha de
+        una fila y el texto ocupa el resto, así que ningún nombre lo alcanza.
+      */}
+      <div className="flex flex-col items-end gap-4 md:flex-row-reverse md:items-start md:gap-10">
+        <img
+          ref={mascot}
+          src="/images/potro-mascota.png"
+          alt=""
+          aria-hidden="true"
+          className="pointer-events-none h-24 w-auto shrink-0 rounded-xl bg-paper p-1.5 shadow-lg ring-1 ring-ink/10 sm:h-28 md:h-32"
+        />
 
-      <p data-eyebrow className="eyebrow">
-        Tu resultado
-      </p>
-      <h1 data-heading className="mt-2 h1">
-        Tu mayor afinidad es{' '}
-        <span data-sweep className="text-sweep-gold">
-          {topArea.name}
-        </span>
-      </h1>
-      <p data-description className="mt-3 lead">
-        {topArea.description}
-      </p>
+        <div className="w-full min-w-0 md:flex-1">
+          <p data-eyebrow className="eyebrow">
+            Tu resultado
+          </p>
+          <h1 data-heading className="mt-2 h1">
+            Tu mayor afinidad es <span className="text-gold-dark">{topArea.name}</span>
+          </h1>
+          <p data-description className="mt-3 lead">
+            {topArea.description}
+          </p>
+        </div>
+      </div>
 
       <div className="mt-10 flex flex-col gap-3">
         {results.map(({ areaId, percentage }) => (
@@ -170,7 +257,7 @@ function ResultsView({ results, onRetake }) {
             <div className="h-2 w-full overflow-hidden rounded-full bg-paper-alt">
               <div
                 data-bar={percentage}
-                className="h-full w-full origin-left rounded-full bg-gold"
+                className="h-full w-full origin-left rounded-full bg-green-mid"
                 style={{ transform: `scaleX(${percentage / 100})` }}
               />
             </div>
@@ -201,9 +288,7 @@ function ResultsView({ results, onRetake }) {
         <Link to="/comunidad" className="btn-green">
           Unirme a la comunidad
         </Link>
-        <button type="button" onClick={onRetake} className="btn-outline">
-          Repetir diagnóstico
-        </button>
+        <RetakeButton onConfirm={onRetake} />
       </div>
     </section>
   )

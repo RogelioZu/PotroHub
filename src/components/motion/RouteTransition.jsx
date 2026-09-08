@@ -83,7 +83,13 @@ function RouteTransition() {
     { dependencies: [view.pathname], scope: container },
   )
 
-  return <div ref={container}>{view.outlet}</div>
+  // La columna flexible se propaga desde `main` para que la vista de dentro
+  // pueda ocupar el alto disponible (ver Layout).
+  return (
+    <div ref={container} className="flex flex-1 flex-col">
+      {view.outlet}
+    </div>
+  )
 }
 
 export default RouteTransition

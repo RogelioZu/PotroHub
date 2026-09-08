@@ -2,8 +2,8 @@
  * Tokens de movimiento de PotroPath.
  *
  * La tesis es "el vitral se arma": fragmentos de luz que se acomodan. De ahí
- * salen los revelados por máscara y los barridos dorados; el desplazamiento
- * con desvanecido queda reservado a las listas que aparecen como listas.
+ * salen los revelados por máscara; el desplazamiento con desvanecido queda
+ * reservado a las listas que aparecen como listas.
  *
  * Tener las duraciones y curvas en un solo lugar es lo que hace que el sitio
  * se sienta un sistema y no una colección de efectos sueltos.
@@ -19,8 +19,6 @@ export const DUR = {
   view: 0.45,
   /** Entrada con autoría. Solo el hero y la revelación de resultados. */
   focal: 0.7,
-  /** Barrido de luz dorada sobre una palabra clave. */
-  sweep: 0.6,
 }
 
 export const EASE = {
@@ -29,6 +27,11 @@ export const EASE = {
   /** Las salidas son más rápidas que las entradas. */
   exit: 'power2.in',
   state: 'power2.out',
+  /**
+   * Simétrica: entra y sale con la misma suavidad. Su único uso es el pulso de
+   * brillo de la barra de progreso al cruzar un hito (`src/pages/Quiz.jsx`),
+   * que va y vuelve con `yoyo`.
+   */
   sweep: 'power2.inOut',
   /** Único rebote del sitio, reservado al potro: ahí la personalidad es el objetivo. */
   land: 'back.out(1.6)',
