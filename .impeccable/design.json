@@ -1,0 +1,471 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-07T23:59:46.430624+00:00",
+  "title": "Design System: PotroPath",
+  "extensions": {
+    "colorMeta": {
+      "verde-universitario": {
+        "role": "primary",
+        "displayName": "Verde Universitario",
+        "canonical": "oklch(49.4% 0.040 148.7)",
+        "tonalRamp": [
+          "oklch(15.0% 0.014 148.7)",
+          "oklch(26.4% 0.015 148.7)",
+          "oklch(37.9% 0.025 148.7)",
+          "oklch(49.3% 0.035 148.7)",
+          "oklch(60.7% 0.035 148.7)",
+          "oklch(72.1% 0.025 148.7)",
+          "oklch(83.6% 0.015 148.7)",
+          "oklch(95.0% 0.014 148.7)"
+        ]
+      },
+      "oro-viejo": {
+        "role": "primary",
+        "displayName": "Oro Viejo",
+        "canonical": "oklch(72.5% 0.108 79.4)",
+        "tonalRamp": [
+          "oklch(15.0% 0.038 79.4)",
+          "oklch(26.4% 0.039 79.4)",
+          "oklch(37.9% 0.067 79.4)",
+          "oklch(49.3% 0.094 79.4)",
+          "oklch(60.7% 0.094 79.4)",
+          "oklch(72.1% 0.067 79.4)",
+          "oklch(83.6% 0.039 79.4)",
+          "oklch(95.0% 0.038 79.4)"
+        ]
+      },
+      "verde-profundo": {
+        "role": "secondary",
+        "displayName": "Verde Profundo",
+        "canonical": "oklch(36.0% 0.024 133.4)",
+        "tonalRamp": [
+          "oklch(15.0% 0.009 133.4)",
+          "oklch(26.4% 0.009 133.4)",
+          "oklch(37.9% 0.015 133.4)",
+          "oklch(49.3% 0.021 133.4)",
+          "oklch(60.7% 0.021 133.4)",
+          "oklch(72.1% 0.015 133.4)",
+          "oklch(83.6% 0.009 133.4)",
+          "oklch(95.0% 0.009 133.4)"
+        ]
+      },
+      "ambar-quemado": {
+        "role": "secondary",
+        "displayName": "Ámbar Quemado",
+        "canonical": "oklch(54.3% 0.119 59.3)",
+        "tonalRamp": [
+          "oklch(15.0% 0.042 59.3)",
+          "oklch(26.4% 0.043 59.3)",
+          "oklch(37.9% 0.073 59.3)",
+          "oklch(49.3% 0.104 59.3)",
+          "oklch(60.7% 0.104 59.3)",
+          "oklch(72.1% 0.073 59.3)",
+          "oklch(83.6% 0.043 59.3)",
+          "oklch(95.0% 0.042 59.3)"
+        ]
+      },
+      "papel": {
+        "role": "neutral",
+        "displayName": "Papel",
+        "canonical": "oklch(100.0% 0 0)",
+        "tonalRamp": [
+          "oklch(15.0% 0 0)",
+          "oklch(26.4% 0 0)",
+          "oklch(37.9% 0 0)",
+          "oklch(49.3% 0 0)",
+          "oklch(60.7% 0 0)",
+          "oklch(72.1% 0 0)",
+          "oklch(83.6% 0 0)",
+          "oklch(95.0% 0 0)"
+        ]
+      },
+      "papel-gris": {
+        "role": "neutral",
+        "displayName": "Papel Gris",
+        "canonical": "oklch(96.1% 0 0)",
+        "tonalRamp": [
+          "oklch(15.0% 0 0)",
+          "oklch(26.4% 0 0)",
+          "oklch(37.9% 0 0)",
+          "oklch(49.3% 0 0)",
+          "oklch(60.7% 0 0)",
+          "oklch(72.1% 0 0)",
+          "oklch(83.6% 0 0)",
+          "oklch(95.0% 0 0)"
+        ]
+      },
+      "verde-bruma": {
+        "role": "neutral",
+        "displayName": "Verde Bruma",
+        "canonical": "oklch(93.9% 0.008 139.4)",
+        "tonalRamp": [
+          "oklch(15.0% 0.003 139.4)",
+          "oklch(26.4% 0.003 139.4)",
+          "oklch(37.9% 0.005 139.4)",
+          "oklch(49.3% 0.007 139.4)",
+          "oklch(60.7% 0.007 139.4)",
+          "oklch(72.1% 0.005 139.4)",
+          "oklch(83.6% 0.003 139.4)",
+          "oklch(95.0% 0.003 139.4)"
+        ]
+      },
+      "oro-claro": {
+        "role": "neutral",
+        "displayName": "Oro Claro",
+        "canonical": "oklch(83.3% 0.083 82.7)",
+        "tonalRamp": [
+          "oklch(15.0% 0.029 82.7)",
+          "oklch(26.4% 0.030 82.7)",
+          "oklch(37.9% 0.051 82.7)",
+          "oklch(49.3% 0.072 82.7)",
+          "oklch(60.7% 0.072 82.7)",
+          "oklch(72.1% 0.051 82.7)",
+          "oklch(83.6% 0.030 82.7)",
+          "oklch(95.0% 0.029 82.7)"
+        ]
+      },
+      "tinta": {
+        "role": "neutral",
+        "displayName": "Tinta",
+        "canonical": "oklch(26.4% 0 0)",
+        "tonalRamp": [
+          "oklch(15.0% 0 0)",
+          "oklch(26.4% 0 0)",
+          "oklch(37.9% 0 0)",
+          "oklch(49.3% 0 0)",
+          "oklch(60.7% 0 0)",
+          "oklch(72.1% 0 0)",
+          "oklch(83.6% 0 0)",
+          "oklch(95.0% 0 0)"
+        ]
+      },
+      "tinta-suave": {
+        "role": "neutral",
+        "displayName": "Tinta Suave",
+        "canonical": "oklch(47.5% 0 0)",
+        "tonalRamp": [
+          "oklch(15.0% 0 0)",
+          "oklch(26.4% 0 0)",
+          "oklch(37.9% 0 0)",
+          "oklch(49.3% 0 0)",
+          "oklch(60.7% 0 0)",
+          "oklch(72.1% 0 0)",
+          "oklch(83.6% 0 0)",
+          "oklch(95.0% 0 0)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "brand": {
+        "displayName": "Marca",
+        "purpose": "La palabra PotroPath en header y footer, partida en dos colores. El único texto que crece más que el titular de página."
+      },
+      "display": {
+        "displayName": "Titular de Página",
+        "purpose": "La clase .h1. Hero, resultado y portada de sección; el momento de mayor peso visual."
+      },
+      "headline": {
+        "displayName": "Encabezado de Sección",
+        "purpose": "La clase .h2. Casi siempre acompañado por el separador dorado."
+      },
+      "title": {
+        "displayName": "Título de Tarjeta",
+        "purpose": "La clase .h3. El color lo decide quien la usa, no la clase."
+      },
+      "lead": {
+        "displayName": "Entrada",
+        "purpose": "La clase .lead. Párrafo bajo un .h1, acotado a 42rem de ancho de lectura."
+      },
+      "body": {
+        "displayName": "Cuerpo",
+        "purpose": "Texto corrido y contenido de tarjeta, casi siempre en Tinta Suave."
+      },
+      "label": {
+        "displayName": "Etiqueta",
+        "purpose": "La clase .eyebrow. Mayúsculas con tracking amplio en Ámbar Quemado, sobre un titular."
+      }
+    },
+    "shadows": [
+      {
+        "name": "levantado-fotografico",
+        "value": "0 10px 15px -3px rgb(37 37 37 / 10%), 0 4px 6px -4px rgb(37 37 37 / 10%)",
+        "purpose": "Exclusivo de la tarjeta del vitral y de la insignia del potro. La sombra es privilegio de la fotografía."
+      },
+      {
+        "name": "asiento-tarjeta",
+        "value": "0 1px 3px 0 rgb(37 37 37 / 5%), 0 1px 2px -1px rgb(37 37 37 / 5%)",
+        "purpose": "Tarjetas sobre papel blanco, para despegarlas apenas del fondo. Funciona más como borde suave que como elevación."
+      },
+      {
+        "name": "texto-sobre-vidrio",
+        "value": "0 1px 6px rgb(0 0 0 / 75%)",
+        "purpose": "Legibilidad, no elevación. Todo texto sobre la fotografía del vitral. La marca usa la variante 0 2px 10px rgb(0 0 0 / 70%)."
+      }
+    ],
+    "motion": [
+      {
+        "name": "dur-feedback",
+        "value": "0.15s",
+        "purpose": "Acuse inmediato: selección de opción, presión de un control."
+      },
+      {
+        "name": "dur-state",
+        "value": "0.28s",
+        "purpose": "Cambio de estado rutinario: subrayado del nav, barra de progreso. Es el default de GSAP en el sitio."
+      },
+      {
+        "name": "dur-view",
+        "value": "0.45s",
+        "purpose": "Cambio de vista: transición de ruta, revelado al hacer scroll."
+      },
+      {
+        "name": "dur-focal",
+        "value": "0.7s",
+        "purpose": "Entrada con autoría. Solo el hero y la revelación de resultados."
+      },
+      {
+        "name": "ease-enter",
+        "value": "expo.out",
+        "purpose": "Desaceleración exponencial: llegadas seguras. La curva de toda entrada."
+      },
+      {
+        "name": "ease-exit",
+        "value": "power2.in",
+        "purpose": "Salidas, siempre más rápidas que las entradas."
+      },
+      {
+        "name": "ease-state",
+        "value": "power2.out",
+        "purpose": "Cambios de estado rutinarios."
+      },
+      {
+        "name": "ease-sweep",
+        "value": "power2.inOut",
+        "purpose": "Curva simétrica, para el único movimiento que va y vuelve: el pulso de brillo de la barra de progreso al cruzar un hito del cuestionario."
+      },
+      {
+        "name": "ease-land",
+        "value": "back.out(1.6)",
+        "purpose": "El único rebote del sistema, reservado al potro."
+      },
+      {
+        "name": "stagger-tight",
+        "value": "0.15s (amount)",
+        "purpose": "Parejas y tríos: CTAs, tarjetas de una fila."
+      },
+      {
+        "name": "stagger-words",
+        "value": "0.22s (amount)",
+        "purpose": "Palabras de un titular: el retardo total debe caber en un parpadeo."
+      },
+      {
+        "name": "stagger-list",
+        "value": "0.3s (amount)",
+        "purpose": "Rejillas de tarjetas que aparecen como listas."
+      },
+      {
+        "name": "stagger-bars",
+        "value": "0.4s (amount)",
+        "purpose": "Las cinco barras de afinidad en resultados."
+      },
+      {
+        "name": "reveal-start",
+        "value": "top 85%",
+        "purpose": "Punto de disparo compartido por todos los revelados al hacer scroll."
+      },
+      {
+        "name": "shift",
+        "value": "24px",
+        "purpose": "Desplazamiento vertical estándar de un revelado."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      },
+      {
+        "name": "xl",
+        "value": "1280px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Botón Verde",
+      "kind": "button",
+      "refersTo": "button-green",
+      "description": "El botón de acción del sistema. El oro firma, el verde trabaja.",
+      "html": "<button class=\"ds-btn-green\">Unirme a la comunidad</button>",
+      "css": ".ds-btn-green{display:inline-block;border:none;cursor:pointer;font-family:var(--font-sans, 'DM Sans', Inter, system-ui, sans-serif);font-size:1rem;font-weight:600;line-height:1.5rem;padding:12px 24px;border-radius:9999px;transition:color .2s,background-color .2s,border-color .2s;background:var(--color-green-mid, #526855);color:var(--color-paper, #ffffff);box-shadow:0 1px 3px 0 rgb(37 37 37 / 5%);}\n.ds-btn-green:hover{background:var(--color-green, #384033);}\n.ds-btn-green:focus-visible{outline:2px solid var(--color-green, #384033);outline-offset:2px;}"
+    },
+    {
+      "name": "Botón Fantasma",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Acción secundaria de una pareja. Borde verde; no existe variante dorada. Cuando la acción es destructiva —\"Repetir diagnóstico\", que borra las 50 respuestas— confirma sobre sí misma en dos pasos: el primer toque cambia la etiqueta y el control toma el estado hover (borde y texto Verde Universitario sólidos, 6.05:1 sobre papel); el segundo ejecuta. Se desarma a los 6s, al perder el foco o al tocar fuera, y lleva aria-live=\"polite\".",
+      "html": "<button class=\"ds-btn-outline\">Repetir diagnóstico</button>",
+      "css": ".ds-btn-outline{display:inline-block;border:none;cursor:pointer;font-family:var(--font-sans, 'DM Sans', Inter, system-ui, sans-serif);font-size:1rem;font-weight:600;line-height:1.5rem;padding:12px 24px;border-radius:9999px;transition:color .2s,background-color .2s,border-color .2s;background:transparent;color:var(--color-ink-soft, #5c5c5c);border:1px solid color-mix(in srgb, var(--color-green-mid, #526855) 40%, transparent);}\n.ds-btn-outline:hover{border-color:var(--color-green-mid, #526855);color:var(--color-green-mid, #526855);}\n.ds-btn-outline:focus-visible{outline:2px solid var(--color-green-mid, #526855);outline-offset:2px;}"
+    },
+    {
+      "name": "Botón Pendiente",
+      "kind": "button",
+      "refersTo": "button-disabled",
+      "description": "Acción que existirá pero todavía no. Mantiene la promesa visible sin fingir que funciona.",
+      "html": "<button class=\"ds-btn-disabled\" disabled>Enlace de invitación próximamente</button>",
+      "css": ".ds-btn-disabled{display:inline-block;border:none;cursor:pointer;font-family:var(--font-sans, 'DM Sans', Inter, system-ui, sans-serif);font-size:1rem;font-weight:600;line-height:1.5rem;padding:12px 24px;border-radius:9999px;transition:color .2s,background-color .2s,border-color .2s;background:var(--color-paper-alt, #f2f2f2);color:color-mix(in srgb, var(--color-ink-soft, #5c5c5c) 60%, transparent);cursor:not-allowed;}"
+    },
+    {
+      "name": "Opción del Cuestionario",
+      "kind": "custom",
+      "refersTo": "quiz-option",
+      "description": "El control más repetido del sitio (50 por sesión) y el único con estado propio. El relleno barre desde la izquierda al seleccionarse.",
+      "html": "<div class=\"ds-quiz-stack\">\n  <button class=\"ds-quiz-option\"><span>Totalmente en desacuerdo</span></button>\n  <button class=\"ds-quiz-option is-selected\"><span>De acuerdo</span></button>\n</div>",
+      "css": ".ds-quiz-stack{display:flex;flex-direction:column;gap:8px;font-family:var(--font-sans, 'DM Sans', Inter, system-ui, sans-serif);max-width:420px;}\n.ds-quiz-option{position:relative;overflow:hidden;border-radius:12px;border:1px solid color-mix(in srgb, var(--color-ink, #252525) 10%, transparent);padding:12px 16px;text-align:left;font-size:.875rem;line-height:1.25rem;background:transparent;color:var(--color-ink-soft, #5c5c5c);cursor:pointer;transition:color .2s,border-color .2s;}\n.ds-quiz-option::before{content:\"\";position:absolute;inset:0;transform-origin:left;transform:scaleX(0);background:var(--color-green-soft, #e8ece7);transition:transform .28s cubic-bezier(.16,1,.3,1);}\n.ds-quiz-option>span{position:relative;}\n.ds-quiz-option:hover{border-color:color-mix(in srgb, var(--color-green-mid, #526855) 50%, transparent);}\n.ds-quiz-option.is-selected{border-color:var(--color-green-mid, #526855);color:var(--color-ink, #252525);}\n.ds-quiz-option.is-selected::before{transform:scaleX(1);}\n.ds-quiz-option:focus-visible{outline:2px solid var(--color-green-mid, #526855);outline-offset:2px;}"
+    },
+    {
+      "name": "Tarjeta de Contenido",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Tarjeta gris sobre papel. Sin sombra: la separación es tonal.",
+      "html": "<div class=\"ds-card\">\n  <h3 class=\"ds-card-title\">Habilidades demandadas</h3>\n  <ul class=\"ds-card-list\"><li>· Python</li><li>· Machine learning</li><li>· MLOps</li></ul>\n</div>",
+      "css": ".ds-card{font-family:var(--font-sans, 'DM Sans', Inter, system-ui, sans-serif);border-radius:12px;background:var(--color-paper-alt, #f2f2f2);padding:20px;max-width:320px;}\n.ds-card-title{margin:0;font-size:1.125rem;line-height:1.75rem;font-weight:700;color:var(--color-green-mid, #526855);}\n.ds-card-list{margin:12px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:4px;font-size:.875rem;line-height:1.25rem;color:var(--color-ink-soft, #5c5c5c);}"
+    },
+    {
+      "name": "Bloque de Nota",
+      "kind": "card",
+      "refersTo": "card-note",
+      "description": "La tercera capa tonal, teñida de verde. Para lo que se lee como aparte.",
+      "html": "<div class=\"ds-note\">\n  <h3 class=\"ds-note-title\">Moderación y privacidad</h3>\n  <p class=\"ds-note-body\">El servidor cuenta con mentores como moderadores y reglas claras de convivencia.</p>\n</div>",
+      "css": ".ds-note{font-family:var(--font-sans, 'DM Sans', Inter, system-ui, sans-serif);border-radius:12px;background:var(--color-green-soft, #e8ece7);padding:24px;max-width:420px;}\n.ds-note-title{margin:0;font-size:1.125rem;line-height:1.75rem;font-weight:700;color:var(--color-green, #384033);}\n.ds-note-body{margin:8px 0 0;font-size:.875rem;line-height:1.25rem;color:var(--color-ink-soft, #5c5c5c);}"
+    },
+    {
+      "name": "Separador de Sección",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "Encabezado de sección entre dos líneas doradas que se dibujan hacia afuera. La firma estructural del sitio.",
+      "html": "<div class=\"ds-divider\"><h2>Áreas de especialización</h2></div>",
+      "css": ".ds-divider{display:flex;align-items:center;gap:16px;font-family:var(--font-sans, 'DM Sans', Inter, system-ui, sans-serif);color:var(--color-gold-dark, #a15c17);}\n.ds-divider::before,.ds-divider::after{content:\"\";height:1px;flex:1;background:color-mix(in srgb, var(--color-gold, #ca9e52) 40%, transparent);}\n.ds-divider h2{margin:0;min-width:0;font-size:1.5rem;line-height:2rem;font-weight:700;color:var(--color-ink, #252525);}"
+    },
+    {
+      "name": "Barra de Afinidad",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "Fila de resultado: nombre, porcentaje y barra. Crece con scaleX desde origin-left, nunca con width.",
+      "html": "<div class=\"ds-bar-row\">\n  <div class=\"ds-bar-head\"><span class=\"ds-bar-name\">Ciberseguridad</span><span class=\"ds-bar-pct\">78%</span></div>\n  <div class=\"ds-bar-track\"><div class=\"ds-bar-fill\" style=\"transform:scaleX(.78)\"></div></div>\n</div>",
+      "css": ".ds-bar-row{font-family:var(--font-sans, 'DM Sans', Inter, system-ui, sans-serif);max-width:420px;}\n.ds-bar-head{display:flex;justify-content:space-between;margin-bottom:4px;font-size:.875rem;line-height:1.25rem;}\n.ds-bar-name{font-weight:500;color:var(--color-ink, #252525);}\n.ds-bar-pct{color:var(--color-ink-soft, #5c5c5c);}\n.ds-bar-track{height:8px;width:100%;overflow:hidden;border-radius:9999px;background:var(--color-paper-alt, #f2f2f2);}\n.ds-bar-fill{height:100%;width:100%;transform-origin:left;border-radius:9999px;background:var(--color-green-mid, #526855);}"
+    },
+    {
+      "name": "Navegación sobre Vitral",
+      "kind": "nav",
+      "refersTo": null,
+      "description": "Enlaces sobre la fotografía del vitral, defendidos con text-shadow en vez de un velo. Un solo subrayado dorado viaja hasta el activo.",
+      "html": "<nav class=\"ds-nav\">\n  <a class=\"ds-nav-link\" href=\"#\">Inicio</a>\n  <a class=\"ds-nav-link is-active\" href=\"#\">Diagnóstico<span class=\"ds-nav-indicator\"></span></a>\n  <a class=\"ds-nav-link\" href=\"#\">Comunidad</a>\n</nav>",
+      "css": ".ds-nav{display:flex;align-items:center;gap:32px;font-family:var(--font-sans, 'DM Sans', Inter, system-ui, sans-serif);background:linear-gradient(135deg,var(--color-green, #384033),var(--color-green-mid, #526855) 45%,var(--color-gold-dark, #a15c17));padding:20px 24px;border-radius:12px;}\n.ds-nav-link{position:relative;padding-bottom:4px;font-size:1.125rem;font-weight:500;text-decoration:none;color:var(--color-paper, #ffffff);text-shadow:0 1px 6px rgb(0 0 0 / 75%);transition:color .2s;}\n.ds-nav-link:hover{color:var(--color-gold-light, #e3c48a);}\n.ds-nav-link.is-active{color:var(--color-gold-light, #e3c48a);}\n.ds-nav-indicator{position:absolute;left:0;bottom:0;height:2px;width:100%;border-radius:9999px;background:var(--color-gold, #ca9e52);box-shadow:0 1px 6px rgb(0 0 0 / 60%);}"
+    },
+    {
+      "name": "Botón Final de Tarea",
+      "kind": "button",
+      "refersTo": "button-green-deep",
+      "description": "\"Ver resultados\" al cerrar el cuestionario. Verde profundo para distinguirse de \"Siguiente\" sin recurrir al oro.",
+      "html": "<button class=\"ds-btn-green-deep\">Ver resultados</button>",
+      "css": ".ds-btn-green-deep{display:inline-block;border:none;cursor:pointer;font-family:var(--font-sans, 'DM Sans', Inter, system-ui, sans-serif);font-size:.875rem;font-weight:600;line-height:1.25rem;padding:8px 24px;border-radius:9999px;background:var(--color-green, #384033);color:var(--color-paper, #ffffff);transition:opacity .2s;}\n.ds-btn-green-deep:disabled{opacity:.3;cursor:not-allowed;}\n.ds-btn-green-deep:focus-visible{outline:2px solid var(--color-green, #384033);outline-offset:2px;}"
+    }
+  ],
+  "narrative": {
+    "northStar": "El vitral y el papel",
+    "overview": "El sistema está hecho de dos materiales en oposición deliberada. En los bordes de cada página —el header y el footer— está la fotografía real del vitral de la biblioteca de la Facultad de Ingeniería, a todo color y sin filtro que la apague; la marca y la navegación flotan encima, y lo que las hace legibles no es un velo sobre la imagen sino una sombra de texto sobre las letras. Entre esas dos bandas, la página es papel: blanco, silencioso, generoso, casi enteramente tipográfico.\n\nEsa oposición no es decorativa, es estructural, y explica todo lo demás. El vitral puede permitirse ser intenso justamente porque aparece solo dos veces y siempre en el mismo lugar. El centro puede permitirse ser sobrio porque no tiene que competir por atención: ya la ganó el borde. Cuando una página necesita color en el cuerpo —las cinco áreas en Inicio, las barras de afinidad en resultados— lo toma en dosis pequeñas y siempre sobre papel, nunca cubriendo la superficie.\n\nEl único lugar donde el vitral entra al cuerpo de la página es su propio espacio dedicado: la tarjeta panorámica de Inicio, con la mascota de la universidad asomada en la esquina. Es la excepción que confirma la regla, y por eso es el objeto con más peso visual de todo el sitio.",
+    "keyCharacteristics": [
+      "Vitral fotográfico solo en header y footer; papel en todo lo demás.",
+      "Paleta cerrada de cinco colores oficiales más sus tintes derivados.",
+      "Profundidad por tono, no por sombra: papel → papel-gris → verde-bruma.",
+      "Tipografía única (DM Sans) haciendo toda la jerarquía por tamaño y peso.",
+      "Movimiento como sistema, no como efecto: cuatro duraciones, cinco curvas, un solo rebote.",
+      "Todo revelado se construye con gsap.from, así que sin JavaScript la página se ve completa."
+    ],
+    "rules": [
+      {
+        "name": "La regla de la Paleta Cerrada",
+        "section": "colors",
+        "body": "Los cinco colores del manual de identidad de la UAEMéx son la paleta completa. Los neutrales derivados existen solo como tintes y textos derivados de esos cinco. Nunca se introduce un color suelto: si hace falta un matiz nuevo, se deriva, no se inventa."
+      },
+      {
+        "name": "La regla del Oro que Firma",
+        "section": "colors",
+        "body": "El oro firma; el verde trabaja. El oro marca dónde habla la marca —titular, separadores, nav, footer— y el verde se queda con el trabajo funcional: acciones, progreso y estado. Prueba de auditoría: si un elemento dorado responde a un clic o representa un dato, está mal pintado. El código cumple esta regla: se eliminó .btn-gold por no quedarle un uso permitido, .btn-outline pasó a borde verde y las barras de afinidad pasaron de oro a verde, lo que además corrigió un contraste de 2.20:1 (por debajo del mínimo no textual de 3:1) a 5.41:1. El nombre del área en Resultados se queda en oro y eso es coherente con la regla: el oro firma el titular y el .h1 es territorio de firma. Lo que nunca puede ser dorado es la representación del dato —las barras y los porcentajes— que ya son verdes. No es una excepción silenciosa, es el reparto que la regla describe. Todo el oro que aparece como texto es Ámbar Quemado (#a15c17, 5.17:1 sobre papel); Oro Viejo sobre blanco da 2.46:1 y no alcanza ni el mínimo de texto grande."
+      },
+      {
+        "name": "La regla del Tamaño Decidido",
+        "section": "typography",
+        "body": ".h1, .h2, .h3, .lead y .eyebrow son el único lugar donde se decide qué tan grande es un encabezado. Una página nunca fija un tamaño suelto encima de esas clases."
+      },
+      {
+        "name": "La regla de la Sombra sobre Vidrio",
+        "section": "typography",
+        "body": "Todo texto que cae sobre la fotografía del vitral lleva text-shadow, nunca un velo sobre la imagen. El vitral se ve completo y a todo color; el que se defiende es el texto."
+      },
+      {
+        "name": "La regla de los Dos Anchos",
+        "section": "layout",
+        "body": "Si el visitante está componiendo una mirada, max-w-6xl. Si está leyendo o completando una tarea, max-w-2xl. No hay un tercer ancho, y una página no mezcla los dos para el mismo tipo de contenido."
+      },
+      {
+        "name": "La regla de la Sombra Fotográfica",
+        "section": "elevation",
+        "body": "La sombra es privilegio de la fotografía. Solo el vitral y la mascota se levantan del papel; todo lo demás se separa por tono. Un componente nuevo que pida sombra para distinguirse está pidiendo, en realidad, la capa tonal que le falta."
+      },
+      {
+        "name": "La regla de la Píldora y la Tarjeta",
+        "section": "shapes",
+        "body": "Redondo completo es para lo que se presiona o avanza; 12px es para lo que contiene. Una tarjeta nunca es una píldora y un botón nunca es una tarjeta."
+      },
+      {
+        "name": "La regla del from",
+        "section": "components",
+        "body": "Todo revelado se construye con gsap.from, nunca con gsap.to desde un estado oculto en el HTML. El estado por defecto del marcado es visible: si el JavaScript falla o tarda, la página se ve completa en lugar de quedarse en blanco."
+      },
+      {
+        "name": "La regla del Único Rebote",
+        "section": "components",
+        "body": "back.out(1.6) está reservado al potro. Es el único rebote del sistema, y lo es porque ahí la personalidad es justamente el objetivo. Cualquier otro elemento que rebote le roba ese momento."
+      },
+      {
+        "name": "La regla del Movimiento Opcional",
+        "section": "components",
+        "body": "Toda animación se declara dentro de gsap.matchMedia() con (prefers-reduced-motion: no-preference), o comprueba prefersReducedMotion() en las ramas imperativas. No hay una sola animación sin esa condición."
+      }
+    ],
+    "dos": [
+      "Do dejar que el vitral aparezca a todo color y sin velo en header y footer, y defender el texto con text-shadow en vez de apagar la imagen.",
+      "Do separar superficies con las tres capas tonales (Papel → Papel Gris → Verde Bruma) antes de considerar una sombra.",
+      "Do usar .h1, .h2, .h3, .lead y .eyebrow para toda jerarquía tipográfica, y dejar que esas clases sean el único lugar donde se decide un tamaño.",
+      "Do elegir entre los dos anchos: max-w-6xl para componer, max-w-2xl para leer o completar una tarea.",
+      "Do animar avance con scaleX desde origin-left, nunca con width.",
+      "Do construir los revelados con gsap.from, para que el HTML por defecto sea el estado visible.",
+      "Do declarar toda animación dentro de matchMedia('(prefers-reduced-motion: no-preference)').",
+      "Do marcar el contenido que todavía no existe con borde punteado o un control deshabilitado que nombre lo que vendrá.",
+      "Do confirmar una acción destructiva en el propio control, en dos pasos, y dejar que se desarme sola por tiempo, por foco o por un toque fuera."
+    ],
+    "donts": [
+      "Don't introducir un color fuera de los cinco oficiales y sus tintes derivados. Si falta un matiz, se deriva de la paleta; no se inventa.",
+      "Don't pintar de oro algo que responde a un clic o representa un dato. El oro firma; el verde trabaja.",
+      "Don't pintar texto con un degradado. El énfasis lo hacen el peso, el tamaño y un color plano de la paleta. La palabra dorada del titular es Ámbar Quemado sólido, y entra con el mismo escalonado que el resto de su titular, sin tratamiento propio.",
+      "Don't poner sombra a un componente para distinguirlo. Lo que le falta es capa tonal.",
+      "Don't hacer que un botón se levante, escale o se mueva en hover. Las transiciones de los botones son solo de color.",
+      "Don't abrir un modal para una tarea que no necesita foco protegido ni interrumpir nada. El sitio no tiene ninguno, y una confirmación de un solo control no es motivo para el primero.",
+      "Don't darle rebote a nada que no sea el potro.",
+      "Don't repetir el revelado de entrada en cada sección: Reveal es para listas que aparecen como listas. Usarlo en todas partes convierte el movimiento en ruido.",
+      "Don't convertir el diagnóstico en un test de personalidad juguetón: nada de confeti, emoji, insignias gamificadas ni colores brillantes. El resultado es una decisión profesional.",
+      "Don't derivar hacia el dashboard SaaS genérico: nada de degradados azul/morado, glassmorphism ni iconografía de stock. Disuelve la especificidad institucional que es toda la ventaja.",
+      "Don't adoptar el lenguaje de una landing de bootcamp: sin urgencia, sin contadores, sin carruseles de testimonios. Además exigiría evidencia social que no existe."
+    ]
+  }
+}
