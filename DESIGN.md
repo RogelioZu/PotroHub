@@ -151,6 +151,15 @@ tarjeta panorámica de Inicio (`VitralShowcase`), con la mascota de la universid
 esquina. Es la excepción que confirma la regla, y por eso es el objeto con más peso visual de todo
 el sitio.
 
+La sección de áreas de especialización usa una órbita circular: las cinco áreas rodean un centro
+con la mascota institucional y la etiqueta "Tu ruta". Las fotografías de cada área siguen siendo
+el punto de identificación de sus tarjetas; el círculo organiza la relación entre ellas sin
+convertir el cuerpo en un panel de dashboard.
+
+Su encabezado conserva una separación corta con la órbita: el título en verde lleva una firma dorada
+y el subtítulo usa una medida de lectura más amplia para presentar la interacción sin competir con
+las tarjetas.
+
 **Key Characteristics:**
 
 - Vitral fotográfico solo en header y footer; papel en todo lo demás.

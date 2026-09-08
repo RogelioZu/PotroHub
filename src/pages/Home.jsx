@@ -123,21 +123,33 @@ function Home() {
       <section className="section-py border-t border-ink/5 bg-paper-alt">
         <div className="mx-auto max-w-6xl px-6">
           <SectionDivider>
-            <h2 className="min-w-0 h2 sm:shrink-0">Áreas de especialización</h2>
+            <h2 className="area-heading-title min-w-0 h2 sm:shrink-0">¿Dónde está tu potencial?</h2>
           </SectionDivider>
-          <p className="mt-4 text-ink-soft">
-            El diagnóstico evalúa tu afinidad con cada una de estas cinco áreas.
+          <p className="area-heading-subtitle mt-8">
+            Descubre las áreas de Computación que mejor conectan con tus habilidades, intereses y forma de resolver problemas.
           </p>
-          <Reveal className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
+          <Reveal className="area-orbit -mt-12" aria-label="Áreas de especialización">
+            <div className="area-orbit-center">
+              <img src="/images/potro-mascota.png" alt="Mascota de la UAEMéx" />
+              <span>Tu ruta</span>
+            </div>
             {AREAS.map((area) => (
-              <div key={area.id} className="overflow-hidden rounded-xl bg-paper shadow-sm shadow-ink/5">
-                <div className={`relative aspect-video bg-linear-to-br ${area.tone}`}>
-                  <span className="absolute bottom-3 left-3 rounded-md bg-ink/70 px-3 py-1.5 text-sm font-medium text-paper">
-                    {area.name}
-                  </span>
+              <article key={area.id} className="area-orbit-item" tabIndex="0">
+                <div className="area-orbit-card">
+                  <div className="area-orbit-flip">
+                    <div className="area-orbit-face area-orbit-front">
+                      <div className="area-orbit-image">
+                        <img src={area.image} alt={area.name} />
+                        <h3>{area.name}</h3>
+                      </div>
+                    </div>
+                    <div className="area-orbit-face area-orbit-back">
+                      <p>{area.description}</p>
+                      <button type="button">Ver más <span aria-hidden="true">→</span></button>
+                    </div>
+                  </div>
                 </div>
-                <p className="p-4 text-sm text-ink-soft">{area.description}</p>
-              </div>
+              </article>
             ))}
           </Reveal>
         </div>

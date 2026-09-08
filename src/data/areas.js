@@ -3,31 +3,31 @@ export const AREAS = [
     id: 'ia',
     name: 'Inteligencia Artificial',
     description: 'Aprendizaje automático, modelos de lenguaje y visión por computadora aplicados a problemas reales.',
-    tone: 'from-green to-green-mid',
+    image: '/images/IA.png'
   },
   {
     id: 'ciberseguridad',
     name: 'Ciberseguridad',
     description: 'Protección de sistemas, análisis de vulnerabilidades y respuesta a incidentes.',
-    tone: 'from-gold-dark to-gold',
+    image: '/images/Seguridad.png'
   },
   {
     id: 'nube',
     name: 'Cloud Computing',
     description: 'Arquitectura, despliegue y administración de infraestructura en la nube.',
-    tone: 'from-green-mid to-green',
+    image: '/images/Cloud.png'
   },
   {
     id: 'ciencia-datos',
     name: 'Ciencia de Datos',
     description: 'Análisis estadístico, modelado predictivo y visualización de datos para la toma de decisiones.',
-    tone: 'from-gold to-gold-dark',
+    image: '/images/DC.png'
   },
   {
     id: 'software',
     name: 'Desarrollo de Software',
     description: 'Diseño, construcción y mantenimiento de aplicaciones y sistemas.',
-    tone: 'from-green to-gold-dark',
+    image: '/images/Desarrollo.png'
   },
 ]
 
