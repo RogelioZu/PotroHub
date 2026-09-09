@@ -378,11 +378,27 @@
       "description": "\"Ver resultados\" al cerrar el cuestionario. Verde profundo para distinguirse de \"Siguiente\" sin recurrir al oro.",
       "html": "<button class=\"ds-btn-green-deep\">Ver resultados</button>",
       "css": ".ds-btn-green-deep{display:inline-block;border:none;cursor:pointer;font-family:var(--font-sans, 'DM Sans', Inter, system-ui, sans-serif);font-size:.875rem;font-weight:600;line-height:1.25rem;padding:8px 24px;border-radius:9999px;background:var(--color-green, #384033);color:var(--color-paper, #ffffff);transition:opacity .2s;}\n.ds-btn-green-deep:disabled{opacity:.3;cursor:not-allowed;}\n.ds-btn-green-deep:focus-visible{outline:2px solid var(--color-green, #384033);outline-offset:2px;}"
+    },
+    {
+      "name": "Celda de Dato del Mosaico",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "Las dos celdas de cifra del mosaico de Inicio. Único uso decorativo del redondo completo, acotado a cifras verdaderas del producto. Verdes porque son dato, nunca doradas.",
+      "html": "<div class=\"ds-mosaic-col\">\n  <p class=\"ds-mosaic-circle\"><span class=\"ds-mosaic-num\">50</span><span class=\"ds-mosaic-label\">preguntas</span></p>\n  <p class=\"ds-mosaic-pill\">5 áreas de especialización</p>\n</div>",
+      "css": ".ds-mosaic-col{font-family:var(--font-sans, 'DM Sans', Inter, system-ui, sans-serif);display:flex;flex-direction:column;gap:12px;width:200px;}\n.ds-mosaic-circle{margin:0;aspect-ratio:1;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:9999px;background:var(--color-green-mid, #526855);color:var(--color-paper, #fff);text-align:center;}\n.ds-mosaic-num{font-size:2.25rem;line-height:1;font-weight:700;}\n.ds-mosaic-label{margin-top:4px;font-size:.75rem;}\n.ds-mosaic-pill{margin:0;flex:1;display:flex;align-items:center;justify-content:center;border-radius:9999px;background:var(--color-green-soft, #e8ece7);padding:16px;text-align:center;font-size:.875rem;line-height:1.25;font-weight:600;color:var(--color-green, #384033);}"
+    },
+    {
+      "name": "Tarjeta de Área",
+      "kind": "card",
+      "refersTo": null,
+      "description": "Una de las cinco áreas en Inicio. Papel con shadow-sm porque vive sobre la sección Papel Gris. La descripción está siempre visible: antes vivía en el reverso de un giro que un teléfono no puede disparar.",
+      "html": "<article class=\"ds-area\">\n  <img class=\"ds-area-img\" src=\"/images/IA.webp\" alt=\"\">\n  <div class=\"ds-area-body\">\n    <h3 class=\"ds-area-title\">Inteligencia Artificial</h3>\n    <p class=\"ds-area-text\">Aprendizaje automático, modelos de lenguaje y visión por computadora aplicados a problemas reales.</p>\n  </div>\n</article>",
+      "css": ".ds-area{font-family:var(--font-sans, 'DM Sans', Inter, system-ui, sans-serif);overflow:hidden;border-radius:12px;background:var(--color-paper, #fff);box-shadow:0 1px 3px 0 rgb(37 37 37 / 5%), 0 1px 2px -1px rgb(37 37 37 / 5%);max-width:360px;}\n.ds-area-img{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;}\n.ds-area-body{padding:20px;}\n.ds-area-title{margin:0;font-size:1.125rem;line-height:1.75rem;font-weight:700;color:var(--color-green-mid, #526855);}\n.ds-area-text{margin:8px 0 0;font-size:.875rem;line-height:1.25rem;color:var(--color-ink-soft, #5c5c5c);}"
     }
   ],
   "narrative": {
     "northStar": "El vitral y el papel",
-    "overview": "El sistema está hecho de dos materiales en oposición deliberada. En los bordes de cada página —el header y el footer— está la fotografía real del vitral de la biblioteca de la Facultad de Ingeniería, a todo color y sin filtro que la apague; la marca y la navegación flotan encima, y lo que las hace legibles no es un velo sobre la imagen sino una sombra de texto sobre las letras. Entre esas dos bandas, la página es papel: blanco, silencioso, generoso, casi enteramente tipográfico.\n\nEsa oposición no es decorativa, es estructural, y explica todo lo demás. El vitral puede permitirse ser intenso justamente porque aparece solo dos veces y siempre en el mismo lugar. El centro puede permitirse ser sobrio porque no tiene que competir por atención: ya la ganó el borde. Cuando una página necesita color en el cuerpo —las cinco áreas en Inicio, las barras de afinidad en resultados— lo toma en dosis pequeñas y siempre sobre papel, nunca cubriendo la superficie.\n\nEl único lugar donde el vitral entra al cuerpo de la página es su propio espacio dedicado: la tarjeta panorámica de Inicio, con la mascota de la universidad asomada en la esquina. Es la excepción que confirma la regla, y por eso es el objeto con más peso visual de todo el sitio.",
+    "overview": "El sistema está hecho de dos materiales en oposición deliberada. En los bordes de cada página —el header y el footer— está la fotografía real del vitral de la biblioteca de la Facultad de Ingeniería, a todo color y sin filtro que la apague; la marca y la navegación flotan encima, y lo que las hace legibles no es un velo sobre la imagen sino una sombra de texto sobre las letras. Entre esas dos bandas, la página es papel: blanco, silencioso, generoso, casi enteramente tipográfico.\n\nEsa oposición no es decorativa, es estructural, y explica todo lo demás. El vitral puede permitirse ser intenso justamente porque aparece solo dos veces y siempre en el mismo lugar. El centro puede permitirse ser sobrio porque no tiene que competir por atención: ya la ganó el borde. Cuando una página necesita color en el cuerpo —las cinco áreas en Inicio, las barras de afinidad en resultados— lo toma en dosis pequeñas y siempre sobre papel, nunca cubriendo la superficie.\n\nEl único lugar donde el vitral entra al cuerpo de la página es su propio espacio dedicado: la tarjeta panorámica de Inicio, con la mascota de la universidad asomada en la esquina. Es la excepción que confirma la regla, y por eso es el objeto con más peso visual de todo el sitio.\n\nEsa tarjeta es la pieza superior del mosaico del hero: un vitral es, literalmente, celdas de color separadas por plomo, así que la composición modular es la geometría del propio activo insignia y no un préstamo de una landing de moda. Bajo la franja del vitral van una fotografía de estudiantes y dos celdas de dato — una redonda y una en pastilla — que sólo pueden contener hechos verificables del producto: cuántas preguntas son y cuántas áreas mide. Son verdes y no doradas porque representan un dato.\n\nLas cinco áreas se presentan como una rejilla editorial de tres arriba y dos abajo, con la fotografía de cada área como identificación y la descripción siempre visible. Tienen el mismo peso visual a propósito: el diagnóstico las mide, no las rankea.",
     "keyCharacteristics": [
       "Vitral fotográfico solo en header y footer; papel en todo lo demás.",
       "Paleta cerrada de cinco colores oficiales más sus tintes derivados.",
@@ -426,6 +442,11 @@
         "name": "La regla de la Píldora y la Tarjeta",
         "section": "shapes",
         "body": "Redondo completo es para lo que se presiona o avanza; 12px es para lo que contiene. Una tarjeta nunca es una píldora y un botón nunca es una tarjeta."
+      },
+      {
+        "name": "La excepción de la Celda de Dato",
+        "section": "shapes",
+        "body": "El redondo completo tiene un tercer uso, y sólo uno: las celdas de dato del mosaico del hero — el círculo de \"50 preguntas\" y la pastilla de \"5 áreas de especialización\". Son formas que no se presionan y no contienen nada; son cifras. La excepción está acotada: vale únicamente para el mosaico, únicamente para cifras verdaderas del producto, y nunca para una fotografía, que sigue en 12px."
       },
       {
         "name": "La regla del from",

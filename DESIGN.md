@@ -151,14 +151,22 @@ tarjeta panorámica de Inicio (`VitralShowcase`), con la mascota de la universid
 esquina. Es la excepción que confirma la regla, y por eso es el objeto con más peso visual de todo
 el sitio.
 
-La sección de áreas de especialización usa una órbita circular: las cinco áreas rodean un centro
-con la mascota institucional y la etiqueta "Tu ruta". Las fotografías de cada área siguen siendo
-el punto de identificación de sus tarjetas; el círculo organiza la relación entre ellas sin
-convertir el cuerpo en un panel de dashboard.
+Esa tarjeta ya no vive sola: es la pieza superior del **mosaico del hero**. Un vitral es,
+literalmente, celdas de color separadas por plomo, así que la composición modular no es un préstamo
+de una landing de moda — es la geometría del propio activo insignia. Debajo de la franja del vitral
+van una fotografía de estudiantes y dos celdas de dato, una redonda y una en pastilla.
 
-Su encabezado conserva una separación corta con la órbita: el título en verde lleva una firma dorada
-y el subtítulo usa una medida de lectura más amplia para presentar la interacción sin competir con
-las tarjetas.
+Esas dos celdas dicen "50 preguntas" y "5 áreas de especialización", y son deliberadamente la
+versión honesta de las burbujas de cifra que usan las landings educativas. Sólo pueden contener
+hechos verificables del producto; ningún conteo de usuarios, adopción ni respaldo, porque nada de
+eso existe todavía (ver `PRODUCT.md` → *Evidence on Hand*). Son verdes y no doradas porque
+representan un dato, y el dato es territorio del verde.
+
+Las cinco áreas de especialización se presentan como una rejilla editorial de tres arriba y dos
+abajo, con la fotografía de cada área como punto de identificación y la descripción siempre visible.
+Las dos celdas anchas de abajo usan un recorte más panorámico para que las dos filas pesen igual.
+Las cinco áreas tienen el mismo peso visual a propósito: el diagnóstico las mide, no las rankea, y
+destacar una antes de que el estudiante responda sugeriría una recomendación que todavía no se hizo.
 
 **Key Characteristics:**
 
@@ -292,8 +300,11 @@ contenido quedaban pegadas al tercio superior con media pantalla vacía debajo, 
 leían como pantallas sin terminar.
 
 Las rejillas colapsan en un patrón consistente: `sm:grid-cols-2` y luego `lg:grid-cols-4` o
-`lg:grid-cols-5` según cuántos elementos haya. El hero es de dos columnas desde `md`, con la
-tarjeta del vitral a la derecha. La navegación cambia de barra horizontal a menú desplegable en
+`lg:grid-cols-5` según cuántos elementos haya. La excepción es la rejilla de áreas de Inicio, que
+usa `lg:grid-cols-6` con tramos de 2 y de 3 para dar tres celdas arriba y dos abajo: cinco
+elementos no caben en una rejilla regular sin dejar un hueco o sin apretarlos a un ancho donde la
+descripción ya no se lee. El hero es de dos columnas desde `md`, con el mosaico a la derecha. La
+navegación cambia de barra horizontal a menú desplegable en
 `lg` —no en `md`— porque la etiqueta "Comunidad Facultad de Ingeniería" es larga y rompe antes que
 el resto.
 
@@ -357,6 +368,14 @@ es la forma que el sistema tiene de decir "esto todavía no existe" sin fingir q
 
 **La regla de la Píldora y la Tarjeta.** Redondo completo es para lo que se presiona o avanza;
 `12px` es para lo que contiene. Una tarjeta nunca es una píldora y un botón nunca es una tarjeta.
+
+**La excepción de la Celda de Dato.** El redondo completo tiene un tercer uso, y sólo uno: las
+celdas de dato del mosaico del hero —el círculo de "50 preguntas" y la pastilla de "5 áreas de
+especialización"—. Son formas que no se presionan y no contienen nada; son cifras. La excepción
+está acotada a propósito: vale únicamente para el mosaico, únicamente para cifras verdaderas del
+producto, y nunca para una fotografía, que sigue en `12px`. Es lo que permite traer la energía
+modular de un mosaico sin convertir la página en una ensalada de formas, y sin que un círculo
+llegue a parecer un botón que no responde al clic.
 
 ## Components
 
@@ -431,6 +450,32 @@ desde `origin-left`, nunca con `width` — la anchura dispara *layout* en cada a
 cuestionario y las barras de afinidad comparten color: las dos son dato, no firma. La barra del cuestionario mide `6px`
 de alto (`h-1.5`) y las de resultados `8px` (`h-2`). En resultados, cada barra cuenta su porcentaje
 en sincronía con el llenado.
+
+### Mosaico del hero
+
+La mitad derecha de Inicio. Tres piezas bajo la franja del vitral: una fotografía de estudiantes a
+`3/5` del ancho y, a `2/5`, una columna con el círculo de "50 preguntas" arriba y la pastilla de
+"5 áreas de especialización" abajo.
+
+Es composición de cajas flexibles y no una rejilla de pistas fijas, y eso es deliberado: el círculo
+nace del ancho de su columna, así que acotar esa columna a `2/5` es lo único que evita que se
+deforme en elipse o se coma la composición. Con la columna a la mitad del ancho, el círculo crecía
+hasta ~270px y dejaba a la pastilla como una rendija de 22px.
+
+Las celdas entran al final de la secuencia del hero desde `scale: 0.92` —piezas que caen en su
+hueco—, sin rebote: el rebote es del potro. `VitralShowcase` no participa de esa secuencia porque
+es dueño de su propia entrada y corre en paralelo.
+
+### Tarjeta de área
+
+Fotografía arriba, `.h3` en `Verde Universitario` y descripción en `Tinta Suave`. Vive sobre la
+sección `Papel Gris`, así que es `Papel` con `shadow-sm shadow-ink/5`. Las tres de la fila superior
+recortan a `16/10`; las dos anchas de abajo pasan a `21/9` desde `lg` para que las dos filas pesen
+igual.
+
+La descripción está siempre visible. Antes vivía en el reverso de una tarjeta que giraba al pasar
+el cursor: en un teléfono no hay cursor, y el contenido quedaba detrás de una interacción que ese
+dispositivo no tiene — justo en la escena de llegada que `PRODUCT.md` marca como primaria.
 
 ### VitralShowcase (componente insignia)
 
