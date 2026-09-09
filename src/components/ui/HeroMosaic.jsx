@@ -1,12 +1,23 @@
 import VitralShowcase from './VitralShowcase'
 
+/** Un ícono se oculta si falta, en vez de mostrar el recuadro roto del navegador. */
+function hideOnError(event) {
+  event.currentTarget.style.display = 'none'
+}
+
 /**
  * El mosaico del hero.
  *
  * Un vitral es, literalmente, celdas de color separadas por plomo: la
  * geometría modular no es un préstamo de moda, es la geometría del activo
  * insignia del sitio. De ahí sale la composición — la franja panorámica del
- * vitral arriba, y debajo una fotografía alta junto a dos celdas de dato.
+ * vitral arriba, y debajo una celda de collage técnico junto a dos celdas de
+ * dato.
+ *
+ * La celda de collage vive sobre `Papel Gris` y lleva tres ilustraciones en
+ * PNG transparente (ver `public/images/hero/README.md` para la especificación
+ * exacta). Son decorativas —la información real está en el titular y en las
+ * tarjetas de área de abajo—, por eso `alt=""`.
  *
  * Las dos celdas redondas son la versión honesta de las burbujas de cifra que
  * usan las landings educativas ("120k estudiantes"): aquí sólo pueden decir
@@ -27,23 +38,38 @@ function HeroMosaic({ className = '' }) {
       <VitralShowcase />
 
       {/*
-        La fotografía se lleva la parte ancha (3/5) y la columna de dato la
-        estrecha (2/5): el círculo nace del ancho de su columna, así que
+        La celda de collage se lleva la parte ancha (3/5) y la columna de dato
+        la estrecha (2/5): el círculo nace del ancho de su columna, así que
         acotarla es lo que evita que se coma la composición y deje a la
         pastilla como una rendija.
       */}
       <div className="flex gap-3">
-        <figure
+        <div
           data-mosaic-cell
-          className="w-3/5 overflow-hidden rounded-xl shadow-sm shadow-ink/5"
+          className="relative w-3/5 overflow-hidden rounded-xl bg-paper-alt shadow-sm shadow-ink/5"
         >
           <img
-            src="/images/Desarrollo.webp"
-            alt="Estudiantes de la Facultad de Ingeniería trabajando juntos."
-            className="h-full w-full object-cover"
+            src="/images/hero/computadora.png"
+            alt=""
+            onError={hideOnError}
             loading="lazy"
+            className="absolute inset-0 m-auto h-[62%] w-[62%] object-contain"
           />
-        </figure>
+          <img
+            src="/images/hero/servidor.png"
+            alt=""
+            onError={hideOnError}
+            loading="lazy"
+            className="absolute top-4 left-4 h-[28%] w-[28%] object-contain"
+          />
+          <img
+            src="/images/hero/ia.png"
+            alt=""
+            onError={hideOnError}
+            loading="lazy"
+            className="absolute right-4 bottom-4 h-[30%] w-[30%] object-contain"
+          />
+        </div>
 
         <div className="flex w-2/5 flex-col gap-3">
           <p

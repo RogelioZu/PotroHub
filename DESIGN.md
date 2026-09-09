@@ -154,7 +154,8 @@ el sitio.
 Esa tarjeta ya no vive sola: es la pieza superior del **mosaico del hero**. Un vitral es,
 literalmente, celdas de color separadas por plomo, así que la composición modular no es un préstamo
 de una landing de moda — es la geometría del propio activo insignia. Debajo de la franja del vitral
-van una fotografía de estudiantes y dos celdas de dato, una redonda y una en pastilla.
+van una celda de collage técnico (tres ilustraciones en PNG transparente sobre `Papel Gris` —
+computadora, servidor, IA) y dos celdas de dato, una redonda y una en pastilla.
 
 Esas dos celdas dicen "50 preguntas" y "5 áreas de especialización", y son deliberadamente la
 versión honesta de las burbujas de cifra que usan las landings educativas. Sólo pueden contener
@@ -163,10 +164,12 @@ eso existe todavía (ver `PRODUCT.md` → *Evidence on Hand*). Son verdes y no d
 representan un dato, y el dato es territorio del verde.
 
 Las cinco áreas de especialización se presentan como una rejilla editorial de tres arriba y dos
-abajo, con la fotografía de cada área como punto de identificación y la descripción siempre visible.
-Las dos celdas anchas de abajo usan un recorte más panorámico para que las dos filas pesen igual.
-Las cinco áreas tienen el mismo peso visual a propósito: el diagnóstico las mide, no las rankea, y
-destacar una antes de que el estudiante responda sugeriría una recomendación que todavía no se hizo.
+abajo. Cada tarjeta voltea sobre sí misma: la foto y el nombre al frente, el nombre y la descripción
+al fondo. El disparador tiene dos vías — `:hover` en escritorio con puntero fino, y una clase que
+React fija al tocar o hacer clic, que es la que funciona en cualquier dispositivo — así que ningún
+teléfono queda con una tarjeta atascada mostrando sólo el frente. Las cinco áreas tienen el mismo
+peso visual a propósito: el diagnóstico las mide, no las rankea, y destacar una antes de que el
+estudiante responda sugeriría una recomendación que todavía no se hizo.
 
 **Key Characteristics:**
 
@@ -453,9 +456,17 @@ en sincronía con el llenado.
 
 ### Mosaico del hero
 
-La mitad derecha de Inicio. Tres piezas bajo la franja del vitral: una fotografía de estudiantes a
+La mitad derecha de Inicio. Tres piezas bajo la franja del vitral: una celda de collage técnico a
 `3/5` del ancho y, a `2/5`, una columna con el círculo de "50 preguntas" arriba y la pastilla de
 "5 áreas de especialización" abajo.
+
+La celda de collage vive sobre `Papel Gris` y lleva tres ilustraciones en PNG con fondo
+transparente — una computadora (grande, centrada), un servidor (acento, esquina superior izquierda)
+y algo que lea "inteligencia artificial" (acento, esquina inferior derecha). Los tres archivos son
+del equipo, no del sistema de diseño, y viven en `public/images/hero/` con su especificación
+completa en el README de esa carpeta: mismo estilo entre los tres, colores dentro de la paleta si es
+posible, sin sombra horneada en el PNG. Si un archivo todavía no existe, la ilustración se oculta en
+vez de mostrar el recuadro roto del navegador.
 
 Es composición de cajas flexibles y no una rejilla de pistas fijas, y eso es deliberado: el círculo
 nace del ancho de su columna, así que acotar esa columna a `2/5` es lo único que evita que se
@@ -468,14 +479,18 @@ es dueño de su propia entrada y corre en paralelo.
 
 ### Tarjeta de área
 
-Fotografía arriba, `.h3` en `Verde Universitario` y descripción en `Tinta Suave`. Vive sobre la
-sección `Papel Gris`, así que es `Papel` con `shadow-sm shadow-ink/5`. Las tres de la fila superior
-recortan a `16/10`; las dos anchas de abajo pasan a `21/9` desde `lg` para que las dos filas pesen
-igual.
+Voltea sobre sí misma. Frente: fotografía con el nombre en una etiqueta superpuesta
+(`badge-overlay`). Fondo: el nombre en `.h3` `Verde Universitario` y la descripción en `Tinta
+Suave`, sobre `Papel` con relleno de `20px`. Las cinco viven en un `<button>` — no en una tarjeta
+pasiva — porque el volteo necesita un elemento que reciba clic, toque y teclado por igual.
 
-La descripción está siempre visible. Antes vivía en el reverso de una tarjeta que giraba al pasar
-el cursor: en un teléfono no hay cursor, y el contenido quedaba detrás de una interacción que ese
-dispositivo no tiene — justo en la escena de llegada que `PRODUCT.md` marca como primaria.
+El disparador tiene dos vías independientes a la misma transición. En escritorio con puntero fino,
+`:hover`/`:focus-visible`, acotado a `(hover: hover) and (pointer: fine)` — sin esa condición un
+teléfono dispararía el volteo con el primer toque y no habría manera de volver al frente. En
+cualquier dispositivo, un `onClick` de React que fija una clase (`is-flipped`) — el mecanismo que
+sí llega al teléfono, porque un manejador de clic responde igual a mouse, teclado o toque. Varias
+tarjetas pueden quedar volteadas a la vez: no hay motivo para forzarlas a cerrarse entre sí si el
+estudiante quiere comparar dos áreas.
 
 ### VitralShowcase (componente insignia)
 
@@ -588,6 +603,10 @@ imperativas. No hay una sola animación sin esa condición.
 - **Don't** convertir el diagnóstico en un test de personalidad juguetón: nada de confeti, emoji,
   insignias gamificadas ni colores brillantes. El resultado es una decisión profesional.
 - **Don't** derivar hacia el dashboard SaaS genérico: nada de degradados azul/morado, glassmorphism
-  ni iconografía de stock. Disuelve la especificidad institucional que es toda la ventaja.
+  ni un cajón de íconos sueltos de librería genérica —el estilo de UI de escritorio, candado,
+  engrane, flecha—. Disuelve la especificidad institucional que es toda la ventaja. Esto no prohíbe
+  ilustración técnica curada: la celda de collage del mosaico del hero (computadora, servidor, IA)
+  es un conjunto pequeño, de un solo estilo entre sí y con especificación propia
+  (`public/images/hero/README.md`), no un cajón de clip art sin filtrar.
 - **Don't** adoptar el lenguaje de una landing de bootcamp: sin urgencia, sin contadores, sin
   carruseles de testimonios. Además exigiría evidencia social que no existe.

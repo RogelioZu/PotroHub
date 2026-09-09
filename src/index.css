@@ -126,4 +126,64 @@
   .btn-disabled {
     @apply inline-block cursor-not-allowed rounded-full bg-paper-alt px-6 py-3 font-semibold text-ink-soft/60;
   }
+
+  /**
+   * Tarjeta de área con volteo. Frente: foto + nombre. Fondo: nombre en
+   * verde + descripción. El disparador tiene dos vías independientes que
+   * llegan a la misma transición:
+   *
+   *  1. `:hover`/`:focus-visible`, pero sólo bajo `(hover: hover) and
+   *     (pointer: fine)` — un dedo no tiene "encima sin tocar", así que sin
+   *     esa condición un teléfono dispararía el volteo con el primer toque
+   *     y no habría manera de volver al frente.
+   *  2. la clase `.is-flipped`, que pone React al hacer clic o tocar — el
+   *     mecanismo que sí funciona en cualquier dispositivo, porque un click
+   *     handler dispara igual con mouse, teclado o toque.
+   *
+   * `.area-flip` es el `<button>` completo: por eso el volteo 3D vive en un
+   * hijo (`.area-flip-inner`) y no en el propio botón, que además necesita
+   * quedarse quieto para que su `outline` de foco no rote con la tarjeta.
+   */
+  .area-flip {
+    /* Un `<button>` es `inline-block` por defecto y no se estira solo dentro
+       de una rejilla — `block` + `width: 100%` lo fuerza a llenar su celda. */
+    display: block;
+    width: 100%;
+    perspective: 1000px;
+  }
+  .area-flip-inner {
+    position: relative;
+    display: block;
+    aspect-ratio: 4 / 3;
+    transform-style: preserve-3d;
+    transition: transform 500ms ease;
+  }
+  .area-flip.is-flipped .area-flip-inner {
+    transform: rotateY(180deg);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .area-flip:hover .area-flip-inner,
+    .area-flip:focus-visible .area-flip-inner {
+      transform: rotateY(180deg);
+    }
+  }
+  .area-flip-face {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    border-radius: 12px;
+    backface-visibility: hidden;
+  }
+  .area-flip-front {
+    background: var(--color-paper);
+  }
+  .area-flip-back {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    transform: rotateY(180deg);
+    background: var(--color-paper);
+    padding: 20px;
+  }
 }

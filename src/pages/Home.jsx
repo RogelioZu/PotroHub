@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Reveal from '../components/motion/Reveal'
 import SectionDivider from '../components/motion/SectionDivider'
@@ -11,6 +11,12 @@ import { useDocumentTitle } from '../lib/useDocumentTitle'
 function Home() {
   const hero = useRef(null)
   const heading = useRef(null)
+  // Qué tarjetas de área están volteadas. Es un mapa y no un solo id: en
+  // escritorio el volteo por :hover ya es excluyente por sí mismo (sólo se
+  // puede pasar el mouse sobre una a la vez), pero en teléfono el toque fija
+  // el estado, y fijar más de una a la vez para comparar dos áreas es
+  // razonable — no hay motivo para forzarlas a cerrarse entre sí.
+  const [flipped, setFlipped] = useState({})
 
   useDocumentTitle('PotroPath — Encuentra tu ruta en Ingeniería en Computación')
 
@@ -161,33 +167,41 @@ function Home() {
             abajo es una composición, no una jerarquía. Destacar una sola antes
             de que el estudiante responda sugeriría una recomendación que el
             diagnóstico todavía no hizo.
+
+            Cada tarjeta es un botón que voltea sobre sí misma: la foto y el
+            nombre al frente, la descripción al fondo. En escritorio basta con
+            pasar el mouse (ver `.area-flip` en index.css, sólo bajo
+            `(hover: hover) and (pointer: fine)`); en teléfono no hay hover,
+            así que tocar la tarjeta la fija volteada por medio de este
+            estado — el mismo botón cubre los dos casos sin ramificar la
+            interacción por dispositivo.
           */}
           <Reveal className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
             {AREAS.map((area, index) => (
-              <article
+              <button
                 key={area.id}
-                className={`overflow-hidden rounded-xl bg-paper shadow-sm shadow-ink/5 ${
-                  index < 3 ? 'lg:col-span-2' : 'lg:col-span-3'
-                }`}
+                type="button"
+                aria-pressed={Boolean(flipped[area.id])}
+                onClick={() =>
+                  setFlipped((current) => ({ ...current, [area.id]: !current[area.id] }))
+                }
+                className={`area-flip text-left shadow-sm shadow-ink/5 ${
+                  flipped[area.id] ? 'is-flipped' : ''
+                } ${index < 3 ? 'lg:col-span-2' : 'lg:col-span-3'}`}
               >
-                {/*
-                  Las dos celdas de abajo son más anchas, así que su fotografía
-                  toma un recorte más panorámico: con el mismo 16/10 crecían de
-                  alto y la fila inferior pesaba más que la superior.
-                */}
-                <img
-                  src={area.image}
-                  alt=""
-                  className={`w-full object-cover ${
-                    index < 3 ? 'aspect-16/10' : 'aspect-16/10 lg:aspect-21/9'
-                  }`}
-                  loading="lazy"
-                />
-                <div className="p-5">
-                  <h3 className="h3 text-green-mid">{area.name}</h3>
-                  <p className="mt-2 text-sm text-ink-soft">{area.description}</p>
-                </div>
-              </article>
+                <span className="area-flip-inner">
+                  <span className="area-flip-face area-flip-front">
+                    <img src={area.image} alt="" className="h-full w-full object-cover" loading="lazy" />
+                    <span className="absolute inset-x-3 bottom-3 rounded-md bg-ink/70 px-3 py-2 text-sm font-bold text-paper">
+                      {area.name}
+                    </span>
+                  </span>
+                  <span className="area-flip-face area-flip-back">
+                    <span className="h3 text-green-mid">{area.name}</span>
+                    <span className="mt-2 text-sm text-ink-soft">{area.description}</span>
+                  </span>
+                </span>
+              </button>
             ))}
           </Reveal>
         </div>
