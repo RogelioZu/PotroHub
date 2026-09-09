@@ -341,14 +341,18 @@ percibe y funciona más como un borde suave que como una elevación.
   exclusivo de la tarjeta del vitral y de la insignia del potro.
 - **Asiento de tarjeta** (`box-shadow: 0 1px 3px 0 rgb(37 37 37 / 5%), 0 1px 2px -1px rgb(37 37 37 / 5%)`):
   tarjetas sobre papel blanco, para despegarlas apenas del fondo.
+- **Recorte y pegado** (`drop-shadow-sm`, el filtro de Tailwind): exclusivo de las doce piezas del
+  collage del hero. A diferencia de las otras dos, sigue el contorno del recorte y no un rectángulo
+  — es lo que hace que cada pieza lea como un objeto suelto y no como una foto rectangular más.
 - **Sombra de texto sobre vidrio** (`text-shadow: 0 1px 6px rgb(0 0 0 / 75%)`): no es elevación, es
   legibilidad. Ver *La regla de la Sombra sobre Vidrio*.
 
 ### Named Rules
 
-**La regla de la Sombra Fotográfica.** La sombra es privilegio de la fotografía. Solo el vitral y la
-mascota se levantan del papel; todo lo demás se separa por tono. Un componente nuevo que pida sombra
-para distinguirse está pidiendo, en realidad, la capa tonal que le falta.
+**La regla de la Sombra Fotográfica.** La sombra es privilegio de la fotografía. Se levantan del
+papel la tarjeta del vitral, la mascota y las doce piezas del collage del hero; todo lo demás se
+separa por tono. Un componente nuevo que pida sombra para distinguirse está pidiendo, en realidad,
+la capa tonal que le falta.
 
 ## Shapes
 
@@ -456,26 +460,33 @@ en sincronía con el llenado.
 
 ### Mosaico del hero
 
-La mitad derecha de Inicio. Tres piezas bajo la franja del vitral: una celda de collage técnico a
-`3/5` del ancho y, a `2/5`, una columna con el círculo de "50 preguntas" arriba y la pastilla de
-"5 áreas de especialización" abajo.
+La mitad derecha de Inicio, debajo de la franja del vitral: un collage de doce recortes
+fotográficos y, debajo, el círculo de "50 preguntas" junto a la pastilla de "5 áreas de
+especialización".
 
-La celda de collage vive sobre `Papel Gris` y lleva tres ilustraciones en PNG con fondo
-transparente — una computadora (grande, centrada), un servidor (acento, esquina superior izquierda)
-y algo que lea "inteligencia artificial" (acento, esquina inferior derecha). Los tres archivos son
-del equipo, no del sistema de diseño, y viven en `public/images/hero/` con su especificación
-completa en el README de esa carpeta: mismo estilo entre los tres, colores dentro de la paleta si es
-posible, sin sombra horneada en el PNG. Si un archivo todavía no existe, la ilustración se oculta en
-vez de mostrar el recuadro roto del navegador.
+El collage es doce fotografías reales recortadas —CD, walkman, máquina de escribir, teléfono de
+disco, computadora retro... hasta laptop, smartphone, cámara y lentes VR actuales—, superpuestas y
+giradas a mano dentro de un contenedor cuadrado, sin tarjeta ni fondo detrás: cada recorte flota
+directo sobre el papel, con un `drop-shadow` sutil para el efecto de recorte-y-pegado. Es la
+segunda excepción documentada a *la regla de la Sombra Fotográfica* (la primera es
+`VitralShowcase`), acotada igual: sólo estas doce imágenes, sólo en esta celda. La narrativa "antes
+→ ahora" no es casual — es la misma idea que el titular ya dice en palabras ("encuentra tu ruta"),
+puesta en imágenes.
 
-Es composición de cajas flexibles y no una rejilla de pistas fijas, y eso es deliberado: el círculo
-nace del ancho de su columna, así que acotar esa columna a `2/5` es lo único que evita que se
-deforme en elipse o se coma la composición. Con la columna a la mitad del ancho, el círculo crecía
-hasta ~270px y dejaba a la pastilla como una rendija de 22px.
+Los doce archivos son del equipo, no del sistema de diseño, y viven en `public/images/hero/` con su
+especificación completa en el README de esa carpeta: sin logotipos ni marcas de terceros visibles,
+recorte ajustado al objeto, mismo tratamiento fotográfico entre los doce. La posición de cada uno
+—`top`/`left`/`width`/rotación, en porcentaje del contenedor— vive en el arreglo `COLLAGE_ITEMS` de
+`HeroMosaic.jsx`, a mano y no calculada, igual que en la referencia. Mientras un archivo no exista,
+esa pieza se oculta en vez de mostrar el recuadro roto del navegador, y mientras *ninguna* de las
+doce haya cargado, la celda completa cae al mismo aviso punteado que usa el resto del sitio para
+contenido pendiente ("Collage pendiente de agregar en /public/images/hero") — nunca un vacío mudo.
 
-Las celdas entran al final de la secuencia del hero desde `scale: 0.92` —piezas que caen en su
-hueco—, sin rebote: el rebote es del potro. `VitralShowcase` no participa de esa secuencia porque
-es dueño de su propia entrada y corre en paralelo.
+Las celdas de dato entran al final de la secuencia del hero desde `scale: 0.92` —piezas que caen en
+su hueco—, sin rebote: el rebote es del potro. `VitralShowcase` no participa de esa secuencia
+porque es dueño de su propia entrada y corre en paralelo, y el collage tampoco: sus doce piezas
+aparecen con la carga de cada imagen, no con una entrada coreografiada — coreografiar doce elementos
+más habría competido con el titular por ser el momento focal de la página.
 
 ### Tarjeta de área
 
