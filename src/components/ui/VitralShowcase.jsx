@@ -7,9 +7,8 @@ import { DUR, EASE, FULL_MOTION } from '../../lib/motion'
  * Facultad de Ingeniería, con la etiqueta superpuesta sobre la imagen
  * (mismo patrón de tarjeta fotográfica que usa uaemex.mx) y la mascota de
  * la universidad como insignia sobre la esquina, para dar sentido de
- * pertenencia. La foto real es un panorámico muy ancho, por eso la tarjeta
- * usa una relación de aspecto amplia en lugar de 16:9. Si
- * `/images/vitral-biblioteca.webp` todavía no existe, se muestra un
+ * pertenencia. La fotografía se presenta como un círculo para convertirla en
+ * el foco visual del hero. Si `/images/vitral-biblioteca.webp` todavía no existe, se muestra un
  * placeholder con el acento decorativo `vitral-accent` en lugar de romper
  * el layout.
  *
@@ -28,15 +27,14 @@ function VitralShowcase({ caption = 'El vitral de nuestra biblioteca', className
       const mm = gsap.matchMedia()
 
       mm.add(FULL_MOTION, () => {
-        // El radio del `round` acompaña a `rounded-xl` para que las esquinas
-        // no se cuadren mientras la máscara barre.
+        // El radio del `round` acompaña al marco circular mientras la máscara barre.
         const tl = gsap.timeline()
 
         tl.fromTo(
           frame.current,
-          { clipPath: 'inset(0% 100% 0% 0% round 0.75rem)' },
+          { clipPath: 'inset(0% 100% 0% 0% round 50%)' },
           {
-            clipPath: 'inset(0% 0% 0% 0% round 0.75rem)',
+            clipPath: 'inset(0% 0% 0% 0% round 50%)',
             duration: DUR.focal,
             ease: EASE.enter,
             clearProps: 'clipPath',
@@ -95,10 +93,10 @@ function VitralShowcase({ caption = 'El vitral de nuestra biblioteca', className
     <figure ref={root} className={`relative ${className}`}>
       <div
         ref={frame}
-        className="overflow-hidden rounded-xl shadow-lg shadow-ink/10 ring-1 ring-ink/5"
+        className="relative z-10 mx-auto aspect-square w-full max-w-[32rem] overflow-hidden rounded-full border-2 border-green bg-green p-2 shadow-xl shadow-ink/15 ring-1 ring-gold/60 sm:p-3"
       >
         {imageFailed ? (
-          <div className="vitral-accent flex aspect-21/9 w-full items-center justify-center">
+          <div className="vitral-accent flex h-full w-full items-center justify-center rounded-full">
             <span className="rounded-full bg-ink/70 px-4 py-2 text-xs text-paper">
               Imagen pendiente de colocar en /public/images/vitral-biblioteca.webp
             </span>
@@ -107,12 +105,12 @@ function VitralShowcase({ caption = 'El vitral de nuestra biblioteca', className
           <img
             src="/images/vitral-biblioteca.webp"
             alt={caption}
-            className="aspect-21/9 w-full object-cover"
+            className="h-full w-full rounded-full object-cover"
             onError={() => setImageFailed(true)}
             onLoad={refreshScrollTriggers}
           />
         )}
-        <figcaption className="absolute bottom-4 left-4 rounded-md bg-ink/70 px-4 py-2 text-sm font-medium text-paper">
+        <figcaption className="absolute inset-x-8 bottom-8 rounded-md border-l-2 border-gold bg-ink/80 px-4 py-2 text-center text-sm font-semibold text-paper shadow-sm sm:inset-x-12 sm:bottom-12">
           {caption}
         </figcaption>
       </div>
@@ -121,7 +119,7 @@ function VitralShowcase({ caption = 'El vitral de nuestra biblioteca', className
         ref={mascot}
         src="/images/potro-mascota.webp"
         alt="Potro, la mascota de la UAEMéx"
-        className="absolute -right-4 -bottom-6 h-24 w-auto rounded-xl bg-paper p-1.5 shadow-lg ring-1 ring-ink/10 sm:h-28 md:-right-6 md:h-32"
+        className="absolute z-20 -right-4 -bottom-8 h-24 w-auto rounded-xl bg-paper p-1.5 shadow-lg ring-1 ring-ink/10 sm:h-28 md:-right-8 md:h-36"
       />
     </figure>
   )

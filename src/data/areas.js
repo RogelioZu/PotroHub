@@ -1,42 +1,45 @@
 /**
- * Las cinco áreas fijas del diagnóstico.
+ * Las cinco áreas son fijas y de igual peso: el diagnóstico no rankea áreas,
+ * las mide. Ninguna vista debe destacar una sobre las otras antes de que el
+ * estudiante responda.
  *
- * `image` apunta a `public/images/areas/*.webp`: los originales eran JPEG de
- * 2432px de ancho con extensión `.png` —unos 2 MB cada uno, 10 MB entre los
- * cinco— para pintarse en una tarjeta de 240px. El teléfono con red de campus
- * mala es un caso de uso primario, no un respaldo: reencodados a 720px de
- * ancho pesan 187 KB en total y se ven idénticos en la tarjeta.
+ * Las fotos son WebP a 1200px de ancho en `public/images/areas/`. Llegaron
+ * como JPEG de 2432px con extensión `.png` —9.7 MB entre las cinco— y el
+ * teléfono con mala red del campus es un caso primario del producto, no un
+ * respaldo (ver PRODUCT.md → Accessibility). A 1200px pesan 308 KB en total
+ * y siguen alcanzando para la tarjeta más ancha de la rejilla de Inicio, que
+ * mide unos 560px y a 2x pide 1120px.
  */
 export const AREAS = [
   {
     id: 'ia',
     name: 'Inteligencia Artificial',
     description: 'Aprendizaje automático, modelos de lenguaje y visión por computadora aplicados a problemas reales.',
-    image: '/images/areas/ia.webp'
+    image: '/images/areas/ia.webp',
   },
   {
     id: 'ciberseguridad',
     name: 'Ciberseguridad',
     description: 'Protección de sistemas, análisis de vulnerabilidades y respuesta a incidentes.',
-    image: '/images/areas/seguridad.webp'
+    image: '/images/areas/seguridad.webp',
   },
   {
     id: 'nube',
     name: 'Cloud Computing',
     description: 'Arquitectura, despliegue y administración de infraestructura en la nube.',
-    image: '/images/areas/cloud.webp'
+    image: '/images/areas/cloud.webp',
   },
   {
     id: 'ciencia-datos',
     name: 'Ciencia de Datos',
     description: 'Análisis estadístico, modelado predictivo y visualización de datos para la toma de decisiones.',
-    image: '/images/areas/dc.webp'
+    image: '/images/areas/dc.webp',
   },
   {
     id: 'software',
     name: 'Desarrollo de Software',
     description: 'Diseño, construcción y mantenimiento de aplicaciones y sistemas.',
-    image: '/images/areas/desarrollo.webp'
+    image: '/images/areas/desarrollo.webp',
   },
 ]
 

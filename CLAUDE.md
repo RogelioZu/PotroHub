@@ -33,7 +33,8 @@ Todo lo demás está en los documentos. Estos cuatro se equivocan rápido y cues
 
 1. **Nunca fabriques un dato institucional.** No hay testimonios, ni conteos de usuarios, ni cifras
    de adopción, ni convenios, ni aprobación de la UAEMéx. Ningún estudiante ha usado esto todavía.
-   Lo pendiente se declara pendiente — el Discord, los eventos IEEE, la estadística de titulación.
+   Lo pendiente se declara pendiente — los canales de Teams, los eventos IEEE, la estadística de
+   titulación.
    Un placeholder disfrazado de dato real destruye exactamente la credibilidad que el proyecto
    existe para ganarse. Ver `PRODUCT.md` → *Evidence on Hand*.
 2. **La paleta es cerrada.** Cinco colores del manual de identidad de la UAEMéx más sus tintes
@@ -127,7 +128,7 @@ Un documento desactualizado envenena todas las sesiones siguientes.
 |---|---|
 | Color, tipografía, espaciado, forma, componente o movimiento | `DESIGN.md` **y** `.impeccable/design.json` (deben coincidir) |
 | Usuarios, alcance, capacidades, restricciones o principios | `PRODUCT.md` |
-| Algo pendiente que se vuelve real (Discord, eventos IEEE, la estadística, Supabase) | `PRODUCT.md` → *Evidence on Hand*, **y** quita el estado vacío honesto que lo suplía |
+| Algo pendiente que se vuelve real (los canales de Teams, eventos IEEE, la estadística, Supabase) | `PRODUCT.md` → *Evidence on Hand*, **y** quita el estado vacío honesto que lo suplía |
 | Rutas, dependencias, scripts o estructura de carpetas | Este archivo |
 | Una Regla Nombrada que el código deja de cumplir | `DESIGN.md`: o corriges el código, o escribes la deuda explícitamente. Nunca la dejes callada |
 

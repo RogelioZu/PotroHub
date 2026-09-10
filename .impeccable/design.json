@@ -367,9 +367,9 @@
       "name": "Navegación sobre Vitral",
       "kind": "nav",
       "refersTo": null,
-      "description": "Enlaces sobre la fotografía del vitral, defendidos con text-shadow en vez de un velo. Un solo subrayado dorado viaja hasta el activo.",
+      "description": "Enlaces sobre la fotografía del vitral, defendidos con text-shadow en vez de un velo. El activo se resalta con una cápsula clara y un solo subrayado dorado viaja hasta él.",
       "html": "<nav class=\"ds-nav\">\n  <a class=\"ds-nav-link\" href=\"#\">Inicio</a>\n  <a class=\"ds-nav-link is-active\" href=\"#\">Diagnóstico<span class=\"ds-nav-indicator\"></span></a>\n  <a class=\"ds-nav-link\" href=\"#\">Comunidad</a>\n</nav>",
-      "css": ".ds-nav{display:flex;align-items:center;gap:32px;font-family:var(--font-sans, 'DM Sans', Inter, system-ui, sans-serif);background:linear-gradient(135deg,var(--color-green, #384033),var(--color-green-mid, #526855) 45%,var(--color-gold-dark, #a15c17));padding:20px 24px;border-radius:12px;}\n.ds-nav-link{position:relative;padding-bottom:4px;font-size:1.125rem;font-weight:500;text-decoration:none;color:var(--color-paper, #ffffff);text-shadow:0 1px 6px rgb(0 0 0 / 75%);transition:color .2s;}\n.ds-nav-link:hover{color:var(--color-gold-light, #e3c48a);}\n.ds-nav-link.is-active{color:var(--color-gold-light, #e3c48a);}\n.ds-nav-indicator{position:absolute;left:0;bottom:0;height:2px;width:100%;border-radius:9999px;background:var(--color-gold, #ca9e52);box-shadow:0 1px 6px rgb(0 0 0 / 60%);}"
+      "css": ".ds-nav{display:flex;align-items:center;gap:32px;font-family:var(--font-sans, 'DM Sans', Inter, system-ui, sans-serif);background:linear-gradient(135deg,var(--color-green, #384033),var(--color-green-mid, #526855) 45%,var(--color-gold-dark, #a15c17));padding:20px 24px;border-radius:12px;}\n.ds-nav-link{position:relative;display:inline-flex;align-items:center;padding:8px 16px;border-radius:9999px;font-size:1.125rem;font-weight:500;text-decoration:none;color:var(--color-paper, #ffffff);text-shadow:0 1px 6px rgb(0 0 0 / 75%);transition:color .2s,background-color .2s;}\n.ds-nav-link:hover{color:var(--color-gold-light, #e3c48a);}\n.ds-nav-link.is-active{background:var(--color-paper, #ffffff);color:var(--color-ink, #252525);text-shadow:none;box-shadow:0 1px 3px rgb(37 37 37 / 10%);}\n.ds-nav-indicator{position:absolute;left:0;bottom:0;height:2px;width:100%;border-radius:9999px;background:var(--color-gold, #ca9e52);box-shadow:0 1px 6px rgb(0 0 0 / 60%);}"
     },
     {
       "name": "Botón Final de Tarea",
@@ -378,11 +378,51 @@
       "description": "\"Ver resultados\" al cerrar el cuestionario. Verde profundo para distinguirse de \"Siguiente\" sin recurrir al oro.",
       "html": "<button class=\"ds-btn-green-deep\">Ver resultados</button>",
       "css": ".ds-btn-green-deep{display:inline-block;border:none;cursor:pointer;font-family:var(--font-sans, 'DM Sans', Inter, system-ui, sans-serif);font-size:.875rem;font-weight:600;line-height:1.25rem;padding:8px 24px;border-radius:9999px;background:var(--color-green, #384033);color:var(--color-paper, #ffffff);transition:opacity .2s;}\n.ds-btn-green-deep:disabled{opacity:.3;cursor:not-allowed;}\n.ds-btn-green-deep:focus-visible{outline:2px solid var(--color-green, #384033);outline-offset:2px;}"
+    },
+    {
+      "name": "Celda de Dato del Mosaico",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "Las dos celdas de cifra del mosaico de Inicio. Único uso decorativo del redondo completo, acotado a cifras verdaderas del producto. Verdes porque son dato, nunca doradas.",
+      "html": "<div class=\"ds-mosaic-col\">\n  <p class=\"ds-mosaic-circle\"><span class=\"ds-mosaic-num\">50</span><span class=\"ds-mosaic-label\">preguntas</span></p>\n  <p class=\"ds-mosaic-pill\">5 áreas de especialización</p>\n</div>",
+      "css": ".ds-mosaic-col{font-family:var(--font-sans, 'DM Sans', Inter, system-ui, sans-serif);display:flex;flex-direction:column;gap:12px;width:200px;}\n.ds-mosaic-circle{margin:0;aspect-ratio:1;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:9999px;background:var(--color-green-mid, #526855);color:var(--color-paper, #fff);text-align:center;}\n.ds-mosaic-num{font-size:2.25rem;line-height:1;font-weight:700;}\n.ds-mosaic-label{margin-top:4px;font-size:.75rem;}\n.ds-mosaic-pill{margin:0;flex:1;display:flex;align-items:center;justify-content:center;border-radius:9999px;background:var(--color-green-soft, #e8ece7);padding:16px;text-align:center;font-size:.875rem;line-height:1.25;font-weight:600;color:var(--color-green, #384033);}"
+    },
+    {
+      "name": "Tarjeta de Área",
+      "kind": "card",
+      "refersTo": null,
+      "description": "Una de las cinco áreas en Inicio. Voltea sobre sí misma al pasar el mouse (escritorio) o al tocar/hacer clic (cualquier dispositivo): foto y nombre al frente, nombre y descripción al fondo.",
+      "html": "<button type=\"button\" class=\"ds-area-flip\">\n  <span class=\"ds-area-flip-inner\">\n    <span class=\"ds-area-face ds-area-front\">\n      <img src=\"/images/IA.webp\" alt=\"\">\n      <span class=\"ds-area-badge\">Inteligencia Artificial</span>\n    </span>\n    <span class=\"ds-area-face ds-area-back\">\n      <span class=\"ds-area-title\">Inteligencia Artificial</span>\n      <span class=\"ds-area-text\">Aprendizaje automático, modelos de lenguaje y visión por computadora aplicados a problemas reales.</span>\n    </span>\n  </span>\n</button>",
+      "css": ".ds-area-flip{font-family:var(--font-sans, 'DM Sans', Inter, system-ui, sans-serif);display:block;width:100%;max-width:360px;text-align:left;perspective:1000px;}\n.ds-area-flip-inner{position:relative;display:block;aspect-ratio:4/3;transform-style:preserve-3d;transition:transform 500ms ease;}\n@media (hover: hover) and (pointer: fine){.ds-area-flip:hover .ds-area-flip-inner,.ds-area-flip:focus-visible .ds-area-flip-inner{transform:rotateY(180deg);}}\n.ds-area-flip.is-flipped .ds-area-flip-inner{transform:rotateY(180deg);}\n.ds-area-face{position:absolute;inset:0;overflow:hidden;border-radius:12px;background:var(--color-paper, #fff);backface-visibility:hidden;}\n.ds-area-front img{display:block;width:100%;height:100%;object-fit:cover;}\n.ds-area-badge{position:absolute;left:12px;right:12px;bottom:12px;padding:8px 12px;border-radius:6px;background:rgb(37 37 37 / 70%);color:var(--color-paper, #fff);font-size:.875rem;font-weight:700;}\n.ds-area-back{display:flex;flex-direction:column;justify-content:center;transform:rotateY(180deg);padding:20px;}\n.ds-area-title{font-size:1.125rem;line-height:1.75rem;font-weight:700;color:var(--color-green-mid, #526855);}\n.ds-area-text{margin-top:8px;font-size:.875rem;line-height:1.25rem;color:var(--color-ink-soft, #5c5c5c);}"
+    },
+    {
+      "name": "Foto con Degradación Elegante",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "PhotoCard: fotografía que puede no existir todavía. Si falla, cae al aviso de borde punteado de contenido pendiente, con el nombre/caption siempre visible. Con la foto cargada, el caption se superpone con badge-overlay.",
+      "html": "<figure class=\"ds-photo\"><img src=\"/images/comunidad/canal-ia.jpg\" alt=\"\"><figcaption class=\"ds-photo-badge\">Inteligencia Artificial</figcaption></figure>",
+      "css": ".ds-photo{position:relative;overflow:hidden;border-radius:12px;aspect-ratio:4/3;box-shadow:0 1px 3px 0 rgb(37 37 37 / 5%), 0 1px 2px -1px rgb(37 37 37 / 5%);}\n.ds-photo img{display:block;width:100%;height:100%;object-fit:cover;}\n.ds-photo-badge{position:absolute;left:12px;right:12px;bottom:12px;padding:8px 12px;border-radius:6px;background:rgb(37 37 37 / 70%);color:var(--color-paper, #fff);font-size:.875rem;font-weight:700;}"
+    },
+    {
+      "name": "Tarjeta de Canal (Comunidad)",
+      "kind": "card",
+      "refersTo": null,
+      "description": "Un canal de Microsoft Teams en la lista de Comunidad: miniatura cuadrada de PhotoCard en modo compact (sin la frase de pendiente, no cabe en 80px) + nombre + descripción, fila por fila — no una rejilla de tarjetas fotográficas, para no repetir el tratamiento de la tarjeta de área de Inicio.",
+      "html": "<div class=\"ds-channel-row\"><figure class=\"ds-channel-thumb\"><img src=\"/images/comunidad/canal-ia.jpg\" alt=\"\"></figure><div><h3 class=\"ds-channel-name\">Inteligencia Artificial</h3><p class=\"ds-channel-text\">Aprendizaje automático, modelos de lenguaje y visión por computadora aplicados a problemas reales.</p></div></div>",
+      "css": ".ds-channel-row{display:flex;gap:16px;align-items:flex-start;border-radius:12px;background:var(--color-paper-alt, #f2f2f2);padding:12px;font-family:var(--font-sans, 'DM Sans', Inter, system-ui, sans-serif);}\n.ds-channel-thumb{flex-shrink:0;width:96px;aspect-ratio:1;overflow:hidden;border-radius:12px;}\n.ds-channel-thumb img{display:block;width:100%;height:100%;object-fit:cover;}\n.ds-channel-name{margin:0;font-size:1.125rem;line-height:1.75rem;font-weight:700;color:var(--color-green-mid, #526855);}\n.ds-channel-text{margin-top:4px;font-size:.875rem;line-height:1.25rem;color:var(--color-ink-soft, #5c5c5c);}"
+    },
+    {
+      "name": "Hero de Comunidad",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "El borde fotográfico propio de Comunidad: foto real a pantalla completa con velo (from-ink/85 via-ink/40 to-ink/10) y titular encima. Si la foto falta, cae a Verde Profundo sólido — no al acento vitral-accent, que es territorio exclusivo del vitral.",
+      "html": "<section class=\"ds-comm-hero\"><img class=\"ds-comm-hero-img\" src=\"/images/comunidad/quienes-somos.jpg\" alt=\"\"><div class=\"ds-comm-hero-scrim\"></div><div class=\"ds-comm-hero-text\"><p class=\"ds-comm-hero-eyebrow\">Comunidad universitaria</p><h1>Una facultad que comparte lo que sabe</h1></div></section>",
+      "css": ".ds-comm-hero{position:relative;overflow:hidden;background:var(--color-green, #384033);padding:96px 24px;text-align:center;color:var(--color-paper, #fff);font-family:var(--font-sans, 'DM Sans', Inter, system-ui, sans-serif);}\n.ds-comm-hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}\n.ds-comm-hero-scrim{position:absolute;inset:0;background:linear-gradient(to top, rgb(37 37 37 / 85%), rgb(37 37 37 / 40%) 60%, rgb(37 37 37 / 10%));}\n.ds-comm-hero-text{position:relative;max-width:48rem;margin:0 auto;}\n.ds-comm-hero-eyebrow{font-size:.875rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--color-gold-light, #e3c48a);}"
     }
   ],
   "narrative": {
     "northStar": "El vitral y el papel",
-    "overview": "El sistema está hecho de dos materiales en oposición deliberada. En los bordes de cada página —el header y el footer— está la fotografía real del vitral de la biblioteca de la Facultad de Ingeniería, a todo color y sin filtro que la apague; la marca y la navegación flotan encima, y lo que las hace legibles no es un velo sobre la imagen sino una sombra de texto sobre las letras. Entre esas dos bandas, la página es papel: blanco, silencioso, generoso, casi enteramente tipográfico.\n\nEsa oposición no es decorativa, es estructural, y explica todo lo demás. El vitral puede permitirse ser intenso justamente porque aparece solo dos veces y siempre en el mismo lugar. El centro puede permitirse ser sobrio porque no tiene que competir por atención: ya la ganó el borde. Cuando una página necesita color en el cuerpo —las cinco áreas en Inicio, las barras de afinidad en resultados— lo toma en dosis pequeñas y siempre sobre papel, nunca cubriendo la superficie.\n\nEl único lugar donde el vitral entra al cuerpo de la página es su propio espacio dedicado: la tarjeta panorámica de Inicio, con la mascota de la universidad asomada en la esquina. Es la excepción que confirma la regla, y por eso es el objeto con más peso visual de todo el sitio.",
+    "overview": "El sistema está hecho de dos materiales en oposición deliberada. En los bordes de cada página —el header y el footer— está la fotografía real del vitral de la biblioteca de la Facultad de Ingeniería, a todo color y sin filtro que la apague; la marca y la navegación flotan encima, y lo que las hace legibles no es un velo sobre la imagen sino una sombra de texto sobre las letras. Entre esas dos bandas, la página es papel: blanco, silencioso, generoso, casi enteramente tipográfico.\n\nEsa oposición no es decorativa, es estructural, y explica todo lo demás. El vitral puede permitirse ser intenso justamente porque aparece solo dos veces y siempre en el mismo lugar. El centro puede permitirse ser sobrio porque no tiene que competir por atención: ya la ganó el borde. Cuando una página necesita color en el cuerpo —las cinco áreas en Inicio, las barras de afinidad en resultados— lo toma en dosis pequeñas y siempre sobre papel, nunca cubriendo la superficie.\n\nEl único lugar donde el vitral entra al cuerpo de la página es su propio espacio dedicado: la tarjeta panorámica de Inicio, con la mascota de la universidad asomada en la esquina. Es la excepción que confirma la regla, y por eso es el objeto con más peso visual de todo el sitio.\n\nEsa tarjeta es la pieza superior del mosaico del hero: un vitral es, literalmente, celdas de color separadas por plomo, así que la composición modular es la geometría del propio activo insignia y no un préstamo de una landing de moda. Bajo la franja del vitral va un collage de doce recortes fotográficos reales (CD, walkman, máquina de escribir, teléfono de disco, computadora retro... hasta laptop, smartphone, cámara y lentes VR actuales), superpuestos y girados a mano, sin tarjeta ni fondo detrás, cada uno con un drop-shadow de recorte-y-pegado — la segunda excepción documentada a la regla de la Sombra Fotográfica. Debajo van dos celdas de dato — una redonda y una en pastilla — que sólo pueden contener hechos verificables del producto: cuántas preguntas son y cuántas áreas mide. Son verdes y no doradas porque representan un dato.\n\nComunidad tiene su propio borde fotográfico, y es la segunda y última excepción. Su hero es una foto real a pantalla completa —gente de la facultad, no el vitral— con un titular sobre un velo oscuro, a todo el ancho, justo debajo del header: se lee como una extensión del borde superior del sitio y no como una interrupción a mitad de página, así que sigue siendo una excepción acotada. El resto de Comunidad —la lista de canales, el bloque de invitación, la tarjeta de IEEE— vuelve al papel de inmediato. A diferencia del vitral, esta foto sí lleva un velo y no sólo sombra de texto: es gente real, con zonas claras donde el texto blanco se pierde sin ayuda.\n\nLas cinco áreas se presentan como una rejilla editorial de tres arriba y dos abajo. Cada tarjeta voltea sobre sí misma: la foto y el nombre al frente, la descripción al fondo. El disparador tiene dos vías a la misma transición — hover acotado a (hover: hover) and (pointer: fine) en escritorio, y una clase que React fija al tocar o hacer clic en cualquier dispositivo — así que ningún teléfono queda con una tarjeta atascada mostrando sólo el frente. Tienen el mismo peso visual a propósito: el diagnóstico las mide, no las rankea.",
     "keyCharacteristics": [
       "Vitral fotográfico solo en header y footer; papel en todo lo demás.",
       "Paleta cerrada de cinco colores oficiales más sus tintes derivados.",
@@ -420,12 +460,22 @@
       {
         "name": "La regla de la Sombra Fotográfica",
         "section": "elevation",
-        "body": "La sombra es privilegio de la fotografía. Solo el vitral y la mascota se levantan del papel; todo lo demás se separa por tono. Un componente nuevo que pida sombra para distinguirse está pidiendo, en realidad, la capa tonal que le falta."
+        "body": "La sombra es privilegio de la fotografía. Se levantan del papel la tarjeta del vitral, la mascota y las doce piezas del collage del hero (drop-shadow, siguiendo el contorno del recorte); todo lo demás se separa por tono. Un componente nuevo que pida sombra para distinguirse está pidiendo, en realidad, la capa tonal que le falta."
       },
       {
         "name": "La regla de la Píldora y la Tarjeta",
         "section": "shapes",
         "body": "Redondo completo es para lo que se presiona o avanza; 12px es para lo que contiene. Una tarjeta nunca es una píldora y un botón nunca es una tarjeta."
+      },
+      {
+        "name": "La excepción de la Celda de Dato",
+        "section": "shapes",
+        "body": "El redondo completo tiene un tercer uso, y sólo uno: las celdas de dato del mosaico del hero — el círculo de \"50 preguntas\" y la pastilla de \"5 áreas de especialización\". Son formas que no se presionan y no contienen nada; son cifras. La excepción está acotada: vale únicamente para el mosaico, únicamente para cifras verdaderas del producto, y nunca para una fotografía, que sigue en 12px."
+      },
+      {
+        "name": "La regla de la Foto no borra el Nombre",
+        "section": "components",
+        "body": "PhotoCard cae a un aviso de borde punteado si la foto todavía no existe, pero el caption (el nombre del canal, la etiqueta de la foto) sigue mostrándose dentro del aviso — la foto es lo que falta, no el nombre. Una tarjeta sin su nombre visible mientras el equipo sube la imagen real deja de comunicar nada, y eso puede durar semanas."
       },
       {
         "name": "La regla del from",

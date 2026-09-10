@@ -154,234 +154,27 @@
     @apply text-lg text-ink-soft;
   }
 
-  .area-heading-title {
-    position: relative;
-    color: var(--color-green);
-    font-size: clamp(1.9rem, 4vw, 3rem);
-    line-height: 1.1;
-  }
-
-  .area-heading-title::after {
-    display: block;
-    width: 4rem;
-    height: 0.25rem;
-    margin-top: 0.55rem;
-    border-radius: 9999px;
-    background: var(--color-gold);
-    content: "";
-  }
-
-  .area-orbit {
-    position: relative;
-    isolation: isolate;
-    width: min(100%, 60rem);
-    aspect-ratio: 1;
-    margin-inline: auto;
-  }
-
-  .area-orbit::before {
-    position: absolute;
-    inset: 14%;
-    z-index: -1;
-    border: 1px solid rgb(202 158 82 / 35%);
-    border-radius: 50%;
-    content: "";
-  }
-
-  .area-orbit-center {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    display: flex;
-    width: clamp(8rem, 24%, 13rem);
-    aspect-ratio: 1;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    border: 6px solid var(--color-paper);
-    border-radius: 50%;
-    background: var(--color-green);
-    box-shadow: 0 0 0 1px rgb(82 104 85 / 30%), 0 12px 30px rgb(37 37 37 / 15%);
-    color: var(--color-paper);
-    transform: translate(-50%, -50%);
-  }
-
-  .area-orbit-center img {
-    width: 58%;
-    height: 58%;
-    object-fit: contain;
-  }
-
-  .area-orbit-center span {
-    /* En la escala (0.875rem = `text-sm`) y no en un `clamp` suelto: la regla
-       del Tamaño Decidido vale también dentro de un componente propio. */
-    font-size: 0.875rem;
-    font-weight: 700;
-  }
-
-  .area-orbit-item {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: min(28%, 15rem);
-    transform: translate(-50%, -50%) rotate(var(--angle)) translateY(clamp(8rem, 29vw, 17rem)) rotate(calc(var(--angle) * -1));
-  }
-
-  .area-orbit-item:nth-of-type(1) { --angle: 0deg; }
-  .area-orbit-item:nth-of-type(2) { --angle: 72deg; }
-  .area-orbit-item:nth-of-type(3) { --angle: 144deg; }
-  .area-orbit-item:nth-of-type(4) { --angle: 216deg; }
-  .area-orbit-item:nth-of-type(5) { --angle: 288deg; }
-
-  .area-orbit-card {
-    display: block;
-    width: 100%;
-    padding: 0;
-    border: 0;
-    perspective: 1000px;
-    background: none;
-    color: inherit;
-    font: inherit;
-    text-align: left;
-    cursor: pointer;
-  }
-
-  .area-orbit-flip {
-    /* Las caras son `span` —el contenido de un `button` es contenido de
-       frase— así que el bloque hay que declararlo. */
-    position: relative;
-    display: block;
-    aspect-ratio: 1.6 / 1;
-    transform-style: preserve-3d;
-    transition: transform 500ms ease;
-  }
-
-  .area-orbit-item:hover .area-orbit-flip,
-  .area-orbit-card:focus-visible .area-orbit-flip,
-  .area-orbit-card[aria-expanded='true'] .area-orbit-flip {
-    transform: rotateY(180deg);
-  }
-
-  /* El giro es adorno: sin él la tarjeta sigue contando lo mismo. */
-  @media (prefers-reduced-motion: reduce) {
-    .area-orbit-flip {
-      transition: none;
-    }
-  }
-
-  .area-orbit-face {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    overflow: hidden;
-    flex-direction: column;
-    justify-content: space-between;
-    border: 1px solid transparent;
-    border-radius: 12px;
-    background: var(--color-paper);
-    box-shadow: 0 8px 24px rgb(37 37 37 / 10%);
-    backface-visibility: hidden;
-    transition: border-color 200ms ease, box-shadow 200ms ease;
-  }
-
-  .area-orbit-item:hover .area-orbit-face,
-  .area-orbit-card:focus-visible .area-orbit-face,
-  .area-orbit-card[aria-expanded='true'] .area-orbit-face {
-    border-color: var(--color-gold);
-    box-shadow: 0 10px 28px rgb(161 92 23 / 22%);
-  }
-
-  .area-orbit-image {
-    position: relative;
-    display: block;
-    height: 100%;
-  }
-
-  .area-orbit-front img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .area-orbit-name {
-    position: absolute;
-    right: 0.6rem;
-    bottom: 0.6rem;
-    left: 0.6rem;
-    padding: 0.45rem 0.6rem;
-    border-radius: 6px;
-    background: rgb(37 37 37 / 70%);
-    color: var(--color-paper);
-    font-size: 0.9rem;
-    font-weight: 700;
-    line-height: 1.2;
-  }
-
-  .area-orbit-back {
-    align-items: flex-start;
-    justify-content: center;
-    padding: 0.9rem;
-    color: var(--color-ink-soft);
-    font-size: 1rem;
-    line-height: 1.45;
-    transform: rotateY(180deg);
-  }
-
-  /*
-   * Bajo 640px la órbita no cabe y no es cuestión de afinarla: cinco tarjetas
-   * repartidas en un círculo necesitan un radio de al menos vez y media su
-   * propio ancho, y a 390px eso pedía un contenedor más ancho que la pantalla.
-   * Medido, las tarjetas se encimaban entre sí y encima del círculo central.
-   *
-   * Así que la órbita se endereza en una columna: mismas tarjetas, mismo giro
-   * —que ahora sí se puede tocar—, y el potro pasa de centro a distintivo de
-   * entrada. A ancho completo cada tarjeta mide unos 342x214px, donde la
-   * descripción del reverso por fin se lee.
-   */
-  @media (max-width: 639px) {
-    .area-orbit {
-      display: flex;
-      width: 100%;
-      aspect-ratio: auto;
-      flex-direction: column;
-      align-items: stretch;
-      gap: 1rem;
-    }
-
-    .area-orbit::before {
-      display: none;
-    }
-
-    .area-orbit-center {
-      position: static;
-      width: auto;
-      align-self: center;
-      padding: 0.35rem 1.1rem 0.35rem 0.4rem;
-      flex-direction: row;
-      gap: 0.5rem;
-      aspect-ratio: auto;
-      border-width: 4px;
-      border-radius: 9999px;
-      transform: none;
-    }
-
-    .area-orbit-center img {
-      width: 2.25rem;
-      height: 2.25rem;
-    }
-
-    .area-orbit-item {
-      position: static;
-      width: 100%;
-      transform: none;
-    }
-  }
-
   /** Ritmo vertical de una sección de página completa (no de estados vacíos, que son más generosos a propósito). */
   .section-py {
     @apply py-16 md:py-24;
+  }
+
+  /**
+   * Puente visual entre el hero y el bloque de áreas: el degradado se queda
+   * en el borde y no convierte toda la sección en una superficie decorativa.
+   */
+  .potential-section {
+    position: relative;
+    isolation: isolate;
+  }
+  .potential-section::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: -1;
+    height: 4rem;
+    background: linear-gradient(to bottom, var(--color-paper) 0%, var(--color-paper-alt) 100%);
+    opacity: 0.9;
   }
 
   /**
@@ -416,5 +209,65 @@
    */
   .btn-disabled {
     @apply inline-block cursor-not-allowed rounded-full border border-dashed border-ink/25 bg-paper-alt px-6 py-3 font-semibold text-ink-soft;
+  }
+
+  /**
+   * Tarjeta de área con volteo. Frente: foto + nombre. Fondo: nombre en
+   * verde + descripción. El disparador tiene dos vías independientes que
+   * llegan a la misma transición:
+   *
+   *  1. `:hover`/`:focus-visible`, pero sólo bajo `(hover: hover) and
+   *     (pointer: fine)` — un dedo no tiene "encima sin tocar", así que sin
+   *     esa condición un teléfono dispararía el volteo con el primer toque
+   *     y no habría manera de volver al frente.
+   *  2. la clase `.is-flipped`, que pone React al hacer clic o tocar — el
+   *     mecanismo que sí funciona en cualquier dispositivo, porque un click
+   *     handler dispara igual con mouse, teclado o toque.
+   *
+   * `.area-flip` es el `<button>` completo: por eso el volteo 3D vive en un
+   * hijo (`.area-flip-inner`) y no en el propio botón, que además necesita
+   * quedarse quieto para que su `outline` de foco no rote con la tarjeta.
+   */
+  .area-flip {
+    /* Un `<button>` es `inline-block` por defecto y no se estira solo dentro
+       de una rejilla — `block` + `width: 100%` lo fuerza a llenar su celda. */
+    display: block;
+    width: 100%;
+    perspective: 1000px;
+  }
+  .area-flip-inner {
+    position: relative;
+    display: block;
+    aspect-ratio: 4 / 3;
+    transform-style: preserve-3d;
+    transition: transform 500ms ease;
+  }
+  .area-flip.is-flipped .area-flip-inner {
+    transform: rotateY(180deg);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .area-flip:hover .area-flip-inner,
+    .area-flip:focus-visible .area-flip-inner {
+      transform: rotateY(180deg);
+    }
+  }
+  .area-flip-face {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    border-radius: 12px;
+    backface-visibility: hidden;
+  }
+  .area-flip-front {
+    background: var(--color-paper);
+  }
+  .area-flip-back {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    transform: rotateY(180deg);
+    background: var(--color-paper);
+    padding: 20px;
   }
 }

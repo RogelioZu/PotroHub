@@ -151,14 +151,27 @@ tarjeta panorámica de Inicio (`VitralShowcase`), con la mascota de la universid
 esquina. Es la excepción que confirma la regla, y por eso es el objeto con más peso visual de todo
 el sitio.
 
-La sección de áreas de especialización usa una órbita circular: las cinco áreas rodean un centro
-con la mascota institucional y la etiqueta "Tu ruta". Las fotografías de cada área siguen siendo
-el punto de identificación de sus tarjetas; el círculo organiza la relación entre ellas sin
-convertir el cuerpo en un panel de dashboard.
+Esa tarjeta vive como la imagen principal del hero, centrada frente al titular. El collage técnico y
+las celdas de dato se retiraron hasta que existan activos visuales aprobados para esa composición.
 
-Su encabezado conserva una separación corta con la órbita: el título en verde lleva una firma dorada
-y el subtítulo usa una medida de lectura más amplia para presentar la interacción sin competir con
-las tarjetas.
+**Comunidad tiene su propio borde fotográfico, y es la segunda y última excepción.** Su hero es una
+foto real a pantalla completa —gente de la facultad, no el vitral— con un titular sobre un velo
+oscuro. No es una tarjeta acotada como `VitralShowcase`: cubre todo el ancho, justo debajo del
+header. Esa posición es la que hace que siga siendo una excepción acotada y no una grieta en la
+regla: se lee como una extensión del borde superior del sitio —vitral, inmediatamente seguido por
+esta foto— y no como una interrupción a mitad de página. El resto de Comunidad —la lista de
+canales, el bloque de invitación, la tarjeta de IEEE— vuelve al papel de inmediato. A diferencia
+del vitral, esta foto sí lleva un velo (`from-ink/85 via-ink/40 to-ink/10`) y no sólo sombra de
+texto: es gente real, y una foto de personas puede tener zonas claras que el glass art del vitral
+no tiene, donde el texto blanco se pierde sin ayuda.
+
+Las cinco áreas de especialización se presentan como una rejilla editorial de tres arriba y dos
+abajo. Cada tarjeta voltea sobre sí misma: la foto y el nombre al frente, el nombre y la descripción
+al fondo. El disparador tiene dos vías — `:hover` en escritorio con puntero fino, y una clase que
+React fija al tocar o hacer clic, que es la que funciona en cualquier dispositivo — así que ningún
+teléfono queda con una tarjeta atascada mostrando sólo el frente. Las cinco áreas tienen el mismo
+peso visual a propósito: el diagnóstico las mide, no las rankea, y destacar una antes de que el
+estudiante responda sugeriría una recomendación que todavía no se hizo.
 
 **Key Characteristics:**
 
@@ -312,8 +325,11 @@ contenido quedaban pegadas al tercio superior con media pantalla vacía debajo, 
 leían como pantallas sin terminar.
 
 Las rejillas colapsan en un patrón consistente: `sm:grid-cols-2` y luego `lg:grid-cols-4` o
-`lg:grid-cols-5` según cuántos elementos haya. El hero es de dos columnas desde `md`, con la
-tarjeta del vitral a la derecha. La navegación cambia de barra horizontal a menú desplegable en
+`lg:grid-cols-5` según cuántos elementos haya. La excepción es la rejilla de áreas de Inicio, que
+usa `lg:grid-cols-6` con tramos de 2 y de 3 para dar tres celdas arriba y dos abajo: cinco
+elementos no caben en una rejilla regular sin dejar un hueco o sin apretarlos a un ancho donde la
+descripción ya no se lee. El hero es de dos columnas desde `md`, con el mosaico a la derecha. La
+navegación cambia de barra horizontal a menú desplegable en
 `lg` —no en `md`— porque la etiqueta "Comunidad Facultad de Ingeniería" es larga y rompe antes que
 el resto.
 
@@ -347,14 +363,18 @@ percibe y funciona más como un borde suave que como una elevación.
   exclusivo de la tarjeta del vitral y de la insignia del potro.
 - **Asiento de tarjeta** (`box-shadow: 0 1px 3px 0 rgb(37 37 37 / 5%), 0 1px 2px -1px rgb(37 37 37 / 5%)`):
   tarjetas sobre papel blanco, para despegarlas apenas del fondo.
+- **Recorte y pegado** (`drop-shadow-sm`, el filtro de Tailwind): exclusivo de las doce piezas del
+  collage del hero. A diferencia de las otras dos, sigue el contorno del recorte y no un rectángulo
+  — es lo que hace que cada pieza lea como un objeto suelto y no como una foto rectangular más.
 - **Sombra de texto sobre vidrio** (`text-shadow: 0 1px 6px rgb(0 0 0 / 75%)`): no es elevación, es
   legibilidad. Ver *La regla de la Franja de Lectura*.
 
 ### Named Rules
 
-**La regla de la Sombra Fotográfica.** La sombra es privilegio de la fotografía. Solo el vitral y la
-mascota se levantan del papel; todo lo demás se separa por tono. Un componente nuevo que pida sombra
-para distinguirse está pidiendo, en realidad, la capa tonal que le falta.
+**La regla de la Sombra Fotográfica.** La sombra es privilegio de la fotografía. Se levantan del
+papel la tarjeta del vitral, la mascota y las doce piezas del collage del hero; todo lo demás se
+separa por tono. Un componente nuevo que pida sombra para distinguirse está pidiendo, en realidad,
+la capa tonal que le falta.
 
 ## Shapes
 
@@ -377,6 +397,14 @@ es la forma que el sistema tiene de decir "esto todavía no existe" sin fingir q
 
 **La regla de la Píldora y la Tarjeta.** Redondo completo es para lo que se presiona o avanza;
 `12px` es para lo que contiene. Una tarjeta nunca es una píldora y un botón nunca es una tarjeta.
+
+**La excepción de la Celda de Dato.** El redondo completo tiene un tercer uso, y sólo uno: las
+celdas de dato del mosaico del hero —el círculo de "50 preguntas" y la pastilla de "5 áreas de
+especialización"—. Son formas que no se presionan y no contienen nada; son cifras. La excepción
+está acotada a propósito: vale únicamente para el mosaico, únicamente para cifras verdaderas del
+producto, y nunca para una fotografía, que sigue en `12px`. Es lo que permite traer la energía
+modular de un mosaico sin convertir la página en una ensalada de formas, y sin que un círculo
+llegue a parecer un botón que no responde al clic.
 
 ## Components
 
@@ -436,6 +464,31 @@ las cincuenta respondidas: con veinte contestadas no había ninguna forma de emp
 - **Border:** ninguno, salvo los espacios reservados, que usan `border-dashed border-ink/15`.
 - **Internal Padding:** `20px` (`p-5`) en tarjeta; `24px` (`p-6`) en bloque de nota.
 - **Título:** `.h3` en `Verde Universitario`; cuerpo en `text-sm` `Tinta Suave`.
+
+Cuando una tarjeta `Papel` vive sobre una sección `Papel Gris` que a su vez esconde una foto
+pendiente en `Papel Gris` (ver `PhotoCard` abajo), las dos superficies quedan del mismo tono y se
+funden entre sí sin un límite visible. Ahí la tarjeta suma `ring-1 ring-ink/5` al `shadow-sm` — el
+filete hairline que esta misma sección ya prescribe para "dos superficies del mismo tono que se
+tocan" (ver *Elevation & Depth*), no un tratamiento nuevo.
+
+### PhotoCard (foto con degradación elegante)
+
+El patrón para toda fotografía que un equipo agrega después y que todavía puede no existir —las
+fotos de Comunidad, hoy; cualquier foto futura de contenido real, después—. Si `src` no carga, cae
+al mismo aviso de borde punteado que el resto del sitio usa para "esto todavía no existe"
+(ver *Shapes*), con un detalle que no es opcional: el `caption` —el nombre del canal, la etiqueta de
+la foto— **sigue mostrándose** dentro del aviso. La foto es lo que falta, no el nombre; una tarjeta
+de canal sin su nombre visible deja de comunicar nada mientras el equipo no haya subido la imagen,
+que puede ser semanas.
+
+Con la foto cargada, el `caption` se superpone dentro de ella con el componente `badge-overlay` ya
+documentado (`rgb(37 37 37 / 70%)`, `rounded-md`, texto `Papel`) — la misma insignia que usa
+`VitralShowcase`.
+
+La prop `compact` es para cuando ni el nombre ni la frase completa de "pendiente" caben sin
+desbordar — las miniaturas de 80px de la lista de canales de Comunidad. Ahí el aviso de "esto
+todavía no existe" se reduce al hueco punteado solo; el nombre real vive junto a la miniatura, no
+depende de caber encima de ella.
 
 ### Quiz Option
 
@@ -504,63 +557,97 @@ cuestionario y las barras de afinidad comparten color: las dos son dato, no firm
 de alto (`h-1.5`) y las de resultados `8px` (`h-2`). En resultados, cada barra cuenta su porcentaje
 en sincronía con el llenado.
 
+### Mosaico geométrico del hero
+
+La mitad derecha de Inicio contiene un mosaico modular de círculos, pastillas, cuadrados y piezas
+angulares inspirado en la geometría de un vitral. Usa únicamente la paleta institucional y deja
+seis espacios identificados con `data-image-slot` para agregar fotografías después sin cambiar la
+composición ni el layout responsive. Los huecos tienen un filete interior sutil para señalar su
+propósito sin mostrar texto provisional al estudiante.
+
+### Tarjeta de área
+
+Voltea sobre sí misma. Frente: fotografía con el nombre en una etiqueta superpuesta
+(`badge-overlay`). Fondo: el nombre en `.h3` `Verde Universitario` y la descripción en `Tinta
+Suave`, sobre `Papel` con relleno de `20px`. Las cinco viven en un `<button>` — no en una tarjeta
+pasiva — porque el volteo necesita un elemento que reciba clic, toque y teclado por igual.
+
+El disparador tiene dos vías independientes a la misma transición. En escritorio con puntero fino,
+`:hover`/`:focus-visible`, acotado a `(hover: hover) and (pointer: fine)` — sin esa condición un
+teléfono dispararía el volteo con el primer toque y no habría manera de volver al frente. En
+cualquier dispositivo, un `onClick` de React que fija una clase (`is-flipped`) — el mecanismo que
+sí llega al teléfono, porque un manejador de clic responde igual a mouse, teclado o toque. Varias
+tarjetas pueden quedar volteadas a la vez: no hay motivo para forzarlas a cerrarse entre sí si el
+estudiante quiere comparar dos áreas.
+
+**La etiqueta del frente es `Verde Profundo` al 90%**, que sobre la zona más clara que una foto
+puede tener —blanco puro— deja el texto `Papel` en **7.97:1**, muy por encima del 4.5:1 que le
+corresponde a 14px. Es velo de fotografía, no relleno de tarjeta: por eso lleva opacidad y no el
+verde sólido.
+
+**Las cinco fotografías pesan 308 KB.** Llegaron como JPEG de 2432px de ancho con extensión `.png`,
+unos 2 MB cada una — 9.7 MB en la portada. El teléfono con red de campus mala es un caso de uso
+primario, no un respaldo: en WebP a 1200px pesan el 3% de lo que pesaban y siguen alcanzando para la
+tarjeta más ancha de la rejilla, que mide unos `560px` y a 2x pide `1120px`.
+
+### Comunidad
+
+Tres momentos, cada uno con un trabajo distinto — deliberadamente distintos entre sí y distintos de
+Inicio, después de que una primera versión terminara repitiendo casi literalmente su hero (foto +
+titular en dos columnas) y su rejilla de áreas (las mismas cinco tarjetas, mismo tratamiento
+visual). Comunidad no es Inicio con otro título: es la página que existe para probar que la
+comunidad es real, y cada sección lo hace a su manera.
+
+**El hero** es el borde fotográfico propio de la página (ver *Overview*): una foto real a pantalla
+completa con el titular encima, sin tarjeta ni columna de texto — el formato de Inicio ya está
+tomado.
+
+**El cuerpo** se parte en dos mitades de trabajo distinto, `lg:grid-cols-2`, ninguna copia de la
+otra:
+
+- *Canales de Microsoft Teams*, a la izquierda: una **lista** compacta, no una rejilla de tarjetas
+  — miniatura cuadrada de `PhotoCard` en modo `compact` (sin la frase larga de "pendiente", que no
+  cabría en 80px) junto al nombre y la descripción, fila por fila. Es la misma información que la
+  rejilla de áreas de Inicio (`AREAS`, reutilizada — el diagnóstico y la comunidad comparten datos
+  porque son la misma facultad, no porque se copiaron los diseños), pero presentada como lo que es
+  aquí: un directorio de canales a los que unirse, no tarjetas que explorar.
+- *Explora más allá del salón*, a la derecha: un bloque editorial silencioso —`Papel Gris`, texto
+  centrado verticalmente— que conecta el diagnóstico con la Rama IEEE de abajo (`<a href="#ieee">`).
+  Es la idea de `PRODUCT.md` → *Users* ("la mayoría llega con participación extracurricular
+  mínima... y eso es lo que las empresas leen como un perfil de egreso débil") convertida en una
+  invitación directa, sin inventar una cifra para sostenerla.
+
+**La Rama IEEE destaca**, literalmente: es una tarjeta `Verde Profundo` a ancho completo con texto
+`Papel`, no una tarjeta entre cuatro iguales. Es la misma vocabulario tonal que ya separa `Papel` →
+`Papel Gris` → `Verde Bruma` (ver *Elevation & Depth*), llevado a una escala mayor para dar
+jerarquía sin inventar un tratamiento nuevo — sus cuatro capítulos viven dentro, en filas `Papel/10`
+sobre el verde. *Otros espacios estudiantiles* (Sociedad de Alumnos, clubes, voluntariado,
+movilidad) va debajo, deliberadamente más chico: es contenido sin confirmar, no la pieza central de
+la sección.
+
 ### VitralShowcase (componente insignia)
 
-La tarjeta panorámica de Inicio y el objeto de mayor peso visual del sitio. Relación de aspecto
-`21/9` —no `16/9`— porque la fotografía real del vitral es un panorámico de unos `8.9:1`. Lleva la
-etiqueta superpuesta sobre la imagen en un velo `Tinta` al 70% (el mismo patrón de tarjeta
-fotográfica de uaemex.mx) y la mascota asomada sobre la esquina inferior derecha, en una insignia de
-papel con relleno de `6px`.
+> **Deuda declarada:** ninguna página lo monta. El mosaico geométrico tomó la mitad derecha de
+> Inicio, que era su único uso. El componente sigue en `components/ui/` con su entrada y su
+> respaldo intactos. Queda por decidir si vuelve a alguna vista o se retira; mientras tanto, esta
+> sección describe un componente vivo pero no montado, y `Overview` todavía lo menciona como la
+> tarjeta panorámica de Inicio.
+
+La imagen circular de Inicio y el objeto de mayor peso visual del sitio. Vive en un marco cuadrado
+con `rounded-full`, borde de `Verde Profundo`, filete de `Oro Viejo` y relleno interior para
+separar la fotografía del papel. La etiqueta se superpone dentro del círculo y la mascota asoma
+por la esquina inferior derecha con `z-index` superior, en una insignia de papel con relleno de
+`6px`.
 
 Se descubre con una máscara `clip-path` que barre de izquierda a derecha mientras la imagen se
 asienta desde `scale: 1.06`; el potro aterriza al final con el único rebote del sistema y luego
 queda flotando en un bucle suave de ±5px que se pausa cuando sale del viewport. Si la imagen falta,
 cae al acento decorativo `vitral-accent` en vez de romper el layout.
 
-### La órbita de áreas (Inicio)
-
-Las cinco áreas rodean un círculo con el potro al centro. Cada tarjeta es un `button` que gira sobre
-su eje Y para descubrir la descripción del área; el `:hover` la gira también, pero es un atajo del
-puntero, no el mecanismo.
-
-**Es un `button` y no un contenedor enfocable.** El giro dependía de `:hover` y de un
-`:focus-within` que sólo podía venir de un "Ver más" que no hacía nada, sobre un `<article>` con
-`tabindex="0"`. En teléfono —escena de llegada primaria— la descripción del área era inalcanzable, y
-con teclado el foco caía en un elemento sin acción. Ahora el control dice qué hace (`aria-expanded`)
-y responde a toque, clic, Enter y Espacio. Las caras son `span` porque el contenido de un `button`
-es contenido de frase.
-
-**La etiqueta del área usa el velo de fotografía del sistema**, `Tinta` al 70% (**5.71:1** en el
-peor caso), y no un verde al 82%, que daba **4.03:1** sobre las zonas claras de la foto — por debajo
-del umbral de 4.5:1 que le corresponde a 14px.
-
-**Bajo `640px` la órbita se endereza en una columna.** No es afinable: cinco tarjetas repartidas en
-un círculo necesitan un radio de al menos vez y media su propio ancho, y a 390px eso pedía un
-contenedor más ancho que la pantalla — medido, las tarjetas se encimaban entre sí y encima del
-círculo central. En columna son las mismas tarjetas con el mismo giro, a ancho completo (unos
-`342×214px`, donde la descripción del reverso por fin se lee), y el potro pasa de centro a
-distintivo de entrada.
-
-**El revelado apunta a la tarjeta interior, nunca al `<article>`.** La posición de cada tarjeta en
-el círculo *es* un `transform` con porcentajes y una variable `--angle`, y GSAP reescribe el
-`transform` completo del elemento que anima. Al animar el `<article>`, las cinco tarjetas quedaban
-apiladas en la misma fila antes de que el disparador se cumpliera, y después la órbita quedaba
-congelada en píxeles y ya no se recomponía al cambiar el ancho de la ventana. Por eso `Reveal` lleva
-`selector=".area-orbit-card"`: el botón de dentro no tiene `transform` propio.
-
-**El potro del centro necesitaba su canal alfa.** El archivo venía en RGB con el fondo gris
-incrustado: sobre el papel blanco de la insignia —sus dos usos anteriores— no se notaba, pero dentro
-del círculo `Verde Profundo` aparecía un rectángulo claro detrás de la mascota. El fondo se rellenó
-desde los bordes, no por color, para no tocar los blancos interiores.
-
-**Las fotografías pesan 187 KB entre las cinco.** Llegaron como JPEG de 2432px de ancho con
-extensión `.png`, unos 2 MB cada una —10 MB en la portada— para pintarse en una tarjeta de 240px.
-El teléfono con red de campus mala es un caso de uso primario, no un respaldo: reencodadas a WebP de
-720px se ven idénticas en la tarjeta y pesan el 1.8% de lo que pesaban.
-
 ### La insignia del potro en Resultados
 
-El segundo y último lugar donde aparece la mascota, con el mismo tratamiento de insignia de papel
+El único lugar donde la mascota aparece hoy en una página renderizada —`VitralShowcase` también la
+lleva, pero ninguna vista lo monta desde que el mosaico tomó el hero—, con el tratamiento de papel
 (`rounded-xl`, relleno de `6px`, `shadow-lg`, anillo `ring-ink/10`) y la misma escala
 `h-24 / sm:h-28 / md:h-32`. Aterriza al final de la secuencia de resultados con el único rebote y
 se queda en el mismo bucle de ±5px, pausado fuera del viewport.
@@ -571,6 +658,11 @@ texto ocupa el resto. Superpuesto, el nombre de área más largo —"Desarrollo 
 debajo de la insignia en escritorio, y en teléfono el elemento estaba oculto, que es justo donde
 esta pantalla es el pago de las cincuenta preguntas. Reservar la columna resuelve las dos cosas sin
 depender de un padding adivinado.
+
+**El archivo necesitaba su canal alfa.** Venía en RGB con el fondo gris incrustado: sobre el papel
+blanco de la insignia no se notaba, pero sobre cualquier superficie de color aparecía un rectángulo
+claro detrás de la mascota. El fondo se rellenó desde los bordes, no por color, para no tocar los
+blancos interiores — ojos, dientes, camisa.
 
 ### Tarjeta de vista previa (Open Graph)
 
@@ -632,7 +724,8 @@ imperativas. No hay una sola animación sin esa condición.
 - **Do** construir los revelados con `gsap.from`, para que el HTML por defecto sea el estado visible.
 - **Do** declarar toda animación dentro de `matchMedia('(prefers-reduced-motion: no-preference)')`.
 - **Do** marcar el contenido que todavía no existe con borde punteado o un control deshabilitado que
-  nombre lo que vendrá.
+  nombre lo que vendrá. Si el marcador reemplaza a una foto con nombre o etiqueta propios (ver
+  `PhotoCard`), el nombre sigue mostrándose — lo pendiente es la imagen, no la información.
 - **Do** confirmar una acción destructiva en el propio control, en dos pasos, y dejar que se desarme
   sola por tiempo, por foco o por un toque fuera. Reutiliza `ConfirmButton`.
 - **Do** dar a un control que se pulsa muchas veces `44px` de alto, aunque su tipografía sea
@@ -669,6 +762,10 @@ imperativas. No hay una sola animación sin esa condición.
 - **Don't** convertir el diagnóstico en un test de personalidad juguetón: nada de confeti, emoji,
   insignias gamificadas ni colores brillantes. El resultado es una decisión profesional.
 - **Don't** derivar hacia el dashboard SaaS genérico: nada de degradados azul/morado, glassmorphism
-  ni iconografía de stock. Disuelve la especificidad institucional que es toda la ventaja.
+  ni un cajón de íconos sueltos de librería genérica —el estilo de UI de escritorio, candado,
+  engrane, flecha—. Disuelve la especificidad institucional que es toda la ventaja. Esto no prohíbe
+  ilustración técnica curada: la celda de collage del mosaico del hero (computadora, servidor, IA)
+  es un conjunto pequeño, de un solo estilo entre sí y con especificación propia
+  (`public/images/hero/README.md`), no un cajón de clip art sin filtrar.
 - **Don't** adoptar el lenguaje de una landing de bootcamp: sin urgencia, sin contadores, sin
   carruseles de testimonios. Además exigiría evidencia social que no existe.
