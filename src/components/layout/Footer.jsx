@@ -23,7 +23,9 @@ function Footer() {
           </p>
         </div>
         <div>
-          <p className="text-sm font-semibold text-gold-light uppercase">Navegación</p>
+          <p className="inline-block rounded-md bg-ink/75 px-3 py-1 text-sm font-semibold text-gold-light uppercase shadow-sm">
+            Navegación
+          </p>
           <ul className="mt-3 space-y-2 text-sm text-paper">
             {links.map((link) => (
               <li key={link.to}>
@@ -35,7 +37,9 @@ function Footer() {
           </ul>
         </div>
         <div>
-          <p className="text-sm font-semibold text-gold-light uppercase">Proyecto</p>
+          <p className="inline-block rounded-md bg-ink/75 px-3 py-1 text-sm font-semibold text-gold-light uppercase shadow-sm">
+            Proyecto
+          </p>
           <p className="mt-3 text-sm text-paper">
             Proyecto estudiantil sin fines de lucro, presentado como Producto Mínimo Viable para la
             Facultad de Ingeniería.

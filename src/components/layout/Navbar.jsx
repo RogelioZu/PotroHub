@@ -104,8 +104,10 @@ function Navbar() {
                   to={to}
                   end={end}
                   className={({ isActive }) =>
-                    `pb-1 font-medium [text-shadow:0_1px_6px_rgb(0_0_0/75%)] transition-colors duration-200 ${
-                      isActive ? 'text-gold-light' : 'text-paper hover:text-gold-light'
+                    `inline-flex items-center rounded-full px-4 py-2 font-medium [text-shadow:0_1px_6px_rgb(0_0_0/75%)] transition-colors duration-200 ${
+                      isActive
+                        ? 'bg-paper text-ink shadow-sm [text-shadow:none]'
+                        : 'text-paper hover:text-gold-light'
                     }`
                   }
                 >

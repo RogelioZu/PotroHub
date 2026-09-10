@@ -151,17 +151,8 @@ tarjeta panorámica de Inicio (`VitralShowcase`), con la mascota de la universid
 esquina. Es la excepción que confirma la regla, y por eso es el objeto con más peso visual de todo
 el sitio.
 
-Esa tarjeta ya no vive sola: es la pieza superior del **mosaico del hero**. Un vitral es,
-literalmente, celdas de color separadas por plomo, así que la composición modular no es un préstamo
-de una landing de moda — es la geometría del propio activo insignia. Debajo de la franja del vitral
-van una celda de collage técnico (tres ilustraciones en PNG transparente sobre `Papel Gris` —
-computadora, servidor, IA) y dos celdas de dato, una redonda y una en pastilla.
-
-Esas dos celdas dicen "50 preguntas" y "5 áreas de especialización", y son deliberadamente la
-versión honesta de las burbujas de cifra que usan las landings educativas. Sólo pueden contener
-hechos verificables del producto; ningún conteo de usuarios, adopción ni respaldo, porque nada de
-eso existe todavía (ver `PRODUCT.md` → *Evidence on Hand*). Son verdes y no doradas porque
-representan un dato, y el dato es territorio del verde.
+Esa tarjeta vive como la imagen principal del hero, centrada frente al titular. El collage técnico y
+las celdas de dato se retiraron hasta que existan activos visuales aprobados para esa composición.
 
 Las cinco áreas de especialización se presentan como una rejilla editorial de tres arriba y dos
 abajo. Cada tarjeta voltea sobre sí misma: la foto y el nombre al frente, el nombre y la descripción
@@ -440,7 +431,9 @@ siempre por encima.
 ### Navigation
 
 - **Escritorio (`lg` en adelante):** lista horizontal sobre el vitral, `gap-8`, semibold, con
-  `text-shadow`. El enlace activo es `Oro Claro`; los demás, `Papel`, y pasan a `Oro Claro` en hover.
+  `text-shadow`. El enlace activo se resalta como una cápsula de `Papel` con texto `Tinta`; los
+  demás son `Papel` y pasan a `Oro Claro` en hover. Todos conservan el mismo padding para que la
+  navegación no cambie de tamaño al cambiar de página.
 - **Indicador:** una sola barra dorada de `2px` que *viaja* hasta el enlace activo con `transform`,
   en lugar de dos bordes que se encienden y se apagan. La primera colocación es instantánea: el
   subrayado no "llega" a la página, ya estaba ahí. En móvil no existe — una lista vertical no tiene
@@ -458,35 +451,13 @@ cuestionario y las barras de afinidad comparten color: las dos son dato, no firm
 de alto (`h-1.5`) y las de resultados `8px` (`h-2`). En resultados, cada barra cuenta su porcentaje
 en sincronía con el llenado.
 
-### Mosaico del hero
+### Mosaico geométrico del hero
 
-La mitad derecha de Inicio, debajo de la franja del vitral: un collage de doce recortes
-fotográficos y, debajo, el círculo de "50 preguntas" junto a la pastilla de "5 áreas de
-especialización".
-
-El collage es doce fotografías reales recortadas —CD, walkman, máquina de escribir, teléfono de
-disco, computadora retro... hasta laptop, smartphone, cámara y lentes VR actuales—, superpuestas y
-giradas a mano dentro de un contenedor cuadrado, sin tarjeta ni fondo detrás: cada recorte flota
-directo sobre el papel, con un `drop-shadow` sutil para el efecto de recorte-y-pegado. Es la
-segunda excepción documentada a *la regla de la Sombra Fotográfica* (la primera es
-`VitralShowcase`), acotada igual: sólo estas doce imágenes, sólo en esta celda. La narrativa "antes
-→ ahora" no es casual — es la misma idea que el titular ya dice en palabras ("encuentra tu ruta"),
-puesta en imágenes.
-
-Los doce archivos son del equipo, no del sistema de diseño, y viven en `public/images/hero/` con su
-especificación completa en el README de esa carpeta: sin logotipos ni marcas de terceros visibles,
-recorte ajustado al objeto, mismo tratamiento fotográfico entre los doce. La posición de cada uno
-—`top`/`left`/`width`/rotación, en porcentaje del contenedor— vive en el arreglo `COLLAGE_ITEMS` de
-`HeroMosaic.jsx`, a mano y no calculada, igual que en la referencia. Mientras un archivo no exista,
-esa pieza se oculta en vez de mostrar el recuadro roto del navegador, y mientras *ninguna* de las
-doce haya cargado, la celda completa cae al mismo aviso punteado que usa el resto del sitio para
-contenido pendiente ("Collage pendiente de agregar en /public/images/hero") — nunca un vacío mudo.
-
-Las celdas de dato entran al final de la secuencia del hero desde `scale: 0.92` —piezas que caen en
-su hueco—, sin rebote: el rebote es del potro. `VitralShowcase` no participa de esa secuencia
-porque es dueño de su propia entrada y corre en paralelo, y el collage tampoco: sus doce piezas
-aparecen con la carga de cada imagen, no con una entrada coreografiada — coreografiar doce elementos
-más habría competido con el titular por ser el momento focal de la página.
+La mitad derecha de Inicio contiene un mosaico modular de círculos, pastillas, cuadrados y piezas
+angulares inspirado en la geometría de un vitral. Usa únicamente la paleta institucional y deja
+seis espacios identificados con `data-image-slot` para agregar fotografías después sin cambiar la
+composición ni el layout responsive. Los huecos tienen un filete interior sutil para señalar su
+propósito sin mostrar texto provisional al estudiante.
 
 ### Tarjeta de área
 
@@ -505,11 +476,11 @@ estudiante quiere comparar dos áreas.
 
 ### VitralShowcase (componente insignia)
 
-La tarjeta panorámica de Inicio y el objeto de mayor peso visual del sitio. Relación de aspecto
-`21/9` —no `16/9`— porque la fotografía real del vitral es un panorámico de unos `8.9:1`. Lleva la
-etiqueta superpuesta sobre la imagen en un velo `Tinta` al 70% (el mismo patrón de tarjeta
-fotográfica de uaemex.mx) y la mascota asomada sobre la esquina inferior derecha, en una insignia de
-papel con relleno de `6px`.
+La imagen circular de Inicio y el objeto de mayor peso visual del sitio. Vive en un marco cuadrado
+con `rounded-full`, borde de `Verde Profundo`, filete de `Oro Viejo` y relleno interior para
+separar la fotografía del papel. La etiqueta se superpone dentro del círculo y la mascota asoma
+por la esquina inferior derecha con `z-index` superior, en una insignia de papel con relleno de
+`6px`.
 
 Se descubre con una máscara `clip-path` que barre de izquierda a derecha mientras la imagen se
 asienta desde `scale: 1.06`; el potro aterriza al final con el único rebote del sistema y luego
