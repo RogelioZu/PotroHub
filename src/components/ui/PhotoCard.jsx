@@ -11,19 +11,35 @@ import { useState } from 'react'
  * texto `Papel`) — el mismo patrón que usan la tarjeta del vitral y las
  * tarjetas de área.
  */
-function PhotoCard({ src, alt = '', caption, aspect = 'aspect-4/3', rounded = 'rounded-xl', className = '' }) {
+function PhotoCard({
+  src,
+  alt = '',
+  caption,
+  aspect = 'aspect-4/3',
+  rounded = 'rounded-xl',
+  compact = false,
+  className = '',
+}) {
   const [failed, setFailed] = useState(false)
 
   if (failed) {
     // El nombre no puede desaparecer sólo porque la foto todavía no existe
     // — sigue siendo la información real de la tarjeta, la foto es la
-    // que falta.
+    // que falta. `compact` es para miniaturas donde ni el nombre ni la
+    // frase de "pendiente" caben sin desbordar: ahí basta el hueco punteado,
+    // el nombre real vive junto a la miniatura, no encima de ella.
     return (
       <div
-        className={`flex ${aspect} ${rounded} flex-col items-center justify-center gap-1 border border-dashed border-ink/15 bg-paper-alt px-4 text-center ${className}`}
+        className={`flex ${aspect} ${rounded} flex-col items-center justify-center gap-1 border border-dashed border-ink/15 bg-paper-alt text-center ${
+          compact ? '' : 'px-4'
+        } ${className}`}
       >
-        {caption && <p className="text-sm font-bold text-ink">{caption}</p>}
-        <p className="text-xs text-ink-soft/70">Foto pendiente de agregar en /public/images/comunidad</p>
+        {!compact && (
+          <>
+            {caption && <p className="text-sm font-bold text-ink">{caption}</p>}
+            <p className="text-xs text-ink-soft/70">Foto pendiente de agregar en /public/images/comunidad</p>
+          </>
+        )}
       </div>
     )
   }

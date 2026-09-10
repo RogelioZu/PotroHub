@@ -144,8 +144,7 @@ Esa oposición no es decorativa, es estructural, y explica todo lo demás. El vi
 ser intenso justamente porque aparece solo dos veces y siempre en el mismo lugar. El centro puede
 permitirse ser sobrio porque no tiene que competir por atención: ya la ganó el borde. Cuando una
 página necesita color en el cuerpo —las cinco áreas en Inicio, las barras de afinidad en
-resultados, las fotos de canal y de comunidad en Comunidad— lo toma en dosis pequeñas y siempre
-sobre papel, nunca cubriendo la superficie.
+resultados— lo toma en dosis pequeñas y siempre sobre papel, nunca cubriendo la superficie.
 
 El único lugar donde el vitral entra al cuerpo de la página es su propio espacio dedicado: la
 tarjeta panorámica de Inicio (`VitralShowcase`), con la mascota de la universidad asomada en la
@@ -154,6 +153,17 @@ el sitio.
 
 Esa tarjeta vive como la imagen principal del hero, centrada frente al titular. El collage técnico y
 las celdas de dato se retiraron hasta que existan activos visuales aprobados para esa composición.
+
+**Comunidad tiene su propio borde fotográfico, y es la segunda y última excepción.** Su hero es una
+foto real a pantalla completa —gente de la facultad, no el vitral— con un titular sobre un velo
+oscuro. No es una tarjeta acotada como `VitralShowcase`: cubre todo el ancho, justo debajo del
+header. Esa posición es la que hace que siga siendo una excepción acotada y no una grieta en la
+regla: se lee como una extensión del borde superior del sitio —vitral, inmediatamente seguido por
+esta foto— y no como una interrupción a mitad de página. El resto de Comunidad —la lista de
+canales, el bloque de invitación, la tarjeta de IEEE— vuelve al papel de inmediato. A diferencia
+del vitral, esta foto sí lleva un velo (`from-ink/85 via-ink/40 to-ink/10`) y no sólo sombra de
+texto: es gente real, y una foto de personas puede tener zonas claras que el glass art del vitral
+no tiene, donde el texto blanco se pierde sin ayuda.
 
 Las cinco áreas de especialización se presentan como una rejilla editorial de tres arriba y dos
 abajo. Cada tarjeta voltea sobre sí misma: la foto y el nombre al frente, el nombre y la descripción
@@ -440,6 +450,11 @@ Con la foto cargada, el `caption` se superpone dentro de ella con el componente 
 documentado (`rgb(37 37 37 / 70%)`, `rounded-md`, texto `Papel`) — la misma insignia que usa
 `VitralShowcase`.
 
+La prop `compact` es para cuando ni el nombre ni la frase completa de "pendiente" caben sin
+desbordar — las miniaturas de 80px de la lista de canales de Comunidad. Ahí el aviso de "esto
+todavía no existe" se reduce al hueco punteado solo; el nombre real vive junto a la miniatura, no
+depende de caber encima de ella.
+
 ### Quiz Option
 
 El control más repetido del sitio y el único con estado propio. Rectángulo de `12px` con borde
@@ -495,27 +510,40 @@ sí llega al teléfono, porque un manejador de clic responde igual a mouse, tecl
 tarjetas pueden quedar volteadas a la vez: no hay motivo para forzarlas a cerrarse entre sí si el
 estudiante quiere comparar dos áreas.
 
-### Comunidad: canales fotográficos
+### Comunidad
 
-Comunidad es la página que más depende de fotografía real de la facultad, y por eso es también la
-que más usa `PhotoCard`: la foto grupal del encabezado y, más abajo, una por cada canal de Microsoft
-Teams (las cinco áreas de `AREAS`, reutilizadas — mismo dato que Inicio, presentado como comunidad en
-vez de como diagnóstico). A diferencia de la tarjeta de área de Inicio, aquí la descripción **no**
-se esconde detrás de un volteo: una página de comunidad quiere sentirse cálida de inmediato, no
-gamificada, así que la foto y el nombre van arriba y la descripción abajo, siempre visibles, en la
-misma tarjeta `Papel` con `shadow-sm` y ahora también `ring-1 ring-ink/5` (ver *Cards / Containers*).
+Tres momentos, cada uno con un trabajo distinto — deliberadamente distintos entre sí y distintos de
+Inicio, después de que una primera versión terminara repitiendo casi literalmente su hero (foto +
+titular en dos columnas) y su rejilla de áreas (las mismas cinco tarjetas, mismo tratamiento
+visual). Comunidad no es Inicio con otro título: es la página que existe para probar que la
+comunidad es real, y cada sección lo hace a su manera.
 
-La rejilla de canales es `sm:grid-cols-2 lg:grid-cols-3` — no el `4` o `5` habitual — porque tres
-columnas sobre cinco elementos dan 3+2, la misma lógica de composición dispareja que ya usa la
-rejilla de áreas de Inicio (`lg:grid-cols-6` con tramos de 2 y 3), aplicada aquí con columnas
-regulares porque las tarjetas de Comunidad no necesitan anchos distintos entre sí.
+**El hero** es el borde fotográfico propio de la página (ver *Overview*): una foto real a pantalla
+completa con el titular encima, sin tarjeta ni columna de texto — el formato de Inicio ya está
+tomado.
 
-El copy de esta sección existe para resolver una objeción de confianza específica, y por eso la
-dice dos veces con palabras distintas: en la introducción y en el bloque de moderación. Los canales
-son de Microsoft Teams y no de un servidor abierto, y se entra con la cuenta institucional de la
-UAEMéx — así que quien esté ahí es, verificablemente, un compañero de la propia facultad, no un
-desconocido con un enlace de invitación. Es la razón de producto detrás del cambio de plataforma
-(ver `PRODUCT.md` → *Positioning*), no sólo un cambio de nombre.
+**El cuerpo** se parte en dos mitades de trabajo distinto, `lg:grid-cols-2`, ninguna copia de la
+otra:
+
+- *Canales de Microsoft Teams*, a la izquierda: una **lista** compacta, no una rejilla de tarjetas
+  — miniatura cuadrada de `PhotoCard` en modo `compact` (sin la frase larga de "pendiente", que no
+  cabría en 80px) junto al nombre y la descripción, fila por fila. Es la misma información que la
+  rejilla de áreas de Inicio (`AREAS`, reutilizada — el diagnóstico y la comunidad comparten datos
+  porque son la misma facultad, no porque se copiaron los diseños), pero presentada como lo que es
+  aquí: un directorio de canales a los que unirse, no tarjetas que explorar.
+- *Explora más allá del salón*, a la derecha: un bloque editorial silencioso —`Papel Gris`, texto
+  centrado verticalmente— que conecta el diagnóstico con la Rama IEEE de abajo (`<a href="#ieee">`).
+  Es la idea de `PRODUCT.md` → *Users* ("la mayoría llega con participación extracurricular
+  mínima... y eso es lo que las empresas leen como un perfil de egreso débil") convertida en una
+  invitación directa, sin inventar una cifra para sostenerla.
+
+**La Rama IEEE destaca**, literalmente: es una tarjeta `Verde Profundo` a ancho completo con texto
+`Papel`, no una tarjeta entre cuatro iguales. Es la misma vocabulario tonal que ya separa `Papel` →
+`Papel Gris` → `Verde Bruma` (ver *Elevation & Depth*), llevado a una escala mayor para dar
+jerarquía sin inventar un tratamiento nuevo — sus cuatro capítulos viven dentro, en filas `Papel/10`
+sobre el verde. *Otros espacios estudiantiles* (Sociedad de Alumnos, clubes, voluntariado,
+movilidad) va debajo, deliberadamente más chico: es contenido sin confirmar, no la pieza central de
+la sección.
 
 ### VitralShowcase (componente insignia)
 
