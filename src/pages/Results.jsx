@@ -1,19 +1,20 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import ConfirmButton from '../components/ui/ConfirmButton'
 import { AREA_BY_ID } from '../data/areas'
 import { QUESTIONS } from '../data/questions'
 import { ROADMAP } from '../data/roadmap'
 import { gsap, ScrollTrigger, useGSAP } from '../lib/gsap'
 import { DUR, EASE, FULL_MOTION, STAGGER } from '../lib/motion'
 import { useDocumentTitle } from '../lib/useDocumentTitle'
-import { useQuizStore } from '../store/quizStore'
+import { MIN_PERCENTAGE, NEUTRAL_PERCENTAGE, useQuizStore } from '../store/quizStore'
 
 function EmptyState() {
   useDocumentTitle('Aún no tienes resultados — PotroPath')
 
   return (
     <section className="mx-auto flex max-w-2xl flex-1 flex-col items-center justify-center gap-4 px-6 py-24 text-center">
-      <h1 className="text-3xl font-bold text-ink">Aún no tienes resultados</h1>
+      <h1 className="h1">Aún no tienes resultados</h1>
       <p className="text-ink-soft">
         Responde el diagnóstico de 50 preguntas para descubrir tu ruta de crecimiento dentro de la
         Ingeniería en Computación.
@@ -28,55 +29,6 @@ function EmptyState() {
 /** Duración de una barra de afinidad llenándose. */
 const BAR_FILL = 0.8
 
-/** Cuánto espera armado el botón destructivo antes de desarmarse solo (ms). */
-const CONFIRM_WINDOW = 6000
-
-/**
- * "Repetir diagnóstico" borra las 50 respuestas, y en teléfono queda a 16px de
- * "Unirme a la comunidad": un pulgar mal puesto cuesta ocho minutos de trabajo.
- *
- * La confirmación ocurre en el propio botón y no en un modal — la tarea no
- * necesita foco protegido ni interrumpe nada — y se desarma sola por tiempo,
- * al perder el foco o al tocar fuera, para que nunca quede un control cargado
- * esperando un segundo toque que el usuario ya olvidó.
- */
-function RetakeButton({ onConfirm }) {
-  const [armed, setArmed] = useState(false)
-  const button = useRef(null)
-
-  useEffect(() => {
-    if (!armed) return
-
-    const disarm = () => setArmed(false)
-    const onPointerDown = (event) => {
-      if (!button.current?.contains(event.target)) disarm()
-    }
-
-    const timer = setTimeout(disarm, CONFIRM_WINDOW)
-    document.addEventListener('pointerdown', onPointerDown)
-
-    return () => {
-      clearTimeout(timer)
-      document.removeEventListener('pointerdown', onPointerDown)
-    }
-  }, [armed])
-
-  return (
-    <button
-      ref={button}
-      type="button"
-      onClick={() => (armed ? onConfirm() : setArmed(true))}
-      onBlur={() => setArmed(false)}
-      // El propio control es la región viva: el cambio de etiqueta es todo el
-      // anuncio que hay que dar, y darlo aparte lo diría dos veces.
-      aria-live="polite"
-      className={armed ? 'btn-outline border-green-mid text-green-mid' : 'btn-outline'}
-    >
-      {armed ? '¿Seguro? Se borran tus 50 respuestas' : 'Repetir diagnóstico'}
-    </button>
-  )
-}
-
 /**
  * La vista con resultados vive en su propio componente para que sus hooks
  * corran siempre: `Results` decide antes si hay algo que mostrar, y un hook
@@ -88,6 +40,11 @@ function ResultsView({ results, onRetake }) {
   const top = results[0]
   const topArea = AREA_BY_ID[top.areaId]
   const topRoadmap = ROADMAP[top.areaId]
+
+  // Responder "Neutral" a las cincuenta produce el mismo porcentaje en las
+  // cinco áreas. La pantalla no puede seguir diciendo "tu mayor afinidad es X"
+  // como si hubiera ganado algo: si hay empate arriba, se nombra.
+  const tied = results.filter((result) => result.percentage === top.percentage)
 
   useDocumentTitle(`Tu ruta: ${topArea.name} — PotroPath`)
 
@@ -213,7 +170,7 @@ function ResultsView({ results, onRetake }) {
   )
 
   return (
-    <section ref={root} className="section-py mx-auto max-w-4xl px-6">
+    <section ref={root} className="section-py mx-auto max-w-2xl px-6">
       {/*
         El potro comparte fila con el titular en vez de flotar en `absolute`
         sobre él: superpuesto, un área de nombre largo —"Desarrollo de
@@ -226,7 +183,7 @@ function ResultsView({ results, onRetake }) {
       <div className="flex flex-col items-end gap-4 md:flex-row-reverse md:items-start md:gap-10">
         <img
           ref={mascot}
-          src="/images/potro-mascota.png"
+          src="/images/potro-mascota.webp"
           alt=""
           aria-hidden="true"
           className="pointer-events-none h-24 w-auto shrink-0 rounded-xl bg-paper p-1.5 shadow-lg ring-1 ring-ink/10 sm:h-28 md:h-32"
@@ -265,20 +222,49 @@ function ResultsView({ results, onRetake }) {
         ))}
       </div>
 
-      <div className="mt-12 grid gap-6 sm:grid-cols-2">
+      {/*
+        La escala tiene piso: cada área parte de diez preguntas, así que el
+        mínimo posible es 20% y no 0%. Sin esta nota, un porcentaje de 60 se
+        lee como "apenas aprobado" cuando en realidad es el centro exacto de
+        la escala — y una valoración técnica que audite el método ataca justo
+        por aquí.
+      */}
+      <div data-card className="mt-6 rounded-xl bg-green-soft p-6 text-sm text-ink-soft">
+        <h2 className="h3 text-green">Cómo se lee este porcentaje</h2>
+        <p className="mt-2">
+          Cada área suma sus diez preguntas sobre un máximo de cincuenta puntos, así que la escala va
+          de {MIN_PERCENTAGE}% a 100%: responder «Neutral» a las diez de un área da{' '}
+          {NEUTRAL_PERCENTAGE}%, que es su punto medio. El porcentaje mide qué tanto te reconociste
+          en esas afirmaciones, no qué tan bueno eres en el área.
+        </p>
+        {tied.length > 1 && (
+          <p className="mt-3 font-medium text-ink">
+            Empate: {tied.map((result) => AREA_BY_ID[result.areaId].name).join(', ')} quedaron en el
+            mismo porcentaje. Abajo aparece la ruta de {topArea.name}; las otras te quedan igual de
+            cerca.
+          </p>
+        )}
+      </div>
+
+      <div className="mt-6 grid gap-6 sm:grid-cols-2">
         <div data-card className="rounded-xl bg-paper-alt p-5">
           <h2 className="h3 text-green-mid">Habilidades demandadas</h2>
-          <ul className="mt-3 space-y-1 text-sm text-ink-soft">
+          {/*
+            Los "·" eran caracteres tecleados dentro de cada `<li>`: un lector
+            de pantalla decía "punto medio" ocho veces seguidas. El marcador
+            real lo pone la lista, y el oro lo firma.
+          */}
+          <ul className="mt-3 list-disc space-y-1 ps-5 text-sm text-ink-soft marker:text-gold-dark">
             {topRoadmap.skills.map((skill) => (
-              <li key={skill}>· {skill}</li>
+              <li key={skill}>{skill}</li>
             ))}
           </ul>
         </div>
         <div data-card className="rounded-xl bg-paper-alt p-5">
           <h2 className="h3 text-green-mid">Certificaciones clave</h2>
-          <ul className="mt-3 space-y-1 text-sm text-ink-soft">
+          <ul className="mt-3 list-disc space-y-1 ps-5 text-sm text-ink-soft marker:text-gold-dark">
             {topRoadmap.certifications.map((cert) => (
-              <li key={cert}>· {cert}</li>
+              <li key={cert}>{cert}</li>
             ))}
           </ul>
         </div>
@@ -288,7 +274,11 @@ function ResultsView({ results, onRetake }) {
         <Link to="/comunidad" className="btn-green">
           Unirme a la comunidad
         </Link>
-        <RetakeButton onConfirm={onRetake} />
+        <ConfirmButton
+          label="Repetir diagnóstico"
+          confirmLabel="¿Seguro? Se borran tus 50 respuestas"
+          onConfirm={onRetake}
+        />
       </div>
     </section>
   )

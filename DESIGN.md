@@ -135,10 +135,10 @@ components:
 
 El sistema está hecho de dos materiales en oposición deliberada. En los bordes de cada página —el
 header y el footer— está la fotografía real del vitral de la biblioteca de la Facultad de
-Ingeniería, a todo color y sin filtro que la apague; la marca y la navegación flotan encima, y lo
-que las hace legibles no es un velo sobre la imagen sino una sombra de texto sobre las letras
-(`0 1px 6px rgb(0 0 0 / 75%)`). Entre esas dos bandas, la página es papel: blanco, silencioso,
-generoso, casi enteramente tipográfico.
+Ingeniería; la marca y la navegación flotan encima, apoyadas en una franja de tinta que se
+desvanece hacia los dos bordes de la banda, de modo que el vidrio conserva su color propio justo
+donde toca el papel. Entre esas dos bandas, la página es papel: blanco, silencioso, generoso, casi
+enteramente tipográfico.
 
 Esa oposición no es decorativa, es estructural, y explica todo lo demás. El vitral puede permitirse
 ser intenso justamente porque aparece solo dos veces y siempre en el mismo lugar. El centro puede
@@ -163,6 +163,7 @@ las tarjetas.
 **Key Characteristics:**
 
 - Vitral fotográfico solo en header y footer; papel en todo lo demás.
+- Sobre el vidrio, el texto se apoya en una franja direccional, no en una sombra sola.
 - Paleta cerrada de cinco colores oficiales más sus tintes derivados.
 - Profundidad por tono, no por sombra: `papel` → `papel-gris` → `verde-bruma`.
 - Tipografía única (DM Sans) haciendo toda la jerarquía por tamaño y peso.
@@ -204,7 +205,11 @@ sin un solo color puro ni saturado en todo el sistema.
   (privacidad y moderación en Comunidad), y el relleno de una opción seleccionada en el
   cuestionario.
 - **Oro Claro** (`#e3c48a`): oro sobre fondo oscuro. Existe únicamente para el vitral: la mitad
-  "Path" de la marca, los enlaces activos del nav, las etiquetas del footer.
+  "Path" de la marca, el enlace activo del nav y el subrayado que lo señala. Sobre la franja de
+  tinta da **3.63:1**, así que sólo puede llevar texto que califique como grande —de ahí que el
+  enlace activo vaya en negrita a 20px y la marca del footer subiera a 20px—. Las etiquetas de
+  columna del footer eran `Oro Claro` a 14px y pasaron a `Papel` (**6.09:1**): a ese tamaño el
+  umbral es 4.5:1 y ningún velo que deje viva la fotografía lo alcanza.
 - **Tinta** (`#252525`): texto principal y los velos translúcidos sobre fotografía
   (`rgb(37 37 37 / 70%)`).
 - **Tinta Suave** (`#5c5c5c`): texto secundario, descripciones, cuerpo de tarjeta.
@@ -271,10 +276,25 @@ se decide qué tan grande es un encabezado. Una página nunca fija un tamaño su
 clases. Antes de que existieran, cada página elegía su propio tamaño a mano y el sitio se sentía
 plano; volver a hacerlo lo aplana otra vez.
 
-**La regla de la Sombra sobre Vidrio.** Todo texto que cae sobre la fotografía del vitral lleva
-`text-shadow`, nunca un velo sobre la imagen. El vitral se ve completo y a todo color; el que se
-defiende es el texto. La marca usa `0 2px 10px rgb(0 0 0 / 70%)`; el resto, `0 1px 6px
-rgb(0 0 0 / 75%)`.
+**La regla de la Franja de Lectura.** Todo texto que cae sobre la fotografía del vitral se apoya en
+una franja de `Tinta` al **72%** (`.vitral-scrim`) que va a plena fuerza donde cae el contenido y se
+desvanece en los `24px` de canalón de arriba y abajo, donde nunca hay letras. Encima sigue el
+`text-shadow` —`0 2px 10px rgb(0 0 0 / 70%)` para la marca, `0 1px 6px rgb(0 0 0 / 75%)` para el
+resto—, pero ya no carga solo con el trabajo.
+
+La regla anterior decía "sombra de texto, nunca un velo", y medida no se sostuvo: la sombra defiende
+el borde de la letra y no su interior, así que sobre los paneles pálidos del vidrio el texto blanco
+llegaba a **1.0:1** y ninguna cadena del header o del footer alcanzaba su umbral en más del **63%**
+de sus píxeles —el peor caso, el enlace activo del nav, en el **17.6%**—. Con la franja, las once
+cadenas de header y footer miden **100%** de píxeles conformes a 390px y a 1440px.
+
+El 72% no es un gusto: es el mínimo que lleva `Papel` a 4.5:1 y `Oro Claro` a 3:1 incluso sobre un
+panel de vidrio blanco puro. Bajarlo devuelve el problema; subirlo apaga la fotografía. Y sigue
+siendo direccional a propósito: el vitral conserva su color en los dos bordes de cada banda, que es
+lo que la tesis pedía.
+
+**El corolario:** todo canalón de una banda de vitral mide al menos `24px`. Un elemento con menos
+—el panel del menú móvil tenía `8px`— cae dentro del desvanecido y pierde el apoyo.
 
 ## Layout
 
@@ -328,7 +348,7 @@ percibe y funciona más como un borde suave que como una elevación.
 - **Asiento de tarjeta** (`box-shadow: 0 1px 3px 0 rgb(37 37 37 / 5%), 0 1px 2px -1px rgb(37 37 37 / 5%)`):
   tarjetas sobre papel blanco, para despegarlas apenas del fondo.
 - **Sombra de texto sobre vidrio** (`text-shadow: 0 1px 6px rgb(0 0 0 / 75%)`): no es elevación, es
-  legibilidad. Ver *La regla de la Sombra sobre Vidrio*.
+  legibilidad. Ver *La regla de la Franja de Lectura*.
 
 ### Named Rules
 
@@ -367,30 +387,45 @@ es la forma que el sistema tiene de decir "esto todavía no existe" sin fingir q
 - **Verde** (`btn-green`): fondo `Verde Universitario`, texto `Papel`; en hover, `Verde Profundo`.
   Es *el* botón de acción del sistema: no hay una variante dorada, y no debe crearse
   (ver *La regla del Oro que Firma*).
-- **Fantasma** (`btn-outline`): sin fondo, borde `border-green-mid/40`, texto `Tinta Suave`. En hover
+- **Fantasma** (`btn-outline`): sin fondo, borde `border-green-mid/70`, texto `Tinta Suave`. En hover
   el borde se satura y el texto pasa a `Verde Universitario`. Reservado a la acción secundaria de
-  una pareja: "Conoce la comunidad" en Inicio, "Repetir diagnóstico" en resultados.
+  una pareja: "Conoce la comunidad" en Inicio, "Repetir diagnóstico" en resultados. El borde estuvo
+  al 40% y medía **1.98:1** contra el papel — por debajo del mínimo de 3:1 que pide el límite de un
+  control. Al 70% da **3.14:1** sin salirse de la paleta: es el mismo verde, más presente.
 - **Final de tarea** (`bg-green`): el botón "Ver resultados" del cuestionario usa el verde profundo
   en vez del principal, para seguir distinguiéndose de "Siguiente" —que aparece cuarenta y nueve
   veces antes— sin recurrir al oro.
-- **Deshabilitado** (`btn-disabled`): fondo `Papel Gris`, texto `Tinta Suave` al 60%, cursor
-  `not-allowed`. Se usa cuando una acción existirá pero todavía no ("Enlace de invitación
-  próximamente") — mantiene la promesa visible sin fingir que ya funciona.
+- **Deshabilitado** (`btn-disabled`): fondo `Papel Gris`, borde `border-dashed border-ink/25`, texto
+  `Tinta Suave` a opacidad plena, cursor `not-allowed`. Se usa cuando una acción existirá pero
+  todavía no ("Enlace de invitación próximamente") — mantiene la promesa visible sin fingir que ya
+  funciona. El punteado no es adorno: es el mismo con el que el sistema marca el contenido que aún
+  no existe, y hace que "todavía no" deje de decirse de cuatro maneras distintas en `/comunidad`.
+  Sin borde, el relleno gris sobre papel daba **1.12:1** y no se percibía como control; el texto al
+  60% daba **2.58:1** y era el texto menos legible del sitio fuera del vitral. A opacidad plena da
+  **5.97:1**.
 - **Transiciones:** solo de color (`transition-colors`). Ningún botón se mueve, escala ni se levanta
   al pasar el cursor.
 
 Los controles del cuestionario quedan deliberadamente fuera de este sistema: aparecen cincuenta
-veces por sesión y usan un tamaño compacto (`text-sm`, relleno menor) porque un CTA de decisión y un
-control de repetición no son el mismo objeto.
+veces por sesión y usan un tamaño de letra compacto (`text-sm`) porque un CTA de decisión y un
+control de repetición no son el mismo objeto. Lo compacto es la tipografía, no el objetivo táctil:
+el relleno es `py-3` para que midan `44px` de alto. Con `py-2` medían `36px` y había que acertarlos
+con el pulgar cuarenta y nueve veces seguidas.
 
-**Confirmación en el propio control.** La única acción destructiva del sitio —"Repetir
-diagnóstico", que borra las cincuenta respuestas— confirma sobre sí misma y no en un modal: el
+**Confirmación en el propio control** (`ConfirmButton`). Las acciones destructivas del sitio
+—"Repetir diagnóstico" en resultados y "Empezar de nuevo" al pie del cuestionario, que borran las
+respuestas— confirman sobre sí mismas y no en un modal: el
 primer toque cambia la etiqueta a "¿Seguro? Se borran tus 50 respuestas" y el segundo ejecuta. El
 control armado toma el estado hover del fantasma —borde y texto `Verde Universitario` sólidos,
 **6.05:1** sobre papel— así que el cambio se ve además de leerse, sin añadir un color al sistema.
 Se desarma solo a los seis segundos, al perder el foco o al tocar fuera, y lleva `aria-live="polite"`
 para que el cambio de etiqueta se anuncie. En teléfono ese botón queda a `16px` de "Unirme a la
 comunidad": un pulgar mal puesto costaba ocho minutos de trabajo sin ninguna advertencia.
+
+Son dos usos y un solo componente a propósito: reiniciar desde el resultado y reiniciar a media
+prueba. Un segundo control con la misma promesa y otra mecánica sería otra forma de decir lo mismo.
+El de `/quiz` existe porque `reset()` sólo se alcanzaba desde `/resultados`, que sólo aparece con
+las cincuenta respondidas: con veinte contestadas no había ninguna forma de empezar limpio.
 
 ### Cards / Containers
 
@@ -405,24 +440,61 @@ comunidad": un pulgar mal puesto costaba ocho minutos de trabajo sin ninguna adv
 ### Quiz Option
 
 El control más repetido del sitio y el único con estado propio. Rectángulo de `12px` con borde
-hairline y sin relleno en reposo; al seleccionarse, el borde pasa a `Verde Universitario`, el texto a
-`Tinta`, y un relleno `Verde Bruma` barre de izquierda a derecha desde `scaleX(0)` bajo el texto. El
-borde y el relleno son ahora del mismo color base, cosa que antes no ocurría. El relleno
+hairline `border-green-mid/70` y sin relleno en reposo; al seleccionarse, el borde pasa a
+`Verde Universitario` sólido, el texto a `Tinta`, y un relleno `Verde Bruma` barre de izquierda a
+derecha desde `scaleX(0)` bajo el texto. El borde y el relleno son del mismo color base. El relleno
 es un `span` absoluto con `aria-hidden`, y el texto vive en un hermano `relative` para quedar
 siempre por encima.
 
+El borde en reposo era `border-ink/10` y medía **1.21:1**: las cuatro opciones no elegidas no
+tenían un límite perceptible. `border-green-mid/70` da **3.14:1** y además las pinta con el color
+que en este sistema trabaja, no con un gris.
+
+**Las cinco opciones son un grupo de radios, no cinco botones sueltos.** El contenedor lleva
+`role="radiogroup"` con `aria-labelledby` apuntando al enunciado, y cada opción `role="radio"` con
+`aria-checked`. Antes, un lector de pantalla oía cinco botones sin relación entre sí y nunca sabía
+cuál estaba elegido: el único indicio del estado era un relleno que sólo se ve. La barra de avance
+lleva `role="progressbar"` con `aria-valuetext` en preguntas —"Pregunta 34 de 50"— y no en
+porcentaje, que no es la unidad en la que el estudiante está pensando.
+
+**El foco viaja al enunciado al cambiar de pregunta.** El panel se reemplaza en sitio cincuenta
+veces; sin mover el foco, quien navega con teclado pulsa "Siguiente" y se queda en un botón que ya
+pertenece a otra pregunta, sin que nada se anuncie. El `<h1>` lleva `tabIndex={-1}` —enfocable por
+programa, fuera del orden de tabulación— y recibe el foco en cada avance, lo que lee la pregunta
+nueva y devuelve la tabulación a su principio.
+
 ### Navigation
 
-- **Escritorio (`lg` en adelante):** lista horizontal sobre el vitral, `gap-8`, semibold, con
-  `text-shadow`. El enlace activo es `Oro Claro`; los demás, `Papel`, y pasan a `Oro Claro` en hover.
-- **Indicador:** una sola barra dorada de `2px` que *viaja* hasta el enlace activo con `transform`,
-  en lugar de dos bordes que se encienden y se apagan. La primera colocación es instantánea: el
-  subrayado no "llega" a la página, ya estaba ahí. En móvil no existe — una lista vertical no tiene
-  a dónde viajar.
+- **Escritorio (`lg` en adelante):** lista horizontal sobre el vitral, `gap-8`, `text-xl`, con
+  `text-shadow`. El enlace activo es `Oro Claro` **en negrita**; los demás, `Papel` en `medium`, y
+  pasan a `Oro Claro` en hover. La negrita no es énfasis decorativo: a 20px y peso 700 el enlace
+  activo califica como texto grande, que es el único umbral que `Oro Claro` alcanza sobre la franja
+  de tinta (**3.63:1**). Ver *La regla de la Franja de Lectura*.
+- **Indicador:** una sola barra de `Oro Claro` de `2px` que *viaja* hasta el enlace activo con
+  `transform`, en lugar de dos bordes que se encienden y se apagan. La primera colocación es
+  instantánea: el subrayado no "llega" a la página, ya estaba ahí. Era `Oro Viejo` y medía
+  **2.47:1** sobre el vitral, por debajo del mínimo no textual de 3:1; `Oro Claro` da **3.63:1** y
+  es además el oro que el sistema reserva para el vidrio. En móvil no existe — una lista vertical no
+  tiene a dónde viajar.
 - **Móvil (bajo `lg`):** hamburguesa de tres barras que se cierran en X, y un panel que se abre
   animando `grid-template-rows` de `0fr` a `1fr` — no `max-height`, para no tener que adivinar una
-  altura de destino.
-- **Marca:** "Potro" en `Papel` y "Path" en `Oro Claro`, siempre partida así, en header y footer.
+  altura de destino. El panel lleva `inert` mientras está cerrado: sin eso sus tres enlaces siguen
+  en el orden de tabulación aunque midan cero de alto, y el teclado se pierde en un panel invisible
+  antes de llegar al contenido. Los enlaces miden `52px` de alto y el canalón inferior es `pb-6`,
+  el mínimo que exige el corolario de la franja.
+- **Marca:** "Potro" en `Papel` y "Path" en `Oro Claro`, siempre partida así, en header y footer. En
+  el footer va a `20px` en negrita —estaba a `18px`— porque por debajo de `18.66px` dejaría de
+  calificar como texto grande y `Oro Claro` no llegaría a su umbral.
+
+### Anillo de foco
+
+No había una sola regla `:focus` de autor en el proyecto: el foco era el `outline auto 1px` del
+navegador, invisible sobre la fotografía del vitral, que es justo donde vive la navegación.
+
+El anillo es `2px` con `outline-offset: 2px` y su color sale de la variable `--focus-ring`, que vale
+`Verde Universitario` en `:root` y `Oro Claro` dentro de `header` y `footer`. Es el mismo reparto
+que el sistema ya usa para el texto —verde sobre papel, oro sobre vidrio— y evita que cada control
+tenga que saber sobre qué fondo vive.
 
 ### Progress & Affinity Bars
 
@@ -444,6 +516,47 @@ Se descubre con una máscara `clip-path` que barre de izquierda a derecha mientr
 asienta desde `scale: 1.06`; el potro aterriza al final con el único rebote del sistema y luego
 queda flotando en un bucle suave de ±5px que se pausa cuando sale del viewport. Si la imagen falta,
 cae al acento decorativo `vitral-accent` en vez de romper el layout.
+
+### La órbita de áreas (Inicio)
+
+Las cinco áreas rodean un círculo con el potro al centro. Cada tarjeta es un `button` que gira sobre
+su eje Y para descubrir la descripción del área; el `:hover` la gira también, pero es un atajo del
+puntero, no el mecanismo.
+
+**Es un `button` y no un contenedor enfocable.** El giro dependía de `:hover` y de un
+`:focus-within` que sólo podía venir de un "Ver más" que no hacía nada, sobre un `<article>` con
+`tabindex="0"`. En teléfono —escena de llegada primaria— la descripción del área era inalcanzable, y
+con teclado el foco caía en un elemento sin acción. Ahora el control dice qué hace (`aria-expanded`)
+y responde a toque, clic, Enter y Espacio. Las caras son `span` porque el contenido de un `button`
+es contenido de frase.
+
+**La etiqueta del área usa el velo de fotografía del sistema**, `Tinta` al 70% (**5.71:1** en el
+peor caso), y no un verde al 82%, que daba **4.03:1** sobre las zonas claras de la foto — por debajo
+del umbral de 4.5:1 que le corresponde a 14px.
+
+**Bajo `640px` la órbita se endereza en una columna.** No es afinable: cinco tarjetas repartidas en
+un círculo necesitan un radio de al menos vez y media su propio ancho, y a 390px eso pedía un
+contenedor más ancho que la pantalla — medido, las tarjetas se encimaban entre sí y encima del
+círculo central. En columna son las mismas tarjetas con el mismo giro, a ancho completo (unos
+`342×214px`, donde la descripción del reverso por fin se lee), y el potro pasa de centro a
+distintivo de entrada.
+
+**El revelado apunta a la tarjeta interior, nunca al `<article>`.** La posición de cada tarjeta en
+el círculo *es* un `transform` con porcentajes y una variable `--angle`, y GSAP reescribe el
+`transform` completo del elemento que anima. Al animar el `<article>`, las cinco tarjetas quedaban
+apiladas en la misma fila antes de que el disparador se cumpliera, y después la órbita quedaba
+congelada en píxeles y ya no se recomponía al cambiar el ancho de la ventana. Por eso `Reveal` lleva
+`selector=".area-orbit-card"`: el botón de dentro no tiene `transform` propio.
+
+**El potro del centro necesitaba su canal alfa.** El archivo venía en RGB con el fondo gris
+incrustado: sobre el papel blanco de la insignia —sus dos usos anteriores— no se notaba, pero dentro
+del círculo `Verde Profundo` aparecía un rectángulo claro detrás de la mascota. El fondo se rellenó
+desde los bordes, no por color, para no tocar los blancos interiores.
+
+**Las fotografías pesan 187 KB entre las cinco.** Llegaron como JPEG de 2432px de ancho con
+extensión `.png`, unos 2 MB cada una —10 MB en la portada— para pintarse en una tarjeta de 240px.
+El teléfono con red de campus mala es un caso de uso primario, no un respaldo: reencodadas a WebP de
+720px se ven idénticas en la tarjeta y pesan el 1.8% de lo que pesaban.
 
 ### La insignia del potro en Resultados
 
@@ -507,8 +620,8 @@ imperativas. No hay una sola animación sin esa condición.
 
 ### Do:
 
-- **Do** dejar que el vitral aparezca a todo color y sin velo en header y footer, y defender el
-  texto con `text-shadow` en vez de apagar la imagen.
+- **Do** apoyar el texto del vitral en la franja direccional `.vitral-scrim` y dejar al menos `24px`
+  de canalón arriba y abajo, para que el vidrio conserve su color donde no hay letras.
 - **Do** separar superficies con las tres capas tonales (`Papel` → `Papel Gris` → `Verde Bruma`)
   antes de considerar una sombra.
 - **Do** usar `.h1`, `.h2`, `.h3`, `.lead` y `.eyebrow` para toda jerarquía tipográfica, y dejar que
@@ -521,7 +634,13 @@ imperativas. No hay una sola animación sin esa condición.
 - **Do** marcar el contenido que todavía no existe con borde punteado o un control deshabilitado que
   nombre lo que vendrá.
 - **Do** confirmar una acción destructiva en el propio control, en dos pasos, y dejar que se desarme
-  sola por tiempo, por foco o por un toque fuera.
+  sola por tiempo, por foco o por un toque fuera. Reutiliza `ConfirmButton`.
+- **Do** dar a un control que se pulsa muchas veces `44px` de alto, aunque su tipografía sea
+  compacta.
+- **Do** anunciar el estado además de pintarlo: `role="radio"` con `aria-checked`, `progressbar` con
+  `aria-valuetext`, y foco movido cuando el contenido se reemplaza en sitio.
+- **Do** medir el contraste sobre la fotografía píxel a píxel y no sobre el color nominal: el vitral
+  tiene paneles casi blancos y una mediana aceptable esconde mínimos de 1.0:1.
 
 ### Don't:
 
@@ -535,6 +654,13 @@ imperativas. No hay una sola animación sin esa condición.
 - **Don't** poner sombra a un componente para distinguirlo. Lo que le falta es capa tonal.
 - **Don't** hacer que un botón se levante, escale o se mueva en hover. Las transiciones de los
   botones son solo de color.
+- **Don't** pintar `Oro Claro` en texto pequeño sobre el vitral. Sólo alcanza el umbral de texto
+  grande; a 14px manda `Papel`.
+- **Don't** animar con GSAP un elemento cuya posición ya venga de un `transform` de CSS. Anima un
+  hijo sin transform propio, o el revelado se lleva por delante el layout.
+- **Don't** dejar el giro de una tarjeta detrás de `:hover` sin un control real: en teléfono no hay
+  puntero, y el contenido del reverso deja de existir.
+- **Don't** dejar un control que no hace nada para que otro elemento pueda recibir foco.
 - **Don't** abrir un modal para una tarea que no necesita foco protegido ni interrumpir nada. El
   sitio no tiene ninguno, y una confirmación de un solo control no es motivo para el primero.
 - **Don't** darle rebote a nada que no sea el potro.

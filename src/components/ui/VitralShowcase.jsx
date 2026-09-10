@@ -9,7 +9,7 @@ import { DUR, EASE, FULL_MOTION } from '../../lib/motion'
  * la universidad como insignia sobre la esquina, para dar sentido de
  * pertenencia. La foto real es un panorámico muy ancho, por eso la tarjeta
  * usa una relación de aspecto amplia en lugar de 16:9. Si
- * `/images/vitral-biblioteca.png` todavía no existe, se muestra un
+ * `/images/vitral-biblioteca.webp` todavía no existe, se muestra un
  * placeholder con el acento decorativo `vitral-accent` en lugar de romper
  * el layout.
  *
@@ -100,12 +100,12 @@ function VitralShowcase({ caption = 'El vitral de nuestra biblioteca', className
         {imageFailed ? (
           <div className="vitral-accent flex aspect-21/9 w-full items-center justify-center">
             <span className="rounded-full bg-ink/70 px-4 py-2 text-xs text-paper">
-              Imagen pendiente de colocar en /public/images/vitral-biblioteca.png
+              Imagen pendiente de colocar en /public/images/vitral-biblioteca.webp
             </span>
           </div>
         ) : (
           <img
-            src="/images/vitral-biblioteca.png"
+            src="/images/vitral-biblioteca.webp"
             alt={caption}
             className="aspect-21/9 w-full object-cover"
             onError={() => setImageFailed(true)}
@@ -119,7 +119,7 @@ function VitralShowcase({ caption = 'El vitral de nuestra biblioteca', className
 
       <img
         ref={mascot}
-        src="/images/potro-mascota.png"
+        src="/images/potro-mascota.webp"
         alt="Potro, la mascota de la UAEMéx"
         className="absolute -right-4 -bottom-6 h-24 w-auto rounded-xl bg-paper p-1.5 shadow-lg ring-1 ring-ink/10 sm:h-28 md:-right-6 md:h-32"
       />

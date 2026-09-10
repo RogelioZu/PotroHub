@@ -7,12 +7,28 @@ import VitralBackdrop from '../ui/VitralBackdrop'
 const links = [
   { to: '/', label: 'Inicio', end: true },
   { to: '/quiz', label: 'Diagnóstico' },
-  // { to: '/resultados', label: 'Mi ruta' }, // oculto del nav por ahora, reactivar si se vuelve a necesitar
   { to: '/comunidad', label: 'Comunidad Facultad de Ingeniería' },
 ]
 
 /** Ancho base del indicador; el ancho real se consigue escalando en X. */
 const INDICATOR_BASE_WIDTH = 100
+
+/**
+ * Sobre el vitral, el oro que se lee es `Oro Claro` y sólo en tamaño grande:
+ * medido sobre la franja de tinta da 3.63:1, que pasa el umbral de texto
+ * grande (3:1) y no el de texto normal (4.5:1). Por eso el enlace activo va
+ * en negrita a 20px —con eso califica como texto grande— y el inactivo se
+ * queda en `Papel`, que da 6.09:1 a cualquier tamaño.
+ */
+const linkTone = (isActive) =>
+  `[text-shadow:0_1px_6px_rgb(0_0_0/75%)] transition-colors duration-200 ${
+    isActive ? 'font-bold text-gold-light' : 'font-medium text-paper hover:text-gold-light'
+  }`
+
+/** Escritorio: `pb-1` es el aire por el que pasa el subrayado que viaja. */
+const deskLink = ({ isActive }) => `pb-1 ${linkTone(isActive)}`
+/** Móvil: `py-3` sobre 28px de interlínea deja el objetivo táctil en 52px. */
+const mobileLink = ({ isActive }) => `block py-3 ${linkTone(isActive)}`
 
 function Navbar() {
   const { pathname } = useLocation()
@@ -81,7 +97,7 @@ function Navbar() {
 
   return (
     <header className="relative overflow-hidden text-paper">
-      <VitralBackdrop scrimClassName="" />
+      <VitralBackdrop />
 
       <div className="relative z-10 mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-6 sm:py-8 md:py-10">
         <Link
@@ -91,24 +107,22 @@ function Navbar() {
           Potro<span className="text-gold-light">Path</span>
         </Link>
 
-        <nav ref={list} className="relative hidden lg:block">
+        <nav ref={list} aria-label="Principal" className="relative hidden lg:block">
+          {/*
+            El indicador pasó de `Oro Viejo` a `Oro Claro`: sobre la franja del
+            vitral el primero medía 2.47:1 y el segundo da 3.63:1, que es lo
+            que pide un elemento no textual. Es además el oro que el sistema
+            reserva para el vidrio.
+          */}
           <span
             ref={indicator}
             aria-hidden="true"
-            className="pointer-events-none absolute top-0 left-0 h-0.5 w-[100px] origin-left rounded-full bg-gold opacity-0 shadow-[0_1px_6px_rgb(0_0_0/60%)]"
+            className="pointer-events-none absolute top-0 left-0 h-0.5 w-[100px] origin-left rounded-full bg-gold-light opacity-0 shadow-[0_1px_6px_rgb(0_0_0/60%)]"
           />
-          <ul className="flex items-center gap-8 text-lg font-semibold md:text-xl">
+          <ul className="flex items-center gap-8 text-xl">
             {links.map(({ to, label, end }) => (
               <li key={to}>
-                <NavLink
-                  to={to}
-                  end={end}
-                  className={({ isActive }) =>
-                    `pb-1 font-medium [text-shadow:0_1px_6px_rgb(0_0_0/75%)] transition-colors duration-200 ${
-                      isActive ? 'text-gold-light' : 'text-paper hover:text-gold-light'
-                    }`
-                  }
-                >
+                <NavLink to={to} end={end} className={deskLink}>
                   {label}
                 </NavLink>
               </li>
@@ -116,14 +130,14 @@ function Navbar() {
           </ul>
         </nav>
 
-        {/* Botón hamburguesa: tres barras que se cierran en X, solo bajo md. */}
+        {/* Botón hamburguesa: tres barras que se cierran en X, solo bajo lg. */}
         <button
           type="button"
           onClick={() => setMenuOpen((open) => !open)}
           aria-expanded={menuOpen}
           aria-controls="mobile-nav"
           aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
-          className="flex h-10 w-10 shrink-0 flex-col items-center justify-center gap-1.5 lg:hidden"
+          className="flex h-11 w-11 shrink-0 flex-col items-center justify-center gap-1.5 rounded-full lg:hidden"
         >
           <span
             aria-hidden="true"
@@ -152,6 +166,10 @@ function Navbar() {
         apuntar, y el contenido puede cambiar de tamaño sin romper la
         animación. `overflow-hidden` va en el hijo, que es la única pista de
         la rejilla.
+
+        `inert` mientras está cerrado: si no, los tres enlaces siguen en el
+        orden de tabulación aunque midan cero de alto, y el teclado se pierde
+        en un panel invisible antes de llegar al contenido.
       */}
       <div
         id="mobile-nav"
@@ -159,23 +177,20 @@ function Navbar() {
           menuOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
         }`}
       >
-        <ul className="overflow-hidden border-t border-paper/15 px-6">
-          {links.map(({ to, label, end }) => (
-            <li key={to}>
-              <NavLink
-                to={to}
-                end={end}
-                className={({ isActive }) =>
-                  `block py-3 text-lg font-semibold [text-shadow:0_1px_6px_rgb(0_0_0/75%)] ${
-                    isActive ? 'text-gold-light' : 'text-paper'
-                  }`
-                }
-              >
-                {label}
-              </NavLink>
-            </li>
-          ))}
-        </ul>
+        <nav aria-label="Principal" inert={!menuOpen} className="overflow-hidden">
+          {/* `pb-6` no es aire decorativo: la franja de lectura se desvanece
+              en los últimos 24px, así que el último enlace necesita ese
+              canalón para no caer dentro del degradado. */}
+          <ul className="border-t border-paper/15 px-6 pb-6 text-xl">
+            {links.map(({ to, label, end }) => (
+              <li key={to}>
+                <NavLink to={to} end={end} className={mobileLink}>
+                  {label}
+                </NavLink>
+              </li>
+            ))}
+          </ul>
+        </nav>
       </div>
     </header>
   )

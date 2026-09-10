@@ -26,6 +26,31 @@
   body {
     @apply bg-paper font-sans text-ink antialiased;
   }
+
+  /*
+   * Anillo de foco propio. No había ninguna regla `:focus` de autor en todo
+   * el proyecto, así que el foco era el `outline auto 1px` del navegador —
+   * invisible sobre la fotografía del vitral, que es justo donde vive la
+   * navegación.
+   *
+   * El color sale de una variable para que el header y el footer lo cambien
+   * sin que cada control tenga que saber sobre qué fondo vive: verde sobre
+   * papel, oro claro sobre el vidrio. Es el mismo reparto que ya usa el
+   * sistema para el texto.
+   */
+  :root {
+    --focus-ring: var(--color-green-mid);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  header,
+  footer {
+    --focus-ring: var(--color-gold-light);
+  }
 }
 
 @layer utilities {
@@ -48,6 +73,34 @@
       ),
       radial-gradient(circle at 50% 50%, var(--color-green-mid) 0%, transparent 60%);
     background-color: var(--color-green);
+  }
+
+  /*
+   * Franja de lectura sobre el vitral.
+   *
+   * La regla original era "sombra de texto, nunca un velo", y medida no se
+   * sostuvo: sobre los paneles pálidos del vidrio el texto blanco llegaba a
+   * 1.0:1 y ninguna cadena del header o del footer alcanzaba su umbral en
+   * más del 63% de sus píxeles. La sombra defiende el borde de la letra, no
+   * su interior.
+   *
+   * El velo es direccional y no global: a plena fuerza exactamente donde cae
+   * el contenido, y desvanecido en los 24px de canalón de arriba y abajo, que
+   * es donde nunca hay letras. Así el vitral conserva color propio en sus dos
+   * bordes —justo donde toca el papel— y las letras se apoyan en tinta.
+   *
+   * El 72% no es un gusto: es el mínimo que lleva texto `Papel` a 4.5:1 y
+   * `Oro Claro` a 3:1 incluso sobre el panel más claro del vidrio (blanco
+   * puro). Bajarlo devuelve el problema; subirlo apaga la fotografía.
+   */
+  .vitral-scrim {
+    background-image: linear-gradient(
+      to bottom,
+      rgb(37 37 37 / 0%) 0,
+      rgb(37 37 37 / 72%) 1.5rem,
+      rgb(37 37 37 / 72%) calc(100% - 1.5rem),
+      rgb(37 37 37 / 0%) 100%
+    );
   }
 
   /* Separador de sección: línea dorada delgada, como en uaemex.mx. Las líneas
@@ -118,13 +171,6 @@
     content: "";
   }
 
-  .area-heading-subtitle {
-    max-width: 44rem;
-    color: var(--color-ink-soft);
-    font-size: clamp(1.1rem, 2vw, 1.3rem);
-    line-height: 1.65;
-  }
-
   .area-orbit {
     position: relative;
     isolation: isolate;
@@ -168,7 +214,9 @@
   }
 
   .area-orbit-center span {
-    font-size: clamp(0.7rem, 1.5vw, 0.95rem);
+    /* En la escala (0.875rem = `text-sm`) y no en un `clamp` suelto: la regla
+       del Tamaño Decidido vale también dentro de un componente propio. */
+    font-size: 0.875rem;
     font-weight: 700;
   }
 
@@ -187,20 +235,39 @@
   .area-orbit-item:nth-of-type(5) { --angle: 288deg; }
 
   .area-orbit-card {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
     perspective: 1000px;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
   }
 
   .area-orbit-flip {
+    /* Las caras son `span` —el contenido de un `button` es contenido de
+       frase— así que el bloque hay que declararlo. */
     position: relative;
+    display: block;
     aspect-ratio: 1.6 / 1;
     transform-style: preserve-3d;
     transition: transform 500ms ease;
   }
 
   .area-orbit-item:hover .area-orbit-flip,
-  .area-orbit-item:focus-visible .area-orbit-flip,
-  .area-orbit-item:focus-within .area-orbit-flip {
+  .area-orbit-card:focus-visible .area-orbit-flip,
+  .area-orbit-card[aria-expanded='true'] .area-orbit-flip {
     transform: rotateY(180deg);
+  }
+
+  /* El giro es adorno: sin él la tarjeta sigue contando lo mismo. */
+  @media (prefers-reduced-motion: reduce) {
+    .area-orbit-flip {
+      transition: none;
+    }
   }
 
   .area-orbit-face {
@@ -219,14 +286,15 @@
   }
 
   .area-orbit-item:hover .area-orbit-face,
-  .area-orbit-item:focus-visible .area-orbit-face,
-  .area-orbit-item:focus-within .area-orbit-face {
+  .area-orbit-card:focus-visible .area-orbit-face,
+  .area-orbit-card[aria-expanded='true'] .area-orbit-face {
     border-color: var(--color-gold);
     box-shadow: 0 10px 28px rgb(161 92 23 / 22%);
   }
 
   .area-orbit-image {
     position: relative;
+    display: block;
     height: 100%;
   }
 
@@ -237,14 +305,14 @@
     object-fit: cover;
   }
 
-  .area-orbit-front h3 {
+  .area-orbit-name {
     position: absolute;
     right: 0.6rem;
     bottom: 0.6rem;
     left: 0.6rem;
     padding: 0.45rem 0.6rem;
     border-radius: 6px;
-    background: rgb(82 104 85 / 82%);
+    background: rgb(37 37 37 / 70%);
     color: var(--color-paper);
     font-size: 0.9rem;
     font-weight: 700;
@@ -256,54 +324,58 @@
     justify-content: center;
     padding: 0.9rem;
     color: var(--color-ink-soft);
+    font-size: 1rem;
+    line-height: 1.45;
     transform: rotateY(180deg);
   }
 
-  .area-orbit-back p {
-    font-size: 1rem;
-    line-height: 1.45;
-  }
-
-  .area-orbit-back button {
-    margin-top: 0.75rem;
-    color: var(--color-gold-dark);
-    font-size: 0.75rem;
-    font-weight: 700;
-  }
-
+  /*
+   * Bajo 640px la órbita no cabe y no es cuestión de afinarla: cinco tarjetas
+   * repartidas en un círculo necesitan un radio de al menos vez y media su
+   * propio ancho, y a 390px eso pedía un contenedor más ancho que la pantalla.
+   * Medido, las tarjetas se encimaban entre sí y encima del círculo central.
+   *
+   * Así que la órbita se endereza en una columna: mismas tarjetas, mismo giro
+   * —que ahora sí se puede tocar—, y el potro pasa de centro a distintivo de
+   * entrada. A ancho completo cada tarjeta mide unos 342x214px, donde la
+   * descripción del reverso por fin se lee.
+   */
   @media (max-width: 639px) {
     .area-orbit {
-      margin-top: -2.5rem;
-    }
-
-    .area-orbit {
-      width: min(100%, 26rem);
-      aspect-ratio: 0.86;
+      display: flex;
+      width: 100%;
+      aspect-ratio: auto;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 1rem;
     }
 
     .area-orbit::before {
-      inset: 20% 5%;
+      display: none;
+    }
+
+    .area-orbit-center {
+      position: static;
+      width: auto;
+      align-self: center;
+      padding: 0.35rem 1.1rem 0.35rem 0.4rem;
+      flex-direction: row;
+      gap: 0.5rem;
+      aspect-ratio: auto;
+      border-width: 4px;
+      border-radius: 9999px;
+      transform: none;
+    }
+
+    .area-orbit-center img {
+      width: 2.25rem;
+      height: 2.25rem;
     }
 
     .area-orbit-item {
-      width: 38%;
-      transform: translate(-50%, -50%) rotate(var(--angle)) translateY(clamp(7rem, 30vw, 8.5rem)) rotate(calc(var(--angle) * -1));
-    }
-
-    .area-orbit-front h3 {
-      right: 0.35rem;
-      bottom: 0.35rem;
-      left: 0.35rem;
-      padding: 0.35rem 0.4rem;
-      font-size: 0.68rem;
-    }
-
-    .area-orbit-back {
-      padding: 0.6rem;
-    }
-
-    .area-orbit-back p {
-      font-size: 0.82rem;
+      position: static;
+      width: 100%;
+      transform: none;
     }
   }
 
@@ -326,10 +398,23 @@
   .btn-green {
     @apply inline-block rounded-full bg-green-mid px-6 py-3 font-semibold text-paper shadow-sm transition-colors hover:bg-green;
   }
+  /*
+   * El borde va al 70% y no al 40%: al 40% medía 1.98:1 contra el papel, por
+   * debajo del mínimo de 3:1 que pide un límite de control. Al 70% da 3.14:1
+   * sin salirse de la paleta — es el mismo verde, más presente.
+   */
   .btn-outline {
-    @apply inline-block rounded-full border border-green-mid/40 px-6 py-3 font-semibold text-ink-soft transition-colors hover:border-green-mid hover:text-green-mid;
+    @apply inline-block rounded-full border border-green-mid/70 px-6 py-3 font-semibold text-ink-soft transition-colors hover:border-green-mid hover:text-green-mid;
   }
+  /*
+   * Deshabilitado es "todavía no", no "roto": toma prestado el borde punteado
+   * con el que el sistema marca el contenido que aún no existe, así deja de
+   * ser el cuarto lenguaje distinto para lo mismo en /comunidad. El relleno
+   * gris sobre papel daba 1.12:1 y no se percibía como control; el texto al
+   * 60% daba 2.58:1 y era el texto menos legible del sitio fuera del vitral.
+   * A opacidad plena da 5.97:1.
+   */
   .btn-disabled {
-    @apply inline-block cursor-not-allowed rounded-full bg-paper-alt px-6 py-3 font-semibold text-ink-soft/60;
+    @apply inline-block cursor-not-allowed rounded-full border border-dashed border-ink/25 bg-paper-alt px-6 py-3 font-semibold text-ink-soft;
   }
 }

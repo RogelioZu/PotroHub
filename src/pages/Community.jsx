@@ -48,13 +48,22 @@ function Community() {
       <Reveal className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         {AREAS.map((area) => (
           <div key={area.id} className="rounded-xl bg-paper-alt p-5">
-            <h3 className="h3 text-green-mid">#{area.id}</h3>
+            {/*
+              El título era `#{area.id}`, que producía "#nube" mientras el
+              resto del sitio llama a esa área "Cloud Computing" — y de paso
+              presentaba como nombres de canal unos identificadores internos
+              de un servidor que todavía no existe. El nombre del área sí es
+              dato real.
+            */}
+            <h3 className="h3 text-green-mid">{area.name}</h3>
             <p className="mt-2 text-sm text-ink-soft">{area.description}</p>
           </div>
         ))}
       </Reveal>
-      <div className="mt-6 rounded-xl bg-green-soft p-6">
-        <h3 className="text-lg font-bold text-green">Moderación y privacidad</h3>
+      {/* `max-w-2xl`: a lo ancho de la composición esta nota llegaba a 137
+          caracteres por línea. Es texto para leer, no para componer. */}
+      <div className="mt-6 max-w-2xl rounded-xl bg-green-soft p-6">
+        <h3 className="h3 text-green">Moderación y privacidad</h3>
         <p className="mt-2 text-sm text-ink-soft">
           El servidor cuenta con mentores como moderadores y reglas claras de convivencia. No se
           recopila ni comparte información personal de los participantes.
@@ -88,14 +97,20 @@ function Community() {
           </div>
         ))}
       </Reveal>
-      <p className="mt-3 text-xs text-ink-soft/70">
-        Lista de referencia — pendiente de confirmar contra los capítulos activos actuales de la rama.
+      <p className="mt-3 max-w-2xl text-sm text-ink-soft">
+        Lista de referencia — pendiente de confirmar contra los capítulos activos actuales de la
+        rama.
       </p>
 
-      <h3 className="mt-8 text-lg font-bold text-ink">Próximos eventos</h3>
+      <h3 className="mt-8 h3 text-ink">Próximos eventos</h3>
       {events.length === 0 ? (
-        <p className="mt-2 text-ink-soft">
-          Aún no hay eventos publicados. Esta sección se conectará a la agenda de la rama estudiantil.
+        // Mismo punteado que las tarjetas reservadas de abajo: es la forma que
+        // el sistema tiene de decir "esto todavía no existe" sin fingir que
+        // existe, y antes esta misma idea se decía de cuatro maneras distintas
+        // en esta página.
+        <p className="mt-3 max-w-2xl rounded-xl border border-dashed border-ink/15 p-5 text-sm text-ink-soft">
+          Aún no hay eventos publicados. Esta sección se conectará a la agenda de la rama
+          estudiantil.
         </p>
       ) : (
         <ul className="mt-2 space-y-2">
