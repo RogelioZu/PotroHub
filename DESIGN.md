@@ -556,10 +556,35 @@ en sincronía con el llenado.
 ### Mosaico geométrico del hero
 
 La mitad derecha de Inicio contiene un mosaico modular de círculos, pastillas, cuadrados y piezas
-angulares inspirado en la geometría de un vitral. Usa únicamente la paleta institucional y deja
-seis espacios identificados con `data-image-slot` para agregar fotografías después sin cambiar la
-composición ni el layout responsive. Los huecos tienen un filete interior sutil para señalar su
-propósito sin mostrar texto provisional al estudiante.
+angulares inspirado en la geometría de un vitral: un vitral es, literalmente, celdas de color
+separadas por plomo, así que la rejilla modular es la geometría del propio activo insignia y no un
+préstamo de una landing de moda. Usa únicamente la paleta institucional.
+
+**Es un andamio, y no es dueño de su contenido.** `HeroMosaic` posee la rejilla de `4×4`, las seis
+celdas con su forma y su posición, los tres adornos que rompen la cuadrícula por los bordes y el
+tratamiento del hueco vacío. Lo que va dentro se inyecta por nombre desde la página:
+
+```jsx
+<HeroMosaic>
+  <HeroMosaic.Slot name="circle-main">
+    <img src="…" alt="…" />
+  </HeroMosaic.Slot>
+</HeroMosaic>
+```
+
+Los seis huecos son `circle-main`, `circle-portrait`, `square-top`, `pill-wide`, `circle-small` y
+`square-bottom`. Esa separación es la que permite cambiar qué ocupa un hueco —una fotografía, una
+cifra, nada— sin tocar el dibujo, y mantiene cada `alt` junto a su fotografía en vez de en una tabla
+de configuración lejos de ella. Hoy tres huecos llevan foto y tres están en espera.
+
+Un hueco sin `Slot` se queda como bloque de color con un filete interior sutil, que es como el
+sistema señala "aquí va algo que todavía no existe" sin mostrar texto provisional al estudiante. Un
+hueco vacío es decoración y va `aria-hidden`: un bloque de color no tiene nada que anunciar.
+
+**Cada celda lleva `data-mosaic-cell`**, que es lo que busca la secuencia de entrada del hero para
+escalonarlas. El atributo se llamó `data-image-slot` y nadie lo consultaba: el escalonado apuntaba a
+un selector que no existía, así que el mosaico nunca animó. El nombre nuevo además ya no promete que
+un hueco sea para una imagen.
 
 ### Tarjeta de área
 

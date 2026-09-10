@@ -166,7 +166,22 @@ function Home() {
           </div>
         </div>
 
-        <HeroMosaic />
+        {/*
+          Tres huecos con fotografía y tres en espera. El scaffold no sabe qué
+          va dentro: aquí se decide, y por eso el `alt` de cada foto vive junto
+          a la foto y no en una tabla de configuración lejos de ella.
+        */}
+        <HeroMosaic>
+          <HeroMosaic.Slot name="circle-main">
+            <img src="/images/estudiante-ico.png" alt="Estudiante de Ingeniería en Computación" />
+          </HeroMosaic.Slot>
+          <HeroMosaic.Slot name="square-top">
+            <img src="/images/trabajo-equipo.png" alt="Estudiantes trabajando en equipo" />
+          </HeroMosaic.Slot>
+          <HeroMosaic.Slot name="pill-wide">
+            <img src="/images/estudiante-redes.png" alt="Estudiante del área de redes" />
+          </HeroMosaic.Slot>
+        </HeroMosaic>
       </section>
 
       <section className="potential-section pt-8 pb-16 bg-paper-alt md:pt-12 md:pb-24">
