@@ -701,6 +701,19 @@ otra:
   mínima... y eso es lo que las empresas leen como un perfil de egreso débil") convertida en una
   invitación directa, sin inventar una cifra para sostenerla.
 
+  Arriba del titular va una fotografía cuadrada de estudiantes con reconocimientos de un hackathon,
+  que ancla la idea del bloque —el perfil se construye afuera del plan de estudios— y de paso
+  empareja las dos columnas: sin ella esta era la corta, contra una lista de cinco canales que mide
+  el doble. El recorte cuadrado está hecho en el archivo y no en CSS, porque el original es `3:4`
+  con casi un tercio de pared vacía arriba: encuadrar desde abajo deja a las cuatro personas de
+  cuerpo entero y no paga bytes por la pared.
+
+  **Deuda anotada:** la foto no es de la UAEMéx —son estudiantes de UPIITA-IPN en el hackathon
+  U-HACKS— y va **sin pie de foto**, por decisión explícita del autor. Mientras siga así, el copy
+  alrededor no puede presentarla como gente de esta facultad ni como un logro propio, que es
+  justo lo que `PRODUCT.md` → *Evidence on Hand* prohíbe dar por bueno. Se sustituye en cuanto
+  exista una fotografía de la rama de la facultad.
+
 **La Rama IEEE destaca**, literalmente: es una tarjeta `Verde Profundo` a ancho completo con texto
 `Papel`, no una tarjeta entre cuatro iguales. Es la misma vocabulario tonal que ya separa `Papel` →
 `Papel Gris` → `Verde Bruma` (ver *Elevation & Depth*), llevado a una escala mayor para dar
@@ -708,6 +721,35 @@ jerarquía sin inventar un tratamiento nuevo — sus cuatro capítulos viven den
 sobre el verde. *Otros espacios estudiantiles* (Sociedad de Alumnos, clubes, voluntariado,
 movilidad) va debajo, deliberadamente más chico: es contenido sin confirmar, no la pieza central de
 la sección.
+
+**Las marcas son papel dentro del verde.** Debajo de los capítulos, una segunda rejilla con las
+mismas columnas: un recuadro `Papel` puro por capítulo, con el logotipo oficial de su sociedad, de
+modo que cada marca cae en la columna de su nombre. No es una capa tonal nueva: es el fondo base de
+la página asomando dentro de la tarjeta, que es lo único que un logotipo ajeno admite. Los cuatro
+traen color propio fuera de la paleta —el naranja de Computer Society, el vino y morado de Robotics
+and Automation, el verde de Power & Energy, el morado `#742780` de WIE— y ninguno se puede
+repintar: el manual de cada sociedad pide fondo neutro, y sobre `Verde Profundo` el morado de WIE
+cae a **1.20:1**, prácticamente invisible, contra **8.96:1** sobre papel. Es el mismo argumento que
+la insignia del potro en Resultados: papel para lo que no nos pertenece.
+
+Dos decisiones más, por si vuelven a hacer falta:
+
+- **El recuadro tiene alto fijo (`h-32`) y el logotipo no.** Es lo que deja que cuatro marcas de
+  proporciones incompatibles —3.25:1 el lockup de Computer Society, 2.71:1 el de Robotics and
+  Automation, 1.43:1 el de Power & Energy, 0.99:1 el emblema de WIE— se vean del mismo tamaño sin
+  que la rejilla se escalone. Se alinean por **peso óptico y no por caja**: los apaisados van bajos
+  (`h-12`) y los cuadrados altos (`h-20`, y `h-22` para WIE, cuyo trazo fino lee más ligero a la
+  misma altura). Igualarles el alto achicaría los cuadrados hasta perder su tagline; igualarles el
+  ancho reventaría los apaisados.
+- **La marca vive dentro de su capítulo, en el mismo arreglo `chapters`.** Las dos rejillas recorren
+  la misma lista, así que no pueden desordenarse una respecto de la otra. La nota al pie dice "lista
+  y marcas de referencia" para que el pendiente de confirmar las cubra a ellas también.
+
+**Deuda anotada:** en teléfono las dos rejillas se apilan a una columna y los mismos cuatro
+capítulos se recorren dos veces —cuatro tarjetas de nombre y luego cuatro recuadros de logotipo—,
+unos 500px de scroll para información que ya se dio. La rejilla de marcas se pidió explícitamente
+como recuadros independientes; si esa restricción se levanta, el logotipo se mete dentro de su
+propia tarjeta de capítulo y el problema desaparece.
 
 ### La insignia del potro en Resultados
 

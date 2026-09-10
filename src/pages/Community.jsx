@@ -8,11 +8,64 @@ import { useDocumentTitle } from '../lib/useDocumentTitle'
 // TODO: colocar el código de invitación real al equipo de Teams cuando exista.
 const TEAMS_JOIN_CODE_URL = null
 
+// La marca vive dentro del capítulo y no en una lista aparte para que las dos
+// rejillas no puedan desordenarse una respecto de la otra: cada recuadro de
+// logotipo cae en la misma columna que su capítulo porque las dos recorren
+// este mismo arreglo.
+//
+// `logoSize` va por marca y no compartido porque las proporciones no se
+// parecen —3.25:1 el lockup de Computer Society, 0.99:1 el emblema de WIE—:
+// igualarles el alto achicaría los cuadrados hasta perder su tagline, e
+// igualarles el ancho reventaría los apaisados. Los logotipos se alinean por
+// peso óptico, no por caja, así que los apaisados van bajos y los cuadrados
+// altos.
 const chapters = [
-  { name: 'Computer Society', focus: 'Software, IA y ciencias de la computación.' },
-  { name: 'Robotics and Automation', focus: 'Robótica, control y sistemas autónomos.' },
-  { name: 'Power & Energy Society', focus: 'Sistemas eléctricos y energías renovables.' },
-  { name: 'Women in Engineering', focus: 'Inclusión y liderazgo de mujeres en ingeniería.' },
+  {
+    name: 'Computer Society',
+    focus: 'Software, IA y ciencias de la computación.',
+    logo: {
+      src: '/images/comunidad/ieee-computer-society.webp',
+      alt: 'IEEE Computer Society',
+      width: 480,
+      height: 148,
+      logoSize: 'h-12',
+    },
+  },
+  {
+    name: 'Robotics and Automation',
+    focus: 'Robótica, control y sistemas autónomos.',
+    logo: {
+      src: '/images/comunidad/ieee-robotics-automation.webp',
+      alt: 'IEEE Robotics and Automation Society',
+      width: 320,
+      height: 118,
+      logoSize: 'h-12',
+    },
+  },
+  {
+    name: 'Power & Energy Society',
+    focus: 'Sistemas eléctricos y energías renovables.',
+    logo: {
+      src: '/images/comunidad/ieee-power-energy.webp',
+      alt: 'IEEE Power & Energy Society',
+      width: 268,
+      height: 187,
+      logoSize: 'h-20',
+    },
+  },
+  {
+    name: 'Women in Engineering',
+    focus: 'Inclusión y liderazgo de mujeres en ingeniería.',
+    logo: {
+      src: '/images/comunidad/ieee-women-in-engineering.webp',
+      alt: 'IEEE Women in Engineering',
+      width: 280,
+      height: 282,
+      // Un escalón más alto que las otras tres: el trazo del monograma es fino
+      // y a la misma altura lee más ligero que los lockups de palo seco.
+      logoSize: 'h-22',
+    },
+  },
 ]
 
 const events = []
@@ -168,6 +221,31 @@ function Community() {
           </div>
 
           <div className="flex flex-col justify-center rounded-xl bg-paper-alt p-8">
+            {/*
+              La foto ancla la idea del bloque: el perfil se construye afuera
+              del plan de estudios. Va arriba del titular y no al lado porque
+              esta columna es la corta de las dos —la lista de canales de la
+              izquierda mide el doble— y la imagen es lo que las empareja.
+
+              Nota para quien venga después: son estudiantes de UPIITA-IPN con
+              reconocimientos del hackathon U-HACKS, no de la UAEMéx. Va sin
+              pie por decisión explícita del autor. Mientras siga así, no se
+              puede escribir copy alrededor que la presente como gente de esta
+              facultad ni como un logro propio — ver `PRODUCT.md` →
+              *Evidence on Hand*. Cuando exista una foto de la rama de la
+              facultad, ésta se sustituye.
+
+              El recorte es cuadrado y anclado abajo, hecho en el archivo y no
+              en CSS: el original es 3:4 con casi un tercio de pared vacía
+              arriba, y encuadrar desde abajo deja a las cuatro personas de
+              cuerpo entero sin cargar bytes de pared.
+            */}
+            <PhotoCard
+              src="/images/comunidad/explora-hackathon.webp"
+              alt="Cuatro estudiantes con sus reconocimientos de segundo lugar del hackathon U-HACKS"
+              aspect="aspect-square"
+              className="mb-6"
+            />
             <h2 className="h2">Explora más allá del salón</h2>
             <p className="mt-4 text-ink-soft">
               Las materias te dan la base, pero el perfil que piden las empresas se construye
@@ -212,10 +290,50 @@ function Community() {
                 </div>
               ))}
             </Reveal>
-            <p className="mt-3 text-xs text-paper/60">
-              Lista de referencia — pendiente de confirmar contra los capítulos activos actuales de
-              la rama.
-            </p>
+
+            {/*
+              Un recuadro por capítulo, en la misma rejilla que las tarjetas de
+              arriba, así que cada marca cae en la columna de su capítulo.
+
+              Los recuadros son `Papel` puro y no el verde de la tarjeta. No es
+              una preferencia: son logotipos con color propio ajeno a la paleta
+              y el manual de cada sociedad pide fondo neutro. Sobre `Verde
+              Profundo` el morado de WIE cae a 1.20:1, prácticamente invisible.
+              Es el mismo recurso que la insignia del potro en Resultados:
+              papel para lo que no se puede repintar.
+
+              Van antes de la nota de pendiente, no después, para que "de
+              referencia" las cubra a ellas también y no sólo a la lista.
+
+              El alto del recuadro es fijo (`h-32`) y el del logotipo no: es lo
+              que deja que cuatro marcas de proporciones distintas se vean del
+              mismo tamaño sin que la rejilla se escalone.
+            */}
+            <Reveal className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {chapters.map((chapter) => (
+                <div
+                  key={chapter.name}
+                  className="flex h-32 items-center justify-center rounded-xl bg-paper p-4"
+                >
+                  <img
+                    src={chapter.logo.src}
+                    alt={chapter.logo.alt}
+                    // `width` y `height` sólo aquí, contra la costumbre del resto
+                    // del sitio: estas imágenes se dimensionan por alto con el
+                    // ancho libre, así que sin las medidas intrínsecas el navegador
+                    // les reserva cero de ancho y la rejilla salta al cargar. Las
+                    // demás imágenes viven en cajas con proporción fija y no lo
+                    // necesitan.
+                    width={chapter.logo.width}
+                    height={chapter.logo.height}
+                    className={`w-auto max-w-full ${chapter.logo.logoSize}`}
+                    loading="lazy"
+                  />
+                </div>
+              ))}
+            </Reveal>
+
+
 
             <div className="mt-8 border-t border-paper/15 pt-6">
               <h4 className="font-bold">Próximos eventos</h4>
