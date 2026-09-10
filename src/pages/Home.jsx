@@ -143,7 +143,7 @@ function Home() {
         <HeroMosaic />
       </section>
 
-      <section className="potential-section pt-8 pb-16 border-t border-ink/5 bg-paper-alt md:pt-12 md:pb-24">
+      <section className="potential-section pt-8 pb-16 bg-paper-alt md:pt-12 md:pb-24">
         <div className="mx-auto max-w-6xl px-6">
           <Reveal className="potential-intro">
             <SectionDivider>
