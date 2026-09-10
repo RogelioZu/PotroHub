@@ -5,6 +5,7 @@ Facultad de Ingeniería de la UAEMéx. 50 preguntas → área de mayor afinidad 
 certificaciones y comunidad. Sin registro, sin datos personales, todo del lado del cliente.
 
 React 19 + Vite + Tailwind CSS v4 + React Router + Zustand (persistido) + GSAP. Español (es-MX).
+Matter.js sólo para la física del mosaico del hero, cargado bajo demanda.
 
 ---
 
@@ -86,6 +87,7 @@ src/
     gsap.js                 Punto ÚNICO de registro de GSAP y sus plugins
     motion.js               Tokens de movimiento: DUR, EASE, STAGGER, media queries
     useDocumentTitle.js     Título por vista
+    useMosaicPhysics.js     Física del mosaico del hero (matter-js, carga diferida)
   components/
     layout/                 Navbar, Footer, Layout
     ui/                     VitralBackdrop, HeroMosaic, PhotoCard, ConfirmButton
@@ -114,6 +116,9 @@ absolutizar `og:image` en `index.html` y añadir `og:url` — está marcado ahí
 - **Ningún componente importa `gsap` directamente.** Todo pasa por `src/lib/gsap.js`, para que los
   plugins se registren una sola vez y los valores por defecto sean los mismos en todo el sitio.
 - **Ninguna duración ni curva se escribe a mano.** Salen de `src/lib/motion.js`.
+- **`matter-js` nunca se importa de forma estática.** Entra sólo por el `import()` dinámico de
+  `useMosaicPhysics`, en el primer agarre. Un `import` normal lo metería en el bundle principal y le
+  cobraría 26 KB comprimidos a quien nada más lee la portada.
 - **Ninguna página fija un tamaño de encabezado suelto.** Se usan `.h1`, `.h2`, `.h3`, `.lead` y
   `.eyebrow` de `index.css`.
 - **Los escalonados de GSAP usan `amount`, nunca `each`**, para que el retardo total quede acotado

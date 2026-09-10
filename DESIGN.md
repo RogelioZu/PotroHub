@@ -586,6 +586,43 @@ escalonarlas. El atributo se llamó `data-image-slot` y nadie lo consultaba: el 
 un selector que no existía, así que el mosaico nunca animó. El nombre nuevo además ya no promete que
 un hueco sea para una imagen.
 
+#### Las piezas tienen peso
+
+Las seis piezas se pueden agarrar, arrastrar y aventar. Caen con gravedad, chocan entre sí y se
+apilan contra las paredes de su propio cuadrado, que es la caja: nada sale del mosaico ni cae sobre
+el titular. Los tres adornos no participan — son el marco, no las piezas. Lo mueve `matter-js` a
+través de `useMosaicPhysics`.
+
+**En reposo no existe.** Sin tocar el mosaico no hay motor, ni bucle de animación, ni siquiera la
+descarga del motor: entra por `import()` dinámico en el primer `pointerdown`, en un fragmento
+aparte de `26 KB` comprimidos. Quien sólo lee la portada no paga nada, y el bundle principal sólo
+crece `1.5 KB`. Es la misma cuenta que gobierna las fotografías: el teléfono con mala red del campus
+es un caso primario, no un respaldo.
+
+**El primer agarre despierta a todas las piezas, no sólo a la agarrada.** Con colisiones reales, un
+mundo donde unas caen y otras siguen clavadas en el aire se lee como un error de dibujo y no como
+una decisión. Lo que se conserva es lo que importaba: en carga, nada se mueve.
+
+**Vuelven solas.** Cuando todo queda quieto —el motor las duerme y pasa `900ms` sin novedad— las
+piezas regresan a su hueco con la curva de entrada del sistema, escalonadas. También al salir el
+hero de la pantalla, ahí sin animación: quien vuelve lo encuentra entero. La portada no puede quedar
+hecha escombros, y por eso esto no necesita un botón de reacomodar.
+
+**El layout nunca se toca.** Las celdas siguen en su rejilla y el motor sólo escribe `transform`, de
+modo que volver a casa es devolver ese transform a cero. No hay estado que reparar, y un cambio de
+ancho simplemente rearma el mosaico.
+
+**En táctil, las piezas ceden el gesto vertical** (`touch-action: pan-y`). Ocupan casi todo el
+cuadrado, así que quitarles el deslizamiento hacia abajo dejaría al teléfono sin manera de bajar por
+el hero. Deslizar hacia abajo sobre una pieza mueve la página; el navegador cancela el agarre y la
+pieza se suelta y cae, que es un final honesto del gesto. Al ratón no le afecta: `touch-action` sólo
+gobierna el táctil.
+
+**Con `prefers-reduced-motion: reduce` no hay física.** La comprobación ocurre en el momento del
+gesto y no al montar, para que quien cambie la preferencia a media sesión no tenga que recargar. Ver
+*La regla del Movimiento Opcional*. El mosaico es adorno: sin física no se pierde ninguna
+información, y por eso tampoco tiene equivalente de teclado.
+
 ### Tarjeta de área
 
 Voltea sobre sí misma. Frente: fotografía con el nombre en una etiqueta superpuesta

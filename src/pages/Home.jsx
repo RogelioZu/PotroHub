@@ -171,7 +171,7 @@ function Home() {
           va dentro: aquí se decide, y por eso el `alt` de cada foto vive junto
           a la foto y no en una tabla de configuración lejos de ella.
         */}
-        <HeroMosaic>
+        <HeroMosaic physics>
           <HeroMosaic.Slot name="circle-main">
             <img src="/images/estudiante-ico.png" alt="Estudiante de Ingeniería en Computación" />
           </HeroMosaic.Slot>

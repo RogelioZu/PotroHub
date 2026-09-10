@@ -1,4 +1,5 @@
-import { Children, isValidElement } from 'react'
+import { Children, isValidElement, useRef } from 'react'
+import { useMosaicPhysics } from '../../lib/useMosaicPhysics'
 
 /**
  * La composición del mosaico: qué huecos hay, qué forma tiene cada uno y
@@ -61,9 +62,18 @@ function Slot() {
  * Un hueco sin `Slot` se queda como bloque de color con su filete interior,
  * que es como el sistema señala "aquí va algo que todavía no existe" sin
  * enseñarle texto provisional al estudiante.
+ *
+ * Con `physics`, las seis piezas se pueden agarrar, arrastrar y aventar: caen
+ * con gravedad, chocan entre sí y se apilan contra las paredes del cuadrado.
+ * Los tres adornos no participan — son el marco, no las piezas. En reposo no
+ * hay ninguna diferencia con el mosaico estático, y así se queda si nadie lo
+ * toca. Ver `useMosaicPhysics`.
  */
-function HeroMosaic({ children, className = '' }) {
+function HeroMosaic({ children, className = '', physics = false }) {
+  const root = useRef(null)
   const filled = new Map()
+
+  useMosaicPhysics(root, physics)
 
   Children.forEach(children, (child) => {
     if (!isValidElement(child)) return
@@ -87,7 +97,7 @@ function HeroMosaic({ children, className = '' }) {
   })
 
   return (
-    <div className={`relative mx-auto aspect-square w-full max-w-[32rem] ${className}`}>
+    <div ref={root} className={`relative mx-auto aspect-square w-full max-w-[32rem] ${className}`}>
       <div className="absolute inset-[8%] grid grid-cols-4 grid-rows-4 gap-2 sm:gap-3">
         {CELLS.map(({ name, shape, tone, area }) => {
           const content = filled.get(name)
@@ -100,10 +110,23 @@ function HeroMosaic({ children, className = '' }) {
               // nadie lo consultaba: el escalonado de las celdas apuntaba a un
               // selector que no existía y no animaba nada.
               data-mosaic-cell={name}
+              // La forma viaja en el DOM para que la física pueda darle a cada
+              // pieza su cuerpo —círculo o rectángulo achaflanado— sin tener
+              // que conocer esta tabla.
+              data-mosaic-shape={shape}
               // Vacío es decoración: un bloque de color no tiene nada que
               // anunciar. Con contenido, la semántica la trae el contenido.
               aria-hidden={content ? undefined : 'true'}
-              className={`relative overflow-hidden ${tone} ${SHAPE_CLASS[shape]} ${area} [&>img]:h-full [&>img]:w-full [&>img]:object-cover`}
+              // `touch-action: pan-y` y no `none`: las piezas ocupan casi todo
+              // el cuadrado, así que quitarles el gesto vertical dejaría al
+              // teléfono —escena de llegada primaria— sin manera de bajar por
+              // el hero. Con `pan-y`, deslizar hacia abajo sobre una pieza
+              // sigue moviendo la página y el navegador cancela el agarre; la
+              // pieza se suelta y cae, que es un final honesto del gesto.
+              // Al ratón no le afecta: `touch-action` sólo gobierna el táctil.
+              className={`relative overflow-hidden ${tone} ${SHAPE_CLASS[shape]} ${area} [&>img]:h-full [&>img]:w-full [&>img]:object-cover${
+                physics ? ' touch-pan-y select-none' : ''
+              }`}
             >
               {content}
               {/* El filete va encima del contenido, no debajo: es el plomo
