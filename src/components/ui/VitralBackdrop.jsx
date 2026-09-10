@@ -37,7 +37,7 @@ function VitralBackdrop({ scrim = 'band' }) {
           onLoad={refreshScrollTriggers}
         />
       )}
-      {scrim === 'band' && <div className="vitral-scrim absolute inset-0" />}
+      
     </div>
   )
 }
