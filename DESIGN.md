@@ -593,11 +593,13 @@ apilan contra las paredes de su propio cuadrado, que es la caja: nada sale del m
 el titular. Los tres adornos no participan — son el marco, no las piezas. Lo mueve `matter-js` a
 través de `useMosaicPhysics`.
 
-**En reposo no existe.** Sin tocar el mosaico no hay motor, ni bucle de animación, ni siquiera la
-descarga del motor: entra por `import()` dinámico en el primer `pointerdown`, en un fragmento
-aparte de `26 KB` comprimidos. Quien sólo lee la portada no paga nada, y el bundle principal sólo
-crece `1.5 KB`. Es la misma cuenta que gobierna las fotografías: el teléfono con mala red del campus
-es un caso primario, no un respaldo.
+**En reposo no existe.** Lo que mantiene quieto al mosaico no es el estado de las piezas sino que el
+motor no avanza: sin bucle nadie llama a `Engine.update`, y la composición en reposo es la de
+siempre hasta el píxel. El motor entra por `import()` dinámico en un fragmento aparte de `26 KB`
+comprimidos, y se pide cuando el puntero se acerca —no cuando ya aprieta—, de modo que el agarre no
+espera a una descarga. Quien nunca pasa por encima del mosaico no paga nada, y el bundle principal
+sólo crece `1.5 KB`. Es la misma cuenta que gobierna las fotografías: el teléfono con mala red del
+campus es un caso primario, no un respaldo.
 
 **El primer agarre despierta a todas las piezas, no sólo a la agarrada.** Con colisiones reales, un
 mundo donde unas caen y otras siguen clavadas en el aire se lee como un error de dibujo y no como

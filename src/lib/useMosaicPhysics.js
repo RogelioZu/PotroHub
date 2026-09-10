@@ -7,19 +7,28 @@ import { DUR, EASE, STAGGER } from './motion'
  * arrastrar y aventar, chocan entre sí y se apilan contra las paredes de su
  * propio cuadrado.
  *
- * Tres decisiones gobiernan el resto:
+ * Cuatro decisiones gobiernan el resto:
  *
- * 1. **Nada ocurre hasta el primer agarre.** Sin tocar el mosaico no hay
- *    motor, ni bucle de animación, ni siquiera la descarga del motor: el
- *    módulo entra por `import()` dinámico en el primer `pointerdown`, así que
- *    quien sólo lee la portada no paga sus 25 KB. La composición en reposo es
- *    exactamente el mosaico de siempre.
+ * 1. **Nada se mueve hasta el primer agarre.** Lo que mantiene quieto al
+ *    mosaico no es el estado de las piezas sino que el motor no avanza: sin
+ *    bucle nadie llama a `Engine.update`. La composición en reposo es
+ *    exactamente el mosaico de siempre, hasta el píxel.
  *
- * 2. **El primer agarre despierta a todas las piezas, no sólo a la agarrada.**
- *    Con colisiones reales, un mundo donde unas piezas caen y otras siguen
- *    clavadas en el aire se lee como un error de dibujo, no como una decisión.
+ * 2. **El motor se pide cuando el puntero se acerca, no cuando ya aprieta.**
+ *    Entra por `import()` dinámico —26 KB comprimidos que no paga quien nunca
+ *    pasa por encima del mosaico— y en cuanto llega se arma el mundo en frío,
+ *    sin encender el bucle. Así el agarre no espera a una descarga.
  *
- * 3. **Nunca se altera el layout.** Las celdas siguen en su rejilla; el motor
+ *    Esperar al `pointerdown` para pedirlo parecía suficiente y no lo era: en
+ *    frío pasan cientos de milisegundos hasta que el módulo llega, para
+ *    entonces un toque corto ya terminó, y abortar ahí dejaba el mundo sin
+ *    armar una y otra vez. Las piezas no se movían nunca.
+ *
+ * 3. **El primer agarre despierta a todas, no sólo a la agarrada.** Con
+ *    colisiones reales, un mundo donde unas caen y otras siguen clavadas en el
+ *    aire se lee como un error de dibujo, no como una decisión.
+ *
+ * 4. **Nunca se altera el layout.** Las celdas siguen en su rejilla; el motor
  *    sólo escribe `transform`. Volver a casa es devolver ese transform a cero,
  *    y por eso la composición no puede quedar rota: no hay estado que reparar.
  */
@@ -32,6 +41,10 @@ const GRAB_STIFFNESS = 0.18
 
 /** Grosor de las paredes. Generoso: una pieza rápida no debe atravesarlas. */
 const WALL = 200
+
+/** Umbrales de quietud: por debajo de esto la pieza se considera parada. */
+const REST_SPEED = 0.4
+const REST_SPIN = 0.03
 
 /** El paso fijo evita que un cuadro perdido dispare las piezas. */
 const STEP = 1000 / 60
@@ -48,13 +61,20 @@ const SQUARE_RADIUS = 32
  */
 const bodyFor = (Bodies, home) => {
   const { shape, w, h, x, y } = home
+  // Los cuerpos nacen dinámicos, nunca `isStatic: true`. Lo que mantiene
+  // quieto al mosaico no es el estado de las piezas sino que el motor no
+  // avanza: sin bucle, nadie llama a `Engine.update` y nada se mueve.
+  //
+  // Nacer estáticas y despertarlas con `Body.setStatic(body, false)` parecía
+  // lo natural y es una trampa conocida de Matter: al crear el cuerpo ya
+  // estático nunca se guarda su masa original, así que devolverlo a dinámico
+  // la restaura desde la nada. La masa queda en `NaN`, el motor lo propaga a
+  // la posición, y las piezas se quedan clavadas sin que nada falle en voz
+  // alta — no hay excepción, sólo aritmética con `NaN`.
   const options = {
     restitution: 0.28,
     friction: 0.4,
     frictionAir: 0.012,
-    // Estáticas al nacer: el mosaico se ve idéntico hasta que alguien decide
-    // tocarlo.
-    isStatic: true,
   }
 
   const half = Math.min(w, h) / 2
@@ -98,6 +118,7 @@ export function useMosaicPhysics(containerRef, enabled = true) {
     let settleSince = 0
     let loading = false
     let disposed = false
+    let awake = false
     let homeTween = null
 
     const pointer = { x: 0, y: 0 }
@@ -161,7 +182,15 @@ export function useMosaicPhysics(containerRef, enabled = true) {
       }
     }
 
-    const atRest = () => !drag && bodies.every((body) => body.isSleeping)
+    /**
+     * El reposo se mide por velocidad y no por el `isSleeping` del motor. Tres
+     * de las seis piezas son redondas, y una pieza redonda sobre un suelo con
+     * fricción rueda: nunca baja del umbral de sueño de Matter, así que el
+     * mosaico se quedaba desarmado para siempre esperando un sueño que no
+     * llegaba.
+     */
+    const atRest = () =>
+      !drag && bodies.every((body) => body.speed < REST_SPEED && body.angularSpeed < REST_SPIN)
 
     const loop = () => {
       if (disposed || !engine) return
@@ -198,6 +227,7 @@ export function useMosaicPhysics(containerRef, enabled = true) {
       drag = null
       dragPointer = null
       settleSince = 0
+      awake = false
       for (const cell of cells) cell.style.cursor = ''
     }
 
@@ -223,12 +253,46 @@ export function useMosaicPhysics(containerRef, enabled = true) {
       })
     }
 
-    const wake = () => {
-      for (const body of bodies) {
-        M.Body.setStatic(body, false)
-        M.Sleeping.set(body, false)
+    /** Trae el motor, una sola vez. `true` si quedó disponible. */
+    const load = async () => {
+      if (M) return true
+      if (loading) return false
+      loading = true
+      try {
+        const mod = await import('matter-js')
+        M = mod.default ?? mod
+      } catch {
+        // Sin motor el mosaico se queda como estaba. No hay nada que decirle
+        // al estudiante: no pidió una función, tocó un adorno.
+        return false
+      } finally {
+        loading = false
       }
+      return !disposed
+    }
+
+    /**
+     * Arma el mundo en frío. Los cuerpos nacen estáticos y no se enciende el
+     * bucle, así que esto no mueve un solo píxel: sólo deja todo listo para
+     * que el agarre no tenga que esperar a nada.
+     */
+    const ensureWorld = () => {
+      if (engine || !M) return
+      homeTween?.kill()
+      gsap.set(cells, { x: 0, y: 0, rotation: 0 })
+      build()
       for (const cell of cells) cell.style.cursor = 'grab'
+    }
+
+    /**
+     * Enciende el bucle, que es lo único que separa al mosaico quieto del
+     * mosaico con gravedad. Sólo la primera vez.
+     */
+    const wake = () => {
+      if (awake) return
+      awake = true
+      for (const body of bodies) M.Sleeping.set(body, false)
+      frame = requestAnimationFrame(loop)
     }
 
     const startDrag = (body) => {
@@ -280,34 +344,43 @@ export function useMosaicPhysics(containerRef, enabled = true) {
       toLocal(event)
       dragPointer = event.pointerId
 
-      if (!engine) {
-        if (loading) return
-        loading = true
-        try {
-          const mod = await import('matter-js')
-          M = mod.default ?? mod
-        } catch {
-          // Sin motor, el mosaico se queda como estaba. No hay nada que
-          // decirle al estudiante: no pidió una función, tocó un adorno.
-          loading = false
-          return
-        }
-        loading = false
-        if (disposed || dragPointer !== event.pointerId) return
+      // Con el motor ya en memoria esto es síncrono, que es lo que hace que
+      // el agarre responda al instante a partir del segundo.
+      if (!engine) ensureWorld()
 
-        homeTween?.kill()
-        gsap.set(cells, { x: 0, y: 0, rotation: 0 })
-        build()
-        wake()
-        frame = requestAnimationFrame(loop)
+      if (!engine) {
+        // Primer contacto en frío: hay que esperar a que llegue el motor.
+        // Si para entonces el dedo ya se levantó, el mundo se queda armado de
+        // todos modos y el siguiente agarre es inmediato. Abortar aquí sin
+        // armarlo era el error: un toque corto —que es como se prueba algo
+        // por primera vez— dejaba el mosaico sin construir una y otra vez, y
+        // las piezas no se movían nunca.
+        if (!(await load()) || disposed) return
+        ensureWorld()
+        if (!engine || dragPointer !== event.pointerId) return
       }
 
       const body = bodyUnder(cell)
       if (!body) return
 
+      wake()
       cell.setPointerCapture?.(event.pointerId)
       cell.style.cursor = 'grabbing'
       startDrag(body)
+    }
+
+    /**
+     * El motor se pide en cuanto el puntero se acerca, no cuando ya está
+     * apretando: así el primer agarre con ratón tampoco espera. No descarga
+     * nada de quien nunca pasa por encima del mosaico.
+     */
+    const onPointerOver = () => {
+      if (engine || prefersReducedMotion()) return
+      prepare()
+    }
+
+    const prepare = async () => {
+      if (!engine && (await load())) ensureWorld()
     }
 
     const onPointerMove = (event) => {
@@ -344,6 +417,15 @@ export function useMosaicPhysics(containerRef, enabled = true) {
     })
     resize.observe(container)
 
+    // Las piezas llevan fotografías, y arrastrar una imagen dispara el
+    // arrastre nativo del navegador: en cuanto el puntero se movía, Chrome
+    // daba el gesto por suyo y mandaba `pointercancel`, que aquí significa
+    // soltar. El agarre moría en el primer movimiento y las piezas sólo
+    // caían. Cancelar `dragstart` devuelve el gesto a la pieza.
+    const onDragStart = (event) => event.preventDefault()
+
+    container.addEventListener('dragstart', onDragStart)
+    container.addEventListener('pointerover', onPointerOver)
     container.addEventListener('pointerdown', onPointerDown)
     window.addEventListener('pointermove', onPointerMove)
     window.addEventListener('pointerup', onPointerUp)
@@ -353,6 +435,8 @@ export function useMosaicPhysics(containerRef, enabled = true) {
       disposed = true
       observer.disconnect()
       resize.disconnect()
+      container.removeEventListener('dragstart', onDragStart)
+      container.removeEventListener('pointerover', onPointerOver)
       container.removeEventListener('pointerdown', onPointerDown)
       window.removeEventListener('pointermove', onPointerMove)
       window.removeEventListener('pointerup', onPointerUp)

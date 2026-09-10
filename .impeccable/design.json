@@ -495,7 +495,7 @@
       {
         "name": "La regla del Peso Opcional",
         "section": "components",
-        "body": "La física del mosaico del hero no existe hasta que alguien la pide: sin un pointerdown no hay motor, ni bucle, ni descarga del motor. matter-js entra por import() dinámico y nunca de forma estática. Es la misma cuenta que gobierna las fotografías — el teléfono con mala red del campus es un caso primario, no un respaldo — y es lo que permite que un adorno de 26 KB no le cueste nada a quien sólo lee la portada. En táctil las piezas ceden el gesto vertical (touch-action: pan-y) para no quedarse con el scroll del hero, y con prefers-reduced-motion: reduce no hay física en absoluto."
+        "body": "La física del mosaico del hero no existe hasta que alguien la pide: lo que mantiene quieto al mosaico es que el motor no avanza, no el estado de las piezas. matter-js entra por import() dinámico —nunca de forma estática— y se pide cuando el puntero se acerca, no cuando ya aprieta: en frío, esperar al pointerdown deja el mundo sin armar antes de que termine un toque corto. Es la misma cuenta que gobierna las fotografías — el teléfono con mala red del campus es un caso primario, no un respaldo — y es lo que permite que un adorno de 26 KB no le cueste nada a quien sólo lee la portada. En táctil las piezas ceden el gesto vertical (touch-action: pan-y) para no quedarse con el scroll del hero, y con prefers-reduced-motion: reduce no hay física en absoluto."
       }
     ],
     "dos": [
