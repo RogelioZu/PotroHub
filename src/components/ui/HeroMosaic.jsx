@@ -20,6 +20,29 @@ const CELLS = [
   { name: 'square-bottom', shape: 'square', tone: 'bg-green-soft', area: 'col-span-2 row-start-4 rounded-bl-[3rem]' },
 ]
 
+/**
+ * Los tres adornos que rompen la cuadrícula por los bordes. Viven fuera de la
+ * rejilla —por eso llevan su posición a mano— pero son piezas de pleno
+ * derecho: pesan y se pueden agarrar como las otras seis.
+ */
+const ORNAMENTS = [
+  {
+    name: 'corner-top',
+    shape: 'square',
+    look: '-top-[8%] -right-[3%] h-[14%] w-[14%] rounded-tr-[3rem] bg-green',
+  },
+  {
+    name: 'wedge-bottom',
+    shape: 'triangle',
+    look: 'bottom-0 left-[28%] h-[12%] w-[24%] bg-gold-light [clip-path:polygon(0_0,100%_0,50%_100%)]',
+  },
+  {
+    name: 'corner-right',
+    shape: 'square',
+    look: 'right-0 bottom-[18%] h-[18%] w-[18%] rounded-bl-[3rem] bg-gold-dark',
+  },
+]
+
 /** La forma decide el radio; la pastilla además ocupa dos columnas. */
 const SHAPE_CLASS = {
   circle: 'rounded-full',
@@ -63,11 +86,10 @@ function Slot() {
  * que es como el sistema señala "aquí va algo que todavía no existe" sin
  * enseñarle texto provisional al estudiante.
  *
- * Con `physics`, las seis piezas se pueden agarrar, arrastrar y aventar: caen
- * con gravedad, chocan entre sí y se apilan contra las paredes del cuadrado.
- * Los tres adornos no participan — son el marco, no las piezas. En reposo no
- * hay ninguna diferencia con el mosaico estático, y así se queda si nadie lo
- * toca. Ver `useMosaicPhysics`.
+ * Con `physics`, las nueve piezas —las seis celdas y los tres adornos— se
+ * pueden agarrar, arrastrar y aventar: caen con gravedad, chocan entre sí y se
+ * apilan contra las paredes. En reposo no hay ninguna diferencia con el
+ * mosaico estático, y así se queda si nadie lo toca. Ver `useMosaicPhysics`.
  */
 function HeroMosaic({ children, className = '', physics = false }) {
   const root = useRef(null)
@@ -137,11 +159,19 @@ function HeroMosaic({ children, className = '', physics = false }) {
         })}
       </div>
 
-      {/* Los tres adornos viven fuera de la rejilla a propósito: rompen su
-          cuadrícula por los bordes para que el mosaico no lea como una tabla. */}
-      <span className="absolute -top-[8%] -right-[3%] h-[14%] w-[14%] rounded-tr-[3rem] bg-green" />
-      <span className="absolute bottom-0 left-[28%] h-[12%] w-[24%] bg-gold-light [clip-path:polygon(0_0,100%_0,50%_100%)]" />
-      <span className="absolute right-0 bottom-[18%] h-[18%] w-[18%] rounded-bl-[3rem] bg-gold-dark" />
+      {/* Los adornos viven fuera de la rejilla a propósito: rompen su
+          cuadrícula por los bordes para que el mosaico no lea como una tabla.
+          Aun así llevan `data-mosaic-cell`, porque para la física son piezas
+          como las demás. */}
+      {ORNAMENTS.map(({ name, shape, look }) => (
+        <span
+          key={name}
+          data-mosaic-cell={name}
+          data-mosaic-shape={shape}
+          aria-hidden="true"
+          className={`absolute ${look}${physics ? ' touch-pan-y select-none' : ''}`}
+        />
+      ))}
     </div>
   )
 }

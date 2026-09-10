@@ -588,10 +588,18 @@ un hueco sea para una imagen.
 
 #### Las piezas tienen peso
 
-Las seis piezas se pueden agarrar, arrastrar y aventar. Caen con gravedad, chocan entre sí y se
-apilan contra las paredes de su propio cuadrado, que es la caja: nada sale del mosaico ni cae sobre
-el titular. Los tres adornos no participan — son el marco, no las piezas. Lo mueve `matter-js` a
-través de `useMosaicPhysics`.
+Las nueve piezas —las seis celdas de la rejilla y los tres adornos— se pueden agarrar, arrastrar y
+aventar. Caen con gravedad, chocan entre sí y se apilan contra unas paredes que las encierran: nada
+sale del mosaico ni cae sobre el titular. Lo mueve `matter-js` a través de `useMosaicPhysics`.
+
+**Las paredes encierran la unión del cuadrado y de las piezas, no sólo el cuadrado.** Los adornos
+asoman por el borde a propósito —`corner-top` nace por encima del canto superior— y una pared
+trazada al ras los atraparía dentro de sí misma y los escupiría al arrancar el motor.
+
+**Cada pieza recibe el cuerpo de su forma real, que no siempre es la que dice su nombre.** En una
+rejilla de `4×4`, `rounded-full` sobre una celda de una columna por dos filas no dibuja un círculo
+sino una cápsula vertical; lo que decide es la medida. La cuña es un triángulo de verdad, con el
+mismo polígono que dibuja su `clip-path`.
 
 **En reposo no existe.** Lo que mantiene quieto al mosaico no es el estado de las piezas sino que el
 motor no avanza: sin bucle nadie llama a `Engine.update`, y la composición en reposo es la de

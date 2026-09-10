@@ -4,8 +4,8 @@ import { DUR, EASE, STAGGER } from './motion'
 
 /**
  * Física opcional para las piezas del mosaico del hero: se pueden agarrar,
- * arrastrar y aventar, chocan entre sí y se apilan contra las paredes de su
- * propio cuadrado.
+ * arrastrar y aventar, chocan entre sí y se apilan contra unas paredes que las
+ * encierran.
  *
  * Cuatro decisiones gobiernan el resto:
  *
@@ -78,6 +78,25 @@ const bodyFor = (Bodies, home) => {
   }
 
   const half = Math.min(w, h) / 2
+
+  if (shape === 'triangle') {
+    // El mismo polígono que dibuja el `clip-path`: base arriba, vértice abajo.
+    // Matter coloca el centroide en `(x, y)` —el centro de la caja del
+    // elemento—, que es también el punto sobre el que gira CSS, así que el
+    // dibujo y el cuerpo giran sobre el mismo eje sin más ajustes.
+    return Bodies.fromVertices(
+      x,
+      y,
+      [
+        [
+          { x: -w / 2, y: -h / 2 },
+          { x: w / 2, y: -h / 2 },
+          { x: 0, y: h / 2 },
+        ],
+      ],
+      options,
+    )
+  }
 
   if (shape === 'square') {
     return Bodies.rectangle(x, y, w, h, {
@@ -152,19 +171,40 @@ export function useMosaicPhysics(containerRef, enabled = true) {
       engine = Engine.create({ enableSleeping: true })
       engine.gravity.y = 1
 
-      bodies = measure().map((home) => {
+      const pieces = measure()
+
+      bodies = pieces.map((home) => {
         const body = bodyFor(Bodies, home)
-        body.plugin = { home }
+        // El desplazamiento se mide desde donde nació el cuerpo y no desde el
+        // centro de la celda: en un polígono el motor coloca el centroide, que
+        // no tiene por qué caer en el centro de su caja.
+        body.plugin = { cell: home.cell, ox: body.position.x, oy: body.position.y }
         return body
       })
 
-      const w = box.width
-      const h = box.height
+      // Las paredes encierran la unión del cuadrado y de las piezas, no sólo
+      // el cuadrado: tres adornos asoman por el borde a propósito —uno nace
+      // por encima del canto superior— y una pared trazada al ras los
+      // atraparía dentro de sí misma y los escupiría al arrancar el motor.
+      const edge = pieces.reduce(
+        (acc, p) => ({
+          minX: Math.min(acc.minX, p.x - p.w / 2),
+          minY: Math.min(acc.minY, p.y - p.h / 2),
+          maxX: Math.max(acc.maxX, p.x + p.w / 2),
+          maxY: Math.max(acc.maxY, p.y + p.h / 2),
+        }),
+        { minX: 0, minY: 0, maxX: box.width, maxY: box.height },
+      )
+
+      const w = edge.maxX - edge.minX
+      const h = edge.maxY - edge.minY
+      const cx = edge.minX + w / 2
+      const cy = edge.minY + h / 2
       const walls = [
-        Bodies.rectangle(w / 2, -WALL / 2, w + WALL * 2, WALL, { isStatic: true }),
-        Bodies.rectangle(w / 2, h + WALL / 2, w + WALL * 2, WALL, { isStatic: true }),
-        Bodies.rectangle(-WALL / 2, h / 2, WALL, h + WALL * 2, { isStatic: true }),
-        Bodies.rectangle(w + WALL / 2, h / 2, WALL, h + WALL * 2, { isStatic: true }),
+        Bodies.rectangle(cx, edge.minY - WALL / 2, w + WALL * 2, WALL, { isStatic: true }),
+        Bodies.rectangle(cx, edge.maxY + WALL / 2, w + WALL * 2, WALL, { isStatic: true }),
+        Bodies.rectangle(edge.minX - WALL / 2, cy, WALL, h + WALL * 2, { isStatic: true }),
+        Bodies.rectangle(edge.maxX + WALL / 2, cy, WALL, h + WALL * 2, { isStatic: true }),
       ]
 
       Composite.add(engine.world, [...bodies, ...walls])
@@ -173,10 +213,10 @@ export function useMosaicPhysics(containerRef, enabled = true) {
     /** Escribe en el DOM la diferencia entre donde está la pieza y su hueco. */
     const paint = () => {
       for (const body of bodies) {
-        const { home } = body.plugin
-        gsap.set(home.cell, {
-          x: body.position.x - home.x,
-          y: body.position.y - home.y,
+        const { cell, ox, oy } = body.plugin
+        gsap.set(cell, {
+          x: body.position.x - ox,
+          y: body.position.y - oy,
           rotation: body.angle * (180 / Math.PI),
         })
       }
@@ -322,7 +362,7 @@ export function useMosaicPhysics(containerRef, enabled = true) {
       settleSince = 0
     }
 
-    const bodyUnder = (cell) => bodies.find((body) => body.plugin.home.cell === cell)
+    const bodyUnder = (cell) => bodies.find((body) => body.plugin.cell === cell)
 
     const toLocal = (event) => {
       const box = container.getBoundingClientRect()
@@ -393,7 +433,7 @@ export function useMosaicPhysics(containerRef, enabled = true) {
       dragPointer = null
       if (!engine || !drag) return
 
-      const cell = drag.bodyB.plugin.home.cell
+      const cell = drag.bodyB.plugin.cell
       cell.style.cursor = 'grab'
       M.Composite.remove(engine.world, drag)
       drag = null
