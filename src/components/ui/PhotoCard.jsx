@@ -10,6 +10,13 @@ import { useState } from 'react'
  * `badge-overlay` ya documentado (`rgb(37 37 37 / 70%)`, `rounded-md`,
  * texto `Papel`) — el mismo patrón que usan la tarjeta del vitral y las
  * tarjetas de área.
+ *
+ * `as` cambia la etiqueta que se dibuja, y existe por una sola razón: la fila
+ * de canal de Comunidad es un `<button>` que voltea, y dentro de un botón
+ * sólo cabe contenido de frase — un `<figure>` o un `<div>` ahí es marcado
+ * inválido. Con `as="span"` la foto entra en ese contexto sin que la página
+ * tenga que rehacer la degradación elegante por su cuenta — y va siempre con
+ * `compact`, que es el único modo cuyo aviso de pendiente no lleva `<p>`.
  */
 function PhotoCard({
   src,
@@ -18,9 +25,12 @@ function PhotoCard({
   aspect = 'aspect-4/3',
   rounded = 'rounded-xl',
   compact = false,
+  as,
   className = '',
 }) {
   const [failed, setFailed] = useState(false)
+  const Frame = as ?? (failed ? 'div' : 'figure')
+  const Caption = as ?? 'figcaption'
 
   if (failed) {
     // El nombre no puede desaparecer sólo porque la foto todavía no existe
@@ -29,7 +39,7 @@ function PhotoCard({
     // frase de "pendiente" caben sin desbordar: ahí basta el hueco punteado,
     // el nombre real vive junto a la miniatura, no encima de ella.
     return (
-      <div
+      <Frame
         className={`flex ${aspect} ${rounded} flex-col items-center justify-center gap-1 border border-dashed border-ink/15 bg-paper-alt text-center ${
           compact ? '' : 'px-4'
         } ${className}`}
@@ -40,12 +50,12 @@ function PhotoCard({
             <p className="text-xs text-ink-soft/70">Foto pendiente de agregar en /public/images/comunidad</p>
           </>
         )}
-      </div>
+      </Frame>
     )
   }
 
   return (
-    <figure className={`relative overflow-hidden ${aspect} ${rounded} shadow-sm shadow-ink/5 ${className}`}>
+    <Frame className={`relative block overflow-hidden ${aspect} ${rounded} shadow-sm shadow-ink/5 ${className}`}>
       <img
         src={src}
         alt={alt}
@@ -54,11 +64,11 @@ function PhotoCard({
         onError={() => setFailed(true)}
       />
       {caption && (
-        <figcaption className="absolute inset-x-3 bottom-3 rounded-md bg-ink/70 px-3 py-2 text-sm font-bold text-paper">
+        <Caption className="absolute inset-x-3 bottom-3 block rounded-md bg-ink/70 px-3 py-2 text-sm font-bold text-paper">
           {caption}
-        </figcaption>
+        </Caption>
       )}
-    </figure>
+    </Frame>
   )
 }
 

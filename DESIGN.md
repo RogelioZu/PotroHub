@@ -648,6 +648,11 @@ sí llega al teléfono, porque un manejador de clic responde igual a mouse, tecl
 tarjetas pueden quedar volteadas a la vez: no hay motivo para forzarlas a cerrarse entre sí si el
 estudiante quiere comparar dos áreas.
 
+El mecanismo —`perspective`, `preserve-3d`, la transición de 500 ms, las dos vías del disparador y
+la excepción de movimiento reducido— vive una sola vez en `index.css` y lo comparte la fila de canal
+de Comunidad (ver *Comunidad*). Lo propio de cada componente es sólo la geometría: aquí un `4:3`
+fijo con las caras superpuestas en `absolute`, allá una fila cuyo alto lo decide su texto.
+
 **La etiqueta del frente es `Verde Profundo` al 90%**, que sobre la zona más clara que una foto
 puede tener —blanco puro— deja el texto `Papel` en **7.97:1**, muy por encima del 4.5:1 que le
 corresponde a 14px. Es velo de fotografía, no relleno de tarjeta: por eso lleva opacidad y no el
@@ -675,10 +680,21 @@ otra:
 
 - *Canales de Microsoft Teams*, a la izquierda: una **lista** compacta, no una rejilla de tarjetas
   — miniatura cuadrada de `PhotoCard` en modo `compact` (sin la frase larga de "pendiente", que no
-  cabría en 80px) junto al nombre y la descripción, fila por fila. Es la misma información que la
-  rejilla de áreas de Inicio (`AREAS`, reutilizada — el diagnóstico y la comunidad comparten datos
-  porque son la misma facultad, no porque se copiaron los diseños), pero presentada como lo que es
-  aquí: un directorio de canales a los que unirse, no tarjetas que explorar.
+  cabría en 80px) junto al nombre, fila por fila. Cada fila voltea con el mismo mecanismo que la
+  tarjeta de área de Inicio (ver *Tarjeta de área*): al frente lo que sirve para reconocer el canal
+  dentro de la lista —miniatura y nombre—, al reverso el nombre y la descripción de la especialidad.
+  Es la misma información que la rejilla de áreas de Inicio (`AREAS`, reutilizada — el diagnóstico y
+  la comunidad comparten datos porque son la misma facultad, no porque se copiaron los diseños), y
+  sigue siendo un directorio de canales a los que unirse. Lo que la separa de aquella rejilla ya no
+  es el volteo, que ahora comparten, sino la forma: filas a lo ancho de una columna con la foto en
+  miniatura, contra cinco fotografías de `4:3` repartidas en tres y dos. El precio del volteo es que
+  la descripción se pide en vez de leerse de corrido, y se paga aquí porque una lista de directorio
+  se recorre buscando un nombre, no se lee entera.
+
+  Las dos caras se apilan en la misma celda de una rejilla y no en `absolute`, como sí hacen las de
+  Inicio: aquí no hay `aspect-ratio` que fije el alto —la miniatura mide 80px y el reverso crece con
+  su texto—, así que la fila mide lo que mide su cara más alta y el reverso no se recorta contra un
+  número adivinado.
 - *Explora más allá del salón*, a la derecha: un bloque editorial silencioso —`Papel Gris`, texto
   centrado verticalmente— que conecta el diagnóstico con la Rama IEEE de abajo (`<a href="#ieee">`).
   Es la idea de `PRODUCT.md` → *Users* ("la mayoría llega con participación extracurricular
@@ -754,7 +770,10 @@ rebote le roba ese momento.
 
 **La regla del Movimiento Opcional.** Toda animación se declara dentro de `gsap.matchMedia()` con
 `(prefers-reduced-motion: no-preference)`, o comprueba `prefersReducedMotion()` en las ramas
-imperativas. No hay una sola animación sin esa condición.
+imperativas. No hay una sola animación sin esa condición, y una transición de CSS cuenta como
+animación: el volteo de las tarjetas —lo único que se anima hoy fuera de GSAP— cambia de cara sin
+transición bajo `(prefers-reduced-motion: reduce)`. Lo que se quita es la media vuelta en 3D, no el
+cambio de estado: el reverso tiene que poder leerse igual.
 
 ## Do's and Don'ts
 

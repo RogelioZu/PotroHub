@@ -58,6 +58,11 @@ function CommunityHeroBackdrop() {
 function Community() {
   useDocumentTitle('Comunidad Facultad de Ingeniería — PotroPath')
 
+  // Varios canales pueden quedar volteados a la vez, igual que en Inicio: si
+  // el estudiante quiere comparar dos especialidades, cerrarle una para
+  // abrirle la otra no le ahorra nada.
+  const [flipped, setFlipped] = useState({})
+
   return (
     <>
       {/*
@@ -98,21 +103,49 @@ function Community() {
               sabes que del otro lado hay un compañero de tu propia facultad, no un desconocido.
             </p>
 
+            {/*
+              Cada fila es un botón que voltea, con el mismo mecanismo que las
+              tarjetas de área de Inicio (ver `.canal-flip` en index.css): al
+              frente la miniatura y el nombre —lo que hace falta para
+              reconocer el canal dentro de la lista—, y al reverso la
+              descripción de la especialidad. En escritorio con puntero fino
+              basta pasar el mouse; en teléfono, donde no hay hover, el toque
+              la deja volteada, así que el reverso nunca queda inalcanzable.
+
+              Sigue siendo una lista y no la rejilla de Inicio: filas a lo
+              ancho de la columna, apiladas, con la foto en miniatura. Lo que
+              cambia es que la descripción ahora se pide, no se lee de
+              corrido.
+            */}
             <Reveal className="mt-6 flex flex-col gap-3">
               {AREAS.map((area) => (
-                <div key={area.id} className="flex items-start gap-4 rounded-xl bg-paper-alt p-3">
-                  <PhotoCard
-                    src={`/images/comunidad/canal-${area.id}.jpg`}
-                    alt=""
-                    aspect="aspect-square"
-                    compact
-                    className="w-20 shrink-0 sm:w-24"
-                  />
-                  <div className="min-w-0 py-1">
-                    <h3 className="h3 text-green-mid">{area.name}</h3>
-                    <p className="mt-1 text-sm text-ink-soft">{area.description}</p>
-                  </div>
-                </div>
+                <button
+                  key={area.id}
+                  type="button"
+                  aria-pressed={Boolean(flipped[area.id])}
+                  onClick={() =>
+                    setFlipped((current) => ({ ...current, [area.id]: !current[area.id] }))
+                  }
+                  className={`canal-flip text-left ${flipped[area.id] ? 'is-flipped' : ''}`}
+                >
+                  <span className="canal-flip-inner">
+                    <span className="canal-flip-face flex items-center gap-4 bg-paper-alt p-3">
+                      <PhotoCard
+                        as="span"
+                        src={`/images/comunidad/canal-${area.id}.jpg`}
+                        alt=""
+                        aspect="aspect-square"
+                        compact
+                        className="w-20 shrink-0 sm:w-24"
+                      />
+                      <span className="h3 min-w-0 text-green-mid">{area.name}</span>
+                    </span>
+                    <span className="canal-flip-face canal-flip-back flex flex-col justify-center bg-paper-alt p-5">
+                      <span className="h3 text-green-mid">{area.name}</span>
+                      <span className="mt-1 text-sm text-ink-soft">{area.description}</span>
+                    </span>
+                  </span>
+                </button>
               ))}
             </Reveal>
 

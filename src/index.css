@@ -213,9 +213,13 @@
   }
 
   /**
-   * Tarjeta de área con volteo. Frente: foto + nombre. Fondo: nombre en
-   * verde + descripción. El disparador tiene dos vías independientes que
-   * llegan a la misma transición:
+   * Mecanismo de volteo, compartido por la tarjeta de área de Inicio
+   * (`.area-flip`) y la fila de canal de Comunidad (`.canal-flip`). Las
+   * geometrías son distintas —una es un 4:3 fijo, la otra una fila que crece
+   * con su texto— pero el disparador es el mismo, y vive una sola vez: dos
+   * copias de una regla de interacción se desincronizan en el primer ajuste.
+   *
+   * Son dos vías independientes que llegan a la misma transición:
    *
    *  1. `:hover`/`:focus-visible`, pero sólo bajo `(hover: hover) and
    *     (pointer: fine)` — un dedo no tiene "encima sin tocar", así que sin
@@ -225,39 +229,59 @@
    *     mecanismo que sí funciona en cualquier dispositivo, porque un click
    *     handler dispara igual con mouse, teclado o toque.
    *
-   * `.area-flip` es el `<button>` completo: por eso el volteo 3D vive en un
-   * hijo (`.area-flip-inner`) y no en el propio botón, que además necesita
+   * El elemento exterior es el `<button>` completo: por eso el volteo 3D vive
+   * en un hijo (`…-flip-inner`) y no en el propio botón, que además necesita
    * quedarse quieto para que su `outline` de foco no rote con la tarjeta.
    */
-  .area-flip {
+  :is(.area-flip, .canal-flip) {
     /* Un `<button>` es `inline-block` por defecto y no se estira solo dentro
        de una rejilla — `block` + `width: 100%` lo fuerza a llenar su celda. */
     display: block;
     width: 100%;
     perspective: 1000px;
   }
+  :is(.area-flip-inner, .canal-flip-inner) {
+    transform-style: preserve-3d;
+    transition: transform 500ms ease;
+  }
+  :is(.area-flip, .canal-flip).is-flipped :is(.area-flip-inner, .canal-flip-inner) {
+    transform: rotateY(180deg);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    :is(.area-flip, .canal-flip):hover :is(.area-flip-inner, .canal-flip-inner),
+    :is(.area-flip, .canal-flip):focus-visible :is(.area-flip-inner, .canal-flip-inner) {
+      transform: rotateY(180deg);
+    }
+  }
+  /* La regla del Movimiento Opcional también aplica a una transición de CSS:
+     el cambio de cara se conserva —el reverso tiene que poder leerse— pero
+     media vuelta en 3D es justo el movimiento que la preferencia pide
+     quitar, así que ahí la cara se cambia de golpe. */
+  @media (prefers-reduced-motion: reduce) {
+    :is(.area-flip-inner, .canal-flip-inner) {
+      transition: none;
+    }
+  }
+  :is(.area-flip-face, .canal-flip-face) {
+    overflow: hidden;
+    border-radius: 12px;
+    backface-visibility: hidden;
+  }
+  :is(.area-flip-back, .canal-flip-back) {
+    transform: rotateY(180deg);
+  }
+
+  /* Tarjeta de área. Frente: foto + nombre. Fondo: nombre en verde +
+     descripción. El `aspect-ratio` ya decide la altura, así que las dos caras
+     se superponen en `absolute`. */
   .area-flip-inner {
     position: relative;
     display: block;
     aspect-ratio: 4 / 3;
-    transform-style: preserve-3d;
-    transition: transform 500ms ease;
-  }
-  .area-flip.is-flipped .area-flip-inner {
-    transform: rotateY(180deg);
-  }
-  @media (hover: hover) and (pointer: fine) {
-    .area-flip:hover .area-flip-inner,
-    .area-flip:focus-visible .area-flip-inner {
-      transform: rotateY(180deg);
-    }
   }
   .area-flip-face {
     position: absolute;
     inset: 0;
-    overflow: hidden;
-    border-radius: 12px;
-    backface-visibility: hidden;
   }
   .area-flip-front {
     background: var(--color-paper);
@@ -267,8 +291,23 @@
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
-    transform: rotateY(180deg);
     background: var(--color-paper);
     padding: 20px;
+  }
+
+  /*
+   * Fila de canal de Comunidad. Frente: miniatura + nombre. Fondo: nombre +
+   * descripción. Aquí no hay `aspect-ratio` que fije la altura —la miniatura
+   * mide 80px y el reverso crece con su descripción—, así que las dos caras
+   * se apilan en la misma celda de una rejilla en vez de en `absolute`: la
+   * celda mide lo que mide la cara más alta, y el texto del reverso no se
+   * recorta contra un alto adivinado. El relleno y la capa tonal de cada cara
+   * siguen viviendo en la página, como cuando la fila no volteaba.
+   */
+  .canal-flip-inner {
+    display: grid;
+  }
+  .canal-flip-face {
+    grid-area: 1 / 1;
   }
 }
