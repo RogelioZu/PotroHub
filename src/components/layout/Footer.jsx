@@ -13,7 +13,7 @@ function Footer() {
     <footer className="relative overflow-hidden border-t-2 border-gold text-paper [text-shadow:0_1px_6px_rgb(0_0_0/75%)]">
       <VitralBackdrop scrimClassName="" />
 
-      <Reveal className="relative z-10 mx-auto grid max-w-6xl gap-10 px-6 py-10 sm:grid-cols-3">
+      <Reveal className="relative z-10 mx-auto grid max-w-6xl gap-6 px-6 py-6 sm:grid-cols-3 sm:py-8">
         <div>
           <p className="text-lg font-bold text-paper">
             Potro<span className="text-gold-light">Path</span>

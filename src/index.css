@@ -107,6 +107,24 @@
   }
 
   /**
+   * Puente visual entre el hero y el bloque de áreas: el degradado se queda
+   * en el borde y no convierte toda la sección en una superficie decorativa.
+   */
+  .potential-section {
+    position: relative;
+    isolation: isolate;
+  }
+  .potential-section::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: -1;
+    height: 4rem;
+    background: linear-gradient(to bottom, var(--color-paper) 0%, var(--color-paper-alt) 100%);
+    opacity: 0.9;
+  }
+
+  /**
    * Botones de decisión (CTAs de cambio de vista: hero, resultados,
    * comunidad). Los controles compactos del cuestionario son otro contexto
    * — aparecen 50 veces por sesión — y se quedan fuera a propósito.

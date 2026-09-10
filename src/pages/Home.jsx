@@ -47,7 +47,6 @@ function Home() {
           const pick = (selector) => hero.current.querySelector(selector)
           const eyebrow = pick('[data-hero-eyebrow]')
           const body = pick('[data-hero-body]')
-          const note = pick('[data-hero-note]')
           const ctas = gsap.utils.toArray('[data-hero-cta] > *', hero.current)
           const cells = gsap.utils.toArray('[data-mosaic-cell]', hero.current)
 
@@ -66,7 +65,7 @@ function Home() {
               'words',
             )
             .from(
-              [body, ...ctas, note],
+              [body, ...ctas],
               { opacity: 0, y: 16, duration: DUR.view, ease: EASE.enter, stagger: STAGGER.tight },
               'words+=0.35',
             )
@@ -116,7 +115,7 @@ function Home() {
     <>
       <section
         ref={hero}
-        className="section-py mx-auto grid max-w-6xl gap-10 px-6 md:grid-cols-2 md:items-center"
+        className="pt-16 pb-8 mx-auto grid max-w-6xl gap-10 px-6 md:pt-24 md:pb-12 md:grid-cols-2 md:items-center"
       >
         <div>
           <p data-hero-eyebrow className="eyebrow">
@@ -139,28 +138,22 @@ function Home() {
               Conoce la comunidad
             </Link>
           </div>
-          {/*
-            La objeción que mata a un enlace frío compartido por WhatsApp es
-            "¿me va a pedir mis datos?". Se responde junto al botón, no en una
-            sección de privacidad que nadie abre.
-          */}
-          <p data-hero-note className="mt-4 text-sm text-ink-soft">
-            Sin registro, sin correo y sin datos personales.
-          </p>
         </div>
 
         <HeroMosaic />
       </section>
 
-      <section className="section-py border-t border-ink/5 bg-paper-alt">
+      <section className="potential-section pt-8 pb-16 border-t border-ink/5 bg-paper-alt md:pt-12 md:pb-24">
         <div className="mx-auto max-w-6xl px-6">
-          <SectionDivider>
-            <h2 className="min-w-0 h2 sm:shrink-0">¿Dónde está tu potencial?</h2>
-          </SectionDivider>
-          <p className="mt-6 max-w-2xl text-ink-soft">
-            Descubre las áreas de Computación que mejor conectan con tus habilidades, intereses y
-            forma de resolver problemas.
-          </p>
+          <Reveal className="potential-intro">
+            <SectionDivider>
+              <h2 className="min-w-0 h2 sm:shrink-0">¿Dónde está tu potencial?</h2>
+            </SectionDivider>
+            <p className="mx-auto mt-6 max-w-2xl text-center text-ink-soft">
+              Descubre las áreas de Computación que mejor conectan con tus habilidades, intereses y
+              forma de resolver problemas.
+            </p>
+          </Reveal>
 
           {/*
             Las cinco áreas tienen el mismo peso visual: tres arriba y dos
@@ -192,7 +185,7 @@ function Home() {
                 <span className="area-flip-inner">
                   <span className="area-flip-face area-flip-front">
                     <img src={area.image} alt="" className="h-full w-full object-cover" loading="lazy" />
-                    <span className="absolute inset-x-3 bottom-3 rounded-md bg-ink/70 px-3 py-2 text-sm font-bold text-paper">
+                    <span className="absolute inset-x-3 bottom-3 rounded-md bg-green/90 px-3 py-2 text-sm font-bold text-paper">
                       {area.name}
                     </span>
                   </span>

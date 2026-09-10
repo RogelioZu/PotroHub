@@ -8,8 +8,14 @@ const imageSlots = [
   },
   { shape: 'circle', className: 'bg-gold-light', slot: 'circle-portrait' },
   { shape: 'square', className: 'bg-green', slot: 'square-top' },
-  { shape: 'pill', className: 'bg-gold', slot: 'pill-wide' },
-  { shape: 'circle', className: 'bg-gold-dark', slot: 'circle-small' },
+  {
+    shape: 'pill',
+    className: 'bg-gold',
+    slot: 'pill-wide',
+    image: '/images/estudante-ico-hombre.png',
+    alt: 'Estudiante de Ingeniería en Computación',
+  },
+  { shape: 'circle', className: 'bg-green-mid', slot: 'circle-small' },
   { shape: 'square', className: 'bg-green-soft', slot: 'square-bottom' },
 ]
 
@@ -49,7 +55,7 @@ function HeroMosaic({ className = '' }) {
         ))}
       </div>
 
-      <span className="absolute top-0 right-[8%] h-[18%] w-[18%] rounded-tr-[3rem] bg-green" />
+      <span className="absolute -top-[8%] -right-[3%] h-[14%] w-[14%] rounded-tr-[3rem] bg-green" />
       <span className="absolute bottom-0 left-[28%] h-[12%] w-[24%] bg-gold-light [clip-path:polygon(0_0,100%_0,50%_100%)]" />
       <span className="absolute right-0 bottom-[18%] h-[18%] w-[18%] rounded-bl-[3rem] bg-gold-dark" />
     </div>
