@@ -1,8 +1,8 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Reveal from '../components/motion/Reveal'
 import SectionDivider from '../components/motion/SectionDivider'
-import VitralShowcase from '../components/ui/VitralShowcase'
+import HeroMosaic from '../components/ui/HeroMosaic'
 import { AREAS } from '../data/areas'
 import { gsap, SplitText, useGSAP } from '../lib/gsap'
 import { DUR, EASE, FULL_MOTION, STAGGER } from '../lib/motion'
@@ -11,12 +11,20 @@ import { useDocumentTitle } from '../lib/useDocumentTitle'
 function Home() {
   const hero = useRef(null)
   const heading = useRef(null)
+  // Qué tarjetas de área están volteadas. Es un mapa y no un solo id: en
+  // escritorio el volteo por :hover ya es excluyente por sí mismo (sólo se
+  // puede pasar el mouse sobre una a la vez), pero en teléfono el toque fija
+  // el estado, y fijar más de una a la vez para comparar dos áreas es
+  // razonable — no hay motivo para forzarlas a cerrarse entre sí.
+  const [flipped, setFlipped] = useState({})
 
   useDocumentTitle('PotroPath — Encuentra tu ruta en Ingeniería en Computación')
 
   // Momento focal del sitio. La columna de texto se arma por palabras dentro
   // de una máscara por líneas —"ruta" entra escalonada con las demás, sin
-  // tratamiento propio— y en paralelo VitralShowcase descubre su tarjeta.
+  // tratamiento propio— y al final se acomodan las celdas del mosaico.
+  // VitralShowcase no aparece aquí: es dueño de su propia entrada y corre en
+  // paralelo.
   useGSAP(
     () => {
       const mm = gsap.matchMedia()
@@ -39,7 +47,9 @@ function Home() {
           const pick = (selector) => hero.current.querySelector(selector)
           const eyebrow = pick('[data-hero-eyebrow]')
           const body = pick('[data-hero-body]')
+          const note = pick('[data-hero-note]')
           const ctas = gsap.utils.toArray('[data-hero-cta] > *', hero.current)
+          const cells = gsap.utils.toArray('[data-mosaic-cell]', hero.current)
 
           split = SplitText.create(heading.current, { type: 'lines,words', mask: 'lines' })
 
@@ -56,9 +66,22 @@ function Home() {
               'words',
             )
             .from(
-              [body, ...ctas],
+              [body, ...ctas, note],
               { opacity: 0, y: 16, duration: DUR.view, ease: EASE.enter, stagger: STAGGER.tight },
               'words+=0.35',
+            )
+            // Las celdas se acomodan como piezas que caen en su hueco: entran
+            // desde una escala apenas menor, sin rebote — el rebote es del potro.
+            .from(
+              cells,
+              {
+                opacity: 0,
+                scale: 0.92,
+                duration: DUR.view,
+                ease: EASE.enter,
+                stagger: STAGGER.tight,
+              },
+              'words+=0.5',
             )
         }
 
@@ -116,40 +139,69 @@ function Home() {
               Conoce la comunidad
             </Link>
           </div>
+          {/*
+            La objeción que mata a un enlace frío compartido por WhatsApp es
+            "¿me va a pedir mis datos?". Se responde junto al botón, no en una
+            sección de privacidad que nadie abre.
+          */}
+          <p data-hero-note className="mt-4 text-sm text-ink-soft">
+            Sin registro, sin correo y sin datos personales.
+          </p>
         </div>
-        <VitralShowcase />
+
+        <HeroMosaic />
       </section>
 
       <section className="section-py border-t border-ink/5 bg-paper-alt">
         <div className="mx-auto max-w-6xl px-6">
           <SectionDivider>
-            <h2 className="area-heading-title min-w-0 h2 sm:shrink-0">¿Dónde está tu potencial?</h2>
+            <h2 className="min-w-0 h2 sm:shrink-0">¿Dónde está tu potencial?</h2>
           </SectionDivider>
-          <p className="area-heading-subtitle mt-8">
-            Descubre las áreas de Computación que mejor conectan con tus habilidades, intereses y forma de resolver problemas.
+          <p className="mt-6 max-w-2xl text-ink-soft">
+            Descubre las áreas de Computación que mejor conectan con tus habilidades, intereses y
+            forma de resolver problemas.
           </p>
-          <Reveal className="area-orbit -mt-12" aria-label="Áreas de especialización">
-            <div className="area-orbit-center">
-              <img src="/images/potro-mascota.png" alt="Mascota de la UAEMéx" />
-              <span>Tu ruta</span>
-            </div>
-            {AREAS.map((area) => (
-              <article key={area.id} className="area-orbit-item" tabIndex="0">
-                <div className="area-orbit-card">
-                  <div className="area-orbit-flip">
-                    <div className="area-orbit-face area-orbit-front">
-                      <div className="area-orbit-image">
-                        <img src={area.image} alt={area.name} />
-                        <h3>{area.name}</h3>
-                      </div>
-                    </div>
-                    <div className="area-orbit-face area-orbit-back">
-                      <p>{area.description}</p>
-                      <button type="button">Ver más <span aria-hidden="true">→</span></button>
-                    </div>
-                  </div>
-                </div>
-              </article>
+
+          {/*
+            Las cinco áreas tienen el mismo peso visual: tres arriba y dos
+            abajo es una composición, no una jerarquía. Destacar una sola antes
+            de que el estudiante responda sugeriría una recomendación que el
+            diagnóstico todavía no hizo.
+
+            Cada tarjeta es un botón que voltea sobre sí misma: la foto y el
+            nombre al frente, la descripción al fondo. En escritorio basta con
+            pasar el mouse (ver `.area-flip` en index.css, sólo bajo
+            `(hover: hover) and (pointer: fine)`); en teléfono no hay hover,
+            así que tocar la tarjeta la fija volteada por medio de este
+            estado — el mismo botón cubre los dos casos sin ramificar la
+            interacción por dispositivo.
+          */}
+          <Reveal className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
+            {AREAS.map((area, index) => (
+              <button
+                key={area.id}
+                type="button"
+                aria-pressed={Boolean(flipped[area.id])}
+                onClick={() =>
+                  setFlipped((current) => ({ ...current, [area.id]: !current[area.id] }))
+                }
+                className={`area-flip text-left shadow-sm shadow-ink/5 ${
+                  flipped[area.id] ? 'is-flipped' : ''
+                } ${index < 3 ? 'lg:col-span-2' : 'lg:col-span-3'}`}
+              >
+                <span className="area-flip-inner">
+                  <span className="area-flip-face area-flip-front">
+                    <img src={area.image} alt="" className="h-full w-full object-cover" loading="lazy" />
+                    <span className="absolute inset-x-3 bottom-3 rounded-md bg-ink/70 px-3 py-2 text-sm font-bold text-paper">
+                      {area.name}
+                    </span>
+                  </span>
+                  <span className="area-flip-face area-flip-back">
+                    <span className="h3 text-green-mid">{area.name}</span>
+                    <span className="mt-2 text-sm text-ink-soft">{area.description}</span>
+                  </span>
+                </span>
+              </button>
             ))}
           </Reveal>
         </div>

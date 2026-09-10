@@ -151,14 +151,25 @@ tarjeta panorámica de Inicio (`VitralShowcase`), con la mascota de la universid
 esquina. Es la excepción que confirma la regla, y por eso es el objeto con más peso visual de todo
 el sitio.
 
-La sección de áreas de especialización usa una órbita circular: las cinco áreas rodean un centro
-con la mascota institucional y la etiqueta "Tu ruta". Las fotografías de cada área siguen siendo
-el punto de identificación de sus tarjetas; el círculo organiza la relación entre ellas sin
-convertir el cuerpo en un panel de dashboard.
+Esa tarjeta ya no vive sola: es la pieza superior del **mosaico del hero**. Un vitral es,
+literalmente, celdas de color separadas por plomo, así que la composición modular no es un préstamo
+de una landing de moda — es la geometría del propio activo insignia. Debajo de la franja del vitral
+van una celda de collage técnico (tres ilustraciones en PNG transparente sobre `Papel Gris` —
+computadora, servidor, IA) y dos celdas de dato, una redonda y una en pastilla.
 
-Su encabezado conserva una separación corta con la órbita: el título en verde lleva una firma dorada
-y el subtítulo usa una medida de lectura más amplia para presentar la interacción sin competir con
-las tarjetas.
+Esas dos celdas dicen "50 preguntas" y "5 áreas de especialización", y son deliberadamente la
+versión honesta de las burbujas de cifra que usan las landings educativas. Sólo pueden contener
+hechos verificables del producto; ningún conteo de usuarios, adopción ni respaldo, porque nada de
+eso existe todavía (ver `PRODUCT.md` → *Evidence on Hand*). Son verdes y no doradas porque
+representan un dato, y el dato es territorio del verde.
+
+Las cinco áreas de especialización se presentan como una rejilla editorial de tres arriba y dos
+abajo. Cada tarjeta voltea sobre sí misma: la foto y el nombre al frente, el nombre y la descripción
+al fondo. El disparador tiene dos vías — `:hover` en escritorio con puntero fino, y una clase que
+React fija al tocar o hacer clic, que es la que funciona en cualquier dispositivo — así que ningún
+teléfono queda con una tarjeta atascada mostrando sólo el frente. Las cinco áreas tienen el mismo
+peso visual a propósito: el diagnóstico las mide, no las rankea, y destacar una antes de que el
+estudiante responda sugeriría una recomendación que todavía no se hizo.
 
 **Key Characteristics:**
 
@@ -292,8 +303,11 @@ contenido quedaban pegadas al tercio superior con media pantalla vacía debajo, 
 leían como pantallas sin terminar.
 
 Las rejillas colapsan en un patrón consistente: `sm:grid-cols-2` y luego `lg:grid-cols-4` o
-`lg:grid-cols-5` según cuántos elementos haya. El hero es de dos columnas desde `md`, con la
-tarjeta del vitral a la derecha. La navegación cambia de barra horizontal a menú desplegable en
+`lg:grid-cols-5` según cuántos elementos haya. La excepción es la rejilla de áreas de Inicio, que
+usa `lg:grid-cols-6` con tramos de 2 y de 3 para dar tres celdas arriba y dos abajo: cinco
+elementos no caben en una rejilla regular sin dejar un hueco o sin apretarlos a un ancho donde la
+descripción ya no se lee. El hero es de dos columnas desde `md`, con el mosaico a la derecha. La
+navegación cambia de barra horizontal a menú desplegable en
 `lg` —no en `md`— porque la etiqueta "Comunidad Facultad de Ingeniería" es larga y rompe antes que
 el resto.
 
@@ -327,14 +341,18 @@ percibe y funciona más como un borde suave que como una elevación.
   exclusivo de la tarjeta del vitral y de la insignia del potro.
 - **Asiento de tarjeta** (`box-shadow: 0 1px 3px 0 rgb(37 37 37 / 5%), 0 1px 2px -1px rgb(37 37 37 / 5%)`):
   tarjetas sobre papel blanco, para despegarlas apenas del fondo.
+- **Recorte y pegado** (`drop-shadow-sm`, el filtro de Tailwind): exclusivo de las doce piezas del
+  collage del hero. A diferencia de las otras dos, sigue el contorno del recorte y no un rectángulo
+  — es lo que hace que cada pieza lea como un objeto suelto y no como una foto rectangular más.
 - **Sombra de texto sobre vidrio** (`text-shadow: 0 1px 6px rgb(0 0 0 / 75%)`): no es elevación, es
   legibilidad. Ver *La regla de la Sombra sobre Vidrio*.
 
 ### Named Rules
 
-**La regla de la Sombra Fotográfica.** La sombra es privilegio de la fotografía. Solo el vitral y la
-mascota se levantan del papel; todo lo demás se separa por tono. Un componente nuevo que pida sombra
-para distinguirse está pidiendo, en realidad, la capa tonal que le falta.
+**La regla de la Sombra Fotográfica.** La sombra es privilegio de la fotografía. Se levantan del
+papel la tarjeta del vitral, la mascota y las doce piezas del collage del hero; todo lo demás se
+separa por tono. Un componente nuevo que pida sombra para distinguirse está pidiendo, en realidad,
+la capa tonal que le falta.
 
 ## Shapes
 
@@ -357,6 +375,14 @@ es la forma que el sistema tiene de decir "esto todavía no existe" sin fingir q
 
 **La regla de la Píldora y la Tarjeta.** Redondo completo es para lo que se presiona o avanza;
 `12px` es para lo que contiene. Una tarjeta nunca es una píldora y un botón nunca es una tarjeta.
+
+**La excepción de la Celda de Dato.** El redondo completo tiene un tercer uso, y sólo uno: las
+celdas de dato del mosaico del hero —el círculo de "50 preguntas" y la pastilla de "5 áreas de
+especialización"—. Son formas que no se presionan y no contienen nada; son cifras. La excepción
+está acotada a propósito: vale únicamente para el mosaico, únicamente para cifras verdaderas del
+producto, y nunca para una fotografía, que sigue en `12px`. Es lo que permite traer la energía
+modular de un mosaico sin convertir la página en una ensalada de formas, y sin que un círculo
+llegue a parecer un botón que no responde al clic.
 
 ## Components
 
@@ -431,6 +457,51 @@ desde `origin-left`, nunca con `width` — la anchura dispara *layout* en cada a
 cuestionario y las barras de afinidad comparten color: las dos son dato, no firma. La barra del cuestionario mide `6px`
 de alto (`h-1.5`) y las de resultados `8px` (`h-2`). En resultados, cada barra cuenta su porcentaje
 en sincronía con el llenado.
+
+### Mosaico del hero
+
+La mitad derecha de Inicio, debajo de la franja del vitral: un collage de doce recortes
+fotográficos y, debajo, el círculo de "50 preguntas" junto a la pastilla de "5 áreas de
+especialización".
+
+El collage es doce fotografías reales recortadas —CD, walkman, máquina de escribir, teléfono de
+disco, computadora retro... hasta laptop, smartphone, cámara y lentes VR actuales—, superpuestas y
+giradas a mano dentro de un contenedor cuadrado, sin tarjeta ni fondo detrás: cada recorte flota
+directo sobre el papel, con un `drop-shadow` sutil para el efecto de recorte-y-pegado. Es la
+segunda excepción documentada a *la regla de la Sombra Fotográfica* (la primera es
+`VitralShowcase`), acotada igual: sólo estas doce imágenes, sólo en esta celda. La narrativa "antes
+→ ahora" no es casual — es la misma idea que el titular ya dice en palabras ("encuentra tu ruta"),
+puesta en imágenes.
+
+Los doce archivos son del equipo, no del sistema de diseño, y viven en `public/images/hero/` con su
+especificación completa en el README de esa carpeta: sin logotipos ni marcas de terceros visibles,
+recorte ajustado al objeto, mismo tratamiento fotográfico entre los doce. La posición de cada uno
+—`top`/`left`/`width`/rotación, en porcentaje del contenedor— vive en el arreglo `COLLAGE_ITEMS` de
+`HeroMosaic.jsx`, a mano y no calculada, igual que en la referencia. Mientras un archivo no exista,
+esa pieza se oculta en vez de mostrar el recuadro roto del navegador, y mientras *ninguna* de las
+doce haya cargado, la celda completa cae al mismo aviso punteado que usa el resto del sitio para
+contenido pendiente ("Collage pendiente de agregar en /public/images/hero") — nunca un vacío mudo.
+
+Las celdas de dato entran al final de la secuencia del hero desde `scale: 0.92` —piezas que caen en
+su hueco—, sin rebote: el rebote es del potro. `VitralShowcase` no participa de esa secuencia
+porque es dueño de su propia entrada y corre en paralelo, y el collage tampoco: sus doce piezas
+aparecen con la carga de cada imagen, no con una entrada coreografiada — coreografiar doce elementos
+más habría competido con el titular por ser el momento focal de la página.
+
+### Tarjeta de área
+
+Voltea sobre sí misma. Frente: fotografía con el nombre en una etiqueta superpuesta
+(`badge-overlay`). Fondo: el nombre en `.h3` `Verde Universitario` y la descripción en `Tinta
+Suave`, sobre `Papel` con relleno de `20px`. Las cinco viven en un `<button>` — no en una tarjeta
+pasiva — porque el volteo necesita un elemento que reciba clic, toque y teclado por igual.
+
+El disparador tiene dos vías independientes a la misma transición. En escritorio con puntero fino,
+`:hover`/`:focus-visible`, acotado a `(hover: hover) and (pointer: fine)` — sin esa condición un
+teléfono dispararía el volteo con el primer toque y no habría manera de volver al frente. En
+cualquier dispositivo, un `onClick` de React que fija una clase (`is-flipped`) — el mecanismo que
+sí llega al teléfono, porque un manejador de clic responde igual a mouse, teclado o toque. Varias
+tarjetas pueden quedar volteadas a la vez: no hay motivo para forzarlas a cerrarse entre sí si el
+estudiante quiere comparar dos áreas.
 
 ### VitralShowcase (componente insignia)
 
@@ -543,6 +614,10 @@ imperativas. No hay una sola animación sin esa condición.
 - **Don't** convertir el diagnóstico en un test de personalidad juguetón: nada de confeti, emoji,
   insignias gamificadas ni colores brillantes. El resultado es una decisión profesional.
 - **Don't** derivar hacia el dashboard SaaS genérico: nada de degradados azul/morado, glassmorphism
-  ni iconografía de stock. Disuelve la especificidad institucional que es toda la ventaja.
+  ni un cajón de íconos sueltos de librería genérica —el estilo de UI de escritorio, candado,
+  engrane, flecha—. Disuelve la especificidad institucional que es toda la ventaja. Esto no prohíbe
+  ilustración técnica curada: la celda de collage del mosaico del hero (computadora, servidor, IA)
+  es un conjunto pequeño, de un solo estilo entre sí y con especificación propia
+  (`public/images/hero/README.md`), no un cajón de clip art sin filtrar.
 - **Don't** adoptar el lenguaje de una landing de bootcamp: sin urgencia, sin contadores, sin
   carruseles de testimonios. Además exigiría evidencia social que no existe.
