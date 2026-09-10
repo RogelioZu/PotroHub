@@ -39,5 +39,3 @@ color en espera. Los recortes pendientes del collage están descritos en
 (1200x630). Se queda en PNG a propósito: varios scrapers no leen WebP.
 
 Sin usar todavía: `vitral2.png`, que no referencia ningún componente.
-`VitralShowcase` tampoco lo renderiza ninguna página desde que el mosaico
-tomó el hero, aunque el componente sigue consumiendo el vitral y el potro.

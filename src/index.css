@@ -55,8 +55,9 @@
 
 @layer utilities {
   /* Acento decorativo que evoca el mosaico de vitral (formas irregulares en
-     verde/oro) sin reproducir el vitral real. El vitral fotográfico tiene su
-     propio espacio dedicado, ver src/components/ui/VitralShowcase.jsx */
+     verde/oro) sin reproducir el vitral real. Es el respaldo de
+     `VitralBackdrop` cuando la fotografía no carga: el vitral real vive
+     únicamente en las bandas de header y footer. */
   .vitral-accent {
     background-image:
       conic-gradient(

@@ -146,19 +146,17 @@ permitirse ser sobrio porque no tiene que competir por atención: ya la ganó el
 página necesita color en el cuerpo —las cinco áreas en Inicio, las barras de afinidad en
 resultados— lo toma en dosis pequeñas y siempre sobre papel, nunca cubriendo la superficie.
 
-El único lugar donde el vitral entra al cuerpo de la página es su propio espacio dedicado: la
-tarjeta panorámica de Inicio (`VitralShowcase`), con la mascota de la universidad asomada en la
-esquina. Es la excepción que confirma la regla, y por eso es el objeto con más peso visual de todo
-el sitio.
+**El vitral no entra nunca al cuerpo de la página.** Vive sólo en las dos bandas, y ese límite es
+la regla completa — no hay excepción que la confirme. Hubo una: `VitralShowcase`, una tarjeta que
+llevaba la fotografía al hero de Inicio con la mascota asomada en la esquina. Se retiró cuando el
+mosaico geométrico tomó esa mitad de la composición, y con ella se retiró la excepción: el vitral
+recuperó el trabajo de ser borde y sólo borde, que es de donde le viene la fuerza.
 
-Esa tarjeta vive como la imagen principal del hero, centrada frente al titular. El collage técnico y
-las celdas de dato se retiraron hasta que existan activos visuales aprobados para esa composición.
-
-**Comunidad tiene su propio borde fotográfico, y es la segunda y última excepción.** Su hero es una
-foto real a pantalla completa —gente de la facultad, no el vitral— con un titular sobre un velo
-oscuro. No es una tarjeta acotada como `VitralShowcase`: cubre todo el ancho, justo debajo del
-header. Esa posición es la que hace que siga siendo una excepción acotada y no una grieta en la
-regla: se lee como una extensión del borde superior del sitio —vitral, inmediatamente seguido por
+**Comunidad tiene su propio borde fotográfico, y es la única excepción.** Su hero es una foto real
+a pantalla completa —gente de la facultad, no el vitral— con un titular sobre un velo oscuro. No es
+una tarjeta acotada: cubre todo el ancho, justo debajo del header. Esa posición es la que hace que
+siga siendo una excepción acotada y no una grieta en la regla: se lee como una extensión del borde
+superior del sitio —vitral, inmediatamente seguido por
 esta foto— y no como una interrupción a mitad de página. El resto de Comunidad —la lista de
 canales, el bloque de invitación, la tarjeta de IEEE— vuelve al papel de inmediato. A diferencia
 del vitral, esta foto sí lleva un velo (`from-ink/85 via-ink/40 to-ink/10`) y no sólo sombra de
@@ -352,15 +350,14 @@ El sistema es esencialmente plano y separa por tono, no por sombra. Las tres cap
 por bordes hairline muy tenues (`border-ink/5`, `ring-ink/5`) cuando dos superficies del mismo tono
 se tocan.
 
-Las sombras existen, pero están reservadas. Los dos objetos fotográficos —la tarjeta del vitral y la
-insignia del potro— son lo único que de verdad se levanta del papel, y lo hacen con `shadow-lg` de
-tinta muy diluida. Las tarjetas de área en Inicio llevan un `shadow-sm shadow-ink/5` que apenas se
+Las sombras existen, pero están reservadas. La insignia del potro es lo único que de verdad se
+levanta del papel, y lo hace con `shadow-lg` de tinta muy diluida. Las tarjetas de área en Inicio llevan un `shadow-sm shadow-ink/5` que apenas se
 percibe y funciona más como un borde suave que como una elevación.
 
 ### Shadow Vocabulary
 
 - **Levantado fotográfico** (`box-shadow: 0 10px 15px -3px rgb(37 37 37 / 10%), 0 4px 6px -4px rgb(37 37 37 / 10%)`):
-  exclusivo de la tarjeta del vitral y de la insignia del potro.
+  exclusivo de la insignia del potro.
 - **Asiento de tarjeta** (`box-shadow: 0 1px 3px 0 rgb(37 37 37 / 5%), 0 1px 2px -1px rgb(37 37 37 / 5%)`):
   tarjetas sobre papel blanco, para despegarlas apenas del fondo.
 - **Recorte y pegado** (`drop-shadow-sm`, el filtro de Tailwind): exclusivo de las doce piezas del
@@ -372,7 +369,7 @@ percibe y funciona más como un borde suave que como una elevación.
 ### Named Rules
 
 **La regla de la Sombra Fotográfica.** La sombra es privilegio de la fotografía. Se levantan del
-papel la tarjeta del vitral, la mascota y las doce piezas del collage del hero; todo lo demás se
+papel la mascota y las doce piezas del collage del hero; todo lo demás se
 separa por tono. Un componente nuevo que pida sombra para distinguirse está pidiendo, en realidad,
 la capa tonal que le falta.
 
@@ -381,7 +378,7 @@ la capa tonal que le falta.
 Dos radios y una regla clara sobre cuál va dónde. **`9999px` (`rounded-full`)** para todo lo que se
 presiona o representa avance: botones, la barra de progreso, las barras de afinidad, el subrayado
 del nav, las líneas del menú hamburguesa. **`12px` (`rounded-xl`)** para todo lo que contiene:
-tarjetas, la tarjeta del vitral, la insignia del potro, las opciones del cuestionario. **`6px`
+tarjetas, la insignia del potro, las opciones del cuestionario. **`6px`
 (`rounded-md`)** aparece solo en las etiquetas superpuestas sobre fotografía, donde una píldora
 competiría con la forma de la imagen.
 
@@ -482,8 +479,7 @@ de canal sin su nombre visible deja de comunicar nada mientras el equipo no haya
 que puede ser semanas.
 
 Con la foto cargada, el `caption` se superpone dentro de ella con el componente `badge-overlay` ya
-documentado (`rgb(37 37 37 / 70%)`, `rounded-md`, texto `Papel`) — la misma insignia que usa
-`VitralShowcase`.
+documentado (`rgb(37 37 37 / 70%)`, `rounded-md`, texto `Papel`).
 
 La prop `compact` es para cuando ni el nombre ni la frase completa de "pendiente" caben sin
 desbordar — las miniaturas de 80px de la lista de canales de Comunidad. Ahí el aviso de "esto
@@ -625,29 +621,9 @@ sobre el verde. *Otros espacios estudiantiles* (Sociedad de Alumnos, clubes, vol
 movilidad) va debajo, deliberadamente más chico: es contenido sin confirmar, no la pieza central de
 la sección.
 
-### VitralShowcase (componente insignia)
-
-> **Deuda declarada:** ninguna página lo monta. El mosaico geométrico tomó la mitad derecha de
-> Inicio, que era su único uso. El componente sigue en `components/ui/` con su entrada y su
-> respaldo intactos. Queda por decidir si vuelve a alguna vista o se retira; mientras tanto, esta
-> sección describe un componente vivo pero no montado, y `Overview` todavía lo menciona como la
-> tarjeta panorámica de Inicio.
-
-La imagen circular de Inicio y el objeto de mayor peso visual del sitio. Vive en un marco cuadrado
-con `rounded-full`, borde de `Verde Profundo`, filete de `Oro Viejo` y relleno interior para
-separar la fotografía del papel. La etiqueta se superpone dentro del círculo y la mascota asoma
-por la esquina inferior derecha con `z-index` superior, en una insignia de papel con relleno de
-`6px`.
-
-Se descubre con una máscara `clip-path` que barre de izquierda a derecha mientras la imagen se
-asienta desde `scale: 1.06`; el potro aterriza al final con el único rebote del sistema y luego
-queda flotando en un bucle suave de ±5px que se pausa cuando sale del viewport. Si la imagen falta,
-cae al acento decorativo `vitral-accent` en vez de romper el layout.
-
 ### La insignia del potro en Resultados
 
-El único lugar donde la mascota aparece hoy en una página renderizada —`VitralShowcase` también la
-lleva, pero ninguna vista lo monta desde que el mosaico tomó el hero—, con el tratamiento de papel
+El único lugar del sitio donde aparece la mascota, con el tratamiento de insignia de papel
 (`rounded-xl`, relleno de `6px`, `shadow-lg`, anillo `ring-ink/10`) y la misma escala
 `h-24 / sm:h-28 / md:h-32`. Aterriza al final de la secuencia de resultados con el único rebote y
 se queda en el mismo bucle de ±5px, pausado fuera del viewport.

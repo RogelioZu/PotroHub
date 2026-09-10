@@ -43,8 +43,6 @@ function Home() {
   // Momento focal del sitio. La columna de texto se arma por palabras dentro
   // de una máscara por líneas —"ruta" entra escalonada con las demás, sin
   // tratamiento propio— y al final se acomodan las celdas del mosaico.
-  // El mosaico sustituyó aquí a VitralShowcase, que ya no lo renderiza
-  // ninguna página: el componente sigue en `components/ui` sin uso.
   useGSAP(
     () => {
       const mm = gsap.matchMedia()

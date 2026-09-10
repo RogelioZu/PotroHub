@@ -88,12 +88,15 @@ src/
     useDocumentTitle.js     Título por vista
   components/
     layout/                 Navbar, Footer, Layout
-    ui/                     VitralBackdrop, VitralShowcase
+    ui/                     VitralBackdrop, HeroMosaic, PhotoCard, ConfirmButton
     motion/                 Reveal, SectionDivider, RouteTransition, SmoothScroller
   pages/                    Home, Quiz, Results, Community, NotFound
-public/images/              vitral-biblioteca.png y potro-mascota.png son activos
-                            institucionales reales (ver su README.md);
-                            og-potropath.png es la tarjeta de vista previa generada
+assets-src/                 Masters sin comprimir. Fuera de public/, no entran al
+                            build (ver su README.md)
+public/images/              vitral-biblioteca.webp y potro-mascota.webp son activos
+                            institucionales reales, areas/*.webp las cinco fotos de
+                            área (ver su README.md); og-potropath.png es la tarjeta
+                            de vista previa generada
 ```
 
 Cuando regeneres `og-potropath.png`, la fuente de la composición vive en `DESIGN.md` →
