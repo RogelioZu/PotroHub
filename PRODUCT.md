@@ -57,8 +57,9 @@ dentro de Ingeniería en Computación**: da por hecho que la decisión de carrer
 trabaja un nivel más abajo, donde ningún test general opera.
 
 Su afirmación defendible es la especificidad hiper-local: el resultado se ata a lo que la industria
-demanda *hoy* y a comunidades con nombre dentro de *esta* facultad — un Discord organizado por
-canales de especialidad y la Rama Estudiantil IEEE UAEMéx con sus capítulos técnicos y sus eventos
+demanda *hoy* y a comunidades con nombre dentro de *esta* facultad — canales de Microsoft Teams
+organizados por especialidad, a los que se entra con la cuenta institucional y no con un enlace
+abierto a desconocidos, y la Rama Estudiantil IEEE UAEMéx con sus capítulos técnicos y sus eventos
 presenciales. Un producto genérico de test de carrera puede copiar un cuestionario; no puede ofrecer
 con verdad la capa de comunidad local, y no tiene por qué plantear el resultado como "qué hacer este
 semestre, aquí".
@@ -135,7 +136,7 @@ semestre, aquí".
 **Confirmado como próximo, pero todavía no real.** Cada uno de estos llegará a ser dato real; hasta
 entonces debe presentarse honestamente como pendiente y nunca simularse como si existiera:
 
-- El enlace de invitación al servidor de Discord (`DISCORD_INVITE_URL` es actualmente `null`).
+- El código de invitación a los canales de Microsoft Teams (`TEAMS_JOIN_CODE` es actualmente `null`).
 - La lista confirmada de capítulos IEEE y una agenda real de eventos (`events` está vacío).
 - La estadística de titulación de la UAEMéx que sustentará el planteamiento (nota placeholder en el
   README).
@@ -157,8 +158,8 @@ cosas apareciendo como contenido sería un invento.
    progreso debe ser siempre legible y reanudable, y el pago debe sentirse visiblemente proporcional
    al costo.
 4. **La verdad local le gana al consejo genérico.** La especificidad de esta facultad — su vitral,
-   su mascota, su rama IEEE, su Discord — es toda la ventaja. El lenguaje de test de carrera
-   genérico la disuelve en algo que cualquier sitio podría decir.
+   su mascota, su rama IEEE, sus canales de Teams — es toda la ventaja. El lenguaje de test de
+   carrera genérico la disuelve en algo que cualquier sitio podría decir.
 5. **Nunca fabricar un dato institucional.** Lo pendiente se declara pendiente. Un placeholder
    disfrazado de dato real costaría exactamente la credibilidad institucional que este proyecto
    existe para ganarse.

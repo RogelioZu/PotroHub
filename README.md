@@ -34,7 +34,7 @@ PotroPath se presentará como un Producto Mínimo Viable (MVP) sin fricción de 
 - **Motor de Diagnóstico Situacional:** cuestionario de 50 preguntas (10 por área de especialización) basadas en escenarios prácticos de la industria, evaluando afinidad hacia Inteligencia Artificial, Ciberseguridad, Cloud Computing, Ciencia de Datos y Desarrollo de Software.
 - **Dashboard de Resultados y Ruta:** interfaz dinámica que, tras finalizar el test, muestra la rama de mayor compatibilidad, habilidades demandadas en el mercado laboral y certificaciones clave para ese perfil.
 - **Sección de Inmersión Universitaria (IEEE):** apartado dedicado a conectar al estudiante con la Rama Estudiantil IEEE UAEMéx, visibilizando los capítulos técnicos y eventos presenciales de la facultad.
-- **Módulo de Comunidad Segura:** integración con un servidor de Discord estructurado por canales de especialidad para fomentar el networking técnico y la formación de equipos, garantizando la privacidad de los datos personales.
+- **Módulo de Comunidad Segura:** integración con canales de Microsoft Teams estructurados por especialidad, a los que se entra con la cuenta institucional — así cada estudiante sabe que comparte el espacio con compañeros de su propia facultad y no con desconocidos —, para fomentar el networking técnico y la formación de equipos, garantizando la privacidad de los datos personales.
 
 ### 3. Propuesta de valor
 

@@ -144,7 +144,8 @@ Esa oposición no es decorativa, es estructural, y explica todo lo demás. El vi
 ser intenso justamente porque aparece solo dos veces y siempre en el mismo lugar. El centro puede
 permitirse ser sobrio porque no tiene que competir por atención: ya la ganó el borde. Cuando una
 página necesita color en el cuerpo —las cinco áreas en Inicio, las barras de afinidad en
-resultados— lo toma en dosis pequeñas y siempre sobre papel, nunca cubriendo la superficie.
+resultados, las fotos de canal y de comunidad en Comunidad— lo toma en dosis pequeñas y siempre
+sobre papel, nunca cubriendo la superficie.
 
 El único lugar donde el vitral entra al cuerpo de la página es su propio espacio dedicado: la
 tarjeta panorámica de Inicio (`VitralShowcase`), con la mascota de la universidad asomada en la
@@ -419,6 +420,26 @@ comunidad": un pulgar mal puesto costaba ocho minutos de trabajo sin ninguna adv
 - **Internal Padding:** `20px` (`p-5`) en tarjeta; `24px` (`p-6`) en bloque de nota.
 - **Título:** `.h3` en `Verde Universitario`; cuerpo en `text-sm` `Tinta Suave`.
 
+Cuando una tarjeta `Papel` vive sobre una sección `Papel Gris` que a su vez esconde una foto
+pendiente en `Papel Gris` (ver `PhotoCard` abajo), las dos superficies quedan del mismo tono y se
+funden entre sí sin un límite visible. Ahí la tarjeta suma `ring-1 ring-ink/5` al `shadow-sm` — el
+filete hairline que esta misma sección ya prescribe para "dos superficies del mismo tono que se
+tocan" (ver *Elevation & Depth*), no un tratamiento nuevo.
+
+### PhotoCard (foto con degradación elegante)
+
+El patrón para toda fotografía que un equipo agrega después y que todavía puede no existir —las
+fotos de Comunidad, hoy; cualquier foto futura de contenido real, después—. Si `src` no carga, cae
+al mismo aviso de borde punteado que el resto del sitio usa para "esto todavía no existe"
+(ver *Shapes*), con un detalle que no es opcional: el `caption` —el nombre del canal, la etiqueta de
+la foto— **sigue mostrándose** dentro del aviso. La foto es lo que falta, no el nombre; una tarjeta
+de canal sin su nombre visible deja de comunicar nada mientras el equipo no haya subido la imagen,
+que puede ser semanas.
+
+Con la foto cargada, el `caption` se superpone dentro de ella con el componente `badge-overlay` ya
+documentado (`rgb(37 37 37 / 70%)`, `rounded-md`, texto `Papel`) — la misma insignia que usa
+`VitralShowcase`.
+
 ### Quiz Option
 
 El control más repetido del sitio y el único con estado propio. Rectángulo de `12px` con borde
@@ -473,6 +494,28 @@ cualquier dispositivo, un `onClick` de React que fija una clase (`is-flipped`) �
 sí llega al teléfono, porque un manejador de clic responde igual a mouse, teclado o toque. Varias
 tarjetas pueden quedar volteadas a la vez: no hay motivo para forzarlas a cerrarse entre sí si el
 estudiante quiere comparar dos áreas.
+
+### Comunidad: canales fotográficos
+
+Comunidad es la página que más depende de fotografía real de la facultad, y por eso es también la
+que más usa `PhotoCard`: la foto grupal del encabezado y, más abajo, una por cada canal de Microsoft
+Teams (las cinco áreas de `AREAS`, reutilizadas — mismo dato que Inicio, presentado como comunidad en
+vez de como diagnóstico). A diferencia de la tarjeta de área de Inicio, aquí la descripción **no**
+se esconde detrás de un volteo: una página de comunidad quiere sentirse cálida de inmediato, no
+gamificada, así que la foto y el nombre van arriba y la descripción abajo, siempre visibles, en la
+misma tarjeta `Papel` con `shadow-sm` y ahora también `ring-1 ring-ink/5` (ver *Cards / Containers*).
+
+La rejilla de canales es `sm:grid-cols-2 lg:grid-cols-3` — no el `4` o `5` habitual — porque tres
+columnas sobre cinco elementos dan 3+2, la misma lógica de composición dispareja que ya usa la
+rejilla de áreas de Inicio (`lg:grid-cols-6` con tramos de 2 y 3), aplicada aquí con columnas
+regulares porque las tarjetas de Comunidad no necesitan anchos distintos entre sí.
+
+El copy de esta sección existe para resolver una objeción de confianza específica, y por eso la
+dice dos veces con palabras distintas: en la introducción y en el bloque de moderación. Los canales
+son de Microsoft Teams y no de un servidor abierto, y se entra con la cuenta institucional de la
+UAEMéx — así que quien esté ahí es, verificablemente, un compañero de la propia facultad, no un
+desconocido con un enlace de invitación. Es la razón de producto detrás del cambio de plataforma
+(ver `PRODUCT.md` → *Positioning*), no sólo un cambio de nombre.
 
 ### VitralShowcase (componente insignia)
 
@@ -561,7 +604,8 @@ imperativas. No hay una sola animación sin esa condición.
 - **Do** construir los revelados con `gsap.from`, para que el HTML por defecto sea el estado visible.
 - **Do** declarar toda animación dentro de `matchMedia('(prefers-reduced-motion: no-preference)')`.
 - **Do** marcar el contenido que todavía no existe con borde punteado o un control deshabilitado que
-  nombre lo que vendrá.
+  nombre lo que vendrá. Si el marcador reemplaza a una foto con nombre o etiqueta propios (ver
+  `PhotoCard`), el nombre sigue mostrándose — lo pendiente es la imagen, no la información.
 - **Do** confirmar una acción destructiva en el propio control, en dos pasos, y dejar que se desarme
   sola por tiempo, por foco o por un toque fuera.
 
