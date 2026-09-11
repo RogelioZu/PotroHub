@@ -74,17 +74,19 @@ const events = []
 /**
  * Galería de la comunidad.
  *
- * Las tres primeras son fotografías reales de estudiantes de esta facultad y
- * llevan pie con evento y lugar: **el pie es lo que las vuelve evidencia**. Sin
- * él, un grupo de estudiantes sonriendo se lee como imagen de banco, que es
- * justo la sospecha que esta página existe para desactivar.
+ * **Las cinco son fotografías reales de estudiantes de esta facultad, y ya no
+ * queda ningún hueco pendiente.** Todas llevan pie con evento y lugar: *el pie
+ * es lo que las vuelve evidencia*. Sin él, un grupo de estudiantes sonriendo se
+ * lee como imagen de banco, que es justo la sospecha que esta página existe
+ * para desactivar.
  *
- * Las dos últimas son lugares reservados y se ven como tales — `PhotoCard` las
- * dibuja con el borde punteado con el que todo el sitio dice "esto todavía no
- * existe". Rellenarlas con imágenes de banco destruiría exactamente la
- * credibilidad que la página viene a ganarse (ver PRODUCT.md →
- * *Evidence on Hand*). Sus pies describen el tipo de actividad y no un evento
- * concreto, para que sigan siendo ciertos cuando alguien deje caer el archivo.
+ * Si vuelve a haber huecos —porque se agreguen entradas antes que archivos—,
+ * `PhotoCard` los dibuja con el borde punteado con el que todo el sitio dice
+ * "esto todavía no existe", y ahí el pie describe el *tipo* de actividad y no
+ * un evento concreto, para que siga siendo cierto cuando alguien deje caer el
+ * archivo. Lo que nunca se hace es rellenarlos con imágenes de banco: destruiría
+ * exactamente la credibilidad que la página viene a ganarse (ver PRODUCT.md →
+ * *Evidence on Hand*).
  *
  * **Aquí no entran las fotos de `AREAS`.** Ilustran especialidades y son
  * genéricas; sirven de miniatura para reconocer un canal —ése es su trabajo
@@ -98,11 +100,28 @@ const gallery = [
     alt: 'Estudiantes de la Facultad de Ingeniería frente a la entrada de Talent Land México 2026',
   },
   {
+    // El pie es literalmente lo que dice el lienzo del fondo —"Rama Estudiantil
+    // · Universidad Autónoma del Estado de México · IEEE"—, así que es
+    // verificable dentro de la propia fotografía. Es la pieza de evidencia más
+    // fuerte del repositorio y por eso va en segundo lugar, no al final.
+    src: '/images/comunidad/galeria-rama-ieee.webp',
+    caption: 'Rama Estudiantil IEEE UAEMéx',
+    alt: 'Integrantes de la Rama Estudiantil IEEE de la UAEMéx junto a un vehículo todo terreno construido por el equipo',
+  },
+  {
     src: '/images/comunidad/galeria-wie.webp',
     caption: 'Capítulo Women in Engineering',
     alt: 'Integrantes del capítulo Women in Engineering de la facultad con un reconocimiento',
   },
   {
+    src: '/images/comunidad/galeria-axolotl.webp',
+    caption: 'Axolotl Tournament, UAM Lerma',
+    alt: 'Estudiantes de la facultad con sus robots en el Axolotl Tournament de la UAM Unidad Lerma',
+  },
+  {
+    // Va junto a la del Axolotl: las dos son de la misma sede, y separarlas
+    // haría parecer dos viajes donde hubo uno.
+    //
     // El pie dice "Visita a", no "Rama IEEE UAM Lerma" a secas: son estudiantes
     // de esta facultad en casa ajena, y el orden de las palabras es lo único
     // que separa "fuimos" de atribuirnos una rama que no es nuestra.
@@ -110,22 +129,27 @@ const gallery = [
     caption: 'Visita a la Rama IEEE UAM Lerma',
     alt: 'Estudiantes de la facultad durante su visita a la Rama Estudiantil IEEE de la UAM Lerma',
   },
-  { src: '/images/comunidad/galeria-taller.webp', caption: 'Talleres y proyectos' },
-  { src: '/images/comunidad/galeria-concurso.webp', caption: 'Concursos y hackatones' },
 ]
 
 /**
- * Fotos del bloque *Explora más allá del salón*. Van sin pie, a diferencia de
- * las de la galería: la primera —la única que existe— no puede llevarlo (ver
- * la nota de deuda en el bloque), y un pie en las otras dos abriría dos
+ * Fotos del bloque *Explora más allá del salón*. Van **sin pie**, a diferencia
+ * de las de la galería, y eso no es descuido: la segunda no puede llevarlo (ver
+ * la nota de deuda en el bloque), y ponérselo sólo a las demás abriría dos
  * tratamientos distintos dentro de la misma tira.
+ *
+ * Que vayan sin pie es además lo que deja convivir aquí dos fotos de
+ * procedencia distinta sin afirmar nada sobre ninguna.
  */
 const exploraPhotos = [
+  {
+    // Va primera porque es la única de las dos que es de esta facultad.
+    src: '/images/comunidad/explora-poli-hacks.webp',
+    alt: 'Dos estudiantes de la facultad con su trofeo del hackatón PoliHacks',
+  },
   {
     src: '/images/comunidad/explora-hackathon.webp',
     alt: 'Cuatro estudiantes con sus reconocimientos de segundo lugar del hackathon U-HACKS',
   },
-  { src: '/images/comunidad/explora-concurso.webp' },
   { src: '/images/comunidad/explora-taller.webp' },
 ]
 
@@ -418,16 +442,21 @@ function Community() {
 
               Es un carrusel y no una foto suelta porque lo que sostiene la
               idea es la acumulación: una foto es una anécdota, varias son un
-              hábito. Hoy sólo existe la primera, y las otras dos se ven como
-              lo que son.
+              hábito. Hoy existen dos y la tercera se ve como lo que es.
 
-              Nota para quien venga después: la primera son estudiantes de
-              UPIITA-IPN con reconocimientos del hackathon U-HACKS, no de la
-              UAEMéx. Va sin pie por decisión explícita del autor. Mientras
-              siga así, no se puede escribir copy alrededor que la presente
-              como gente de esta facultad ni como un logro propio — ver
-              `PRODUCT.md` → *Evidence on Hand*. Cuando exista una foto de la
-              rama de la facultad, ésta se sustituye.
+              **Deuda anotada, ahora acotada a la segunda.** `explora-hackathon`
+              son estudiantes de UPIITA-IPN con reconocimientos del hackathon
+              U-HACKS, no de la UAEMéx; va sin pie por decisión explícita del
+              autor, y mientras siga aquí el copy alrededor no puede presentarla
+              como gente de esta facultad ni como un logro propio (ver
+              `PRODUCT.md` → *Evidence on Hand*).
+
+              La primera, `explora-poli-hacks`, **sí** es de esta facultad
+              —compitiendo en PoliHacks, en sede de UPIITA— y por eso encabeza
+              la tira. Con ella se cumple la condición que este mismo comentario
+              fijaba para retirar la ajena: "cuando exista una foto de la rama
+              de la facultad, ésta se sustituye". No se hizo porque no se pidió;
+              queda como el siguiente movimiento obvio, y es borrar una línea.
 
               El recorte es cuadrado y anclado abajo, hecho en el archivo y no
               en CSS: el original es 3:4 con casi un tercio de pared vacía
@@ -487,9 +516,14 @@ function Community() {
             <h2 className="min-w-0 h2 sm:shrink-0">La comunidad, en fotos</h2>
           </SectionDivider>
 
+          {/*
+            La frase decía además "los recuadros punteados son los lugares que
+            todavía esperan su fotografía". Se cayó con ellos: las cinco fotos
+            existen. Una leyenda que explica un elemento que ya no está en
+            pantalla es peor que no tener leyenda.
+          */}
           <p className="mt-6 max-w-2xl text-ink-soft">
-            Actividades de la facultad, documentadas conforme ocurren. Los recuadros punteados son
-            los lugares que todavía esperan su fotografía.
+            Actividades de la facultad, documentadas conforme ocurren.
           </p>
 
           {/*

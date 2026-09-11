@@ -93,8 +93,12 @@ src/
     ui/                     VitralBackdrop, HeroMosaic, PhotoCard, ConfirmButton, Carousel
     motion/                 Reveal, SectionDivider, RouteTransition, SmoothScroller
   pages/                    Home, Quiz, Results, Community, NotFound
-assets-src/                 Masters sin comprimir. Fuera de public/, no entran al
-                            build (ver su README.md)
+assets-src/                 Masters. Fuera de public/, no entran al build, y por
+                            eso mover un archivo aquí lo borra del sitio. Cuatro
+                            carpetas por destino: comunidad/, logotipos-ieee/,
+                            inicio/, institucional/. Su README.md lleva la
+                            procedencia de cada fotografía — y ahí importa tanto
+                            como la imagen (ver su README.md)
 public/images/              vitral-biblioteca.webp y potro-mascota.webp son activos
                             institucionales reales, areas/*.webp las cinco fotos de
                             área (ver su README.md); og-potropath.png es la tarjeta

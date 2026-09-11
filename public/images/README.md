@@ -71,10 +71,11 @@ CSS, para no servir bytes de una pared que el encuadre tira. Ver el README de
 `og-potropath.png` es la tarjeta de vista previa para enlaces compartidos
 (1200x630). Se queda en PNG a propósito: varios scrapers no leen WebP.
 
-Sin usar todavía: `vitral2.png` (1200x600, WebP pese a la extensión), que no
-referencia ningún componente.
+Hubo un `vitral2.png` (1200x600, WebP pese a la extensión) que no referenciaba
+ningún componente. **Se eliminó**, junto con su copia de archivo: pesaba 136 KB
+en cada build sin que nadie lo pidiera. Está en el historial de git.
 
-Los cinco archivos sueltos de esta carpeta tienen una **copia de archivo** en
+Los archivos sueltos de esta carpeta tienen una **copia de archivo** en
 `assets-src/`, con su extensión real y fuera del build. Son copias, no mudanzas:
 `assets-src/` no se sirve, así que mover cualquiera de éstos lo borraría del
 sitio.

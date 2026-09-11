@@ -26,12 +26,12 @@ debajo del titular.
 | `quienes-somos.webp` | 1216×780 (1.56:1) | 124 KB | Desde `768px` |
 | `quienes-somos-movil.webp` | 512×750 (0.68:1) | 48 KB | Bajo `768px` |
 
-Los dos salen de `assets-src/ieee_talent.jpeg` (1600×1200) y **los dos están
+Los dos salen de `assets-src/comunidad/talent-land-2026.jpeg` (1600×1200) y **los dos están
 centrados en el grupo**, cuyo centro está en `x = 768`:
 
 ```
-magick ieee_talent.jpeg -crop 1216x780+160+400 +repage -quality 84 quienes-somos.webp
-magick ieee_talent.jpeg -crop  512x750+512+450 +repage -quality 82 quienes-somos-movil.webp
+magick comunidad/talent-land-2026.jpeg -crop 1216x780+160+400 +repage -quality 84 quienes-somos.webp
+magick comunidad/talent-land-2026.jpeg -crop  512x750+512+450 +repage -quality 82 quienes-somos-movil.webp
 ```
 
 El recorte se lleva lo que descuadraba la foto, que no era el grupo sino los
@@ -61,18 +61,27 @@ Tira horizontal en la sección *La comunidad, en fotos*. Cada foto lleva pie
 visible; el pie describe el **tipo** de actividad y no un evento concreto, para
 que siga siendo cierto cuando se suba el archivo.
 
-| Archivo | Pie | Estado |
-| --- | --- | --- |
-| `galeria-talent-land.webp` | Talent Land México 2026 | ✅ 800×600, 60 KB |
-| `galeria-wie.webp` | Capítulo Women in Engineering | ✅ 800×600, 28 KB |
-| `galeria-visita-uam-lerma.webp` | Visita a la Rama IEEE UAM Lerma | ✅ 760×570, 48 KB |
-| `galeria-taller.webp` | Talleres y proyectos | pendiente |
-| `galeria-concurso.webp` | Concursos y hackatones | pendiente |
+| # | Archivo | Pie | Medidas |
+| --- | --- | --- | --- |
+| 1 | `galeria-talent-land.webp` | Talent Land México 2026 | 800×600, 60 KB |
+| 2 | `galeria-rama-ieee.webp` | Rama Estudiantil IEEE UAEMéx | 800×600, 92 KB |
+| 3 | `galeria-wie.webp` | Capítulo Women in Engineering | 800×600, 28 KB |
+| 4 | `galeria-axolotl.webp` | Axolotl Tournament, UAM Lerma | 800×600, 68 KB |
+| 5 | `galeria-visita-uam-lerma.webp` | Visita a la Rama IEEE UAM Lerma | 760×570, 48 KB |
 
-Las tres que existen son estudiantes de esta facultad y llevan pie con evento y
-lugar; los dos pendientes llevan pie de *tipo* de actividad, que es lo que los
-deja seguir siendo ciertos cuando alguien suba el archivo. Procedencia de cada
-original en `assets-src/README.md` → *community_assets*.
+**Las cinco existen y son de esta facultad: ya no queda ningún hueco pendiente.**
+Todas llevan pie con evento y lugar. Procedencia de cada original en
+`assets-src/README.md` → *comunidad*.
+
+El pie de la 2 es literalmente lo que dice el lienzo del fondo de esa
+fotografía, así que se verifica sin salir de la imagen. Las 4 y 5 van juntas
+porque son de la misma sede: separarlas haría parecer dos viajes donde hubo uno.
+
+**Para agregar una foto** basta con dejar el archivo y añadir su entrada al
+arreglo `gallery` de `Community.jsx`. Si se añade una entrada sin su archivo,
+`PhotoCard` dibuja el recuadro punteado de "Fotografía pendiente" — y entonces
+hay que devolver a la leyenda de la sección la frase que explica esos recuadros,
+que se quitó al no quedar ninguno.
 
 **El pie de `galeria-visita-uam-lerma.webp` dice "Visita a", y el orden importa.**
 Son estudiantes de esta facultad en casa ajena: el telón de fondo con la marca
@@ -89,14 +98,24 @@ a lo largo, así que no hay que rediseñar nada.
 Tira cuadrada dentro del bloque de la derecha. Van **sin pie**, a propósito (ver
 `DESIGN.md` → *Comunidad*).
 
-| Archivo | Estado |
-| --- | --- |
-| `explora-hackathon.webp` | ✅ 900×900, 74 KB. **No es de la UAEMéx** — estudiantes de UPIITA-IPN en el hackathon U-HACKS. Mientras siga aquí, el copy alrededor no puede presentarla como gente de esta facultad |
-| `explora-concurso.webp` | pendiente |
-| `explora-taller.webp` | pendiente |
+| # | Archivo | Estado |
+| --- | --- | --- |
+| 1 | `explora-poli-hacks.webp` | ✅ 620×620, 40 KB. Estudiantes de **esta** facultad con su trofeo de PoliHacks, en sede de UPIITA |
+| 2 | `explora-hackathon.webp` | ✅ 900×900, 74 KB. **No es de la UAEMéx** — estudiantes de UPIITA-IPN en el hackathon U-HACKS. Mientras siga aquí, el copy alrededor no puede presentarla como gente de esta facultad |
+| 3 | `explora-taller.webp` | pendiente |
 
-Formato **WebP**, cuadradas, **900×900**. El recorte cuadrado se hace en el
-archivo y no en CSS.
+Formato **WebP**, cuadradas, **900×900** — salvo `explora-poli-hacks.webp`, que
+sale a 620 porque ése es el lado de su original y ampliarlo no añadiría detalle
+(la tarjeta se dibuja a 224px). El recorte cuadrado se hace en el archivo y no
+en CSS.
+
+**Las dos primeras son de sede UPIITA y sólo la primera es nuestra.** Que la
+tira vaya sin pies es lo que permite que convivan sin afirmar nada sobre
+ninguna. La 1 encabeza por ser la propia.
+
+**Condición de retiro ya cumplida, pendiente de ejecutar:** el comentario del
+bloque fijaba que la foto ajena se sustituyera "cuando exista una foto de la
+rama de la facultad". Ya existe — es la 1. Quitar la 2 es borrar una línea.
 
 ## Miniaturas de canal
 
@@ -123,7 +142,7 @@ primero y destruye lo segundo.
 
 `ieee-computer-society.webp`, `ieee-robotics-automation.webp`,
 `ieee-power-energy.webp`, `ieee-women-in-engineering.webp`. Derivados sin
-modificar de `assets-src/ieee_assets/`. Van sobre recuadro `Papel` puro porque
+modificar de `assets-src/logotipos-ieee/`. Van sobre recuadro `Papel` puro porque
 el manual de cada sociedad pide fondo neutro y ninguno se puede repintar.
 
 ## Personas reconocibles: con su consentimiento

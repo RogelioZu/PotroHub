@@ -939,11 +939,20 @@ otra:
   con casi un tercio de pared vacía arriba: encuadrar desde abajo deja a las cuatro personas de
   cuerpo entero y no paga bytes por la pared.
 
-  **Deuda anotada:** la foto no es de la UAEMéx —son estudiantes de UPIITA-IPN en el hackathon
-  U-HACKS— y va **sin pie de foto**, por decisión explícita del autor. Mientras siga así, el copy
+  **Deuda anotada, ahora acotada a la segunda de la tira.** `explora-hackathon` no es de la UAEMéx
+  —son estudiantes de UPIITA-IPN en el hackathon U-HACKS— y va **sin pie de foto**, por decisión
+  explícita del autor. Mientras siga así, el copy
   alrededor no puede presentarla como gente de esta facultad ni como un logro propio, que es
-  justo lo que `PRODUCT.md` → *Evidence on Hand* prohíbe dar por bueno. Se sustituye en cuanto
-  exista una fotografía de la rama de la facultad.
+  justo lo que `PRODUCT.md` → *Evidence on Hand* prohíbe dar por bueno.
+
+  La primera, `explora-poli-hacks`, **sí** es de esta facultad —dos estudiantes con su trofeo de
+  PoliHacks, en sede de UPIITA— y encabeza la tira por eso. Con ella **se cumple la condición que
+  esta misma nota fijaba para retirar la ajena**: "se sustituye en cuanto exista una fotografía de
+  la rama de la facultad". No se hizo porque no se pidió; queda como el siguiente movimiento obvio.
+
+  Que la tira vaya sin pies es lo que permite que las dos convivan sin afirmar nada sobre ninguna.
+  **Si algún día lleva pies, la ajena tiene que salir o llevar el suyo diciendo de quién es** — y
+  ésa es la razón real por la que la decisión de "sin pie" no es cosmética.
 
 **La galería** es la única sección de la página cuyo contenido son las fotografías mismas y no un
 texto que ellas apoyan, y es donde caben las que se vayan agregando sin rediseñar nada: la tira
@@ -951,14 +960,21 @@ crece a lo ancho, no a lo largo, así que veinte fotos cuestan lo mismo de pági
 las fotos **sí llevan pie** —el `badge-overlay` ya documentado—, porque una galería sin pies es un
 adorno: el pie es lo que dice qué se está viendo y cuándo pasó.
 
-Hoy existen tres —Talent Land México 2026, el capítulo Women in Engineering y la visita a la Rama
-IEEE de la UAM Lerma—, las tres de estudiantes de esta facultad, y las tres con pie que nombra
-evento y lugar. Las otras dos son lugares reservados y se ven como tales, con el borde
-punteado con el que todo el sitio dice "esto todavía no existe" (ver *Shapes* y `PhotoCard`).
-Rellenarlas con imágenes de banco destruiría exactamente la credibilidad que la página viene a
-ganarse — ver `PRODUCT.md` → *Evidence on Hand*. Los pies de los pendientes describen el **tipo** de
-actividad y no un evento concreto, para que sigan siendo ciertos cuando alguien deje caer el
-archivo que falta.
+**Son cinco, las cinco reales, y ya no queda ningún hueco pendiente** — Talent Land México 2026, la
+Rama Estudiantil IEEE UAEMéx, el capítulo Women in Engineering, el Axolotl Tournament en la UAM
+Lerma y la visita a la Rama IEEE de esa misma sede. Las cinco de estudiantes de esta facultad, las
+cinco con pie que nombra evento y lugar.
+
+La sección perdió con ello la frase que explicaba los recuadros punteados: una leyenda que describe
+un elemento que ya no está en pantalla es peor que no tener leyenda. Si vuelve a haber huecos
+—porque se agregue una entrada antes que su archivo— hay que devolverla, y ahí el pie describe el
+**tipo** de actividad y no un evento concreto, para que siga siendo cierto cuando el archivo
+aparezca. Lo que nunca se hace es rellenarlos con imágenes de banco: destruiría exactamente la
+credibilidad que la página viene a ganarse (ver `PRODUCT.md` → *Evidence on Hand*).
+
+**El pie de la segunda se verifica sin salir de la imagen**: "Rama Estudiantil IEEE UAEMéx" es
+literalmente lo que dice el lienzo del fondo de esa fotografía. Es la pieza de evidencia más fuerte
+del repositorio, y por eso va en segundo lugar y no al final.
 
 **El orden de las palabras de un pie puede ser una afirmación institucional.** "Visita a la Rama
 IEEE UAM Lerma" dice que fuimos; "Rama IEEE UAM Lerma" a secas nos atribuiría una rama que no es
