@@ -20,7 +20,7 @@ desactualiza y una mentira en el contexto es peor que un contexto ausente.
 | `DESIGN.md` | El mundo visual comprometido: paleta, tipografía, layout, formas, componentes, movimiento y sus **Reglas Nombradas** | Tocar UI, CSS, clases, color, espaciado o animación |
 | `.impeccable/design.json` | Sidecar de `DESIGN.md`: rampas tonales, sombras, tokens de movimiento y componentes con HTML/CSS listos | Necesitar valores exactos que el frontmatter no cabe |
 | `.impeccable/critique/` | Críticas archivadas con puntaje heurístico y problemas priorizados | Buscar qué está roto y con qué prioridad |
-| `README.md` | La memoria descriptiva académica (planteamiento, alcance, entregables de fase) | Contexto institucional del proyecto |
+| `README.md` | La memoria descriptiva académica (planteamiento, alcance, entregables de fase) y la puesta en marcha (requisitos, comandos, rutas, estructura) | Contexto institucional del proyecto, o levantarlo desde cero |
 
 **Regla de precedencia:** en decisiones visuales manda `DESIGN.md`. En verdad de producto y voz
 manda `PRODUCT.md`. Si algo del código contradice a cualquiera de los dos, el documento gana y el
@@ -90,7 +90,7 @@ src/
     useMosaicPhysics.js     Física del mosaico del hero (matter-js, carga diferida)
   components/
     layout/                 Navbar, Footer, Layout
-    ui/                     VitralBackdrop, HeroMosaic, PhotoCard, ConfirmButton
+    ui/                     VitralBackdrop, HeroMosaic, PhotoCard, ConfirmButton, Carousel
     motion/                 Reveal, SectionDivider, RouteTransition, SmoothScroller
   pages/                    Home, Quiz, Results, Community, NotFound
 assets-src/                 Masters sin comprimir. Fuera de public/, no entran al
@@ -99,6 +99,11 @@ public/images/              vitral-biblioteca.webp y potro-mascota.webp son acti
                             institucionales reales, areas/*.webp las cinco fotos de
                             área (ver su README.md); og-potropath.png es la tarjeta
                             de vista previa generada
+public/images/comunidad/    Las fotos de /comunidad. Su README.md manda: qué
+                            archivo va en qué hueco, con qué medidas y cuáles
+                            siguen pendientes. El hero sirve dos recortes
+                            distintos del mismo original por <picture> — no es
+                            una optimización, es encuadre
 ```
 
 Cuando regeneres `og-potropath.png`, la fuente de la composición vive en `DESIGN.md` →
