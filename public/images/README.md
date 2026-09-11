@@ -24,7 +24,10 @@ usa `Results`.
 
 `areas/*.webp` son las cinco fotografías de las áreas de especialización, a
 1200px de ancho y 308 KB entre las cinco, referenciadas desde
-`src/data/areas.js`. Llegaron como JPEG de 2432px con extensión `.png` y unos
+`src/data/areas.js`. Las consumen **dos** superficies: la rejilla de áreas de
+Inicio y las miniaturas de canal de Comunidad, que las toman del mismo campo
+`image` de `AREAS` en vez de tener copias propias — ver
+`comunidad/README.md` → *Miniaturas de canal*. Llegaron como JPEG de 2432px con extensión `.png` y unos
 2 MB cada una — 9.7 MB en la portada. A 1200px siguen alcanzando para la
 tarjeta más ancha de la rejilla de Inicio, que mide unos 560px y a 2x pide
 1120px.
@@ -33,7 +36,13 @@ tarjeta más ancha de la rejilla de Inicio, que mide unos 560px y a 2x pide
 tres fotografías que hoy ocupan celdas del mosaico del hero
 (`src/components/ui/HeroMosaic.jsx`); el resto de las celdas son bloques de
 color en espera. Los recortes pendientes del collage están descritos en
-`hero/README.md`, y las fotos de canal de Comunidad en `comunidad/README.md`.
+`hero/README.md`, y las fotos de Comunidad en `comunidad/README.md`.
+
+**Sus extensiones mienten:** `estudiante-ico.png` y `trabajo-equipo.png` son
+AVIF, y `estudiante-redes.png` es WebP. Funciona porque el navegador detecta el
+formato por los bytes, pero cualquier herramienta que confíe en la extensión se
+equivocará. Las copias de archivo en `assets-src/` sí llevan la extensión real;
+renombrar éstas es un cambio aparte, porque toca las rutas de `Home.jsx`.
 
 Los cuatro logotipos de `comunidad/ieee-*.webp` son las marcas de los capítulos
 de la Rama IEEE, una por recuadro en la tarjeta de Comunidad:
@@ -62,4 +71,10 @@ CSS, para no servir bytes de una pared que el encuadre tira. Ver el README de
 `og-potropath.png` es la tarjeta de vista previa para enlaces compartidos
 (1200x630). Se queda en PNG a propósito: varios scrapers no leen WebP.
 
-Sin usar todavía: `vitral2.png`, que no referencia ningún componente.
+Sin usar todavía: `vitral2.png` (1200x600, WebP pese a la extensión), que no
+referencia ningún componente.
+
+Los cinco archivos sueltos de esta carpeta tienen una **copia de archivo** en
+`assets-src/`, con su extensión real y fuera del build. Son copias, no mudanzas:
+`assets-src/` no se sirve, así que mover cualquiera de éstos lo borraría del
+sitio.

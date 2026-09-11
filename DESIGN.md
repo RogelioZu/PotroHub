@@ -152,16 +152,26 @@ llevaba la fotografía al hero de Inicio con la mascota asomada en la esquina. S
 mosaico geométrico tomó esa mitad de la composición, y con ella se retiró la excepción: el vitral
 recuperó el trabajo de ser borde y sólo borde, que es de donde le viene la fuerza.
 
-**Comunidad tiene su propio borde fotográfico, y es la única excepción.** Su hero es una foto real
-a pantalla completa —gente de la facultad, no el vitral— con un titular sobre un velo oscuro. No es
-una tarjeta acotada: cubre todo el ancho, justo debajo del header. Esa posición es la que hace que
-siga siendo una excepción acotada y no una grieta en la regla: se lee como una extensión del borde
-superior del sitio —vitral, inmediatamente seguido por
-esta foto— y no como una interrupción a mitad de página. El resto de Comunidad —la lista de
-canales, el bloque de invitación, la tarjeta de IEEE— vuelve al papel de inmediato. A diferencia
-del vitral, esta foto sí lleva un velo (`from-ink/85 via-ink/40 to-ink/10`) y no sólo sombra de
+**Comunidad tiene su propia fotografía en el cuerpo, y es la única excepción.** Su hero es una foto
+real —gente de la facultad, no el vitral— con un titular sobre un velo oscuro, ocupando el alto de
+ventana que queda bajo el header. El resto de Comunidad —la lista de
+canales, el bloque de invitación, la galería, la tarjeta de IEEE— vuelve al papel de inmediato. A
+diferencia del vitral, esta foto sí lleva un velo y no sólo sombra de
 texto: es gente real, y una foto de personas puede tener zonas claras que el glass art del vitral
 no tiene, donde el texto blanco se pierde sin ayuda.
+
+**Es una lámina con canalón, y antes era un sangrado completo.** La versión original cubría todo el
+ancho y arrancaba pegada al vitral, y el argumento para permitirla era precisamente ése: se leía
+como una extensión del borde superior del sitio —vidrio, e inmediatamente esta foto— y no como una
+interrupción a mitad de página. Hoy lleva papel arriba y a los lados, así que ese argumento ya no
+aplica: **es una tarjeta fotográfica, que es justo lo que este párrafo decía que no debía ser.**
+
+Se cambió a sabiendas. Lo que se pagó fue la coartada de "esto es borde, no cuerpo" — y con ella,
+que la excepción sea más difícil de defender la próxima vez que alguien quiera meter una foto grande
+al centro de una página. **Si vuelve a discutirse, el precedente es este párrafo, no el hero.**
+
+Lo que se ganó es nitidez, y es medible: sangrando, el archivo de `1216px` se estiraba `1.18x` a
+`1440` y `1.5x` a `1920`. Con canalón y techo se queda entre `0.95x` y `1.10x` en todo el rango.
 
 Las cinco áreas de especialización se presentan como una rejilla editorial de tres arriba y dos
 abajo. Cada tarjeta voltea sobre sí misma: la foto y el nombre al frente, el nombre y la descripción
@@ -287,6 +297,15 @@ se decide qué tan grande es un encabezado. Una página nunca fija un tamaño su
 clases. Antes de que existieran, cada página elegía su propio tamaño a mano y el sitio se sentía
 plano; volver a hacerlo lo aplana otra vez.
 
+**La forma en que se rompe no es inventar un tamaño, es reescribir uno que ya existe.** Comunidad
+tenía las tres variantes a la vez: un `text-3xl` que no estaba en la escala (y que dejaba un `h3` por
+encima de todos los `h2` de la página), un `text-lg font-bold` que era `.h3` copiado a mano con el
+mismo resultado exacto, y un `text-sm font-semibold tracking-widest uppercase` que era `.eyebrow`
+copiado a mano. Las dos copias no se veían mal —producían el píxel correcto— y por eso sobrevivieron
+a varias revisiones: el costo no es cómo se ven hoy, es que el día que la escala cambie no se
+enteren. Cuando haga falta el mismo tamaño con otro color, se pisa el color sobre la clase
+(`.eyebrow text-gold-light`), no se reescribe la clase.
+
 **La regla de la Franja de Lectura.** Todo texto que cae sobre la fotografía del vitral se apoya en
 una franja de `Tinta` al **72%** (`.vitral-scrim`) que va a plena fuerza donde cae el contenido y se
 desvanece en los `24px` de canalón de arriba y abajo, donde nunca hay letras. Encima sigue el
@@ -337,11 +356,27 @@ alto al hacer scroll. `main` y el contenedor de transición de ruta son a su vez
 es lo que permite que una vista corta pida el alto disponible y se centre en él. Una vista larga no
 crece y queda exactamente igual.
 
+**Un hero a pantalla completa pide lo que queda de ventana, no la ventana entera.** El header está
+en el flujo, no fijo, así que `100svh` empujaría el pie del hero —donde vive su titular— justo por
+debajo del pliegue. La clase `.hero-full` resuelve
+`calc(100svh - var(--nav-h) - 3rem)`, con `--nav-h` declarada en `:root` en tres escalones que
+siguen al relleno del header (`92px`, `108px` desde `sm`, `128px` desde `md`). Es un valor
+duplicado a sabiendas: sólo JavaScript puede medir el header, y este proyecto exige que la página se
+vea completa sin él. **Si cambia el relleno del header, cambia `--nav-h`.**
+
+Los `3rem` restantes no son margen: son la pista de que hay más abajo. Al dejar asomar el filo de la
+sección siguiente, la página se anuncia desplazable sin una flecha parpadeante — que es exactamente
+el lenguaje de landing que la voz del producto rechaza.
+
 ### Named Rules
 
 **La regla de los Dos Anchos.** Si el visitante está componiendo una mirada, `max-w-6xl`. Si está
 leyendo o completando una tarea, `max-w-2xl`. No hay un tercer ancho, y una página no mezcla los dos
 para el mismo tipo de contenido.
+
+El hero de Comunidad la incumplía con un `max-w-3xl` centrado y ya no: compone en `max-w-6xl` y
+acota su titular y su entradilla a `max-w-2xl`, que es el ancho de lectura que esta misma regla
+prescribe.
 
 ## Elevation & Depth
 
@@ -459,7 +494,17 @@ las cincuenta respondidas: con veinte contestadas no había ninguna forma de emp
   aparte; `Papel` con `shadow-sm` cuando la tarjeta vive sobre una sección ya gris.
 - **Shadow Strategy:** ninguna por defecto. Ver *La regla de la Sombra Fotográfica*.
 - **Border:** ninguno, salvo los espacios reservados, que usan `border-dashed border-ink/15`.
-- **Internal Padding:** `20px` (`p-5`) en tarjeta; `24px` (`p-6`) en bloque de nota.
+- **Internal Padding:** `20px` (`p-5`) en tarjeta; `24px` (`p-6`) en bloque de nota; `32px` (`p-8`),
+  que crece a `48px` (`p-12`) desde `md`, en bloque destacado.
+
+**Deuda anotada — el escalón de bloque destacado no estaba escrito.** Los dos bloques grandes de
+Comunidad (la tarjeta `Verde Profundo` de IEEE y el bloque `Papel Gris` de *Explora*) usan `p-8`, y
+el de IEEE sube a `p-12` desde `md`. Quedaba fuera de esta lista, que sólo nombraba `20px` y `24px`,
+así que durante un tiempo fueron dos valores sin respaldo en el documento. Se anota en vez de
+corregirse porque a esa escala el relleno de tarjeta se ve apretado y el cambio sería un rediseño de
+la pieza central de la página, no un arreglo. Lo que **sí** conviene recordar es que ese `p-8` le
+cuesta `64px` de ancho a lo que viva dentro: es la mitad de la razón por la que la tira de *Explora*
+tuvo un asomo de `6px` en teléfono (ver *La regla del Asomo*).
 - **Título:** `.h3` en `Verde Universitario`; cuerpo en `text-sm` `Tinta Suave`.
 
 Cuando una tarjeta `Papel` vive sobre una sección `Papel Gris` que a su vez esconde una foto
@@ -485,6 +530,75 @@ La prop `compact` es para cuando ni el nombre ni la frase completa de "pendiente
 desbordar — las miniaturas de 80px de la lista de canales de Comunidad. Ahí el aviso de "esto
 todavía no existe" se reduce al hueco punteado solo; el nombre real vive junto a la miniatura, no
 depende de caber encima de ella.
+
+**El aviso dice "Fotografía pendiente" y no una ruta del sistema de archivos.** Decía
+"Foto pendiente de agregar en /public/images/comunidad": una frase escrita para quien mantiene el
+repositorio, que casi nunca se veía porque el único hueco no `compact` de la página ya tenía su
+archivo. La galería la puso cuatro veces frente al estudiante, y a quien viene a comprobar si la
+comunidad existe una ruta de carpetas no le dice nada. Dónde va el archivo se documenta en
+`public/images/comunidad/README.md`, que es donde lo busca quien tiene que subirlo.
+
+### Carrusel de fotos
+
+Tira horizontal de fotografías con scroll nativo y `scroll-snap`, en `src/components/ui/Carousel.jsx`.
+Hoy lo usan la galería de Comunidad y el bloque *Explora más allá del salón*.
+
+**No es el carrusel que este documento prohíbe.** Lo prohibido (ver *Don'ts*) es la rueda de
+**testimonios** de una landing de bootcamp: un componente que existe para rotar evidencia social y
+que aquí, además, exigiría una evidencia que no hay. Éste es lo contrario — fotografías reales, sin
+ninguna afirmación encima. La página de Comunidad existe para probar que la comunidad es real, y la
+prueba son las fotos.
+
+Tres decisiones que conviene no deshacer:
+
+- **Sin autoplay.** Nada avanza solo. Un carrusel que se mueve por su cuenta le quita al lector el
+  control de la lectura, y es justo la energía de landing que la voz del producto rechaza. Por lo
+  mismo no hay puntos indicadores ni contador.
+- **El scroll es del navegador, no de JavaScript.** La tira es un contenedor `overflow-x` con
+  `scroll-snap`: se arrastra con el dedo, con el trackpad y con el teclado aunque el JS no cargue
+  nunca. Los botones sólo llaman a `scrollBy` — son un atajo, no el mecanismo. Es la misma tesis que
+  *La regla del `from`*: el estado por defecto del marcado ya funciona. La suavidad se pasa en cada
+  llamada y no en `scroll-behavior`, que es lo único que permite anularla bajo movimiento reducido.
+- **Los botones no provocan re-render.** El estado de "¿llegué al extremo?" se escribe directo sobre
+  el DOM desde el listener de scroll. Con `useState`, cada píxel de arrastre re-renderizaría la tira
+  completa con sus fotos.
+
+**Las flechas toman el vocabulario del botón fantasma**: píldora, `border-green-mid/70`, `44px` de
+alto y transición sólo de color. Su deshabilitado **no** es el de `.btn-disabled`: ahí el borde
+punteado significa "esto todavía no existe" y aquí significaría "llegaste al extremo de la tira".
+Dos estados distintos no pueden compartir forma, así que éste se apaga por tono, que es como el
+sistema separa todo lo demás. Van debajo y a la derecha, nunca superpuestas sobre las fotos: encima
+taparían justo la cara de alguien, y sobre una zona clara un botón de borde verde pierde su límite.
+Se ocultan solas cuando la tira no desborda, para no dejar un control que no hace nada.
+
+La barra de scroll nativa se esconde porque cruzaría el pie de las fotos con un artefacto distinto
+en cada sistema operativo, y porque la tira ya anuncia que se desplaza de otras dos maneras: los
+botones siempre visibles y la tarjeta siguiente asomando por el borde.
+
+**La regla del Asomo.** Ese asomo es el segundo de los dos avisos, así que el ancho de tarjeta no se
+elige a ojo: es **el mayor escalón de la escala que deja ver al menos un canalón —`24px`— de la
+tarjeta siguiente en el contenedor más angosto donde ese carrusel vive**, contando el hueco de la
+tira. El contenedor más angosto casi nunca es el que se está mirando al programar: para la galería
+son los `342px` de un teléfono, y para la tira de *Explora* son `278px`, porque además le comen
+`64px` el `p-8` de su bloque.
+
+Las dos tiras tuvieron anchos puestos a ojo y con escalón por breakpoint —`w-64 sm:w-72` y
+`w-72 sm:w-80`—, y la cuenta salía mal justo donde más importa: en un teléfono, la tira de *Explora*
+dejaba **`6px`** de asomo. A esa medida no se ve nada, así que en la pantalla más angosta —y la más
+común— el carrusel no parecía desplazable y quedaba dependiendo sólo de sus flechas. Hoy son
+`w-56` y `w-72`, un valor fijo cada una y `38px` de asomo las dos a `390px`. El escalón por
+breakpoint desapareció porque no compraba nada: en escritorio a las dos les sobra ancho, y hacía
+además que `w-72` significara dos cosas distintas entre las dos tiras de la misma página.
+
+**`min-width: 0` en la tira y en su contenedor no es opcional.** Sin él la tira deja de ser un
+contenedor de scroll y pasa a ser un empujón: su ancho mínimo de contenido —la suma de todas las
+tarjetas— sube por el árbol y estira a la celda de rejilla que la aloja. En Comunidad eso ensanchaba
+la columna a `864px` dentro de un teléfono de `390px`, y como las dos columnas comparten pista en
+móvil, arrastraba también a la lista de canales: la página completa se iba de lado. Las dos celdas
+de esa rejilla llevan `min-w-0` por la misma razón.
+
+**El carrusel no va envuelto en `Reveal`.** La página ya lo usa cuatro veces, y *Don't repetir el
+revelado de entrada en cada sección* aplica igual a una tira que a una rejilla.
 
 ### Quiz Option
 
@@ -671,9 +785,109 @@ titular en dos columnas) y su rejilla de áreas (las mismas cinco tarjetas, mism
 visual). Comunidad no es Inicio con otro título: es la página que existe para probar que la
 comunidad es real, y cada sección lo hace a su manera.
 
-**El hero** es el borde fotográfico propio de la página (ver *Overview*): una foto real a pantalla
-completa con el titular encima, sin tarjeta ni columna de texto — el formato de Inicio ya está
-tomado.
+**El hero** es la fotografía propia de la página (ver *Overview*): una foto real con el titular
+encima, sin columna de texto al lado — el formato de Inicio ya está
+tomado. Ocupa el alto de ventana que queda bajo el header menos `3rem` (ver *Layout*).
+
+**Es una lámina con canalón de papel arriba y a los lados, y a ras por abajo.** El canalón crece con
+la pantalla —`16px` en teléfono, `24px` desde `sm`, `64px` desde `md`— y no es un número fijo a
+propósito: proporcionalmente el de teléfono es el más grueso de los dos extremos, y un `32px` plano
+ahí se comía el renglón. Con el relleno interno dejaba el texto en
+`278px`, partía el *eyebrow* en dos líneas y el bloque volvía a subir sobre las caras del grupo. En
+una pantalla de `390px`, el aire se mide contra lo que le quita al texto.
+
+Lleva `rounded-t-xl`: esquinas redondeadas arriba, donde hay papel, y rectas abajo, donde va a ras.
+El relleno entra dentro del alto que pide `.hero-full`
+—`box-sizing: border-box`— así que la sección mide lo mismo que cuando sangraba y lo que encoge es
+la lámina: el pliegue no se mueve.
+
+**El tope de la lámina es `84rem`, y no es un ancho de composición: es el techo del sangrado, y sale
+del archivo.** `1344px` son los `1216px` de la fotografía por `1.10`, que es hasta donde se la puede
+estirar sin que se note. No es un tercer ancho de los que prohíbe *La regla de los Dos Anchos*: el
+texto de adentro sigue en `max-w-2xl`, y esto sólo le pone un límite a un sangrado que antes no
+tenía ninguno.
+
+Estuvo en `max-w-6xl` (`1152px`), donde la foto no se escalaba hacia arriba jamás, y se abrió a
+petición explícita: a `1440` ese tope dejaba la lámina en el `80%` del ancho, y al `135%` de zoom
+—donde el tope deja de aplicar— subía al `91%`, que era la proporción que se quería ver al `100%`.
+Con canalón de `64px`, `1440` da `1312px` de lámina, exactamente ese `91%`.
+
+| Ancho | Lámina | Del viewport | Escalado de la foto |
+|---|---|---|---|
+| `1280` | `1152` | 90% | `0.95x` (reducida) |
+| `1440` | `1312` | 91% | `1.08x` |
+| `1920` | `1344` (techo) | 70% | `1.10x` |
+
+Sin ese techo, `1920` daría `1.47x`, que sí se ve. Es la única razón por la que existe — si algún día
+aparece un original de más resolución, el techo sube con él y no al revés.
+
+**El titular se apoya abajo y a la izquierda, no centrado.** Dos razones apuntan al mismo lado:
+centrado, el texto cae encima de las caras del grupo, que es justo lo que la fotografía viene a
+mostrar; y el ancho era `max-w-3xl`, un tercer ancho que *La regla de los Dos Anchos* no contempla.
+Alineado a la izquierda dentro de `max-w-6xl`, el texto ocupa el lado que el velo ya oscurece.
+
+**El velo es vertical y su caída es brusca a propósito.** Sus dos trabajos —dar fondo a las
+letras y dejar ver las caras— se estorban, y subir la opacidad no los concilia: apaga a las
+personas, que son la prueba de que la comunidad existe. Se resuelven **separándolos en el espacio**,
+por altura: plena fuerza en la banda donde cae el texto, y suelta de golpe justo debajo de las
+caras. Un degradado suave repartiría la diferencia y dejaría al grupo a media luz exactamente donde
+tiene que verse. En teléfono el texto arranca al `57%` contado desde abajo y las caras caen entre el
+`62%` y el `75%`; desde `md`, el texto arranca al `48%` y las caras entre el `62%` y el `76%`. La
+zona de texto se queda en `86%` o más, con margen sobre el `72%` que *La regla de la Franja de
+Lectura* fija como mínimo, porque una foto de personas tiene más blancos sueltos que el vidrio. El
+`text-shadow` sigue encima.
+
+**El velo fue diagonal (`to top right`) desde `md`, y dejó de tener sentido al centrar el recorte.**
+Mientras el encuadre dejaba al grupo cargado a la derecha, el ángulo era correcto: bajaba por la
+esquina inferior izquierda —el texto— y se abría hacia la gente. Con el grupo centrado y llenando el
+cuadro de lado a lado, la diagonal ya sólo apagaba su tercio izquierdo: **le devolvía a una foto
+simétrica una asimetría que la foto ya no tenía.** Es el patrón a vigilar — un velo direccional es
+una respuesta a *dónde está el sujeto*, así que cambiar el encuadre obliga a revisarlo.
+
+**Son dos recortes del mismo original, no uno escalado, y los dos centrados en el grupo.** El hueco
+del hero va de `2.65:1` en escritorio a `0.64:1` en un teléfono y ninguna `object-position` salva esa
+distancia: en vertical, el `4:3` completo deja al grupo en la mitad inferior, exactamente debajo del
+texto. Un `<picture>` sirve un apaisado de `1216×780` y bajo `md` un vertical de `512×800`, los dos
+recortados del mismo archivo. Es la misma tesis que el recorte cuadrado de `explora-hackathon`:
+**el encuadre se decide en el archivo, no en CSS.**
+
+**Lo que descuadraba la foto no era el grupo: eran los bordes.** El grupo ocupa `x 195..1340` de un
+original de `1600`, o sea que su centro está en `768`, a `32px` del centro de la imagen — ya estaba
+casi centrado. Lo que rompía la simetría era el zaguán oscuro de la entrada a la izquierda
+(`x 0..190`) y dos personas de paso a la derecha (`x 1350..1600`). Los dos recortes se trazan
+simétricos alrededor de `x = 768` y se llevan esa basura.
+
+Por eso **el hero ya no lleva `object-position`**: con los archivos centrados, el `50% 50%` por
+defecto de `object-cover` es exactamente el encuadre que se busca, y cualquier recorte que el
+contenedor imponga se reparte simétrico a los dos lados. Hubo un `object-[70%_60%]` que corría el
+foco a la derecha para compensar un archivo descentrado — arreglaba el síntoma en CSS en vez de la
+causa en el archivo, y en escritorio su componente horizontal ni siquiera hacía nada, porque a esas
+proporciones el recorte del contenedor es sólo vertical.
+
+De paso los dos archivos pesan menos que el cuadro completo: `84 KB` y `36 KB` contra los `144 KB`
+del `4:3` entero. El precio es que a `1216px` de ancho, un hero de `1440` CSS px lo escala `1.18×`
+hacia arriba en vez de reducirlo; detrás del velo no se nota, y la composición vale bastante más
+que esa nitidez.
+
+**El pie de la fotografía no es un crédito de cortesía.** Nombra a quién, dónde y cuándo
+—"Estudiantes de la facultad en Talent Land México 2026, Expo Santa Fe"— y es la línea que convierte
+una foto grupal en evidencia. Sin fecha ni lugar, cualquier
+grupo de estudiantes sonriendo se lee como imagen de banco, que es justo la sospecha que esta
+página existe para desactivar.
+
+**Todo el bloque de texto se mide contra las caras, y ése es el presupuesto.** En un teléfono el
+hero mide unos `610px` y el recorte vertical deja la banda de caras entre el `58%` y el `67%`
+contados desde abajo; el texto arranca al `57%`, justo por debajo. Cada línea de más lo empuja
+hacia arriba, sobre las caras que el recorte acaba de despejar, así que **la longitud del copy es una
+restricción de layout, no una preferencia de redacción**: el pie perdió "Ciudad de México" y la
+entradilla una subordinada exactamente por eso. Antes de alargar cualquiera de las tres líneas hay
+que volver a medir dónde arranca el bloque.
+
+El pie comparte `max-w-2xl` con el titular y la entradilla, y no lleva un ancho propio: tuvo un
+`max-w-md` que era un tercer ancho que *La regla de los Dos Anchos* no contempla, y que además
+desalineaba el borde derecho del bloque. Su tamaño es `text-sm` plano, el escalón más chico que la
+escala documenta — no un salto `text-xs` → `sm:text-sm`, que era el único cambio de tamaño por
+breakpoint de la página.
 
 **El cuerpo** se parte en dos mitades de trabajo distinto, `lg:grid-cols-2`, ninguna copia de la
 otra:
@@ -685,7 +899,20 @@ otra:
   dentro de la lista —miniatura y nombre—, al reverso el nombre y la descripción de la especialidad.
   Es la misma información que la rejilla de áreas de Inicio (`AREAS`, reutilizada — el diagnóstico y
   la comunidad comparten datos porque son la misma facultad, no porque se copiaron los diseños), y
-  sigue siendo un directorio de canales a los que unirse. Lo que la separa de aquella rejilla ya no
+  sigue siendo un directorio de canales a los que unirse.
+
+  **La miniatura es la foto del área, no un archivo propio**, tomada del mismo `AREAS` que ya
+  aporta el nombre y la descripción. Hubo cinco `canal-<id>.jpg` planeados y ninguno existió, así
+  que las cinco filas se veían punteadas: cinco avisos de "esto todavía no existe" para algo que ya
+  estaba en el repositorio. Se reutiliza por la razón por la que ya se comparten los datos —**una
+  sola fuente**—: un segundo juego de archivos con la misma fotografía se desincroniza en el primer
+  reemplazo, y el canal de Ciberseguridad acabaría ilustrado con una foto distinta a la de su área
+  sin que nadie se entere. `compact` se conserva como red por si un día falta el archivo.
+
+  **Que esas fotos sean ilustraciones genéricas está bien aquí y no en la galería.** El trabajo de
+  la miniatura es reconocer un canal dentro de una lista; el de la galería es probar que la
+  comunidad existe. Una foto de banco sirve para lo primero y destruye lo segundo — por eso las
+  fotos de `AREAS` tienen prohibida la galería. Lo que la separa de aquella rejilla ya no
   es el volteo, que ahora comparten, sino la forma: filas a lo ancho de una columna con la foto en
   miniatura, contra cinco fotografías de `4:3` repartidas en tres y dos. El precio del volteo es que
   la descripción se pide en vez de leerse de corrido, y se paga aquí porque una lista de directorio
@@ -701,10 +928,14 @@ otra:
   mínima... y eso es lo que las empresas leen como un perfil de egreso débil") convertida en una
   invitación directa, sin inventar una cifra para sostenerla.
 
-  Arriba del titular va una fotografía cuadrada de estudiantes con reconocimientos de un hackathon,
-  que ancla la idea del bloque —el perfil se construye afuera del plan de estudios— y de paso
-  empareja las dos columnas: sin ella esta era la corta, contra una lista de cinco canales que mide
-  el doble. El recorte cuadrado está hecho en el archivo y no en CSS, porque el original es `3:4`
+  Arriba del titular va una tira de fotografías cuadradas que ancla la idea del bloque —el perfil
+  se construye afuera del plan de estudios— y de paso empareja las dos columnas: sin ella esta era
+  la corta, contra una lista de cinco canales que mide el doble. Es un carrusel y no una foto
+  suelta porque **lo que sostiene la idea es la acumulación**: una foto es una anécdota, varias son
+  un hábito. Hoy sólo existe la primera y las otras dos se ven como lo que son. Van **sin pie**, a
+  diferencia de las de la galería: la primera no puede llevarlo (ver la deuda anotada abajo), y un
+  pie en las otras dos abriría dos tratamientos distintos dentro de la misma tira. El recorte
+  cuadrado está hecho en el archivo y no en CSS, porque el original es `3:4`
   con casi un tercio de pared vacía arriba: encuadrar desde abajo deja a las cuatro personas de
   cuerpo entero y no paga bytes por la pared.
 
@@ -714,13 +945,47 @@ otra:
   justo lo que `PRODUCT.md` → *Evidence on Hand* prohíbe dar por bueno. Se sustituye en cuanto
   exista una fotografía de la rama de la facultad.
 
+**La galería** es la única sección de la página cuyo contenido son las fotografías mismas y no un
+texto que ellas apoyan, y es donde caben las que se vayan agregando sin rediseñar nada: la tira
+crece a lo ancho, no a lo largo, así que veinte fotos cuestan lo mismo de página que cuatro. Aquí
+las fotos **sí llevan pie** —el `badge-overlay` ya documentado—, porque una galería sin pies es un
+adorno: el pie es lo que dice qué se está viendo y cuándo pasó.
+
+Hoy existen tres —Talent Land México 2026, el capítulo Women in Engineering y la visita a la Rama
+IEEE de la UAM Lerma—, las tres de estudiantes de esta facultad, y las tres con pie que nombra
+evento y lugar. Las otras dos son lugares reservados y se ven como tales, con el borde
+punteado con el que todo el sitio dice "esto todavía no existe" (ver *Shapes* y `PhotoCard`).
+Rellenarlas con imágenes de banco destruiría exactamente la credibilidad que la página viene a
+ganarse — ver `PRODUCT.md` → *Evidence on Hand*. Los pies de los pendientes describen el **tipo** de
+actividad y no un evento concreto, para que sigan siendo ciertos cuando alguien deje caer el
+archivo que falta.
+
+**El orden de las palabras de un pie puede ser una afirmación institucional.** "Visita a la Rama
+IEEE UAM Lerma" dice que fuimos; "Rama IEEE UAM Lerma" a secas nos atribuiría una rama que no es
+nuestra — en esa fotografía el telón con la marca del anfitrión es lo primero que se ve. Es la
+misma clase de error que el archivo del que salió: estuvo descrita en `assets-src/README.md` como
+"estudiantes de la Rama Estudiantil IEEE de la UAM Lerma" cuando son estudiantes de **esta**
+facultad de visita, y esa sola línea mal escrita la mantuvo fuera del sitio, correctamente, hasta
+que se corrigió.
+
+**La lista de canales no se convirtió en carrusel, y no debe convertirse.** Un directorio se recorre
+buscando un nombre, y en una tira horizontal la mitad de los nombres queda fuera de cuadro. Los
+carruseles de esta página son para las fotos, que se hojean.
+
 **La Rama IEEE destaca**, literalmente: es una tarjeta `Verde Profundo` a ancho completo con texto
-`Papel`, no una tarjeta entre cuatro iguales. Es la misma vocabulario tonal que ya separa `Papel` →
+`Papel`, no una tarjeta entre cuatro iguales. Es el mismo vocabulario tonal que ya separa `Papel` →
 `Papel Gris` → `Verde Bruma` (ver *Elevation & Depth*), llevado a una escala mayor para dar
 jerarquía sin inventar un tratamiento nuevo — sus cuatro capítulos viven dentro, en filas `Papel/10`
 sobre el verde. *Otros espacios estudiantiles* (Sociedad de Alumnos, clubes, voluntariado,
 movilidad) va debajo, deliberadamente más chico: es contenido sin confirmar, no la pieza central de
 la sección.
+
+**Su titular es `.h2`, y la prominencia la sigue dando el tono.** Estuvo en un `text-3xl` suelto:
+`30px`, más grande que los cuatro `h2` de la página, que miden `24`. Un `h3` que gritaba por encima
+de los encabezados de sección que lo contienen, y la única medida de toda la escala de Comunidad que
+no existía en ningún otro lado. El salto tonal a `Verde Profundo` ya hace ese trabajo —lo dice el
+párrafo de arriba—, así que agrandar además el titular lo hacía dos veces, y la segunda rompiendo la
+escala. La escala de la página es hoy `48 / 24 / 18 / 16` sin intrusos.
 
 **Las marcas son papel dentro del verde.** Debajo de los capítulos, una segunda rejilla con las
 mismas columnas: un recuadro `Papel` puro por capítulo, con el logotipo oficial de su sociedad, de
@@ -877,4 +1142,8 @@ cambio de estado: el reverso tiene que poder leerse igual.
   es un conjunto pequeño, de un solo estilo entre sí y con especificación propia
   (`public/images/hero/README.md`), no un cajón de clip art sin filtrar.
 - **Don't** adoptar el lenguaje de una landing de bootcamp: sin urgencia, sin contadores, sin
-  carruseles de testimonios. Además exigiría evidencia social que no existe.
+  carruseles de testimonios. Además exigiría evidencia social que no existe. Lo prohibido es la
+  rueda de **testimonios** —y todo lo que se mueva solo para llamar la atención: autoplay, puntos
+  que avanzan, contadores—, no el desplazamiento horizontal como forma. La galería de fotos de
+  Comunidad es una tira horizontal y es exactamente lo contrario: fotografías reales, quietas hasta
+  que alguien las mueve, sin una sola afirmación encima (ver *Carrusel de fotos*).

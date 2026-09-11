@@ -40,6 +40,33 @@
    */
   :root {
     --focus-ring: var(--color-green-mid);
+
+    /*
+     * Alto de la banda de vitral del header. Existe para que un hero a
+     * pantalla completa pueda pedir "lo que queda de ventana" en vez de
+     * `100svh`, que empujaría su propio pie por debajo del pliegue justo
+     * donde vive el titular.
+     *
+     * Es un valor duplicado, y se asume a sabiendas: sólo JavaScript puede
+     * medir el header, y este proyecto exige que la página se vea completa
+     * sin JS. Sale de `py-6 sm:py-8 md:py-10` más la fila más alta del header
+     * — 44px del botón hamburguesa hasta `lg`, 48px de la marca a `text-5xl`
+     * desde `md`. Si cambia el relleno del header, cambia aquí.
+     * Ver src/components/layout/Navbar.jsx.
+     */
+    --nav-h: 92px;
+  }
+
+  @media (width >= 40rem) {
+    :root {
+      --nav-h: 108px;
+    }
+  }
+
+  @media (width >= 48rem) {
+    :root {
+      --nav-h: 128px;
+    }
   }
 
   :focus-visible {
@@ -179,6 +206,86 @@
   }
 
   /**
+   * Hero a pantalla completa (hoy sólo el de Comunidad).
+   *
+   * Pide "lo que queda de ventana bajo el header" y no `100svh`: el titular
+   * vive pegado al pie de este bloque, así que un alto de ventana completa lo
+   * empujaría justo por debajo del pliegue — el header sigue en el flujo, no
+   * es fijo.
+   *
+   * Los `3rem` que sobran no son margen: son la pista de que hay más abajo. Al
+   * dejar asomar el filo de la sección siguiente, la página se anuncia
+   * desplazable sin recurrir a una flecha parpadeante, que es justo el
+   * lenguaje de landing que la voz del producto rechaza.
+   *
+   * `svh` y no `dvh` ni `vh`, por la misma razón que el layout: la barra de
+   * direcciones móvil cambia de alto al hacer scroll. `svh` es el alto
+   * mínimo garantizado, así que el hero nunca crece ni encoge a media
+   * lectura.
+   */
+  .hero-full {
+    min-height: calc(100svh - var(--nav-h) - 3rem);
+  }
+
+  /**
+   * Velo del hero fotográfico de Comunidad.
+   *
+   * A diferencia del vitral, aquí la foto es gente, y el velo tiene dos
+   * trabajos que se estorban: dar a las letras un fondo suficiente y dejar
+   * ver las caras. La solución no es subir la opacidad —eso apaga a las
+   * personas, que son la prueba de que la comunidad existe— sino **separar
+   * las dos cosas en el espacio**.
+   *
+   * **El velo es vertical en los dos tamaños, y su caída es brusca a
+   * propósito:** plena fuerza en la banda de abajo, donde cae el texto, y
+   * suelta de golpe justo debajo de las caras. Un degradado suave repartiría
+   * la diferencia y dejaría al grupo a media luz exactamente donde tiene que
+   * verse.
+   *
+   * Desde `md` fue diagonal (`to top right`) durante un tiempo, y tenía
+   * sentido mientras el recorte dejaba al grupo cargado a la derecha: el
+   * ángulo bajaba por la esquina del texto y se abría hacia la gente. **Al
+   * centrar el recorte en el grupo esa premisa desapareció** — el grupo pasó a
+   * llenar el cuadro de lado a lado, así que la diagonal ya sólo apagaba su
+   * tercio izquierdo y le devolvía a una foto simétrica una asimetría que la
+   * foto ya no tenía. Vertical, el grupo se ilumina parejo.
+   *
+   * Los números salen de la misma cuenta que `.vitral-scrim`: 72% es el
+   * mínimo que lleva `Papel` a 4.5:1 y `Oro Claro` a 3:1 sobre el peor caso
+   * (un píxel blanco puro debajo). Toda la zona de texto se queda en 82% o
+   * más, con margen — una foto de personas tiene más blancos sueltos que el
+   * vidrio, y encima el `text-shadow` sigue puesto.
+   */
+  .community-hero-scrim {
+    /* Teléfono: el texto arranca al 57% y el recorte vertical deja las caras
+       entre el 62% y el 75%, contados desde abajo. */
+    background-image: linear-gradient(
+      to top,
+      rgb(37 37 37 / 92%) 0,
+      rgb(37 37 37 / 88%) 54%,
+      rgb(37 37 37 / 74%) 59%,
+      rgb(37 37 37 / 22%) 65%,
+      rgb(37 37 37 / 10%) 100%
+    );
+  }
+
+  @media (width >= 48rem) {
+    .community-hero-scrim {
+      /* Escritorio: el texto arranca al 48% y las caras caen entre el 62% y
+         el 76%. La banda de texto se queda en 86% o más, muy por encima del
+         72% que `.vitral-scrim` fija como mínimo. */
+      background-image: linear-gradient(
+        to top,
+        rgb(37 37 37 / 92%) 0,
+        rgb(37 37 37 / 86%) 45%,
+        rgb(37 37 37 / 70%) 52%,
+        rgb(37 37 37 / 25%) 62%,
+        rgb(37 37 37 / 12%) 100%
+      );
+    }
+  }
+
+  /**
    * Botones de decisión (CTAs de cambio de vista: hero, resultados,
    * comunidad). Los controles compactos del cuestionario son otro contexto
    * — aparecen 50 veces por sesión — y se quedan fuera a propósito.
@@ -293,6 +400,75 @@
     justify-content: center;
     background: var(--color-paper);
     padding: 20px;
+  }
+
+  /*
+   * Tira del carrusel de fotos (`src/components/ui/Carousel.jsx`).
+   *
+   * El desplazamiento es del navegador y no de JavaScript: `overflow-x` con
+   * `scroll-snap` ya se arrastra con el dedo, con el trackpad y con el
+   * teclado sin que cargue una sola línea de JS. Los botones del componente
+   * son un atajo encima de esto, no el mecanismo — misma tesis que *La regla
+   * del `from`*: el marcado por defecto ya funciona.
+   *
+   * `scroll-behavior` se queda en `auto` a propósito. Si la suavidad
+   * estuviera aquí, no habría forma de anularla bajo movimiento reducido:
+   * el componente pasa `behavior` en cada `scrollBy` y esa es la única
+   * decisión que consulta la preferencia.
+   */
+  .carousel-strip {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: auto;
+    /*
+     * Sin esto la tira deja de ser un contenedor de scroll y pasa a ser un
+     * empujón: su ancho mínimo de contenido —la suma de todas las tarjetas—
+     * sube por el árbol y estira a su celda de rejilla. En Comunidad eso
+     * ensanchaba la columna entera a 864px dentro de un teléfono de 390px, y
+     * como las dos columnas comparten pista en móvil, arrastraba también a la
+     * lista de canales: la página completa se iba de lado.
+     *
+     * `min-width: 0` es lo que permite que la contribución mínima sea cero, y
+     * es lo que convierte "esto se desborda" en "esto se desplaza".
+     */
+    min-width: 0;
+    /* La barra nativa cruzaría el pie de las fotos con un artefacto distinto
+       en cada sistema operativo. Se esconde porque la tira ya anuncia que se
+       desplaza de otras dos maneras: los botones siempre visibles y la
+       tarjeta siguiente asomando por el borde. */
+    scrollbar-width: none;
+  }
+  .carousel-strip::-webkit-scrollbar {
+    display: none;
+  }
+  .carousel-strip > * {
+    scroll-snap-align: start;
+    /* `flex: none` y no `shrink-0`: las tarjetas tampoco deben crecer para
+       repartirse el sobrante, o la última fila dejaría de asomar y con ella
+       la única pista de que hay más. */
+    flex: none;
+  }
+
+  /*
+   * Flechas del carrusel. Toman el vocabulario del botón fantasma —píldora,
+   * borde verde al 70%, transición sólo de color— porque son un control
+   * secundario del mismo sistema, y miden 44px como el resto de lo que se
+   * pulsa muchas veces.
+   *
+   * El deshabilitado NO es el de `.btn-disabled`: ahí el borde punteado
+   * significa "esto todavía no existe", y aquí significa "llegaste al
+   * extremo de la tira". Dos estados distintos no pueden compartir forma, así
+   * que éste se apaga por tono, que es como el sistema separa todo lo demás.
+   */
+  .carousel-arrow {
+    @apply flex h-11 w-11 items-center justify-center rounded-full border border-green-mid/70 text-ink-soft transition-colors;
+  }
+  .carousel-arrow:hover:not(:disabled) {
+    @apply border-green-mid text-green-mid;
+  }
+  .carousel-arrow:disabled {
+    @apply cursor-default border-ink/10 text-ink/25;
   }
 
   /*

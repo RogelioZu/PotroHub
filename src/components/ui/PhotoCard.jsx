@@ -47,7 +47,17 @@ function PhotoCard({
         {!compact && (
           <>
             {caption && <p className="text-sm font-bold text-ink">{caption}</p>}
-            <p className="text-xs text-ink-soft/70">Foto pendiente de agregar en /public/images/comunidad</p>
+            {/*
+              Decía "Foto pendiente de agregar en /public/images/comunidad".
+              Esa frase estaba escrita para quien mantiene el repositorio y
+              casi nunca se veía —el único hueco no `compact` de la página ya
+              tenía su archivo—, pero la galería la puso cuatro veces frente
+              al estudiante. Una ruta del sistema de archivos no le dice nada
+              a quien viene a ver si la comunidad existe; dónde va el archivo
+              se documenta en `public/images/comunidad/README.md`, que es
+              donde lo busca quien tiene que subirlo.
+            */}
+            <p className="text-xs text-ink-soft/70">Fotografía pendiente</p>
           </>
         )}
       </Frame>
