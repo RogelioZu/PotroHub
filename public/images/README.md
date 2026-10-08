@@ -9,25 +9,34 @@ respaldo (ver PRODUCT.md → *Accessibility*): cualquier imagen que se agregue
 aquí pasa por la misma conversión, y el original sin optimizar no entra al
 repositorio.
 
+`vitral-franja.webp` (1600x24, 12 KB) es lo que hoy se ve del vitral: la franja
+de 8px arriba de la cabecera y abajo del pie (`.brand-ribbon` en `index.css`).
+Es una banda horizontal recortada alrededor del 52% de alto del master
+`assets-src/institucional/vitral-biblioteca.png` y estirada a 1600x24. Antes la
+franja cargaba el panorámico completo de 207 KB para pintar 8px, y eso costaba
+medio segundo de primer pintado en un teléfono (ver `docs/RENDIMIENTO.md`).
+
 `vitral-biblioteca.webp` es la fotografía real del vitral de la biblioteca de
 la Facultad de Ingeniería (UAEMéx): un panorámico muy ancho (~8.9:1) de los
-cuatro paneles de vidrio, a 2736x308. La consume `VitralBackdrop`, el fondo
-del header y del footer. Si el archivo llegara a faltar, cae a un placeholder
-con el acento decorativo `vitral-accent` en vez de romper el layout.
+cuatro paneles de vidrio, a 2736x308. Desde el rediseño editorial ya no se
+sirve en ninguna página (el header y el footer usan `vitral-franja.webp`); se
+conserva como activo institucional y para regenerar la tarjeta Open Graph.
 
 `potro-mascota.webp` es la mascota de la universidad, con canal alfa. El
 original venía en RGB con el fondo gris incrustado: sobre el papel blanco de
 la insignia no se notaba, pero sobre cualquier superficie de color aparecía un
 rectángulo claro detrás del potro. El fondo se rellenó desde los bordes —no
 por color— para no tocar los blancos interiores (ojos, dientes, camisa). La
-usa `Results`.
+usan el estado sin resultados de `Results` y la página 404, sobre recuadro de
+papel.
 
 `areas/*.webp` son las cinco fotografías de las áreas de especialización, a
 1200px de ancho y 308 KB entre las cinco, referenciadas desde
 `src/data/areas.js`. Las consumen **dos** superficies: la rejilla de áreas de
-Inicio y las miniaturas de canal de Comunidad, que las toman del mismo campo
-`image` de `AREAS` en vez de tener copias propias — ver
-`comunidad/README.md` → *Miniaturas de canal*. Llegaron como JPEG de 2432px con extensión `.png` y unos
+Inicio y las miniaturas del directorio de Comunidad (y la ilustración de la
+ruta explorada en Resultados), que las toman del mismo campo `image` de
+`AREAS` en vez de tener copias propias — ver `comunidad/README.md` →
+*Miniaturas del directorio de especialidades*. Llegaron como JPEG de 2432px con extensión `.png` y unos
 2 MB cada una — 9.7 MB en la portada. A 1200px siguen alcanzando para la
 tarjeta más ancha de la rejilla de Inicio, que mide unos 560px y a 2x pide
 1120px.
@@ -36,7 +45,9 @@ tarjeta más ancha de la rejilla de Inicio, que mide unos 560px y a 2x pide
 Inicio: integrantes de la Rama Estudiantil IEEE UAEMéx con el vehículo todo
 terreno del equipo. Sale de `assets-src/comunidad/rama-ieee-uaemex.jpeg`
 (4096x3072) con un recorte 16:10 centrado en el grupo —`extract` en
-`left 180, top 720, 3200x2000`, reducido a 1200px, WebP calidad 76— que deja
+`left 180, top 720, 3200x2000`, reducido a 1200px, WebP calidad 76; la
+variante `inicio-rama-ieee-720.webp` (66 KB, calidad 74) es la que reciben los
+teléfonos por `srcset`— que deja
 fuera casi todo el estacionamiento vacío de abajo. Es la misma foto que
 `comunidad/galeria-rama-ieee.webp` con otro encuadre: el lienzo del fondo dice
 "Rama Estudiantil · UAEMéx · IEEE", así que la imagen se verifica sola, y por

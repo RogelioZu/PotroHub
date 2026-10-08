@@ -22,7 +22,8 @@ no un titular encima. Ya no hace falta velo sobre las caras.
 
 | Archivo | Medidas | Uso |
 | --- | --- | --- |
-| `quienes-somos.webp` | 1216×780 | Hero de `/comunidad`, en todos los anchos |
+| `quienes-somos.webp` | 1216×780 | Hero de `/comunidad` en laptop |
+| `quienes-somos-720.webp` | 720×462, 47 KB | La misma, reducida para teléfonos vía `srcset` |
 | `quienes-somos-movil.webp` | 512×750 | **Sin uso.** Era el recorte vertical del hero a pantalla completa; se conserva por si vuelve ese formato |
 
 Los dos salen de `assets-src/comunidad/talent-land-2026.jpeg` (1600×1200),
