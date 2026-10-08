@@ -1,286 +1,236 @@
-import { useRef } from 'react'
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import CareerExplorer from '../components/results/CareerExplorer'
+import CredentialExplorer from '../components/results/CredentialExplorer'
+import SkillPath from '../components/results/SkillPath'
 import ConfirmButton from '../components/ui/ConfirmButton'
-import { AREA_BY_ID } from '../data/areas'
+import { AREAS, AREA_BY_ID } from '../data/areas'
 import { QUESTIONS } from '../data/questions'
 import { ROADMAP } from '../data/roadmap'
-import { gsap, ScrollTrigger, useGSAP } from '../lib/gsap'
-import { DUR, EASE, FULL_MOTION, STAGGER } from '../lib/motion'
+import { summarizeAffinity } from '../lib/affinity'
 import { useDocumentTitle } from '../lib/useDocumentTitle'
 import { MIN_PERCENTAGE, NEUTRAL_PERCENTAGE, useQuizStore } from '../store/quizStore'
 
-function EmptyState() {
-  useDocumentTitle('Aún no tienes resultados — PotroPath')
+/**
+ * Sin las 50 respuestas no hay resultados parciales: con una sesión a medias
+ * los porcentajes pueden caer debajo del piso de 20% y se leerían como un
+ * perfil. La pantalla dice cuánto falta y lleva de vuelta al diagnóstico.
+ */
+function EmptyState({ answered }) {
+  useDocumentTitle('Tu ruta empieza aquí — PotroPath')
 
   return (
-    <section className="mx-auto flex max-w-2xl flex-1 flex-col items-center justify-center gap-4 px-6 py-24 text-center">
-      <h1 className="h1">Aún no tienes resultados</h1>
-      <p className="text-ink-soft">
-        Responde el diagnóstico de 50 preguntas para descubrir tu ruta de crecimiento dentro de la
-        Ingeniería en Computación.
-      </p>
-      <Link to="/quiz" className="btn-green">
-        Ir al diagnóstico
-      </Link>
+    <section className="page-shell section-py flex flex-1 items-center">
+      <div className="dark-panel mx-auto grid max-w-3xl items-center gap-8 md:grid-cols-[1fr_auto]">
+        <div>
+          <p className="eyebrow">Primero, conócete un poco más</p>
+          <h1 className="h1 mt-5">Tu ruta está por descubrirse.</h1>
+          <p className="mt-6 text-paper/85">
+            {answered > 0
+              ? `Llevas ${answered} de ${QUESTIONS.length} respuestas. Continúa donde te quedaste para ver tu perfil completo.`
+              : `Responde ${QUESTIONS.length} afirmaciones sobre lo que disfrutas. Después podrás explorar habilidades, credenciales y trabajos relacionados.`}
+          </p>
+          <Link to="/quiz" className="btn-light mt-8">
+            {answered > 0 ? 'Continuar diagnóstico' : 'Descubrir mi ruta'}{' '}
+            <span aria-hidden="true">↗</span>
+          </Link>
+        </div>
+        {/* La mascota de la universidad: el único guiño de esta pantalla, sin
+            rebote ni animación. Va en recuadro de papel porque es un activo
+            ajeno a la paleta. */}
+        <img
+          src="/images/potro-mascota.webp"
+          alt=""
+          className="hidden h-36 w-auto rounded-2xl bg-paper p-2 md:block"
+        />
+      </div>
     </section>
   )
 }
 
-/** Duración de una barra de afinidad llenándose. */
-const BAR_FILL = 0.8
-
-/**
- * La vista con resultados vive en su propio componente para que sus hooks
- * corran siempre: `Results` decide antes si hay algo que mostrar, y un hook
- * después de ese `return` rompería las reglas de hooks.
- */
-function ResultsView({ results, onRetake }) {
-  const root = useRef(null)
-  const mascot = useRef(null)
-  const top = results[0]
-  const topArea = AREA_BY_ID[top.areaId]
-  const topRoadmap = ROADMAP[top.areaId]
-
-  // Responder "Neutral" a las cincuenta produce el mismo porcentaje en las
-  // cinco áreas. La pantalla no puede seguir diciendo "tu mayor afinidad es X"
-  // como si hubiera ganado algo: si hay empate arriba, se nombra.
-  const tied = results.filter((result) => result.percentage === top.percentage)
-
-  useDocumentTitle(`Tu ruta: ${topArea.name} — PotroPath`)
-
-  // El pago de 50 preguntas. Es la única secuencia larga del sitio: el titular
-  // anuncia el área ganadora y las cinco barras se llenan con su porcentaje
-  // contando en sincronía.
-  useGSAP(
-    () => {
-      const mm = gsap.matchMedia()
-
-      mm.add(FULL_MOTION, () => {
-        const bars = gsap.utils.toArray('[data-bar]', root.current)
-        const labels = bars.map((bar) => bar.closest('[data-row]').querySelector('[data-pct]'))
-
-        // Antes del primer pintado, para que ningún porcentaje se vea saltar
-        // de su valor final a cero.
-        labels.forEach((label) => {
-          label.textContent = '0%'
-        })
-
-        const tl = gsap.timeline()
-
-        // Los offsets relativos se miden contra el FIN de la línea de tiempo, no
-        // contra el tween anterior. Al quitar el barrido dorado —que terminaba
-        // en 0.95s— hubo que reescribir los dos offsets siguientes para que la
-        // secuencia caiga exactamente donde caía: eyebrow 0s, titular y
-        // descripción 0.2s, y la etiqueta `bars` en 0.55s.
-        tl.from('[data-eyebrow]', { opacity: 0, y: 12, duration: DUR.view, ease: EASE.enter })
-          .from('[data-heading]', { opacity: 0, y: 16, duration: DUR.view, ease: EASE.enter }, '-=0.25')
-          .from(
-            '[data-description]',
-            { opacity: 0, y: 14, duration: DUR.view, ease: EASE.enter },
-            '-=0.45',
-          )
-          .addLabel('bars', '-=0.1')
-
-        const step = STAGGER.bars.amount / Math.max(bars.length - 1, 1)
-
-        bars.forEach((bar, i) => {
-          const value = Number(bar.dataset.bar)
-          const at = `bars+=${i * step}`
-          const counter = { v: 0 }
-
-          tl.fromTo(
-            bar,
-            { scaleX: 0 },
-            { scaleX: value / 100, duration: BAR_FILL, ease: EASE.enter },
-            at,
-          ).to(
-            counter,
-            {
-              v: value,
-              duration: BAR_FILL,
-              ease: EASE.enter,
-              snap: { v: 1 },
-              onUpdate: () => {
-                labels[i].textContent = `${Math.round(counter.v)}%`
-              },
-            },
-            at,
-          )
-        })
-
-        tl.from(
-          '[data-card]',
-          { opacity: 0, y: 20, duration: DUR.view, ease: EASE.enter, stagger: STAGGER.tight },
-          '-=0.35',
-        )
-          .from(
-            '[data-cta] > *',
-            { opacity: 0, y: 16, duration: DUR.view, ease: EASE.enter, stagger: STAGGER.tight },
-            '-=0.3',
-          )
-          .from(
-            mascot.current,
-            {
-              opacity: 0,
-              scale: 0.6,
-              y: 14,
-              transformOrigin: 'bottom center',
-              duration: DUR.view,
-              ease: EASE.land,
-            },
-            '-=0.5',
-          )
-
-        // El mismo bucle que la insignia de Inicio: el potro se queda flotando
-        // en vez de clavarse donde aterrizó.
-        const idle = gsap.to(mascot.current, {
-          y: -5,
-          duration: 2.4,
-          ease: 'sine.inOut',
-          yoyo: true,
-          repeat: -1,
-          paused: true,
-        })
-
-        tl.add(() => idle.play())
-
-        // Un bucle que nadie ve no debe seguir corriendo.
-        const visibility = ScrollTrigger.create({
-          trigger: mascot.current,
-          start: 'top bottom',
-          end: 'bottom top',
-          onToggle: (self) => (self.isActive ? idle.play() : idle.pause()),
-        })
-
-        return () => {
-          tl.kill()
-          idle.kill()
-          visibility.kill()
-          // React no vuelve a renderizar estos textos, así que se devuelven a
-          // su valor real al desmontar.
-          labels.forEach((label) => {
-            label.textContent = `${label.dataset.value}%`
-          })
-        }
-      })
-
-      return () => mm.revert()
-    },
-    { scope: root },
+/** Barras de afinidad con el punto neutral marcado sobre cada pista. */
+function AffinityBars({ results, topPercentage }) {
+  return (
+    <ol className="mt-5">
+      {results.map(({ areaId, percentage }, index) => (
+        <li key={areaId} className="affinity-row" data-top={percentage === topPercentage}>
+          <div className="flex items-center justify-between gap-4 text-sm">
+            <span>
+              <span className="source-note number mr-3">0{index + 1}</span>
+              {AREA_BY_ID[areaId].name}
+            </span>
+            <strong className="number">{percentage}%</strong>
+          </div>
+          <div className="affinity-track" aria-hidden="true">
+            <div className="affinity-fill" style={{ transform: `scaleX(${percentage / 100})` }} />
+            <span className="affinity-neutral" style={{ left: `${NEUTRAL_PERCENTAGE}%` }} />
+          </div>
+        </li>
+      ))}
+    </ol>
   )
+}
+
+function ResultsView({ results, answers, onRetake }) {
+  const { top, tied, isTie, allNeutral } = summarizeAffinity(results, answers)
+  const topArea = AREA_BY_ID[top.areaId]
+
+  // El área explorada empieza en el primer resultado, pero es una elección
+  // del estudiante: cambiarla no toca respuestas ni porcentajes. Con empate,
+  // ese estado inicial no es una recomendación — el titular lo dice.
+  const [exploringId, setExploringId] = useState(top.areaId)
+  const exploring = AREA_BY_ID[exploringId]
+  const route = ROADMAP[exploringId]
+
+  let headline = topArea.name
+  let explanation = topArea.description
+  if (allNeutral) {
+    headline = 'Tu camino aún está abierto.'
+    explanation =
+      'Respondiste «Neutral» en todas las afirmaciones, así que no aparece una preferencia definida. Explora las cinco rutas antes de elegir un primer proyecto.'
+  } else if (isTie) {
+    headline = 'Hay más de un camino para ti.'
+    explanation = `Comparten el primer lugar: ${tied.map((result) => AREA_BY_ID[result.areaId].name).join(', ')}. Cualquiera de estas rutas es un buen punto de partida.`
+  }
+
+  useDocumentTitle(isTie ? 'Tu perfil de afinidad — PotroPath' : `Tu ruta: ${topArea.name} — PotroPath`)
 
   return (
-    <section ref={root} className="section-py mx-auto max-w-2xl px-6">
-      {/*
-        El potro comparte fila con el titular en vez de flotar en `absolute`
-        sobre él: superpuesto, un área de nombre largo —"Desarrollo de
-        Software"— se metía debajo de la insignia en escritorio, y en teléfono
-        el elemento estaba escondido, que es justo donde esta pantalla es el
-        pago de cincuenta preguntas. En columna se apoya arriba a la derecha y
-        el titular conserva el ancho completo; desde `md` pasa a la derecha de
-        una fila y el texto ocupa el resto, así que ningún nombre lo alcanza.
-      */}
-      <div className="flex flex-col items-end gap-4 md:flex-row-reverse md:items-start md:gap-10">
-        <img
-          ref={mascot}
-          src="/images/potro-mascota.webp"
-          alt=""
-          aria-hidden="true"
-          className="pointer-events-none h-24 w-auto shrink-0 rounded-xl bg-paper p-1.5 shadow-lg ring-1 ring-ink/10 sm:h-28 md:h-32"
-        />
-
-        <div className="w-full min-w-0 md:flex-1">
-          <p data-eyebrow className="eyebrow">
-            Tu resultado
-          </p>
-          <h1 data-heading className="mt-2 h1">
-            Tu mayor afinidad es <span className="text-gold-dark">{topArea.name}</span>
-          </h1>
-          <p data-description className="mt-3 lead">
-            {topArea.description}
-          </p>
-        </div>
+    <div className="page-shell pb-16">
+      <div className="flex flex-wrap items-center justify-between gap-4 pt-10 pb-6">
+        <p className="eyebrow">Tu diagnóstico · Completado</p>
+        <span className="pill bg-green-soft">
+          {QUESTIONS.length} de {QUESTIONS.length} respuestas · guardadas en este navegador
+        </span>
       </div>
 
-      <div className="mt-10 flex flex-col gap-3">
-        {results.map(({ areaId, percentage }) => (
-          <div key={areaId} data-row>
-            <div className="mb-1 flex justify-between text-sm">
-              <span className="font-medium text-ink">{AREA_BY_ID[areaId].name}</span>
-              <span data-pct data-value={percentage} className="text-ink-soft">
-                {percentage}%
-              </span>
-            </div>
-            <div className="h-2 w-full overflow-hidden rounded-full bg-paper-alt">
-              <div
-                data-bar={percentage}
-                className="h-full w-full origin-left rounded-full bg-green-mid"
-                style={{ transform: `scaleX(${percentage / 100})` }}
-              />
-            </div>
+      <div className="result-grid">
+        <section className="dark-panel flex flex-col justify-between" aria-labelledby="resultado">
+          <div>
+            <p className="eyebrow">{isTie ? 'Tu punto de partida' : 'Tu mayor afinidad'}</p>
+            <h1 id="resultado" className="h1 mt-5">
+              {headline}
+            </h1>
+            <p className="mt-5 text-paper/85">{explanation}</p>
           </div>
-        ))}
-      </div>
+          <div className="mt-8 flex flex-wrap items-end justify-between gap-6 border-t border-paper/20 pt-6">
+            <div>
+              <p className="result-number number">
+                {top.percentage}
+                <span className="ml-1 text-2xl">%</span>
+              </p>
+              <p className="mt-3 text-xs text-paper/80">
+                {isTie ? 'Afinidad compartida más alta' : 'Afinidad con tus intereses'}
+              </p>
+            </div>
+            <a href="#ruta" className="btn-light">
+              Explorar rutas <span aria-hidden="true">↓</span>
+            </a>
+          </div>
+        </section>
 
-      {/*
-        La escala tiene piso: cada área parte de diez preguntas, así que el
-        mínimo posible es 20% y no 0%. Sin esta nota, un porcentaje de 60 se
-        lee como "apenas aprobado" cuando en realidad es el centro exacto de
-        la escala — y una valoración técnica que audite el método ataca justo
-        por aquí.
-      */}
-      <div data-card className="mt-6 rounded-xl bg-green-soft p-6 text-sm text-ink-soft">
-        <h2 className="h3 text-green">Cómo se lee este porcentaje</h2>
-        <p className="mt-2">
-          Cada área suma sus diez preguntas sobre un máximo de cincuenta puntos, así que la escala va
-          de {MIN_PERCENTAGE}% a 100%: responder «Neutral» a las diez de un área da{' '}
-          {NEUTRAL_PERCENTAGE}%, que es su punto medio. El porcentaje mide qué tanto te reconociste
-          en esas afirmaciones, no qué tan bueno eres en el área.
-        </p>
-        {tied.length > 1 && (
-          <p className="mt-3 font-medium text-ink">
-            Empate: {tied.map((result) => AREA_BY_ID[result.areaId].name).join(', ')} quedaron en el
-            mismo porcentaje. Abajo aparece la ruta de {topArea.name}; las otras te quedan igual de
-            cerca.
+        <section className="surface panel-pad" aria-labelledby="panorama">
+          <p className="eyebrow">El panorama completo</p>
+          <h2 id="panorama" className="h3 mt-2">
+            Cinco áreas. Tu propia combinación.
+          </h2>
+          <AffinityBars results={results} topPercentage={top.percentage} />
+          <p className="mt-6 text-xs muted">
+            La línea blanca marca {NEUTRAL_PERCENTAGE}%, el punto neutral. Mide afinidad con lo que
+            te interesa, no una calificación de tus capacidades.
           </p>
-        )}
+          <details className="mt-1 text-xs muted">
+            <summary className="py-3 font-semibold underline underline-offset-4">
+              Cómo se calcula
+            </summary>
+            <p className="pb-2">
+              Cada área suma diez respuestas de 1 a 5 sobre un máximo de 50 puntos. Con el
+              diagnóstico completo la escala va de {MIN_PERCENTAGE}% a 100%, y {NEUTRAL_PERCENTAGE}%
+              es el punto neutral. Las áreas se miden por separado: los porcentajes no suman 100 ni
+              representan probabilidad de empleo.
+            </p>
+          </details>
+        </section>
       </div>
 
-      <div className="mt-6 grid gap-6 sm:grid-cols-2">
-        <div data-card className="rounded-xl bg-paper-alt p-5">
-          <h2 className="h3 text-green-mid">Habilidades demandadas</h2>
-          {/*
-            Los "·" eran caracteres tecleados dentro de cada `<li>`: un lector
-            de pantalla decía "punto medio" ocho veces seguidas. El marcador
-            real lo pone la lista, y el oro lo firma.
-          */}
-          <ul className="mt-3 list-disc space-y-1 ps-5 text-sm text-ink-soft marker:text-gold-dark">
-            {topRoadmap.skills.map((skill) => (
-              <li key={skill}>{skill}</li>
-            ))}
-          </ul>
-        </div>
-        <div data-card className="rounded-xl bg-paper-alt p-5">
-          <h2 className="h3 text-green-mid">Certificaciones clave</h2>
-          <ul className="mt-3 list-disc space-y-1 ps-5 text-sm text-ink-soft marker:text-gold-dark">
-            {topRoadmap.certifications.map((cert) => (
-              <li key={cert}>{cert}</li>
-            ))}
-          </ul>
-        </div>
-      </div>
+      <nav aria-label="Secciones de tu ruta" className="anchor-nav">
+        <a href="#habilidades">
+          <span>01</span>Habilidades
+        </a>
+        <a href="#credenciales">
+          <span>02</span>Credenciales
+        </a>
+        <a href="#puestos">
+          <span>03</span>Puestos tech
+        </a>
+        <a href="#oportunidades">
+          <span>04</span>Oportunidades
+        </a>
+      </nav>
 
-      <div data-cta className="mt-12 flex flex-wrap gap-4">
-        <Link to="/comunidad" className="btn-green">
-          Unirme a la comunidad
+      <section id="ruta" className="pt-12" aria-labelledby="ruta-titulo">
+        <div className="section-heading">
+          <div>
+            <p className="eyebrow">Tú decides qué explorar</p>
+            <h2 id="ruta-titulo" className="h2">
+              Un resultado. Muchas posibilidades.
+            </h2>
+          </div>
+          <p className="section-note">Cambiar de ruta no modifica tus respuestas ni tus porcentajes.</p>
+        </div>
+
+        <div className="choice-group" role="group" aria-label="Especialidad a explorar">
+          {AREAS.map((area) => (
+            <button
+              key={area.id}
+              type="button"
+              className="choice"
+              aria-pressed={exploringId === area.id}
+              onClick={() => setExploringId(area.id)}
+            >
+              {area.name}
+              <span className="number opacity-75">
+                {results.find((result) => result.areaId === area.id).percentage}%
+              </span>
+            </button>
+          ))}
+        </div>
+
+        <div className="route-intro" aria-live="polite">
+          <div>
+            <p className="eyebrow mb-3">Explorando · {exploring.name}</p>
+            <h3 className="h2">{route.headline}</h3>
+            <p className="mt-4 max-w-2xl text-sm muted">{route.intro}</p>
+          </div>
+          <img src={exploring.image} alt="" loading="lazy" />
+        </div>
+      </section>
+
+      {/* La `key` reinicia cada explorador al cambiar de área: la habilidad,
+          la comparación y el puesto elegidos pertenecían a la ruta anterior. */}
+      <SkillPath key={`habilidades-${exploringId}`} route={route} />
+      <CredentialExplorer key={`credenciales-${exploringId}`} ids={route.credentialIds} />
+      <CareerExplorer key={`puestos-${exploringId}`} areaId={exploringId} />
+
+      <div className="surface panel-pad flex flex-wrap items-center justify-between gap-6">
+        <div>
+          <p className="eyebrow">El siguiente paso también se da en equipo</p>
+          <h2 className="h3 mt-2">Encuentra personas con tus mismos intereses.</h2>
+        </div>
+        <Link to={`/comunidad?area=${exploringId}#especialidades`} className="btn-green">
+          Explorar comunidad de {exploring.name} <span aria-hidden="true">↗</span>
         </Link>
+      </div>
+
+      <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
+        <p className="source-note">Tus intereses pueden cambiar. Esta ruta es un punto de partida.</p>
         <ConfirmButton
           label="Repetir diagnóstico"
-          confirmLabel="¿Seguro? Se borran tus 50 respuestas"
+          confirmLabel={`¿Seguro? Se borran tus ${QUESTIONS.length} respuestas`}
           onConfirm={onRetake}
         />
       </div>
-    </section>
+    </div>
   )
 }
 
@@ -290,17 +240,15 @@ function Results() {
   const computeResults = useQuizStore((state) => state.computeResults)
   const reset = useQuizStore((state) => state.reset)
 
-  const answeredCount = Object.keys(answers).length
-  if (answeredCount < QUESTIONS.length) {
-    return <EmptyState />
-  }
+  const answered = Object.keys(answers).length
+  if (answered < QUESTIONS.length) return <EmptyState answered={answered} />
 
   const handleRetake = () => {
     reset()
     navigate('/quiz')
   }
 
-  return <ResultsView results={computeResults()} onRetake={handleRetake} />
+  return <ResultsView results={computeResults()} answers={answers} onRetake={handleRetake} />
 }
 
 export default Results
