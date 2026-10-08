@@ -573,9 +573,15 @@
     background: var(--color-green-soft);
   }
 
+  /*
+   * Proporción fija y no un alto: las dos fotografías de hero (Rama IEEE en
+   * Inicio, Talent Land en Comunidad) son apaisadas cerca de 16:10, y un alto
+   * fijo de 480px las recortaba hasta dejar al grupo sin los extremos.
+   */
   .hero-picture img {
     width: 100%;
-    height: 480px;
+    height: auto;
+    aspect-ratio: 16 / 10;
     object-fit: cover;
   }
 
@@ -1296,10 +1302,6 @@
 
     .editorial-hero {
       padding-block: 40px 56px;
-    }
-
-    .hero-picture img {
-      height: 320px;
     }
 
     .section-heading {

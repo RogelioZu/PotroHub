@@ -32,17 +32,24 @@ Inicio y las miniaturas de canal de Comunidad, que las toman del mismo campo
 tarjeta más ancha de la rejilla de Inicio, que mide unos 560px y a 2x pide
 1120px.
 
-`estudiante-ico.png`, `trabajo-equipo.png` y `estudiante-redes.png` son las
-tres fotografías que hoy ocupan celdas del mosaico del hero
-(`src/components/ui/HeroMosaic.jsx`); el resto de las celdas son bloques de
-color en espera. Los recortes pendientes del collage están descritos en
-`hero/README.md`, y las fotos de Comunidad en `comunidad/README.md`.
+`inicio-rama-ieee.webp` (1200x750, 175 KB) es la fotografía del hero de
+Inicio: integrantes de la Rama Estudiantil IEEE UAEMéx con el vehículo todo
+terreno del equipo. Sale de `assets-src/comunidad/rama-ieee-uaemex.jpeg`
+(4096x3072) con un recorte 16:10 centrado en el grupo —`extract` en
+`left 180, top 720, 3200x2000`, reducido a 1200px, WebP calidad 76— que deja
+fuera casi todo el estacionamiento vacío de abajo. Es la misma foto que
+`comunidad/galeria-rama-ieee.webp` con otro encuadre: el lienzo del fondo dice
+"Rama Estudiantil · UAEMéx · IEEE", así que la imagen se verifica sola, y por
+eso abre el sitio.
 
-**Sus extensiones mienten:** `estudiante-ico.png` y `trabajo-equipo.png` son
-AVIF, y `estudiante-redes.png` es WebP. Funciona porque el navegador detecta el
-formato por los bytes, pero cualquier herramienta que confíe en la extensión se
-equivocará. Las copias de archivo en `assets-src/` sí llevan la extensión real;
-renombrar éstas es un cambio aparte, porque toca las rutas de `Home.jsx`.
+`estudiante-ico.png`, `trabajo-equipo.png` y `estudiante-redes.png` ocupaban
+las celdas del mosaico del hero anterior. **Son fotografías de banco** (sin
+procedencia de la facultad en `assets-src/README.md`) y ya no se muestran:
+abrir un producto cuyo principio es "la verdad local le gana al consejo
+genérico" con una foto de stock lo contradecía. Se conservan aquí y en
+`assets-src/inicio/` por si se necesitan para otra cosa; no deben volver al
+sitio presentadas como estudiantes de la facultad. **Sus extensiones mienten:**
+dos son AVIF y una WebP, las tres con `.png`.
 
 Los cuatro logotipos de `comunidad/ieee-*.webp` son las marcas de los capítulos
 de la Rama IEEE, una por recuadro en la tarjeta de Comunidad:
