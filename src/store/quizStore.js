@@ -1,10 +1,10 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { AREAS } from '../data/areas'
-import { QUESTIONS, SCALE } from '../data/questions'
+import { QUESTIONS, SCALE } from '../data/questions.js'
+import { computeAffinity } from '../lib/affinity.js'
 
-const QUESTIONS_PER_AREA = QUESTIONS.length / AREAS.length
-const MAX_SCORE_PER_AREA = QUESTIONS_PER_AREA * 5
+export { MIN_PERCENTAGE, NEUTRAL_PERCENTAGE } from '../lib/affinity.js'
+
 const VALID_VALUES = new Set(SCALE.map((step) => step.value))
 const QUESTION_IDS = new Set(QUESTIONS.map((question) => question.id))
 
@@ -33,6 +33,12 @@ function sanitize(state) {
   return { answers, currentIndex }
 }
 
+/** La primera pregunta sin responder, o la última si ya están todas. */
+function firstUnanswered(answers) {
+  const index = QUESTIONS.findIndex((question) => !(question.id in answers))
+  return index === -1 ? QUESTIONS.length - 1 : index
+}
+
 export const useQuizStore = create(
   persist(
     (set, get) => ({
@@ -41,7 +47,9 @@ export const useQuizStore = create(
 
       answerCurrent(value) {
         const question = QUESTIONS[get().currentIndex]
-        if (!question) return
+        // La misma guarda que al rehidratar: un valor fuera de la escala no
+        // entra al estado aunque llegue por un atajo de teclado.
+        if (!question || !VALID_VALUES.has(value)) return
         set((state) => ({
           answers: { ...state.answers, [question.id]: value },
         }))
@@ -59,23 +67,18 @@ export const useQuizStore = create(
         }))
       },
 
-      /** Puntaje por área normalizado a porcentaje (0-100) de afinidad. */
+      /**
+       * Al llegar a la última pregunta con alguna pendiente (porque se
+       * retrocedió o se saneó una sesión vieja), esto lleva directo a la
+       * primera que falta en vez de obligar a buscarla con "Anterior".
+       */
+      goToFirstUnanswered() {
+        set((state) => ({ currentIndex: firstUnanswered(state.answers) }))
+      },
+
+      /** Afinidad por área: porcentaje del máximo, escala 20–100 con la sesión completa. */
       computeResults() {
-        const { answers } = get()
-        const totals = Object.fromEntries(AREAS.map((area) => [area.id, 0]))
-
-        for (const question of QUESTIONS) {
-          const value = answers[question.id]
-          if (value) totals[question.areaId] += value
-        }
-
-        const scores = AREAS.map((area) => ({
-          areaId: area.id,
-          score: totals[area.id],
-          percentage: Math.round((totals[area.id] / MAX_SCORE_PER_AREA) * 100),
-        })).sort((a, b) => b.percentage - a.percentage)
-
-        return scores
+        return computeAffinity(get().answers)
       },
 
       reset() {
@@ -88,13 +91,3 @@ export const useQuizStore = create(
     },
   ),
 )
-
-/**
- * El porcentaje mínimo posible: diez preguntas por área respondidas todas con
- * "Totalmente en desacuerdo". No es cero, y la pantalla de resultados lo dice
- * en voz alta en vez de dejar que el estudiante suponga una escala de 0 a 100.
- */
-export const MIN_PERCENTAGE = Math.round((QUESTIONS_PER_AREA * 1) / MAX_SCORE_PER_AREA * 100)
-
-/** El porcentaje que produce responder "Neutral" a las diez de un área. */
-export const NEUTRAL_PERCENTAGE = Math.round((QUESTIONS_PER_AREA * 3) / MAX_SCORE_PER_AREA * 100)
