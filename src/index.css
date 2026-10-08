@@ -1,18 +1,33 @@
 @import "tailwindcss";
 
-@theme {
-  /* Paleta oficial de la UAEMéx (manual de identidad de la Administración
-     Universitaria): dos colores principales y tres secundarios. --color-ink,
-     --color-ink-soft, --color-paper, --color-green-soft y --color-gold-light
-     no vienen del manual — son tintes/textos derivados de esos cinco para
-     tener superficies y texto secundario, y deben seguir siendo variaciones
-     de la paleta oficial, nunca colores sueltos. */
-  --color-green-mid: #526855; /* Principal */
-  --color-gold: #ca9e52; /* Principal */
-  --color-paper-alt: #f2f2f2; /* Secundaria */
-  --color-green: #384033; /* Secundaria */
-  --color-gold-dark: #a15c17; /* Secundaria */
+/*
+ * Sistema editorial de PotroPath (rediseño 2026-10).
+ *
+ * La especificación vigente vive en DESIGN.md → "Redesign 2026-10" y en
+ * `.impeccable/design.json` → `extensions.redesign202610`. Si cambias un
+ * token aquí, cámbialo allá en el mismo commit.
+ *
+ * Tres decisiones gobiernan el resto de la hoja:
+ *
+ * 1. **El contenido nunca depende de una animación.** La primera versión
+ *    ocultaba titulares y tarjetas hasta que GSAP los revelaba; una captura
+ *    sin interacción mostraba el hero vacío. Aquí todo se pinta en su estado
+ *    final y el movimiento se limita a transiciones de color.
+ * 2. **La paleta es cerrada.** Cinco colores del manual de la UAEMéx más sus
+ *    tintes derivados. Si falta un matiz, se deriva con `color-mix`.
+ * 3. **Profundidad por tono, no por sombra.** Papel → papel gris → verde
+ *    bruma → verde profundo para los momentos focales.
+ */
 
+@theme {
+  /* Paleta oficial de la UAEMéx: dos principales y tres secundarios. */
+  --color-green-mid: #526855; /* Principal: el verde que trabaja */
+  --color-gold: #ca9e52; /* Principal: el oro que firma */
+  --color-paper-alt: #f2f2f2; /* Secundaria */
+  --color-green: #384033; /* Secundaria: paneles focales y acción principal */
+  --color-gold-dark: #a15c17; /* Secundaria: el oro legible sobre papel (5.17:1) */
+
+  /* Derivados: superficies y texto, nunca colores sueltos. */
   --color-ink: #252525;
   --color-ink-soft: #5c5c5c;
   --color-paper: #ffffff;
@@ -23,467 +38,1330 @@
 }
 
 @layer base {
-  body {
-    @apply bg-paper font-sans text-ink antialiased;
-  }
-
-  /*
-   * Anillo de foco propio. No había ninguna regla `:focus` de autor en todo
-   * el proyecto, así que el foco era el `outline auto 1px` del navegador —
-   * invisible sobre la fotografía del vitral, que es justo donde vive la
-   * navegación.
-   *
-   * El color sale de una variable para que el header y el footer lo cambien
-   * sin que cada control tenga que saber sobre qué fondo vive: verde sobre
-   * papel, oro claro sobre el vidrio. Es el mismo reparto que ya usa el
-   * sistema para el texto.
-   */
   :root {
     --focus-ring: var(--color-green-mid);
-
-    /*
-     * Alto de la banda de vitral del header. Existe para que un hero a
-     * pantalla completa pueda pedir "lo que queda de ventana" en vez de
-     * `100svh`, que empujaría su propio pie por debajo del pliegue justo
-     * donde vive el titular.
-     *
-     * Es un valor duplicado, y se asume a sabiendas: sólo JavaScript puede
-     * medir el header, y este proyecto exige que la página se vea completa
-     * sin JS. Sale de `py-6 sm:py-8 md:py-10` más la fila más alta del header
-     * — 44px del botón hamburguesa hasta `lg`, 48px de la marca a `text-5xl`
-     * desde `md`. Si cambia el relleno del header, cambia aquí.
-     * Ver src/components/layout/Navbar.jsx.
-     */
-    --nav-h: 92px;
+    --line: rgb(37 37 37 / 12%);
+    --line-strong: rgb(37 37 37 / 22%);
   }
 
-  @media (width >= 40rem) {
-    :root {
-      --nav-h: 108px;
-    }
+  body {
+    @apply bg-paper font-sans text-ink antialiased;
+    line-height: 1.65;
   }
 
-  @media (width >= 48rem) {
-    :root {
-      --nav-h: 128px;
-    }
+  button,
+  a,
+  input,
+  summary {
+    -webkit-tap-highlight-color: transparent;
   }
 
-  :focus-visible {
-    outline: 2px solid var(--focus-ring);
-    outline-offset: 2px;
+  button:not(:disabled),
+  summary {
+    cursor: pointer;
   }
 
-  header,
-  footer {
-    --focus-ring: var(--color-gold-light);
-  }
-}
-
-@layer utilities {
-  /* Acento decorativo que evoca el mosaico de vitral (formas irregulares en
-     verde/oro) sin reproducir el vitral real. Es el respaldo de
-     `VitralBackdrop` cuando la fotografía no carga: el vitral real vive
-     únicamente en las bandas de header y footer. */
-  .vitral-accent {
-    background-image:
-      conic-gradient(
-        from 45deg at 20% 30%,
-        var(--color-green) 0deg,
-        var(--color-green-mid) 90deg,
-        transparent 90deg
-      ),
-      conic-gradient(
-        from 200deg at 80% 70%,
-        var(--color-gold) 0deg,
-        var(--color-gold-dark) 100deg,
-        transparent 100deg
-      ),
-      radial-gradient(circle at 50% 50%, var(--color-green-mid) 0%, transparent 60%);
-    background-color: var(--color-green);
+  button:disabled {
+    cursor: not-allowed;
   }
 
   /*
-   * Franja de lectura sobre el vitral.
-   *
-   * La regla original era "sombra de texto, nunca un velo", y medida no se
-   * sostuvo: sobre los paneles pálidos del vidrio el texto blanco llegaba a
-   * 1.0:1 y ninguna cadena del header o del footer alcanzaba su umbral en
-   * más del 63% de sus píxeles. La sombra defiende el borde de la letra, no
-   * su interior.
-   *
-   * El velo es direccional y no global: a plena fuerza exactamente donde cae
-   * el contenido, y desvanecido en los 24px de canalón de arriba y abajo, que
-   * es donde nunca hay letras. Así el vitral conserva color propio en sus dos
-   * bordes —justo donde toca el papel— y las letras se apoyan en tinta.
-   *
-   * El 72% no es un gusto: es el mínimo que lleva texto `Papel` a 4.5:1 y
-   * `Oro Claro` a 3:1 incluso sobre el panel más claro del vidrio (blanco
-   * puro). Bajarlo devuelve el problema; subirlo apaga la fotografía.
+   * Anillo de foco único. El color sale de una variable para que una
+   * superficie oscura lo cambie sin que cada control sepa sobre qué fondo
+   * vive: verde sobre papel, oro claro sobre verde profundo.
    */
-  .vitral-scrim {
-    background-image: linear-gradient(
-      to bottom,
-      rgb(37 37 37 / 0%) 0,
-      rgb(37 37 37 / 72%) 1.5rem,
-      rgb(37 37 37 / 72%) calc(100% - 1.5rem),
-      rgb(37 37 37 / 0%) 100%
-    );
+  :focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 3px;
   }
 
-  /* Separador de sección: línea dorada delgada, como en uaemex.mx. Las líneas
-     son pseudoelementos y no se pueden animar directamente, así que heredan
-     `--divider-scale` del contenedor y GSAP anima esa variable para que se
-     dibujen hacia afuera desde el encabezado.
-     Ver src/components/motion/SectionDivider.jsx */
-  .section-divider {
-    @apply flex items-center gap-4 text-gold-dark;
-    --divider-scale: 1;
+  /* Las anclas internas (#habilidades, #ieee…) no aterrizan pegadas al borde. */
+  [id] {
+    scroll-margin-top: 1.5rem;
   }
-  .section-divider::before,
-  .section-divider::after {
-    content: "";
-    @apply h-px flex-1 bg-gold/40;
-    transform: scaleX(var(--divider-scale));
-  }
-  .section-divider::before {
-    transform-origin: right;
-  }
-  .section-divider::after {
-    transform-origin: left;
+
+  /*
+   * La regla del Movimiento Opcional, ahora en una sola línea: con
+   * movimiento reducido no hay transición ni scroll suave en ningún lado.
+   * Como ningún contenido depende de una animación, quitarlas no oculta nada.
+   */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation: none !important;
+      transition: none !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
 
 @layer components {
-  /**
-   * Escala tipográfica y ritmo compartidos. Antes de esto cada página fijaba
-   * su propio tamaño de encabezado a mano y el sitio se sentía plano: un
-   * `<h1>` de 4xl aquí, uno de 3xl allá, sin motivo. Estas clases son el
-   * único lugar donde se decide "qué tan grande es un encabezado de página",
-   * y una página nunca debe pisar estos valores con un tamaño suelto.
-   */
-  .eyebrow {
-    @apply text-sm font-semibold tracking-widest text-gold-dark uppercase;
-  }
-  /** Titular de página: el momento de mayor peso visual (hero, resultado, portada de sección). */
-  .h1 {
-    @apply text-4xl leading-tight font-bold text-ink md:text-5xl;
-  }
-  /** Encabezado de sección dentro de una página. */
-  .h2 {
-    @apply text-2xl font-bold text-ink;
-  }
-  /** Título de tarjeta o bloque; el color lo decide quien lo usa. */
-  .h3 {
-    @apply text-lg font-bold;
-  }
-  /** Párrafo de entrada bajo un `.h1`: un paso arriba del cuerpo normal. */
-  .lead {
-    @apply text-lg text-ink-soft;
+  /* ── Estructura ─────────────────────────────────────────────────────── */
+
+  /** El ancho de composición: 1152px con canalón de 24px en todos los anchos. */
+  .page-shell {
+    width: min(100%, 1152px);
+    margin-inline: auto;
+    padding-inline: 24px;
   }
 
-  /** Ritmo vertical de una sección de página completa (no de estados vacíos, que son más generosos a propósito). */
+  /** Ritmo vertical de una sección completa. */
   .section-py {
-    @apply py-16 md:py-24;
-  }
-
-  /**
-   * Puente visual entre el hero y el bloque de áreas: el degradado se queda
-   * en el borde y no convierte toda la sección en una superficie decorativa.
-   */
-  .potential-section {
-    position: relative;
-    isolation: isolate;
-  }
-  .potential-section::before {
-    content: "";
-    position: absolute;
-    inset: 0 0 auto;
-    z-index: -1;
-    height: 4rem;
-    background: linear-gradient(to bottom, var(--color-paper) 0%, var(--color-paper-alt) 100%);
-    opacity: 0.9;
-  }
-
-  /**
-   * Hero a pantalla completa (hoy sólo el de Comunidad).
-   *
-   * Pide "lo que queda de ventana bajo el header" y no `100svh`: el titular
-   * vive pegado al pie de este bloque, así que un alto de ventana completa lo
-   * empujaría justo por debajo del pliegue — el header sigue en el flujo, no
-   * es fijo.
-   *
-   * Los `3rem` que sobran no son margen: son la pista de que hay más abajo. Al
-   * dejar asomar el filo de la sección siguiente, la página se anuncia
-   * desplazable sin recurrir a una flecha parpadeante, que es justo el
-   * lenguaje de landing que la voz del producto rechaza.
-   *
-   * `svh` y no `dvh` ni `vh`, por la misma razón que el layout: la barra de
-   * direcciones móvil cambia de alto al hacer scroll. `svh` es el alto
-   * mínimo garantizado, así que el hero nunca crece ni encoge a media
-   * lectura.
-   */
-  .hero-full {
-    min-height: calc(100svh - var(--nav-h) - 3rem);
-  }
-
-  /**
-   * Velo del hero fotográfico de Comunidad.
-   *
-   * A diferencia del vitral, aquí la foto es gente, y el velo tiene dos
-   * trabajos que se estorban: dar a las letras un fondo suficiente y dejar
-   * ver las caras. La solución no es subir la opacidad —eso apaga a las
-   * personas, que son la prueba de que la comunidad existe— sino **separar
-   * las dos cosas en el espacio**.
-   *
-   * **El velo es vertical en los dos tamaños, y su caída es brusca a
-   * propósito:** plena fuerza en la banda de abajo, donde cae el texto, y
-   * suelta de golpe justo debajo de las caras. Un degradado suave repartiría
-   * la diferencia y dejaría al grupo a media luz exactamente donde tiene que
-   * verse.
-   *
-   * Desde `md` fue diagonal (`to top right`) durante un tiempo, y tenía
-   * sentido mientras el recorte dejaba al grupo cargado a la derecha: el
-   * ángulo bajaba por la esquina del texto y se abría hacia la gente. **Al
-   * centrar el recorte en el grupo esa premisa desapareció** — el grupo pasó a
-   * llenar el cuadro de lado a lado, así que la diagonal ya sólo apagaba su
-   * tercio izquierdo y le devolvía a una foto simétrica una asimetría que la
-   * foto ya no tenía. Vertical, el grupo se ilumina parejo.
-   *
-   * Los números salen de la misma cuenta que `.vitral-scrim`: 72% es el
-   * mínimo que lleva `Papel` a 4.5:1 y `Oro Claro` a 3:1 sobre el peor caso
-   * (un píxel blanco puro debajo). Toda la zona de texto se queda en 82% o
-   * más, con margen — una foto de personas tiene más blancos sueltos que el
-   * vidrio, y encima el `text-shadow` sigue puesto.
-   */
-  .community-hero-scrim {
-    /* Teléfono: el texto arranca al 57% y el recorte vertical deja las caras
-       entre el 62% y el 75%, contados desde abajo. */
-    background-image: linear-gradient(
-      to top,
-      rgb(37 37 37 / 92%) 0,
-      rgb(37 37 37 / 88%) 54%,
-      rgb(37 37 37 / 74%) 59%,
-      rgb(37 37 37 / 22%) 65%,
-      rgb(37 37 37 / 10%) 100%
-    );
+    padding-block: 64px;
   }
 
   @media (width >= 48rem) {
-    .community-hero-scrim {
-      /* Escritorio: el texto arranca al 48% y las caras caen entre el 62% y
-         el 76%. La banda de texto se queda en 86% o más, muy por encima del
-         72% que `.vitral-scrim` fija como mínimo. */
-      background-image: linear-gradient(
-        to top,
-        rgb(37 37 37 / 92%) 0,
-        rgb(37 37 37 / 86%) 45%,
-        rgb(37 37 37 / 70%) 52%,
-        rgb(37 37 37 / 25%) 62%,
-        rgb(37 37 37 / 12%) 100%
-      );
+    .section-py {
+      padding-block: 96px;
     }
   }
 
-  /**
-   * Botones de decisión (CTAs de cambio de vista: hero, resultados,
-   * comunidad). Los controles compactos del cuestionario son otro contexto
-   * — aparecen 50 veces por sesión — y se quedan fuera a propósito.
-   *
-   * Todos son verdes por la regla del Oro que Firma (ver DESIGN.md): el oro
-   * marca dónde habla la marca — eyebrows, separadores, la palabra en oro
-   * del titular, la navegación sobre el vitral — y el verde se queda con lo que
-   * responde a un clic. Hubo un `.btn-gold`; se eliminó al no quedarle un uso
-   * que la regla permitiera.
+  /* ── Tipografía ─────────────────────────────────────────────────────── */
+
+  /*
+   * La escala es el único lugar donde se decide qué tan grande es un
+   * encabezado. Los saltos son grandes a propósito: con una sola familia,
+   * el contraste de jerarquía lo hacen el tamaño, el peso y el tracking.
    */
+  .h1 {
+    font-size: clamp(2.25rem, 5vw, 4.25rem);
+    line-height: 1.06;
+    letter-spacing: -0.045em;
+    font-weight: 600;
+    text-wrap: balance;
+  }
+
+  .h2 {
+    font-size: clamp(1.65rem, 3vw, 2.5rem);
+    line-height: 1.15;
+    letter-spacing: -0.035em;
+    font-weight: 600;
+    text-wrap: balance;
+  }
+
+  .h3 {
+    font-size: 1.125rem;
+    line-height: 1.4;
+    letter-spacing: -0.015em;
+    font-weight: 600;
+  }
+
+  .lead {
+    font-size: 1.075rem;
+    line-height: 1.75;
+    color: var(--color-ink-soft);
+  }
+
+  /** Etiqueta de contexto: ámbar quemado, el único oro legible sobre papel. */
+  .eyebrow {
+    font-size: 0.7rem;
+    line-height: 1.5;
+    letter-spacing: 0.14em;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--color-gold-dark);
+  }
+
+  .muted {
+    color: var(--color-ink-soft);
+  }
+
+  /** Cifras alineadas: porcentajes y conteos no bailan al cambiar. */
+  .number {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /** Nota de fuente o aclaración: pequeña, pero nunca por debajo de 4.5:1. */
+  .source-note {
+    font-size: 0.75rem;
+    line-height: 1.55;
+    color: var(--color-ink-soft);
+  }
+
+  /* ── Acciones ───────────────────────────────────────────────────────── */
+
+  /*
+   * Botones píldora de al menos 48px. Sólo cambian de color: ninguno se
+   * levanta, escala ni se mueve. Todos son verdes por la regla del Oro que
+   * Firma: el oro marca dónde habla la marca y el verde lo que responde.
+   */
+  .btn-green,
+  .btn-outline,
+  .btn-light {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 48px;
+    padding: 12px 22px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    font-weight: 600;
+    text-align: center;
+    transition:
+      background-color 160ms ease,
+      border-color 160ms ease,
+      color 160ms ease;
+  }
+
   .btn-green {
-    @apply inline-block rounded-full bg-green-mid px-6 py-3 font-semibold text-paper shadow-sm transition-colors hover:bg-green;
+    background: var(--color-green);
+    border-color: var(--color-green);
+    color: var(--color-paper);
   }
-  /*
-   * El borde va al 70% y no al 40%: al 40% medía 1.98:1 contra el papel, por
-   * debajo del mínimo de 3:1 que pide un límite de control. Al 70% da 3.14:1
-   * sin salirse de la paleta — es el mismo verde, más presente.
-   */
+
+  .btn-green:hover:not(:disabled) {
+    background: var(--color-green-mid);
+    border-color: var(--color-green-mid);
+  }
+
+  /* El borde al 45% de verde profundo mide más de 3:1 contra el papel. */
   .btn-outline {
-    @apply inline-block rounded-full border border-green-mid/70 px-6 py-3 font-semibold text-ink-soft transition-colors hover:border-green-mid hover:text-green-mid;
+    border-color: color-mix(in srgb, var(--color-green) 45%, transparent);
+    color: var(--color-ink);
   }
+
+  .btn-outline:hover:not(:disabled) {
+    border-color: var(--color-green);
+    color: var(--color-green);
+    background: var(--color-green-soft);
+  }
+
+  /** La acción principal sobre un panel verde profundo. */
+  .btn-light {
+    background: var(--color-paper);
+    border-color: var(--color-paper);
+    color: var(--color-green);
+  }
+
+  .btn-light:hover:not(:disabled) {
+    background: var(--color-green-soft);
+    border-color: var(--color-green-soft);
+  }
+
+  :is(.btn-green, .btn-outline, .btn-light):disabled {
+    opacity: 0.4;
+  }
+
   /*
-   * Deshabilitado es "todavía no", no "roto": toma prestado el borde punteado
-   * con el que el sistema marca el contenido que aún no existe, así deja de
-   * ser el cuarto lenguaje distinto para lo mismo en /comunidad. El relleno
-   * gris sobre papel daba 1.12:1 y no se percibía como control; el texto al
-   * 60% daba 2.58:1 y era el texto menos legible del sitio fuera del vitral.
-   * A opacidad plena da 5.97:1.
+   * "Todavía no" tiene una sola forma en todo el sitio: borde punteado. Un
+   * acceso pendiente no se pinta como botón deshabilitado, que parecería
+   * roto; se pinta como estado.
    */
-  .btn-disabled {
-    @apply inline-block cursor-not-allowed rounded-full border border-dashed border-ink/25 bg-paper-alt px-6 py-3 font-semibold text-ink-soft;
+  .status-pending {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border: 1px dashed currentColor;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
   }
 
-  /**
-   * Mecanismo de volteo, compartido por la tarjeta de área de Inicio
-   * (`.area-flip`) y la fila de canal de Comunidad (`.canal-flip`). Las
-   * geometrías son distintas —una es un 4:3 fijo, la otra una fila que crece
-   * con su texto— pero el disparador es el mismo, y vive una sola vez: dos
-   * copias de una regla de interacción se desincronizan en el primer ajuste.
-   *
-   * Son dos vías independientes que llegan a la misma transición:
-   *
-   *  1. `:hover`/`:focus-visible`, pero sólo bajo `(hover: hover) and
-   *     (pointer: fine)` — un dedo no tiene "encima sin tocar", así que sin
-   *     esa condición un teléfono dispararía el volteo con el primer toque
-   *     y no habría manera de volver al frente.
-   *  2. la clase `.is-flipped`, que pone React al hacer clic o tocar — el
-   *     mecanismo que sí funciona en cualquier dispositivo, porque un click
-   *     handler dispara igual con mouse, teclado o toque.
-   *
-   * El elemento exterior es el `<button>` completo: por eso el volteo 3D vive
-   * en un hijo (`…-flip-inner`) y no en el propio botón, que además necesita
-   * quedarse quieto para que su `outline` de foco no rote con la tarjeta.
-   */
-  :is(.area-flip, .canal-flip) {
-    /* Un `<button>` es `inline-block` por defecto y no se estira solo dentro
-       de una rejilla — `block` + `width: 100%` lo fuerza a llenar su celda. */
-    display: block;
-    width: 100%;
-    perspective: 1000px;
-  }
-  :is(.area-flip-inner, .canal-flip-inner) {
-    transform-style: preserve-3d;
-    transition: transform 500ms ease;
-  }
-  :is(.area-flip, .canal-flip).is-flipped :is(.area-flip-inner, .canal-flip-inner) {
-    transform: rotateY(180deg);
-  }
-  @media (hover: hover) and (pointer: fine) {
-    :is(.area-flip, .canal-flip):hover :is(.area-flip-inner, .canal-flip-inner),
-    :is(.area-flip, .canal-flip):focus-visible :is(.area-flip-inner, .canal-flip-inner) {
-      transform: rotateY(180deg);
-    }
-  }
-  /* La regla del Movimiento Opcional también aplica a una transición de CSS:
-     el cambio de cara se conserva —el reverso tiene que poder leerse— pero
-     media vuelta en 3D es justo el movimiento que la preferencia pide
-     quitar, así que ahí la cara se cambia de golpe. */
-  @media (prefers-reduced-motion: reduce) {
-    :is(.area-flip-inner, .canal-flip-inner) {
-      transition: none;
-    }
-  }
-  :is(.area-flip-face, .canal-flip-face) {
-    overflow: hidden;
-    border-radius: 12px;
-    backface-visibility: hidden;
-  }
-  :is(.area-flip-back, .canal-flip-back) {
-    transform: rotateY(180deg);
+  .text-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 5px;
+    transition: color 160ms ease;
   }
 
-  /* Tarjeta de área. Frente: foto + nombre. Fondo: nombre en verde +
-     descripción. El `aspect-ratio` ya decide la altura, así que las dos caras
-     se superponen en `absolute`. */
-  .area-flip-inner {
-    position: relative;
-    display: block;
-    aspect-ratio: 4 / 3;
+  .text-link:hover {
+    color: var(--color-green-mid);
   }
-  .area-flip-face {
-    position: absolute;
-    inset: 0;
-  }
-  .area-flip-front {
+
+  /* ── Superficies ────────────────────────────────────────────────────── */
+
+  .surface {
+    border: 1px solid var(--line);
+    border-radius: 20px;
     background: var(--color-paper);
   }
-  .area-flip-back {
+
+  .panel-pad {
+    padding: clamp(20px, 3vw, 36px);
+  }
+
+  /*
+   * Panel focal: el momento de mayor peso de una página (resultado,
+   * búsqueda, IEEE). Verde profundo con texto papel, radio de 28px. Dentro,
+   * el foco pasa a oro claro, que es el que se ve sobre verde.
+   */
+  .dark-panel {
+    --focus-ring: var(--color-gold-light);
+    background: var(--color-green);
+    color: var(--color-paper);
+    border-radius: 28px;
+    padding: clamp(24px, 4vw, 48px);
+  }
+
+  .dark-panel :is(.h1, .h2, .h3) {
+    color: var(--color-paper);
+  }
+
+  .dark-panel .eyebrow {
+    color: var(--color-gold-light);
+  }
+
+  .dark-panel .source-note {
+    color: rgb(255 255 255 / 78%);
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 11px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-size: 0.72rem;
+    line-height: 1.4;
+    font-weight: 600;
+  }
+
+  .section-heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 32px;
+  }
+
+  .section-heading .eyebrow {
+    margin-bottom: 12px;
+  }
+
+  .section-note {
+    max-width: 380px;
+    font-size: 0.875rem;
+    color: var(--color-ink-soft);
+  }
+
+  /** Índice de sección dentro de una página larga: 01 Habilidades, 02… */
+  .anchor-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 24px;
+    padding-block: 12px;
+    border-block: 1px solid var(--line);
+  }
+
+  .anchor-nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: color 160ms ease;
+  }
+
+  .anchor-nav a:hover {
+    color: var(--color-green-mid);
+  }
+
+  .anchor-nav span {
+    color: var(--color-gold-dark);
+    margin-right: 8px;
+  }
+
+  /* ── Cabecera y pie ─────────────────────────────────────────────────── */
+
+  /*
+   * El vitral real de la biblioteca sobrevive como firma: una franja de 8px
+   * arriba de la cabecera y abajo del pie. Ya no hay texto encima del vidrio,
+   * así que la franja de lectura de la primera versión dejó de hacer falta.
+   */
+  .brand-ribbon {
+    height: 8px;
+    background: var(--color-green) url("/images/vitral-biblioteca.webp") center 52% / cover;
+  }
+
+  .site-header {
+    position: relative;
+    background: var(--color-paper);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .nav-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    min-height: 84px;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 44px;
+  }
+
+  .brand-name {
+    display: block;
+    font-size: 1.5rem;
+    line-height: 1.1;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+  }
+
+  .brand-context {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.6rem;
+    letter-spacing: 0.16em;
+    font-weight: 600;
+    color: var(--color-ink-soft);
+  }
+
+  /*
+   * El símbolo es tipográfico: una "p" con la flecha de avance. Sin logo
+   * inventado ni ícono de librería; la esquina inferior izquierda recta
+   * evoca una pestaña de ruta.
+   */
+  .brand-symbol {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 42px;
+    border-radius: 12px 12px 12px 3px;
+    background: var(--color-green);
+    color: var(--color-paper);
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.06em;
+  }
+
+  .brand-symbol small {
+    align-self: flex-start;
+    margin-top: 6px;
+    font-size: 0.85rem;
+    color: var(--color-gold-light);
+  }
+
+  .desktop-nav {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .nav-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding-inline: 14px;
+    border-radius: 999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-ink-soft);
+    transition:
+      background-color 160ms ease,
+      color 160ms ease;
+  }
+
+  .nav-link:hover {
+    color: var(--color-green);
+  }
+
+  .nav-link[aria-current="page"] {
+    background: var(--color-green-soft);
+    color: var(--color-green);
+    font-weight: 700;
+  }
+
+  .menu-button {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 8px 16px;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .mobile-nav {
+    display: grid;
+    gap: 4px;
+    padding-bottom: 20px;
+  }
+
+  .mobile-nav .nav-link {
+    min-height: 52px;
+    font-size: 1rem;
+  }
+
+  .skip-link {
+    position: absolute;
+    top: -100px;
+    left: 12px;
+    z-index: 50;
+    padding: 12px 16px;
+    border-radius: 12px;
+    background: var(--color-paper);
+    color: var(--color-green);
+    font-weight: 600;
+  }
+
+  .skip-link:focus {
+    top: 12px;
+  }
+
+  .site-footer {
+    --focus-ring: var(--color-gold-light);
+    margin-top: auto;
+    background: var(--color-green);
+    color: var(--color-paper);
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1.2fr;
+    gap: 40px;
+    padding-block: 56px 40px;
+  }
+
+  .footer-grid a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    font-size: 0.875rem;
+    transition: color 160ms ease;
+  }
+
+  .footer-grid a:hover {
+    color: var(--color-gold-light);
+  }
+
+  .footer-bottom {
+    padding-block: 20px;
+    border-top: 1px solid rgb(255 255 255 / 18%);
+    font-size: 0.75rem;
+    color: var(--color-green-soft);
+  }
+
+  /* ── Hero editorial (Inicio y Comunidad) ───────────────────────────── */
+
+  .editorial-hero {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 56px;
+    align-items: center;
+    padding-block: 72px 80px;
+  }
+
+  .editorial-hero .h1 {
+    margin-block: 20px 24px;
+  }
+
+  .hero-picture {
+    position: relative;
+    overflow: hidden;
+    border-radius: 28px;
+    background: var(--color-green-soft);
+  }
+
+  .hero-picture img {
+    width: 100%;
+    height: 480px;
+    object-fit: cover;
+  }
+
+  /*
+   * El pie de una fotografía real nombra evento y lugar. Es lo que convierte
+   * una foto grupal en evidencia; sin él se lee como imagen de banco.
+   */
+  .photo-caption {
+    padding: 14px 20px;
+    font-size: 0.75rem;
+    background: var(--color-green);
+    color: var(--color-paper);
+  }
+
+  /** Tarjeta superpuesta al pie de la foto del hero de Inicio. */
+  .hero-badge {
+    position: absolute;
+    right: 20px;
+    bottom: -18px;
+    left: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 20px;
+    border: 1px solid var(--color-paper);
+    border-radius: 20px;
+    background: var(--color-green-soft);
+  }
+
+  .hero-badge-mark {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: var(--color-green);
+    color: var(--color-gold-light);
+    font-size: 1.25rem;
+  }
+
+  .hero-facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+    margin-top: 28px;
+    font-size: 0.8rem;
+    color: var(--color-ink-soft);
+  }
+
+  .hero-facts strong {
+    color: var(--color-ink);
+  }
+
+  /* ── Inicio ─────────────────────────────────────────────────────────── */
+
+  .step-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .step-card {
+    padding: 28px;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    background: var(--color-paper);
+  }
+
+  .step-index {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-gold-dark);
+  }
+
+  /*
+   * Las cinco áreas tienen el mismo peso: el diagnóstico las mide, no las
+   * rankea. La descripción está siempre visible; antes vivía detrás de un
+   * giro 3D y había que pedirla tarjeta por tarjeta para poder comparar.
+   */
+  .area-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .area-card {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    background: var(--color-paper);
-    padding: 20px;
+    overflow: hidden;
   }
 
-  /*
-   * Tira del carrusel de fotos (`src/components/ui/Carousel.jsx`).
-   *
-   * El desplazamiento es del navegador y no de JavaScript: `overflow-x` con
-   * `scroll-snap` ya se arrastra con el dedo, con el trackpad y con el
-   * teclado sin que cargue una sola línea de JS. Los botones del componente
-   * son un atajo encima de esto, no el mecanismo — misma tesis que *La regla
-   * del `from`*: el marcado por defecto ya funciona.
-   *
-   * `scroll-behavior` se queda en `auto` a propósito. Si la suavidad
-   * estuviera aquí, no habría forma de anularla bajo movimiento reducido:
-   * el componente pasa `behavior` en cada `scrollBy` y esa es la única
-   * decisión que consulta la preferencia.
-   */
-  .carousel-strip {
+  .area-card img {
+    width: 100%;
+    height: 184px;
+    object-fit: cover;
+  }
+
+  .area-card-body {
     display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scroll-behavior: auto;
-    /*
-     * Sin esto la tira deja de ser un contenedor de scroll y pasa a ser un
-     * empujón: su ancho mínimo de contenido —la suma de todas las tarjetas—
-     * sube por el árbol y estira a su celda de rejilla. En Comunidad eso
-     * ensanchaba la columna entera a 864px dentro de un teléfono de 390px, y
-     * como las dos columnas comparten pista en móvil, arrastraba también a la
-     * lista de canales: la página completa se iba de lado.
-     *
-     * `min-width: 0` es lo que permite que la contribución mínima sea cero, y
-     * es lo que convierte "esto se desborda" en "esto se desplaza".
-     */
-    min-width: 0;
-    /* La barra nativa cruzaría el pie de las fotos con un artefacto distinto
-       en cada sistema operativo. Se esconde porque la tira ya anuncia que se
-       desplaza de otras dos maneras: los botones siempre visibles y la
-       tarjeta siguiente asomando por el borde. */
-    scrollbar-width: none;
+    flex: 1;
+    flex-direction: column;
+    padding: 24px;
   }
-  .carousel-strip::-webkit-scrollbar {
-    display: none;
+
+  .area-card-body p {
+    margin-block: 10px 8px;
+    font-size: 0.875rem;
+    color: var(--color-ink-soft);
   }
-  .carousel-strip > * {
-    scroll-snap-align: start;
-    /* `flex: none` y no `shrink-0`: las tarjetas tampoco deben crecer para
-       repartirse el sobrante, o la última fila dejaría de asomar y con ella
-       la única pista de que hay más. */
-    flex: none;
+
+  .area-card-body .text-link {
+    margin-top: auto;
   }
 
   /*
-   * Flechas del carrusel. Toman el vocabulario del botón fantasma —píldora,
-   * borde verde al 70%, transición sólo de color— porque son un control
-   * secundario del mismo sistema, y miden 44px como el resto de lo que se
-   * pulsa muchas veces.
-   *
-   * El deshabilitado NO es el de `.btn-disabled`: ahí el borde punteado
-   * significa "esto todavía no existe", y aquí significa "llegaste al
-   * extremo de la tira". Dos estados distintos no pueden compartir forma, así
-   * que éste se apaga por tono, que es como el sistema separa todo lo demás.
+   * La sexta celda de la rejilla de áreas: cinco tarjetas en tres columnas
+   * dejan un hueco, y en vez de estirar una (que la destacaría sobre las
+   * demás) el hueco se usa para la invitación al diagnóstico.
    */
-  .carousel-arrow {
-    @apply flex h-11 w-11 items-center justify-center rounded-full border border-green-mid/70 text-ink-soft transition-colors;
-  }
-  .carousel-arrow:hover:not(:disabled) {
-    @apply border-green-mid text-green-mid;
-  }
-  .carousel-arrow:disabled {
-    @apply cursor-default border-ink/10 text-ink/25;
+  .area-invite {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 24px;
   }
 
-  /*
-   * Fila de canal de Comunidad. Frente: miniatura + nombre. Fondo: nombre +
-   * descripción. Aquí no hay `aspect-ratio` que fije la altura —la miniatura
-   * mide 80px y el reverso crece con su descripción—, así que las dos caras
-   * se apilan en la misma celda de una rejilla en vez de en `absolute`: la
-   * celda mide lo que mide la cara más alta, y el texto del reverso no se
-   * recorta contra un alto adivinado. El relleno y la capa tonal de cada cara
-   * siguen viviendo en la página, como cuando la fila no volteaba.
-   */
-  .canal-flip-inner {
+  /* ── Testimonios del piloto ─────────────────────────────────────────── */
+
+  .quote-grid {
     display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
   }
-  .canal-flip-face {
-    grid-area: 1 / 1;
+
+  .quote-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 28px;
+    padding: 28px;
+  }
+
+  .quote-card blockquote {
+    font-size: 1.15rem;
+    line-height: 1.6;
+    letter-spacing: -0.01em;
+  }
+
+  .quote-card:nth-child(2) {
+    background: var(--color-green-soft);
+    border-color: transparent;
+  }
+
+  /* ── Diagnóstico ────────────────────────────────────────────────────── */
+
+  /** Columna de tarea: 720px, separada visualmente de la exploración. */
+  .quiz-shell {
+    width: min(100%, 720px);
+    margin-inline: auto;
+    padding: 40px 24px 72px;
+  }
+
+  .progress-track {
+    height: 6px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: var(--color-paper-alt);
+  }
+
+  .progress-fill {
+    width: 100%;
+    height: 100%;
+    border-radius: 999px;
+    background: var(--color-green-mid);
+    transform-origin: left;
+    transition: transform 280ms ease;
+  }
+
+  /*
+   * Cada opción es un radio nativo dentro de una fila amplia: el teclado,
+   * el lector de pantalla y el estado seleccionado vienen del navegador, no
+   * de un `role="radio"` simulado.
+   */
+  .quiz-option {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-height: 58px;
+    padding: 14px 18px;
+    border: 1px solid var(--line-strong);
+    border-radius: 14px;
+    font-size: 0.925rem;
+    cursor: pointer;
+    transition:
+      background-color 140ms ease,
+      border-color 140ms ease;
+  }
+
+  .quiz-option:hover {
+    border-color: var(--color-green-mid);
+  }
+
+  .quiz-option:has(input:checked) {
+    background: var(--color-green-soft);
+    border-color: var(--color-green-mid);
+    font-weight: 600;
+  }
+
+  .quiz-option:has(input:focus-visible) {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 3px;
+  }
+
+  .quiz-option input {
+    flex: none;
+    width: 19px;
+    height: 19px;
+    accent-color: var(--color-green);
+  }
+
+  /** La tecla que también responde: 1–5. Sólo con teclado físico. */
+  .quiz-key {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 26px;
+    height: 26px;
+    border: 1px solid var(--line-strong);
+    border-radius: 7px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--color-ink-soft);
+  }
+
+  @media (hover: none), (pointer: coarse) {
+    .quiz-key,
+    .keyboard-hint {
+      display: none;
+    }
+  }
+
+  /* ── Resultados ─────────────────────────────────────────────────────── */
+
+  .result-grid {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: 24px;
+    margin-block: 8px 32px;
+  }
+
+  .result-grid .h1 {
+    font-size: clamp(2.1rem, 4vw, 3.5rem);
+  }
+
+  .result-number {
+    font-size: 4.5rem;
+    line-height: 1;
+    letter-spacing: -0.07em;
+    font-weight: 500;
+  }
+
+  .affinity-row + .affinity-row {
+    margin-top: 16px;
+  }
+
+  .affinity-row[data-top="true"] .affinity-fill {
+    background: var(--color-green);
+  }
+
+  .affinity-track {
+    height: 8px;
+    margin-top: 8px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: var(--color-paper-alt);
+  }
+
+  .affinity-fill {
+    width: 100%;
+    height: 100%;
+    border-radius: 999px;
+    background: var(--color-green-mid);
+    transform-origin: left;
+  }
+
+  /*
+   * La marca del 60% sobre cada barra: el punto neutral de la escala. Sin
+   * ella, un 60% se lee como "apenas aprobado" cuando es el centro exacto.
+   */
+  .affinity-track {
+    position: relative;
+  }
+
+  .affinity-neutral {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--color-paper);
+  }
+
+  .choice-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .choice {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 10px 16px;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    font-size: 0.85rem;
+    text-align: left;
+    transition:
+      background-color 140ms ease,
+      border-color 140ms ease,
+      color 140ms ease;
+  }
+
+  .choice:hover {
+    border-color: var(--color-green-mid);
+  }
+
+  .choice[aria-pressed="true"] {
+    background: var(--color-green);
+    border-color: var(--color-green);
+    color: var(--color-paper);
+  }
+
+  .route-intro {
+    display: grid;
+    grid-template-columns: 1fr 240px;
+    gap: 32px;
+    align-items: center;
+    margin-block: 32px 8px;
+  }
+
+  .route-intro img {
+    width: 240px;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 20px;
+  }
+
+  .route-block {
+    padding-block: 56px;
+    border-top: 1px solid var(--line);
+  }
+
+  /* Habilidades: secuencia vertical con puntos y detalle al lado. */
+  .skill-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 28px;
+    align-items: start;
+  }
+
+  .skill-stage {
+    position: relative;
+    padding: 0 0 28px 24px;
+    border-left: 1px solid var(--line-strong);
+  }
+
+  .skill-stage:last-child {
+    padding-bottom: 0;
+  }
+
+  .skill-stage::before {
+    content: "";
+    position: absolute;
+    top: 6px;
+    left: -5px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--color-green-mid);
+  }
+
+  .skill-stage .eyebrow {
+    margin-bottom: 12px;
+  }
+
+  .skill-detail {
+    padding: clamp(22px, 3vw, 32px);
+    border-radius: 20px;
+    background: var(--color-green-soft);
+  }
+
+  .project-box {
+    margin-top: 24px;
+    padding: 20px;
+    border-radius: 14px;
+    background: var(--color-paper);
+  }
+
+  /* Credenciales: tarjetas comparables y tabla por dimensión. */
+  .credential-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .credential-card {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 28px;
+    transition:
+      background-color 140ms ease,
+      border-color 140ms ease;
+  }
+
+  .credential-card[data-selected="true"] {
+    border-color: var(--color-green-mid);
+    background: var(--color-green-soft);
+  }
+
+  .provider-mark {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    border: 1px solid var(--line-strong);
+    border-radius: 12px;
+    background: var(--color-paper);
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+
+  .credential-meta {
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    gap: 10px 12px;
+    font-size: 0.82rem;
+  }
+
+  .credential-meta dt {
+    color: var(--color-ink-soft);
+  }
+
+  .credential-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: auto;
+  }
+
+  .check-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .check-label input {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--color-green);
+  }
+
+  .comparison {
+    margin-top: 24px;
+    padding: clamp(20px, 3vw, 28px);
+    border-radius: 20px;
+    background: var(--color-green-soft);
+  }
+
+  .comparison-row {
+    display: grid;
+    grid-template-columns: 130px 1fr 1fr;
+    gap: 24px;
+    padding-block: 14px;
+    border-top: 1px solid var(--line);
+    font-size: 0.85rem;
+  }
+
+  /* Puestos: selector lateral y ficha. */
+  .career-layout {
+    display: grid;
+    grid-template-columns: 290px 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+
+  .career-list {
+    display: grid;
+    gap: 10px;
+  }
+
+  .career-button {
+    width: 100%;
+    padding: 18px 20px;
+    border: 1px solid var(--line-strong);
+    border-radius: 16px;
+    text-align: left;
+    transition:
+      background-color 140ms ease,
+      border-color 140ms ease;
+  }
+
+  .career-button:hover {
+    border-color: var(--color-green-mid);
+  }
+
+  .career-button[aria-pressed="true"] {
+    background: var(--color-green-soft);
+    border-color: var(--color-green-mid);
+  }
+
+  .requirements {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    margin-block: 28px;
+  }
+
+  .detail-list {
+    padding-left: 18px;
+    list-style: disc;
+    font-size: 0.875rem;
+    color: var(--color-ink-soft);
+  }
+
+  .detail-list li + li {
+    margin-top: 8px;
+  }
+
+  .detail-list li::marker {
+    color: var(--color-green-mid);
+  }
+
+  /* Búsqueda en LinkedIn. */
+  .search-grid {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr auto;
+    gap: 16px;
+    align-items: end;
+  }
+
+  .field-label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  .field {
+    width: 100%;
+    min-height: 48px;
+    padding: 12px 14px;
+    border: 1px solid var(--line-strong);
+    border-radius: 12px;
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font: inherit;
+    font-size: 0.9rem;
+  }
+
+  /* ── Comunidad ──────────────────────────────────────────────────────── */
+
+  .community-directory {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+
+  .interest-button {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    padding: 14px;
+    text-align: left;
+    transition:
+      background-color 140ms ease,
+      border-color 140ms ease;
+  }
+
+  .interest-button:hover {
+    border-color: var(--color-green-mid);
+  }
+
+  .interest-button[aria-pressed="true"] {
+    background: var(--color-green-soft);
+    border-color: var(--color-green-mid);
+  }
+
+  .interest-button img {
+    flex: none;
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    object-fit: cover;
+  }
+
+  /*
+   * Cada sociedad IEEE reúne logo, propósito y estado en una sola tarjeta.
+   * Antes eran dos rejillas paralelas y en teléfono se recorrían los mismos
+   * cuatro capítulos dos veces. El recuadro es papel porque el manual de
+   * cada sociedad pide fondo neutro: sobre verde profundo el morado de WIE
+   * cae a 1.20:1.
+   */
+  .chapter-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+
+  .chapter-card {
+    padding: 22px;
+    border-radius: 18px;
+    background: var(--color-paper);
+    color: var(--color-ink);
+  }
+
+  .chapter-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 92px;
+    margin-bottom: 18px;
+  }
+
+  .chapter-logo img {
+    width: auto;
+    max-width: 100%;
+    max-height: 72px;
+  }
+
+  /*
+   * Galería editorial: una foto principal y el resto en rejilla. Todas son
+   * de estudiantes de esta facultad y todas llevan pie con evento y lugar.
+   */
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .gallery-grid figure:first-child {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+
+  .gallery-grid img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 16px;
+  }
+
+  .gallery-grid figure:first-child img {
+    height: calc(100% - 64px);
+    aspect-ratio: auto;
+    min-height: 320px;
+  }
+
+  .gallery-grid figcaption {
+    padding-top: 10px;
+    font-size: 0.8rem;
+    line-height: 1.5;
+  }
+
+  /* ── Responsive ─────────────────────────────────────────────────────── */
+
+  @media (width < 64rem) {
+    .desktop-nav,
+    .nav-cta {
+      display: none;
+    }
+
+    .menu-button {
+      display: inline-flex;
+    }
+
+    .nav-row {
+      min-height: 76px;
+    }
+
+    .editorial-hero {
+      gap: 32px;
+    }
+
+    .chapter-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .career-layout {
+      grid-template-columns: 240px 1fr;
+    }
+  }
+
+  @media (width < 48rem) {
+    .editorial-hero,
+    .result-grid,
+    .skill-layout,
+    .career-layout,
+    .community-directory,
+    .requirements,
+    .route-intro {
+      grid-template-columns: 1fr;
+    }
+
+    .editorial-hero {
+      padding-block: 40px 56px;
+    }
+
+    .hero-picture img {
+      height: 320px;
+    }
+
+    .section-heading {
+      display: block;
+    }
+
+    .section-note {
+      margin-top: 14px;
+    }
+
+    .step-grid,
+    .area-grid,
+    .credential-grid,
+    .search-grid,
+    .chapter-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .route-intro img {
+      display: none;
+    }
+
+    /* La comparación no se vuelve una tabla ancha: cada dimensión encabeza sus dos valores. */
+    .comparison-row {
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 16px;
+    }
+
+    .comparison-row > :first-child {
+      grid-column: 1 / -1;
+    }
+
+    .gallery-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .gallery-grid figure:first-child {
+      grid-row: auto;
+    }
+
+    .gallery-grid figure:first-child img {
+      height: auto;
+      min-height: 0;
+      aspect-ratio: 4 / 3;
+    }
+
+    .footer-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .footer-grid > :first-child {
+      grid-column: 1 / -1;
+    }
+
+    .dark-panel {
+      border-radius: 22px;
+    }
+
+    .result-number {
+      font-size: 3.5rem;
+    }
   }
 }
