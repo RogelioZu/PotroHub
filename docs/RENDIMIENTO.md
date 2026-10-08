@@ -48,7 +48,7 @@ En las 60 corridas el bloqueo total del hilo principal (TBT) fue 0 ms.
 
 | | Anterior | Rediseño |
 |---|---|---|
-| JavaScript de entrada (gzip) | 141.9 kB | 95.8 kB (−32%) |
+| JavaScript de entrada (gzip) | 141.9 kB | 96.0 kB (−32%) |
 | Fragmento de Matter.js (bajo demanda) | 26.2 kB | — |
 | CSS (gzip) | 7.2 kB | 7.9 kB |
 

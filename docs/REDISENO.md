@@ -59,7 +59,7 @@ Automatizada:
 
 - `npm run lint`: sin errores ni advertencias (la versión anterior tenía una).
 - `npm test`: 13 pruebas aprobadas.
-- `npm run build`: correcto. JavaScript de entrada 95.8 kB gzip, frente a 141.9 kB (−32%).
+- `npm run build`: correcto. JavaScript de entrada 96.0 kB gzip, frente a 141.9 kB (−32%).
 
 En Chrome real, con un script de recorrido (puppeteer-core) a 390 y 1440 px:
 

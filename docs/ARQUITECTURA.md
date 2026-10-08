@@ -159,7 +159,7 @@ erDiagram
 | `localStorage` para el avance | Sesión en servidor | 50 preguntas en un teléfono entre clases: la sesión debe sobrevivir al cierre sin cuenta |
 | Contenido como módulos JS | CMS | Volumen pequeño, cambios raros y revisables en Git; las pruebas validan referencias |
 | Función de afinidad pura | Cálculo dentro del componente | Se prueba sin navegador y su comportamiento queda documentado por pruebas |
-| Sin librerías de animación | GSAP + ScrollSmoother + Matter.js | El contenido dependía de animaciones para aparecer; quitar 3 dependencias redujo el JS de entrada de 141.9 a 95.8 kB gzip |
+| Sin librerías de animación | GSAP + ScrollSmoother + Matter.js | El contenido dependía de animaciones para aparecer; quitar 3 dependencias redujo el JS de entrada de 141.9 a 96.0 kB gzip |
 | Búsqueda en LinkedIn por GET | API de empleos o scraping | No requiere credenciales, no copia datos de terceros y funciona sin JavaScript |
 
 ## 6. Arquitectura futura (propuesta, no implementada)
