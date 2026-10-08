@@ -688,7 +688,7 @@
     padding: 24px;
   }
 
-  .area-card-body p {
+  .area-card-body p:not(.eyebrow) {
     margin-block: 10px 8px;
     font-size: 0.875rem;
     color: var(--color-ink-soft);
@@ -1210,6 +1210,19 @@
     border-radius: 18px;
     background: var(--color-paper);
     color: var(--color-ink);
+  }
+
+  /*
+   * La tarjeta es papel dentro de un panel verde profundo, así que tiene que
+   * devolver el texto a tinta: las reglas `.dark-panel .h3` y
+   * `.dark-panel .source-note` lo pintarían blanco sobre blanco.
+   */
+  .dark-panel .chapter-card .h3 {
+    color: var(--color-ink);
+  }
+
+  .dark-panel .chapter-card .source-note {
+    color: var(--color-ink-soft);
   }
 
   .chapter-logo {

@@ -1,6 +1,6 @@
 ---
 name: PotroPath
-description: El vitral de la Facultad de Ingeniería en los bordes, papel silencioso en el centro.
+description: Guía editorial universitaria — papel, verde institucional y fotografía real de la facultad; el vitral firma en una franja.
 colors:
   verde-universitario: "#526855"
   oro-viejo: "#ca9e52"
@@ -15,54 +15,56 @@ colors:
 typography:
   brand:
     fontFamily: "DM Sans, Inter, system-ui, sans-serif"
-    fontSize: "1.875rem"
-    fontWeight: 700
-    lineHeight: "2.25rem"
-    letterSpacing: "normal"
-  display:
-    fontFamily: "DM Sans, Inter, system-ui, sans-serif"
-    fontSize: "2.25rem"
-    fontWeight: 700
-    lineHeight: "1.25"
-    letterSpacing: "normal"
-  headline:
-    fontFamily: "DM Sans, Inter, system-ui, sans-serif"
     fontSize: "1.5rem"
     fontWeight: 700
-    lineHeight: "2rem"
-    letterSpacing: "normal"
+    lineHeight: "1.1"
+    letterSpacing: "-0.04em"
+  display:
+    fontFamily: "DM Sans, Inter, system-ui, sans-serif"
+    fontSize: "clamp(2.25rem, 5vw, 4.25rem)"
+    fontWeight: 600
+    lineHeight: "1.06"
+    letterSpacing: "-0.045em"
+  headline:
+    fontFamily: "DM Sans, Inter, system-ui, sans-serif"
+    fontSize: "clamp(1.65rem, 3vw, 2.5rem)"
+    fontWeight: 600
+    lineHeight: "1.15"
+    letterSpacing: "-0.035em"
   title:
     fontFamily: "DM Sans, Inter, system-ui, sans-serif"
     fontSize: "1.125rem"
-    fontWeight: 700
-    lineHeight: "1.75rem"
-    letterSpacing: "normal"
+    fontWeight: 600
+    lineHeight: "1.4"
+    letterSpacing: "-0.015em"
   lead:
     fontFamily: "DM Sans, Inter, system-ui, sans-serif"
-    fontSize: "1.125rem"
+    fontSize: "1.075rem"
     fontWeight: 400
-    lineHeight: "1.75rem"
+    lineHeight: "1.75"
     letterSpacing: "normal"
   body:
     fontFamily: "DM Sans, Inter, system-ui, sans-serif"
     fontSize: "1rem"
     fontWeight: 400
-    lineHeight: "1.5rem"
+    lineHeight: "1.65"
     letterSpacing: "normal"
   label:
     fontFamily: "DM Sans, Inter, system-ui, sans-serif"
-    fontSize: "0.875rem"
-    fontWeight: 600
-    lineHeight: "1.25rem"
-    letterSpacing: "0.1em"
+    fontSize: "0.7rem"
+    fontWeight: 700
+    lineHeight: "1.5"
+    letterSpacing: "0.14em"
 rounded:
-  sm: "6px"
-  md: "12px"
+  sm: "12px"
+  md: "20px"
+  focal: "28px"
   full: "9999px"
 spacing:
   gutter: "24px"
-  card: "20px"
-  gap: "24px"
+  container: "1152px"
+  card: "28px"
+  gap: "20px"
   section-y: "64px"
   section-y-md: "96px"
 components:
@@ -129,7 +131,97 @@ components:
      canónicas del formato DESIGN.md y de las herramientas que lo leen. El
      contenido es español. -->
 
+## Redesign 2026-10 — especificación vigente
+
+**Esta sección manda.** Sustituye cualquier decisión histórica de las secciones siguientes que
+entre en conflicto con ella. Lo que viene después de *Overview* conserva el razonamiento de la
+primera versión —por qué la paleta es cerrada, por qué el oro firma y el verde trabaja, cómo se
+midió el contraste— y sigue valiendo donde no choca con esto. La paleta institucional y la verdad
+de producto (`PRODUCT.md`) no cambian.
+
+### Por qué se rediseñó
+
+Una captura de la portada anterior sin interacción mostraba el titular del hero **invisible** y
+cuatro de cinco tarjetas de área a medio revelar: el contenido dependía de que GSAP terminara de
+animarlo. Además, la navegación no tenía "Mi ruta", las descripciones de área vivían detrás de un
+giro 3D, Resultados anunciaba un ganador arbitrario en un empate y Comunidad mostraba filas que
+volteaban en lugar de abrir algo. El sistema visual era fuerte; el sistema de uso no.
+
+### Dirección: guía editorial universitaria
+
+Cada bloque responde una pregunta y ofrece una acción: ¿qué me interesa? (diagnóstico), ¿qué
+puedo aprender? (habilidades por etapas), ¿cómo lo respaldo? (credenciales comparables), ¿dónde se
+usa? (perfiles documentados), ¿cómo busco? (LinkedIn), ¿con quién avanzo? (comunidad). Titulares
+amplios con tracking negativo, numeración editorial de secciones (`01 / …`), superficies papel y
+verde bruma, paneles focales verde profundo y **fotografía real con pie** que nombra evento y lugar.
+
+Se estudiaron patrones de roadmap.sh (rutas por etapas), IxDF (separar aprendizaje, credencial y
+comunidad) y Linear (jerarquía y agrupación). No se copia ninguna identidad.
+
+### Tokens
+
+| Elemento | Valor |
+|---|---|
+| Colores | Los cinco oficiales y sus derivados, sin cambios (ver *Colors*) |
+| `.h1` | `clamp(2.25rem, 5vw, 4.25rem)` / 1.06, 600, −0.045em, `text-wrap: balance` |
+| `.h2` | `clamp(1.65rem, 3vw, 2.5rem)` / 1.15, 600, −0.035em |
+| `.h3` | 1.125rem / 1.4, 600, −0.015em |
+| `.lead` | 1.075rem / 1.75, `Tinta Suave` |
+| Cuerpo | 1rem / 1.65 |
+| `.eyebrow` | 0.7rem / 1.5, 700, 0.14em, mayúsculas, `Ámbar Quemado` |
+| Contenedor | `.page-shell`: 1152px con canalón de 24px |
+| Ritmo | `.section-py`: 64px, 96px desde `md` |
+| Radios | 20px tarjeta (`.surface`), 28px panel focal (`.dark-panel`), 12–14px controles internos, píldora para acciones |
+| Bordes | Tinta al 12% (`--line`), 22% en controles (`--line-strong`) |
+| Acciones | `.btn-green` (verde profundo), `.btn-outline`, `.btn-light` (sobre verde); mínimo 48px. Controles repetidos y enlaces, mínimo 44px |
+| Datos | `.number` con cifras tabulares; barras con valor explícito y marca del 60% neutral |
+| "Todavía no" | `.status-pending`: borde punteado. Una sola forma para todo lo pendiente |
+
+### Estructura
+
+- **Cabecera de papel** con franja de vitral de 8px como firma, marca compacta (`p↗` + PotroPath +
+  "INGENIERÍA · UAEMÉX"), cuatro destinos —Inicio, Diagnóstico, Mi ruta, Comunidad— y un CTA que
+  cambia con el avance guardado. Bajo 1024px, menú desplegable que cierra con Escape y al navegar.
+  Enlace "Saltar al contenido".
+- **Pie verde profundo** con marca, recorrido, nota de privacidad y la aclaración de que empresas y
+  credenciales citadas son referencias. Franja de vitral al final.
+- **El texto ya no cae sobre el vitral.** Por eso se retiraron `VitralBackdrop` y la franja de
+  lectura `.vitral-scrim`: el problema de contraste que resolvían dejó de existir.
+
+### Vistas
+
+- **Inicio:** hero dividido con la foto real de la Rama Estudiantil IEEE UAEMéx (el lienzo se lee en
+  la imagen); tres pasos; cinco áreas con descripción siempre visible y una sexta celda que invita
+  al diagnóstico en vez de estirar una tarjeta; testimonios sólo si existen y están autorizados;
+  panel de comunidad. Las fotos de banco del mosaico anterior ya no se muestran.
+- **Diagnóstico:** columna de 720px, radios nativos en filas de 58px, progreso por respuestas
+  guardadas, atajos 1–5 y Enter en laptop, "Ir a la primera pendiente" al final si falta alguna,
+  reinicio confirmado.
+- **Resultados:** panel focal con el resultado o el empate reconocido; comparación de cinco áreas
+  con marca del 60%; "Cómo se calcula" desplegable; selector de las cinco rutas; habilidades por
+  etapas; comparación de dos credenciales; perfiles con requisitos mínimos y deseables; búsqueda en
+  LinkedIn; enlace a la comunidad del área explorada.
+- **Comunidad:** hero dividido con foto de Talent Land; directorio de cinco intereses ligado a la
+  URL; Rama IEEE con logo, propósito y estado en una tarjeta por sociedad; galería editorial de seis
+  fotos verificadas; agenda vacía compacta.
+
+### Movimiento
+
+Scroll nativo y contenido inmediato. No hay GSAP, Matter.js, ScrollSmoother ni revelados: las
+dependencias se quitaron de `package.json`. El único movimiento son transiciones de color de
+140–280ms y el llenado de la barra de progreso, todo anulado bajo `prefers-reduced-motion`. Esto
+sustituye *Motion* y sus reglas del `from` y del Único Rebote, que quedan como historia.
+
+### Retirado, para no reintroducirlo por accidente
+
+Mosaico con física, tarjetas y filas que voltean, carruseles, `SectionDivider` animado, vitral como
+fondo de texto, `HeroMosaic`, `PhotoCard`, `Reveal`, `SmoothScroller`, `src/lib/gsap.js`,
+`src/lib/motion.js`. Todo está en el historial de git.
+
 ## Overview
+
+> **Histórico.** Esta sección y las siguientes describen la primera versión. Donde contradigan a
+> *Redesign 2026-10*, manda la especificación vigente.
 
 **Creative North Star: "El vitral y el papel"**
 

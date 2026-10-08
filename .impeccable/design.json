@@ -296,7 +296,67 @@
         "name": "xl",
         "value": "1280px"
       }
-    ]
+    ],
+    "redesign202610": {
+      "precedence": "Sustituye los tratamientos históricos en conflicto. Ver DESIGN.md → 'Redesign 2026-10 — especificación vigente'.",
+      "direction": "Guía editorial universitaria",
+      "typography": {
+        "display": "clamp(2.25rem, 5vw, 4.25rem) / 1.06",
+        "headline": "clamp(1.65rem, 3vw, 2.5rem) / 1.15",
+        "title": "1.125rem / 1.4",
+        "lead": "1.075rem / 1.75",
+        "body": "1rem / 1.65",
+        "label": "0.7rem / 1.5",
+        "tracking": {
+          "display": "-0.045em",
+          "headline": "-0.035em",
+          "title": "-0.015em",
+          "label": "0.14em"
+        },
+        "headingWeight": 600
+      },
+      "layout": {
+        "container": "1152px",
+        "gutter": "24px",
+        "sectionY": "64px / 96px desde md",
+        "cardRadius": "20px",
+        "focalRadius": "28px",
+        "header": "papel, marca 24px y franja de vitral de 8px",
+        "footer": "verde profundo con franja de vitral"
+      },
+      "tokens": {
+        "line": "rgb(37 37 37 / 12%)",
+        "lineStrong": "rgb(37 37 37 / 22%)",
+        "minTarget": "44px (controles), 48px (botones de acción)",
+        "neutralMarker": "60% sobre cada barra de afinidad"
+      },
+      "components": [
+        "Cabecera con CTA contextual y menú móvil",
+        "Hero editorial dividido con foto real y pie",
+        "Radios nativos del diagnóstico con atajos 1–5",
+        "Panel de resultado con empates reconocidos",
+        "Mapa de habilidades por etapas",
+        "Tarjetas de credenciales comparables",
+        "Explorador de perfiles documentados",
+        "Búsqueda externa en LinkedIn (GET nativo)",
+        "Directorio de comunidad por interés",
+        "Tarjeta IEEE con logo, propósito y estado",
+        "Galería editorial con pies verificados",
+        "Testimonios condicionados a autorización"
+      ],
+      "motion": "Scroll nativo y contenido inmediato. Sin GSAP, Matter.js ni revelados; sólo transiciones de color de 140–280ms, anuladas con prefers-reduced-motion.",
+      "retired": [
+        "HeroMosaic y física",
+        "tarjetas que voltean",
+        "Carousel",
+        "PhotoCard",
+        "Reveal",
+        "SectionDivider",
+        "SmoothScroller",
+        "VitralBackdrop y .vitral-scrim"
+      ],
+      "status": "Implementado y verificado a 390px y 1440px el 8 de octubre de 2026"
+    }
   },
   "components": [
     {
