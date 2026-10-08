@@ -89,6 +89,8 @@ function Home() {
         <figure className="hero-picture">
           <img
             src="/images/inicio-rama-ieee.webp"
+            srcSet="/images/inicio-rama-ieee-720.webp 720w, /images/inicio-rama-ieee.webp 1200w"
+            sizes="(min-width: 768px) 520px, calc(100vw - 48px)"
             alt="Integrantes de la Rama Estudiantil IEEE UAEMéx reunidos de noche alrededor de un vehículo todo terreno construido por el equipo, frente a su lona"
             width={1200}
             height={750}

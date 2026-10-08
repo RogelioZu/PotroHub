@@ -53,6 +53,8 @@ function Community() {
         <figure className="hero-picture">
           <img
             src="/images/comunidad/quienes-somos.webp"
+            srcSet="/images/comunidad/quienes-somos-720.webp 720w, /images/comunidad/quienes-somos.webp 1216w"
+            sizes="(min-width: 768px) 520px, calc(100vw - 48px)"
             alt="Grupo de estudiantes de la Facultad de Ingeniería en Talent Land México 2026"
             width={1216}
             height={780}
