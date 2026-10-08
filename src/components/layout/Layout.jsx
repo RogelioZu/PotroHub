@@ -1,31 +1,26 @@
 import RouteTransition from '../motion/RouteTransition'
-import SmoothScroller from '../motion/SmoothScroller'
 import Footer from './Footer'
 import Navbar from './Navbar'
 
 /**
- * `RouteTransition` sustituye a `<Outlet />` para poder despedir la vista
- * saliente antes de montar la entrante. La columna flexible vive dentro de
- * `SmoothScroller` porque ScrollSmoother convierte su envoltorio en un
- * elemento fijo, y el footer debe seguir pegado abajo en páginas cortas.
+ * Scroll nativo. `ScrollSmoother` convertía el documento en un elemento fijo
+ * con inercia: las anclas internas, el teclado y los paneles que cambian de
+ * alto (comparar credenciales, cambiar de puesto) dejaban de comportarse como
+ * el navegador promete. Una guía que se lee y se recorre no necesita inercia.
+ *
+ * `main` es columna flexible para que una vista corta —el 404, el estado sin
+ * resultados— pueda centrarse en el alto disponible. `tabIndex={-1}` lo hace
+ * destino válido del enlace "Saltar al contenido".
  */
 function Layout() {
   return (
-    <SmoothScroller>
-      <div className="flex min-h-svh flex-col">
-        <Navbar />
-        {/*
-          `main` es columna flexible, no sólo `flex-1`: así una vista corta
-          —el 404, el estado vacío de resultados— puede pedir `flex-1` y
-          centrarse en el alto disponible en vez de flotar en el tercio
-          superior. Las vistas largas no crecen y quedan exactamente igual.
-        */}
-        <main className="flex flex-1 flex-col">
-          <RouteTransition />
-        </main>
-        <Footer />
-      </div>
-    </SmoothScroller>
+    <div className="flex min-h-svh flex-col">
+      <Navbar />
+      <main id="contenido" tabIndex={-1} className="flex flex-1 flex-col focus:outline-none">
+        <RouteTransition />
+      </main>
+      <Footer />
+    </div>
   )
 }
 
