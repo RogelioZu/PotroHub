@@ -4,8 +4,8 @@ Diagnóstico de afinidad vocacional **dentro** de Ingeniería en Computación, p
 Facultad de Ingeniería de la UAEMéx. 50 preguntas → área de mayor afinidad → habilidades,
 certificaciones y comunidad. Sin registro, sin datos personales, todo del lado del cliente.
 
-React 19 + Vite + Tailwind CSS v4 + React Router + Zustand (persistido) + GSAP. Español (es-MX).
-Matter.js sólo para la física del mosaico del hero, cargado bajo demanda.
+React 19 + Vite + Tailwind CSS v4 + React Router + Zustand (persistido). Español (es-MX).
+Sin librerías de animación: scroll nativo y contenido inmediato (ver `DESIGN.md` → *Redesign 2026-10*).
 
 ---
 
@@ -19,7 +19,8 @@ desactualiza y una mentira en el contexto es peor que un contexto ausente.
 | `PRODUCT.md` | Verdad de producto: usuarios, propósito, posicionamiento, alcance, principios, y **qué no existe y no puede inventarse** | Tocar copy, contenido, alcance, datos o cualquier afirmación |
 | `DESIGN.md` | El mundo visual comprometido: paleta, tipografía, layout, formas, componentes, movimiento y sus **Reglas Nombradas** | Tocar UI, CSS, clases, color, espaciado o animación |
 | `.impeccable/design.json` | Sidecar de `DESIGN.md`: rampas tonales, sombras, tokens de movimiento y componentes con HTML/CSS listos | Necesitar valores exactos que el frontmatter no cabe |
-| `.impeccable/critique/` | Críticas archivadas con puntaje heurístico y problemas priorizados | Buscar qué está roto y con qué prioridad |
+| `.impeccable/critique/` | Críticas archivadas con puntaje heurístico y problemas priorizados. La de septiembre es anterior al rediseño: coteja con el código antes de reutilizarla | Buscar qué está roto y con qué prioridad |
+| `docs/` | Arquitectura y procesamiento, rendimiento medido, protocolo del piloto, plan institucional, comparativa y bitácora del rediseño | Hablar de evidencia, métricas, validación o adopción |
 | `README.md` | La memoria descriptiva académica (planteamiento, alcance, entregables de fase) y la puesta en marcha (requisitos, comandos, rutas, estructura) | Contexto institucional del proyecto, o levantarlo desde cero |
 
 **Regla de precedencia:** en decisiones visuales manda `DESIGN.md`. En verdad de producto y voz
@@ -40,11 +41,10 @@ Todo lo demás está en los documentos. Estos cuatro se equivocan rápido y cues
    existe para ganarse. Ver `PRODUCT.md` → *Evidence on Hand*.
 2. **La paleta es cerrada.** Cinco colores del manual de identidad de la UAEMéx más sus tintes
    derivados. Si falta un matiz, se **deriva**; no se inventa. Nunca un color suelto.
-3. **Todo movimiento es opcional.** Cada animación va dentro de
-   `gsap.matchMedia('(prefers-reduced-motion: no-preference)')`, o comprueba
-   `prefersReducedMotion()` en las ramas imperativas. Y todo revelado usa `gsap.from`, nunca
-   `gsap.to` desde un estado oculto: el HTML por defecto es el estado **visible**, así que si el JS
-   falla la página se ve completa.
+3. **Ningún contenido depende de una animación.** La versión anterior escondía el titular del hero
+   hasta que GSAP lo revelaba, y una captura sin interacción lo mostraba vacío. Hoy todo se pinta en
+   su estado final; sólo hay transiciones de color, anuladas por `prefers-reduced-motion` en
+   `index.css`. No reintroduzcas GSAP ni revelados sin una razón que pese más que eso.
 4. **Español en todo.** Copy, comentarios de código, mensajes de error. La voz es directa y sin
    condescendencia: habla a estudiantes como futuros profesionales.
 
@@ -57,10 +57,11 @@ npm run dev       # servidor de desarrollo (Vite)
 npm run build     # build de producción
 npm run preview   # previsualizar el build
 npm run lint      # oxlint
+npm test          # node --test tests/*.test.js (afinidad, datos profesionales, búsqueda)
 ```
 
-No hay suite de pruebas. La verificación real de un cambio de UI es: `npm run lint`, `npm run build`,
-el detector de Impeccable, y **mirar la página** en los anchos que importan (390px y 1440px).
+La verificación real de un cambio de UI es: `npm run lint`, `npm test`, `npm run build`, el
+detector de Impeccable, y **mirar la página** en los anchos que importan (390px y 1440px).
 
 ```bash
 node ~/.claude/skills/impeccable/scripts/detect.mjs --json src index.html
@@ -77,37 +78,36 @@ compromete deliberadamente una sola familia tipográfica cargando la jerarquía 
 src/
   main.jsx                  Punto de entrada
   App.jsx                   Rutas: / · /quiz · /resultados · /comunidad · *
-  index.css                 @theme de Tailwind v4 (tokens), utilidades y clases de componente
+  index.css                 @theme de Tailwind v4 (tokens) y clases del sistema editorial
   data/                     Contenido estático — NO es un CMS; cambiarlo es cambiar código
     questions.js            50 preguntas (10 por área), escala 1–5. ids: `<areaId>-<n>`
     areas.js                Las cinco áreas fijas
-    roadmap.js              Habilidades y certificaciones por área
+    roadmap.js              Habilidades por etapas, entregables y credenciales por área
+    credentials.js          Diez credenciales con tipo, nivel, fuente y fecha de revisión
+    careers.js              Cinco perfiles profesionales con requisitos y fuente
+    community.js            Teams (null), eventos (vacío), capítulos IEEE, galería, intereses
+    testimonials.js         Citas del piloto (vacío hasta tener autorizaciones) y estado del piloto
   store/quizStore.js        Zustand persistido en localStorage, clave `potropath-quiz`
   lib/
-    gsap.js                 Punto ÚNICO de registro de GSAP y sus plugins
-    motion.js               Tokens de movimiento: DUR, EASE, STAGGER, media queries
+    affinity.js             Cálculo puro de afinidad, empates y caso neutral
+    careerSearch.js         URL de búsqueda en LinkedIn (sólo puesto y ubicación)
+    format.js               Fecha de revisión legible
     useDocumentTitle.js     Título por vista
-    useMosaicPhysics.js     Física del mosaico del hero (matter-js, carga diferida)
   components/
     layout/                 Navbar, Footer, Layout
-    ui/                     VitralBackdrop, HeroMosaic, PhotoCard, ConfirmButton, Carousel
-    motion/                 Reveal, SectionDivider, RouteTransition, SmoothScroller
+    motion/RouteTransition  Foco y anclas al cambiar de ruta (ya sin animación)
+    results/                SkillPath, CredentialExplorer, CareerExplorer
+    home/Testimonials       Voces del piloto, sólo si existen
+    ui/ConfirmButton        Confirmación en dos toques para borrar respuestas
   pages/                    Home, Quiz, Results, Community, NotFound
-assets-src/                 Masters. Fuera de public/, no entran al build, y por
-                            eso mover un archivo aquí lo borra del sitio. Cuatro
-                            carpetas por destino: comunidad/, logotipos-ieee/,
-                            inicio/, institucional/. Su README.md lleva la
-                            procedencia de cada fotografía — y ahí importa tanto
-                            como la imagen (ver su README.md)
-public/images/              vitral-biblioteca.webp y potro-mascota.webp son activos
-                            institucionales reales, areas/*.webp las cinco fotos de
-                            área (ver su README.md); og-potropath.png es la tarjeta
-                            de vista previa generada
-public/images/comunidad/    Las fotos de /comunidad. Su README.md manda: qué
-                            archivo va en qué hueco, con qué medidas y cuáles
-                            siguen pendientes. El hero sirve dos recortes
-                            distintos del mismo original por <picture> — no es
-                            una optimización, es encuadre
+tests/                      Pruebas con el runner nativo de Node (`npm test`)
+docs/                       Arquitectura, rendimiento, piloto, plan institucional, comparativa
+assets-src/                 Masters. Fuera de public/, no entran al build. Su README.md lleva la
+                            procedencia de cada fotografía — y ahí importa tanto como la imagen
+public/images/              inicio-rama-ieee.webp (hero de Inicio), vitral (franja de 8px),
+                            mascota, areas/*.webp y og-potropath.png. Ver su README.md
+public/images/comunidad/    Fotos de /comunidad. Su README.md manda: qué archivo va dónde y
+                            cuáles ya no se muestran (U-HACKS no es de la UAEMéx)
 ```
 
 Cuando regeneres `og-potropath.png`, la fuente de la composición vive en `DESIGN.md` →
@@ -122,16 +122,12 @@ absolutizar `og:image` en `index.html` y añadir `og:url` — está marcado ahí
   código: por qué `scaleX` y no `width`, por qué `svh` y no `vh`, por qué `revert()` y no `kill()`.
   Cuando cambies algo que un comentario explica, **actualiza el comentario** — un comentario que
   miente es peor que ninguno.
-- **Ningún componente importa `gsap` directamente.** Todo pasa por `src/lib/gsap.js`, para que los
-  plugins se registren una sola vez y los valores por defecto sean los mismos en todo el sitio.
-- **Ninguna duración ni curva se escribe a mano.** Salen de `src/lib/motion.js`.
-- **`matter-js` nunca se importa de forma estática.** Entra sólo por el `import()` dinámico de
-  `useMosaicPhysics`, en el primer agarre. Un `import` normal lo metería en el bundle principal y le
-  cobraría 26 KB comprimidos a quien nada más lee la portada.
+- **El contenido vive en `src/data/`, no en el JSX.** Una foto, una credencial o un acceso se
+  agregan editando datos; las pruebas de `tests/` detectan referencias rotas entre ellos.
+- **Cada fuente externa lleva `sourceUrl` y `reviewedAt`.** `reviewedAt` es el día en que alguien
+  leyó la página oficial; no se adelanta sin volver a leerla. Una ficha que desaparece se sustituye.
 - **Ninguna página fija un tamaño de encabezado suelto.** Se usan `.h1`, `.h2`, `.h3`, `.lead` y
   `.eyebrow` de `index.css`.
-- **Los escalonados de GSAP usan `amount`, nunca `each`**, para que el retardo total quede acotado
-  sin importar el largo de la lista.
 - Tailwind v4 configurado **en CSS** (`@theme` en `index.css`). No hay `tailwind.config.js`.
 
 ---
@@ -146,6 +142,7 @@ Un documento desactualizado envenena todas las sesiones siguientes.
 | Color, tipografía, espaciado, forma, componente o movimiento | `DESIGN.md` **y** `.impeccable/design.json` (deben coincidir) |
 | Usuarios, alcance, capacidades, restricciones o principios | `PRODUCT.md` |
 | Algo pendiente que se vuelve real (los canales de Teams, eventos IEEE, la estadística, Supabase) | `PRODUCT.md` → *Evidence on Hand*, **y** quita el estado vacío honesto que lo suplía |
+| Un testimonio o resultado del piloto | Sólo con autorización registrada fuera del repo. Ver `docs/PILOTO.md` |
 | Rutas, dependencias, scripts o estructura de carpetas | Este archivo |
 | Una Regla Nombrada que el código deja de cumplir | `DESIGN.md`: o corriges el código, o escribes la deuda explícitamente. Nunca la dejes callada |
 

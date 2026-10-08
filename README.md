@@ -42,14 +42,44 @@ A diferencia de los test vocacionales tradicionales que se enfocan en elegir una
 
 ### 4. Arquitectura y stack tecnológico
 
-Para la construcción del MVP se optó por un enfoque orientado a la velocidad de despliegue y validación temprana, utilizando tecnologías de dominio actual del equipo, con una arquitectura modular que facilita su futura integración institucional.
+Para la construcción del MVP se optó por un enfoque orientado a la velocidad de despliegue y validación temprana, utilizando tecnologías de dominio actual del equipo, con una arquitectura modular que facilita su futura integración institucional. El detalle completo —componentes, flujo de datos, fórmula con ejemplo numérico y decisiones— está en [`docs/ARQUITECTURA.md`](docs/ARQUITECTURA.md).
 
-- **Frontend (agilidad y experiencia de usuario):** interfaz desarrollada con **React 19** y **Vite**, estilizada con **Tailwind CSS v4** y animada con **GSAP**. Opera completamente del lado del cliente: no hay ida y vuelta al servidor durante el diagnóstico, no hay sesión y no se recogen datos personales.
-- **Gestión de datos locales:** las 50 preguntas, las cinco áreas y el contenido de ruta son módulos JavaScript estáticos en `src/data/` — no un CMS: cambiarlos es un cambio de código. El estado del cuestionario lo administra **Zustand** y persiste en `localStorage` (clave `potropath-quiz`), de modo que una sesión sobrevive al cierre de la pestaña sin pedir registro.
-- **Modelo de puntaje:** cada pregunta suma únicamente a su propia área; los totales se normalizan a un porcentaje de afinidad de 0 a 100 y se ordenan. Se muestran los cinco puntajes, no sólo el ganador.
-- **Movimiento y accesibilidad:** todo el movimiento está condicionado a `prefers-reduced-motion` y todo revelado se construye de manera que el estado por defecto del HTML sea el visible — si el JavaScript falla o tarda, la página se ve completa. **Matter.js** (física del mosaico de la portada) se carga sólo bajo demanda, en el primer arrastre, para no cobrarle 26 KB comprimidos a quien únicamente lee la portada desde un teléfono con red de campus mala.
-- **Backend y base de datos (analíticas anónimas):** ⏳ *pendiente de definir* — se contempla **Supabase** (PostgreSQL) con el único fin de recolectar estadísticas anónimas de los resultados finales, sin sistemas de autenticación ni perfiles de usuario, para maximizar la participación.
-- **Proyección institucional y escalabilidad:** aunque el MVP se ejecuta sobre un entorno serverless moderno, el proyecto contempla en fases posteriores la viabilidad de migrar su backend a PHP y bases de datos locales, alineándose a los estándares e infraestructura tecnológica actual de la UAEMéx para asegurar su adopción oficial y mantenimiento a largo plazo.
+```mermaid
+flowchart LR
+  E[Estudiante] --> UI[React: Inicio · Diagnóstico · Mi ruta · Comunidad]
+  UI --> R[React Router]
+  UI <--> S[Zustand: respuestas e índice]
+  S <--> L[(localStorage del navegador)]
+  Q[Preguntas y áreas estáticas] --> F[Función de afinidad]
+  S --> F
+  F --> V[Resultados: porcentajes, empates, caso neutral]
+  D[Habilidades · credenciales · perfiles] --> V
+  C[Datos de comunidad] --> UI
+  V --> X[Enlaces a fuentes oficiales]
+  V --> LI[Búsqueda externa en LinkedIn]
+```
+
+*Arquitectura actual. No hay servidor propio, cuentas ni base de datos: ningún dato sale del navegador salvo los dos términos que el estudiante escribe en la búsqueda de LinkedIn.*
+
+- **Frontend:** **React 19** y **Vite**, estilizado con **Tailwind CSS v4** sobre un sistema editorial propio. Opera completamente del lado del cliente; sin librerías de animación —el contenido nunca espera a una animación para aparecer—.
+- **Gestión de datos locales:** preguntas, áreas, ruta de habilidades, credenciales, perfiles profesionales y comunidad son módulos JavaScript estáticos en `src/data/`. El estado del cuestionario lo administra **Zustand** y persiste en `localStorage` (clave `potropath-quiz`), saneado al rehidratar.
+- **Procesamiento:** cada respuesta (1–5) suma sólo a su área; el total se expresa como porcentaje del máximo de 50 puntos. Con el diagnóstico completo la escala va de 20% a 100% y 60% es el punto neutral. Los empates se reconocen y responder "Neutral" a todo no produce un ganador. Las recomendaciones son asociaciones estáticas área → habilidades → credenciales → perfiles: **no se usa un modelo de IA ni se predice empleabilidad.** La función es pura (`src/lib/affinity.js`) y está cubierta por pruebas.
+- **Calidad:** 13 pruebas automatizadas (`npm test`), lint sin advertencias y verificación en navegador a 390 y 1440 px. Rendimiento medido con Lighthouse en [`docs/RENDIMIENTO.md`](docs/RENDIMIENTO.md).
+- **Backend y base de datos (analíticas anónimas):** ⏳ *pendiente de decidir tras el piloto* — se contempla **Supabase** (PostgreSQL) o la infraestructura que defina la universidad, sólo para eventos agregados y sin perfiles de usuario. Ver [`docs/PLAN-INSTITUCIONAL.md`](docs/PLAN-INSTITUCIONAL.md).
+- **Proyección institucional y escalabilidad:** al ser un sitio estático, puede alojarse en cualquier servidor web de la UAEMéx sin dependencias de ejecución. Una migración a PHP y bases de datos locales sólo se justifica si un servicio de datos llega a ser necesario; el plan por etapas está en el documento institucional.
+
+### 5. Validación y evidencia
+
+| Pregunta | Dónde está la respuesta | Estado |
+| --- | --- | --- |
+| ¿Cómo está construido y cómo procesa? | [`docs/ARQUITECTURA.md`](docs/ARQUITECTURA.md) | ✅ Documentado y contrastado con el código |
+| ¿Qué tan rápido carga? | [`docs/RENDIMIENTO.md`](docs/RENDIMIENTO.md) | ✅ Medido (laboratorio, condiciones declaradas) |
+| ¿Lo entienden y les sirve a los estudiantes? | [`docs/PILOTO.md`](docs/PILOTO.md) | ⏳ Protocolo, instrumentos y metas listos; piloto sin ejecutar |
+| ¿Cómo se adopta en la facultad? | [`docs/PLAN-INSTITUCIONAL.md`](docs/PLAN-INSTITUCIONAL.md) | ⏳ Plan por etapas; responsables por confirmar |
+| ¿En qué se distingue de herramientas similares? | [`docs/COMPARATIVA.md`](docs/COMPARATIVA.md) | ✅ Matriz con fuentes y fecha |
+| ¿Qué cambió en el rediseño y cómo se verificó? | [`docs/REDISENO.md`](docs/REDISENO.md) | ✅ Implementado y verificado |
+
+**Ningún resultado del piloto se presenta como obtenido antes de ejecutarlo.** Los testimonios de Inicio aparecerán sólo con citas reales y autorización de cada participante.
 
 ## Stack técnico
 
@@ -62,9 +92,8 @@ Las versiones exactas las fija `package-lock.json`; `npm ci` las reproduce tal c
 | Estilos                   | [Tailwind CSS](https://tailwindcss.com/)             | 4       | ✅ Configurado |
 | Enrutamiento              | [React Router](https://reactrouter.com/)             | 7       | ✅ Configurado |
 | Estado global             | [Zustand](https://zustand.docs.pmnd.rs/)             | 5       | ✅ Configurado |
-| Animación                 | [GSAP](https://gsap.com/) + `@gsap/react`            | 3       | ✅ Configurado |
-| Física del mosaico        | [Matter.js](https://brm.io/matter-js/) (bajo demanda) | 0.20    | ✅ Configurado |
 | Linter                    | [oxlint](https://oxc.rs/docs/guide/usage/linter)     | 1       | ✅ Configurado |
+| Pruebas                   | Runner nativo de Node (`node --test`)                | 20+     | ✅ 13 pruebas  |
 | Backend / DB analítica    | [Supabase](https://supabase.com/)                    | —       | ⏳ Pendiente   |
 
 Tailwind v4 se configura **en CSS** (bloque `@theme` en `src/index.css`): no existe `tailwind.config.js` y no debe crearse.
@@ -115,6 +144,7 @@ npm run preview   # sirve dist/ en http://localhost:4173
 | `npm run build` | Build de producción en `dist/` |
 | `npm run preview` | Sirve el build ya generado (`localhost:4173`), para revisarlo tal como se publicaría |
 | `npm run lint` | oxlint sobre todo el repositorio, con las reglas de `.oxlintrc.json` |
+| `npm test` | Pruebas de afinidad, integridad de datos profesionales y búsqueda (`tests/`) |
 
 ### Casos frecuentes
 
@@ -128,10 +158,9 @@ Probar en un teléfono real vale la pena: el teléfono con red de campus mala es
 
 ### Verificación de un cambio
 
-No hay suite de pruebas automatizadas. La verificación real de un cambio es:
-
 ```bash
-npm run lint      # sin errores nuevos
+npm run lint      # sin errores ni advertencias
+npm test          # 13 pruebas
 npm run build     # el build pasa
 ```
 
@@ -143,28 +172,26 @@ npm run build     # el build pasa
 | --- | --- | --- |
 | `/` | Inicio | Presentación y entrada al diagnóstico |
 | `/quiz` | Diagnóstico | Las 50 preguntas, una por pantalla, con progreso reanudable |
-| `/resultados` | Mi ruta | Los cinco puntajes de afinidad, habilidades y certificaciones del área ganadora |
-| `/comunidad` | Comunidad | Canales de Teams por especialidad y Rama Estudiantil IEEE UAEMéx |
+| `/resultados` | Mi ruta | Afinidad en las cinco áreas (con empates), y por cualquier área: habilidades por etapas, credenciales comparables, perfiles profesionales y búsqueda en LinkedIn |
+| `/comunidad` | Comunidad | Directorio por especialidad (`?area=`), Rama Estudiantil IEEE UAEMéx, galería de experiencias y agenda |
 | cualquier otra | 404 | Página de no encontrado |
 
 ## Estructura del repositorio
 
 ```
 src/
-  main.jsx                  Punto de entrada
-  App.jsx                   Rutas: / · /quiz · /resultados · /comunidad · *
-  index.css                 @theme de Tailwind v4 (tokens), utilidades y clases de componente
-  data/                     Contenido estático — no es un CMS; cambiarlo es cambiar código
-    questions.js            50 preguntas (10 por área), escala 1–5
-    areas.js                Las cinco áreas fijas
-    roadmap.js              Habilidades y certificaciones por área
+  main.jsx · App.jsx        Entrada y rutas: / · /quiz · /resultados · /comunidad · *
+  index.css                 Tokens de Tailwind v4 y sistema editorial
+  data/                     Contenido estático: preguntas, áreas, ruta, credenciales,
+                            perfiles, comunidad y testimonios (vacío hasta el piloto)
   store/quizStore.js        Zustand persistido en localStorage (clave `potropath-quiz`)
-  lib/                      Registro único de GSAP, tokens de movimiento y hooks compartidos
-  components/               layout/ · ui/ · motion/
+  lib/                      Afinidad (función pura), búsqueda LinkedIn, formato y título
+  components/               layout/ · results/ · home/ · ui/ · motion/
   pages/                    Home, Quiz, Results, Community, NotFound
-public/images/              Activos que se publican tal cual (vitral, mascota, fotos de área
-                            y de comunidad). Sus README documentan cada imagen y la
-                            especificación de las que todavía faltan
+tests/                      Pruebas con `node --test`
+docs/                       Arquitectura, rendimiento, piloto, plan institucional,
+                            comparativa y bitácora del rediseño
+public/images/              Activos publicados; sus README documentan procedencia
 assets-src/                 Masters sin comprimir; fuera de public/, no entran al build
 dist/                       Salida de `npm run build` (ignorada por Git)
 ```
@@ -184,13 +211,14 @@ En decisiones visuales manda `DESIGN.md`; en verdad de producto y voz manda `PRO
 
 ## Estado del proyecto
 
-**Real y utilizable hoy:** el banco de 50 preguntas y su escala, el contenido de ruta (habilidades y certificaciones) de las cinco áreas, la fotografía del vitral de la biblioteca de la facultad y la mascota universitaria, y el sitio completo navegable de punta a punta.
+**Real y utilizable hoy:** el banco de 50 preguntas y su escala; 25 habilidades con entregables, 10 credenciales y 5 perfiles profesionales con fuente y fecha de revisión; seis fotografías verificadas de estudiantes de la facultad; el vitral y la mascota; y el sitio completo navegable de punta a punta, con pruebas automatizadas.
 
 **Pendiente, declarado como pendiente en la propia interfaz** — ninguno de estos se simula como si ya existiera:
 
-- El código de invitación a los canales de Microsoft Teams (`TEAMS_JOIN_CODE_URL` es `null`).
+- El acceso a los canales de Microsoft Teams (`TEAMS_JOIN_URL` en `src/data/community.js` es `null`).
+- La prueba piloto con estudiantes y, después de ella, los testimonios autorizados (protocolo en `docs/PILOTO.md`).
 - La agenda real de eventos de la Rama IEEE y la confirmación de sus capítulos activos.
 - La estadística de titulación de la UAEMéx que sustentará el planteamiento.
 - El backend de analíticas anónimas en Supabase.
 
-**Ningún estudiante ha usado todavía el producto.** No hay testimonios, conteos de usuarios, cifras de adopción, convenios ni aprobación institucional, y nada de eso debe aparecer como contenido del sitio.
+**Ningún estudiante ha usado todavía el producto fuera de las pruebas de desarrollo.** No hay testimonios, conteos de usuarios, cifras de adopción, convenios ni aprobación institucional, y nada de eso debe aparecer como contenido del sitio.

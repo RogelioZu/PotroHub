@@ -83,15 +83,25 @@ semestre, aquí".
 
 ## Capabilities and Constraints
 
-- **Solo del lado del cliente.** React + Vite, Tailwind CSS v4, React Router, Zustand (persistido) y
-  GSAP para el movimiento. Sin ida y vuelta al servidor durante el diagnóstico.
+- **Solo del lado del cliente.** React + Vite, Tailwind CSS v4, React Router y Zustand (persistido),
+  con scroll nativo y sin librerías de animación. Sin ida y vuelta al servidor durante el
+  diagnóstico. La arquitectura y el flujo de procesamiento están en `docs/ARQUITECTURA.md`.
 - **El contenido son módulos de datos estáticos**, no un CMS: preguntas, áreas y ruta viven en
   `src/data/`. Cambiarlos es un cambio de código.
 - **Cinco áreas fijas:** Inteligencia Artificial, Ciberseguridad, Cloud Computing, Ciencia de Datos
   y Desarrollo de Software.
 - **Modelo de puntaje:** cada pregunta suma únicamente a su propia área; los totales por área se
-  normalizan a un porcentaje de afinidad de 0 a 100 y se ordenan. Se muestran los cinco puntajes, no
-  solo el ganador.
+  expresan como porcentaje del máximo posible —de 20 a 100 con el diagnóstico completo; diez
+  respuestas "Neutral" dan 60— y se ordenan. Se muestran los cinco puntajes, no solo el ganador. Un
+  empate se nombra como empate y responder "Neutral" a todo se presenta como "Tu camino aún está
+  abierto", nunca como un ganador. La función vive en `src/lib/affinity.js` con pruebas en `tests/`.
+- **Ruta profesional.** Por área: cinco habilidades en tres etapas con un entregable sugerido, dos
+  credenciales comparables (tipo, nivel, preparación, evaluación, enfoque) y un perfil profesional
+  publicado por una empresa tecnológica, con requisitos mínimos y deseables separados. Cada fuente
+  lleva enlace y fecha de revisión; los perfiles son ejemplos, no vacantes vigentes, convenios ni
+  una evaluación de elegibilidad. La afinidad no mide dominio ni preparación laboral.
+- **Búsqueda en LinkedIn.** Formulario GET con puesto y ubicación editable (México por defecto). No
+  envía respuestas del diagnóstico, no extrae resultados y no simula un feed de vacantes.
 - **Supabase (PostgreSQL) está planeado solo para analíticas anónimas agregadas** — recolectar
   resultados finales sin autenticación y sin perfiles de usuario, para que medir nunca cueste
   participación.
@@ -114,9 +124,9 @@ semestre, aquí".
   sobre tipografía, layout o movimiento — esos siguen siendo decisiones de diseño abiertas, no
   restricciones heredadas.
 - **Activos institucionales reales disponibles:**
-  - `public/images/vitral-biblioteca.png` — fotografía del vitral real de la biblioteca de la
+  - `public/images/vitral-biblioteca.webp` — fotografía del vitral real de la biblioteca de la
     Facultad de Ingeniería; un panorámico muy ancho (~8.9:1) de sus cuatro paneles de vidrio.
-  - `public/images/potro-mascota.png` — la mascota de la universidad, recortada de su fondo
+  - `public/images/potro-mascota.webp` — la mascota de la universidad, recortada de su fondo
     original.
 - **Voz:** español, directa y sin condescendencia — se dirige a los estudiantes como futuros
   profesionales que están tomando una decisión real, no como niños a los que se orienta.
@@ -126,6 +136,10 @@ semestre, aquí".
 **Real y utilizable hoy:**
 
 - El banco de 50 preguntas (10 por área) y la escala de acuerdo de 1 a 5.
+- Seis fotografías de estudiantes de la facultad con evento y lugar verificables (Rama IEEE UAEMéx,
+  Talent Land 2026, Women in Engineering, Axolotl Tournament y visita a UAM Lerma, PoliHacks), ver
+  `public/images/comunidad/README.md`.
+- Diez credenciales y cinco perfiles profesionales con fuente oficial y fecha de revisión.
 - El contenido de ruta por área: habilidades demandadas y certificaciones de referencia para las
   cinco áreas.
 - La fotografía del vitral y la mascota (rutas arriba).
@@ -136,8 +150,11 @@ semestre, aquí".
 **Confirmado como próximo, pero todavía no real.** Cada uno de estos llegará a ser dato real; hasta
 entonces debe presentarse honestamente como pendiente y nunca simularse como si existiera:
 
-- El código de invitación a los canales de Microsoft Teams (`TEAMS_JOIN_CODE` es actualmente `null`).
-- La lista confirmada de capítulos IEEE y una agenda real de eventos (`events` está vacío).
+- El acceso a los canales de Microsoft Teams (`TEAMS_JOIN_URL` en `src/data/community.js` es `null`).
+- La lista confirmada de capítulos IEEE y una agenda real de eventos (`EVENTS` está vacío).
+- La prueba piloto con estudiantes: protocolo listo en `docs/PILOTO.md`, sin ejecutar. Hasta que haya
+  citas reales y autorizadas, `TESTIMONIALS` en `src/data/testimonials.js` está vacío e Inicio no
+  muestra la sección.
 - La estadística de titulación de la UAEMéx que sustentará el planteamiento (nota placeholder en el
   README).
 - El backend de analíticas anónimas en Supabase.
@@ -168,9 +185,9 @@ cosas apareciendo como contenido sería un invento.
 
 - **Contenido en español primero (es-MX)**; el idioma de la interfaz no es negociable para esta
   audiencia.
-- **El movimiento reducido ya es un compromiso honrado.** Todo el movimiento está condicionado a la
-  preferencia `prefers-reduced-motion` del usuario; es un requisito permanente, no una mejora
-  opcional.
+- **El movimiento reducido ya es un compromiso honrado.** Ningún contenido depende de una animación,
+  y las pocas transiciones de color se anulan con `prefers-reduced-motion`; es un requisito
+  permanente, no una mejora opcional.
 - **Los teléfonos con una red de campus posiblemente mala son un caso primario**, no un respaldo. El
   peso y la respuesta son requisitos de producto, no pulido.
 - **Sin decidir:** si la adopción oficial de la UAEMéx impondría un estándar formal de accesibilidad
