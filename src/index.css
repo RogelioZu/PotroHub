@@ -380,9 +380,15 @@
    * arriba de la cabecera y abajo del pie. Ya no hay texto encima del vidrio,
    * así que la franja de lectura de la primera versión dejó de hacer falta.
    */
+  /*
+   * La franja usa `vitral-franja.webp` (1600x24, 12 KB), una banda recortada
+   * del vitral, y no el panorámico completo (2736x308, 207 KB): pintar 8px
+   * con la foto entera costaba medio segundo de primer pintado en un
+   * teléfono con 4G lento, medido con Lighthouse (docs/RENDIMIENTO.md).
+   */
   .brand-ribbon {
     height: 8px;
-    background: var(--color-green) url("/images/vitral-biblioteca.webp") center 52% / cover;
+    background: var(--color-green) url("/images/vitral-franja.webp") center / cover;
   }
 
   .site-header {
