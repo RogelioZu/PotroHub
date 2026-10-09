@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ConfirmButton from '../components/ui/ConfirmButton'
+import Icon from '../components/ui/Icon'
 import { AREA_BY_ID } from '../data/areas'
 import { QUESTIONS, SCALE } from '../data/questions'
 import { useDocumentTitle } from '../lib/useDocumentTitle'
@@ -148,7 +149,7 @@ function Quiz() {
           onClick={goPrevious}
           disabled={currentIndex === 0}
         >
-          <span aria-hidden="true">←</span> Anterior
+          <Icon name="arrow-left" /> Anterior
         </button>
         <button
           type="button"
@@ -156,12 +157,12 @@ function Quiz() {
           onClick={advance}
           disabled={!selected || (isLast && !canFinish)}
         >
-          {isLast ? 'Descubrir mi ruta' : 'Siguiente'} <span aria-hidden="true">→</span>
+          {isLast ? 'Descubrir mi ruta' : 'Siguiente'} <Icon name="arrow-right" />
         </button>
       </div>
 
       {isLast && pending > 0 && (
-        <div className="mt-5 rounded-2xl bg-green-soft p-5 text-sm" role="status">
+        <div className="mt-5 rounded-md bg-green-soft p-5 text-sm" role="status">
           <p>
             Te {pending === 1 ? 'falta 1 afirmación' : `faltan ${pending} afirmaciones`} antes de
             ver tu ruta.

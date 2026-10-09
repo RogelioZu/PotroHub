@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { CREDENTIALS } from '../../data/credentials'
 import { formatReviewDate } from '../../lib/format'
+import Icon from '../ui/Icon'
 
 /** Las dimensiones con las que se comparan dos credenciales, en el mismo orden siempre. */
 const DIMENSIONS = [
@@ -96,7 +97,7 @@ function CredentialExplorer({ ids, areaName }) {
                   <span className="sr-only"> {credential.name}</span>
                 </label>
                 <a className="text-link" href={credential.sourceUrl} target="_blank" rel="noreferrer">
-                  Ver programa oficial <span aria-hidden="true">↗</span>
+                  Ver programa oficial <Icon name="arrow-up-right" />
                   <span className="sr-only"> (abre otra pestaña)</span>
                 </a>
               </div>

@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { AREA_BY_ID } from '../../data/areas'
 import { FOCUS_BY_ID } from '../../data/focuses'
 import { useQuizStore } from '../../store/quizStore'
+import Icon from '../ui/Icon'
 
 /**
  * Lo que la interfaz dice sobre de dónde salieron las preguntas. Las de
@@ -103,7 +104,7 @@ function RefinePanel({ areas, focus }) {
         </div>
       ) : (
         <div className="surface panel-pad swap-in">
-          <p className="source-note">{SOURCE_NOTE[refinement.source]}</p>
+          <p className="source-note max-w-3xl">{SOURCE_NOTE[refinement.source]}</p>
 
           <div className="mt-6 grid gap-8 md:grid-cols-2">
             {questions.map((question, questionIndex) => (
@@ -154,7 +155,7 @@ function RefinePanel({ areas, focus }) {
               <p className="mt-2 text-sm muted">{focus.description}</p>
               <p className="source-note mt-2">{reasonFor(focus, refinement.picks)}</p>
               <a href="#primer-paso" className="text-link mt-4">
-                Ver tu primer paso <span aria-hidden="true">↓</span>
+                Ver tu primer paso <Icon name="arrow-down" />
               </a>
             </div>
           )}

@@ -4,6 +4,7 @@ import { CAREERS } from '../../data/careers'
 import { ROADMAP } from '../../data/roadmap'
 import { DEFAULT_LOCATION, LINKEDIN_JOBS_URL, linkedInSearch } from '../../lib/careerSearch'
 import { formatReviewDate } from '../../lib/format'
+import Icon from '../ui/Icon'
 
 /**
  * Dos bloques que responden "¿dónde se usa esto?":
@@ -104,7 +105,7 @@ function CareerExplorer({ areaId }) {
                 </div>
               </div>
 
-              <div className="rounded-2xl bg-green-soft p-5">
+              <div className="rounded-md bg-green-soft p-5">
                 <p className="eyebrow">Conecta con tu ruta</p>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {related.map((skill) => (
@@ -121,10 +122,10 @@ function CareerExplorer({ areaId }) {
 
               <div className="mt-5 flex flex-wrap gap-x-6">
                 <a href={selected.sourceUrl} target="_blank" rel="noreferrer" className="text-link">
-                  Consultar ficha original <span aria-hidden="true">↗</span>
+                  Consultar ficha original <Icon name="arrow-up-right" />
                 </a>
                 <a href={similarSearch} target="_blank" rel="noreferrer" className="text-link">
-                  Puestos similares en LinkedIn <span aria-hidden="true">↗</span>
+                  Puestos similares en LinkedIn <Icon name="arrow-up-right" />
                 </a>
               </div>
               <p className="source-note mt-2">
@@ -184,7 +185,7 @@ function CareerExplorer({ areaId }) {
             />
           </div>
           <button type="submit" className="btn-light" disabled={!canSearch}>
-            Buscar en LinkedIn <span aria-hidden="true">↗</span>
+            Buscar en LinkedIn <Icon name="arrow-up-right" />
           </button>
         </form>
 

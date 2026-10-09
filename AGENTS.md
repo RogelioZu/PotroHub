@@ -137,6 +137,7 @@ src/
                             ("Afina tu ruta", que alimenta "Tu primer paso")
     home/Testimonials       Voces del piloto, sólo si existen
     ui/ConfirmButton        Confirmación en dos toques para borrar respuestas
+    ui/Icon                 Los seis íconos de trazo del sitio (flechas, menú, cerrar); no glifos
   pages/                    Home, Quiz, Results, Community, NotFound
 api/
   detonadoras.js            POST /api/detonadoras (Vercel). Su cabecera es el contrato

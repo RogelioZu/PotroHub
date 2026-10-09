@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import Testimonials from '../components/home/Testimonials'
+import Icon from '../components/ui/Icon'
 import { AREAS } from '../data/areas'
 import { QUESTIONS } from '../data/questions'
 import { useDocumentTitle } from '../lib/useDocumentTitle'
@@ -62,10 +63,10 @@ function Home() {
             style={{ '--d': 3 }}
           >
             <Link className="btn-green" to={action.to}>
-              {action.label} <span aria-hidden="true">↗</span>
+              {action.label} <Icon name="arrow-up-right" />
             </Link>
             <a href="#como-funciona" className="text-link">
-              Cómo funciona <span aria-hidden="true">↓</span>
+              Cómo funciona <Icon name="arrow-down" />
             </a>
           </div>
           <p className="hero-facts enter" style={{ '--d': 4 }}>
@@ -163,7 +164,7 @@ function Home() {
                 <h3 className="h3 mt-2">{area.name}</h3>
                 <p>{area.description}</p>
                 <Link to={`/comunidad?area=${area.id}#especialidades`} className="text-link">
-                  Ver su comunidad <span aria-hidden="true">↗</span>
+                  Ver su comunidad <Icon name="arrow-up-right" />
                 </Link>
               </div>
             </article>
@@ -178,7 +179,7 @@ function Home() {
               </p>
             </div>
             <Link to={action.to} className="btn-light self-start">
-              {action.label} <span aria-hidden="true">↗</span>
+              {action.label} <Icon name="arrow-up-right" />
             </Link>
           </div>
         </div>
@@ -198,7 +199,7 @@ function Home() {
               estudiantes de la facultad y los espacios donde puedes seguir explorando.
             </p>
             <Link to="/comunidad" className="btn-light mt-6">
-              Conocer la comunidad <span aria-hidden="true">↗</span>
+              Conocer la comunidad <Icon name="arrow-up-right" />
             </Link>
           </div>
           <figure>

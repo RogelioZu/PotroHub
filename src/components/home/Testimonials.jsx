@@ -1,4 +1,5 @@
 import { PILOT, TESTIMONIALS } from '../../data/testimonials'
+import Icon from '../ui/Icon'
 
 /**
  * "Lo que dicen quienes ya lo probaron": citas reales y autorizadas de
@@ -32,7 +33,7 @@ function Testimonials() {
             </p>
           </div>
           <a href={PILOT.callUrl} target="_blank" rel="noreferrer" className="btn-green">
-            Quiero participar <span aria-hidden="true">↗</span>
+            Quiero participar <Icon name="arrow-up-right" />
           </a>
         </div>
       </section>

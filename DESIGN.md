@@ -15,19 +15,31 @@ colors:
 typography:
   brand:
     fontFamily: "DM Sans, Inter, system-ui, sans-serif"
-    fontSize: "1.5rem"
+    fontSize: "1.75rem"
     fontWeight: 700
-    lineHeight: "1.1"
-    letterSpacing: "-0.04em"
+    lineHeight: "1"
+    letterSpacing: "-0.035em"
   display:
     fontFamily: "DM Sans, Inter, system-ui, sans-serif"
-    fontSize: "clamp(2.25rem, 5vw, 4.25rem)"
+    fontSize: "clamp(2.1rem, 5vw, 4rem)"
     fontWeight: 600
     lineHeight: "1.06"
     letterSpacing: "-0.045em"
+  display-compact:
+    fontFamily: "DM Sans, Inter, system-ui, sans-serif"
+    fontSize: "clamp(2.1rem, 4vw, 3.5rem)"
+    fontWeight: 600
+    lineHeight: "1.06"
+    letterSpacing: "-0.045em"
+  figure:
+    fontFamily: "DM Sans, Inter, system-ui, sans-serif"
+    fontSize: "clamp(3.5rem, 8vw, 4.5rem)"
+    fontWeight: 500
+    lineHeight: "1"
+    letterSpacing: "-0.05em"
   headline:
     fontFamily: "DM Sans, Inter, system-ui, sans-serif"
-    fontSize: "clamp(1.65rem, 3vw, 2.5rem)"
+    fontSize: "clamp(1.6rem, 3vw, 2.4rem)"
     fontWeight: 600
     lineHeight: "1.15"
     letterSpacing: "-0.035em"
@@ -49,13 +61,26 @@ typography:
     fontWeight: 400
     lineHeight: "1.65"
     letterSpacing: "normal"
+  small:
+    fontFamily: "DM Sans, Inter, system-ui, sans-serif"
+    fontSize: "0.9rem"
+    fontWeight: 400
+    lineHeight: "1.6"
+    letterSpacing: "normal"
+  caption:
+    fontFamily: "DM Sans, Inter, system-ui, sans-serif"
+    fontSize: "0.8rem"
+    fontWeight: 400
+    lineHeight: "1.55"
+    letterSpacing: "normal"
   label:
     fontFamily: "DM Sans, Inter, system-ui, sans-serif"
-    fontSize: "0.7rem"
+    fontSize: "0.72rem"
     fontWeight: 700
     lineHeight: "1.5"
     letterSpacing: "0.14em"
 rounded:
+  xs: "8px"
   sm: "12px"
   md: "20px"
   focal: "28px"
@@ -69,25 +94,25 @@ spacing:
   section-y-md: "96px"
 components:
   button-green:
-    backgroundColor: "{colors.verde-universitario}"
-    textColor: "{colors.papel}"
-    rounded: "{rounded.full}"
-    padding: "12px 24px"
-  button-green-hover:
     backgroundColor: "{colors.verde-profundo}"
     textColor: "{colors.papel}"
     rounded: "{rounded.full}"
-    padding: "12px 24px"
+    padding: "12px 22px"
+  button-green-hover:
+    backgroundColor: "{colors.verde-universitario}"
+    textColor: "{colors.papel}"
+    rounded: "{rounded.full}"
+    padding: "12px 22px"
   button-outline:
     backgroundColor: "transparent"
-    textColor: "{colors.tinta-suave}"
+    textColor: "{colors.tinta}"
     rounded: "{rounded.full}"
-    padding: "12px 24px"
+    padding: "12px 22px"
   button-outline-hover:
-    backgroundColor: "transparent"
-    textColor: "{colors.verde-universitario}"
+    backgroundColor: "{colors.verde-bruma}"
+    textColor: "{colors.verde-profundo}"
     rounded: "{rounded.full}"
-    padding: "12px 24px"
+    padding: "12px 22px"
   button-green-deep:
     backgroundColor: "{colors.verde-profundo}"
     textColor: "{colors.papel}"
@@ -100,19 +125,19 @@ components:
     padding: "12px 24px"
   quiz-option:
     backgroundColor: "transparent"
-    textColor: "{colors.tinta-suave}"
-    rounded: "{rounded.md}"
-    padding: "12px 16px"
+    textColor: "{colors.tinta}"
+    rounded: "{rounded.sm}"
+    padding: "14px 18px"
   quiz-option-selected:
     backgroundColor: "{colors.verde-bruma}"
     textColor: "{colors.tinta}"
-    rounded: "{rounded.md}"
-    padding: "12px 16px"
+    rounded: "{rounded.sm}"
+    padding: "14px 18px"
   card:
-    backgroundColor: "{colors.papel-gris}"
-    textColor: "{colors.tinta-suave}"
+    backgroundColor: "{colors.papel}"
+    textColor: "{colors.tinta}"
     rounded: "{rounded.md}"
-    padding: "20px"
+    padding: "28px"
   card-note:
     backgroundColor: "{colors.verde-bruma}"
     textColor: "{colors.tinta-suave}"
@@ -164,16 +189,24 @@ comunidad) y Linear (jerarquía y agrupación). No se copia ninguna identidad.
 |---|---|
 | Colores | Los cinco oficiales y sus derivados, sin cambios (ver *Colors*) |
 | Base | `html { font-size: 112.5% }`: 18px. Todo lo que está en `rem` crece ×1.125 en proporción |
-| `.h1` | `clamp(2.1rem, 5vw, 4rem)` / 1.06, 600, −0.045em, `text-wrap: balance` |
-| `.h2` | `clamp(1.6rem, 3vw, 2.4rem)` / 1.15, 600, −0.035em |
-| `.h3` | 1.125rem / 1.4, 600, −0.015em |
-| `.lead` | 1.075rem / 1.75, `Tinta Suave` |
-| Cuerpo | 1rem / 1.65 |
-| `.eyebrow` | 0.72rem / 1.5, 700, 0.14em, mayúsculas, `Ámbar Quemado` |
+| Escala tipográfica | Once pasos, uno por rol, como tokens `--text-*` en `@theme` (ver *La regla de la Escala Cerrada*) |
+| `display` · `.h1` | `clamp(2.1rem, 5vw, 4rem)` / 1.06, 600, −0.045em, `word-spacing: 0.03em`, `text-wrap: balance` |
+| `display-compact` | `clamp(2.1rem, 4vw, 3.5rem)`: el titular dentro del panel de resultado, a media columna |
+| `figure` | `clamp(3.5rem, 8vw, 4.5rem)` / 1, 500, −0.05em: la cifra del resultado; su "%" va a 0.33em |
+| `headline` · `.h2` | `clamp(1.6rem, 3vw, 2.4rem)` / 1.15, 600, −0.035em |
+| `title` · `.h3` | 1.125rem / 1.4, 600, −0.015em, `text-wrap: balance` |
+| `lead` · `.lead` | 1.075rem / 1.75, `Tinta Suave` |
+| `body` | 1rem / 1.65; párrafos con `text-wrap: pretty` |
+| `small` | 0.9rem (16.2px): botones, enlaces, chips, opciones, campos, texto secundario. `text-sm` de Tailwind apunta aquí |
+| `caption` | 0.8rem (14.4px): `.source-note`, pies de foto, metadatos, índices compactos. `text-xs` apunta aquí |
+| `label` · `.eyebrow` | 0.72rem / 1.5, 700, 0.14em, mayúsculas, `Ámbar Quemado`; también píldoras, teclas e índices de paso |
+| `brand` | 1.75rem, 700, −0.035em: la marca, igual en cabecera y pie |
 | Marca | Sólo texto: "Potro" en `Verde Universitario`, "Path" en oro derivado (60% `Oro Viejo` + 40% `Ámbar Quemado`, 3.26:1 sobre papel); nunca menos de 24px en negrita |
 | Contenedor | `.page-shell`: 1152px con canalón de 24px |
 | Ritmo | `.section-py`: 64px, 96px desde `md` |
-| Radios | 20px tarjeta (`.surface`), 28px panel focal (`.dark-panel`), 12–14px controles internos, píldora para acciones |
+| Radios | `--radius-xs` 8px (teclas) · `--radius-sm` 12px (controles y cajas internas: opciones, campos, puestos, entregable, marcas) · `--radius-md` 20px (tarjetas y fotos) · `--radius-focal` 28px (panel verde profundo y foto del hero), **20px en teléfono** · píldora para acciones y etiquetas. En JSX, `rounded-md` es 20px |
+| Íconos | `Icon.jsx`: seis trazos propios de 1.6px en retícula de 16 (flechas ↗ ↓ → ←, menú, cerrar), a 1em y en `currentColor`. La flecha de una acción avanza 3px en su propia dirección al pasar el cursor |
+| Superficies del navegador | Selección en `Oro Claro` al 75%, cursor de texto en verde profundo, subrayado de 1px a 5px del texto en todo enlace |
 | Bordes | Tinta al 12% (`--line`), 22% en controles (`--line-strong`) |
 | Acciones | `.btn-green` (verde profundo), `.btn-outline`, `.btn-light` (sobre verde); mínimo 48px. Controles repetidos y enlaces, mínimo 44px |
 | Datos | `.number` con cifras tabulares; barras con valor explícito y marca del 60% neutral |
@@ -186,8 +219,10 @@ comunidad) y Linear (jerarquía y agrupación). No se copia ninguna identidad.
   cambia con el avance guardado. Bajo 1024px, menú desplegable que cierra con Escape y al navegar.
   Enlace "Saltar al contenido".
 - **Pie sobre el vitral completo**, con el filete dorado de 2px arriba, como en la primera versión.
-  El texto se apoya en `.footer-scrim` (tinta al 72%, desvanecida en los 24px de arriba y abajo):
-  es *La regla de la Franja de Lectura* aplicada de nuevo. Todo el texto pequeño va en `Papel` a
+  El texto se apoya en `.footer-scrim` (tinta al **42%**, desvanecida en los 24px de arriba y abajo)
+  más la sombra de texto: **deuda registrada** contra *La regla de la Franja de Lectura*, que pide
+  72%. Se quedó en 42% por decisión, para que el vitral se vea; medido el 8 de octubre de 2026, el
+  10% más brillante del vidrio deja el texto cerca de 4:1. En teléfono el pie va a una columna. Todo el texto pequeño va en `Papel` a
   opacidad plena; `Oro Claro` sólo en "Path", que a 24px en negrita es texto grande. La foto es un
   `<img loading="lazy">` porque siempre está bajo el pliegue y pesa 207 KB.
 
@@ -211,6 +246,10 @@ comunidad) y Linear (jerarquía y agrupación). No se copia ninguna identidad.
 - **Comunidad:** hero dividido con foto de Talent Land; directorio de cinco intereses ligado a la
   URL; Rama IEEE con logo, propósito y estado en una tarjeta por sociedad; galería editorial de seis
   fotos verificadas; agenda vacía compacta.
+  Los cuatro logotipos IEEE llevan un ancho que iguala su área visible (`logoWidth` en
+  Community.jsx): a una misma altura, el de Computer Society ocupaba tres veces el área del de Women
+  in Engineering. El estado "Actividad local por confirmar" se apoya en el borde inferior de cada
+  tarjeta para quedar alineado en las cuatro.
 
 ### Afina tu ruta
 
@@ -252,6 +291,15 @@ respuestas". Y lo que no es de la IA no se hace pasar por ella: las preguntas de
 son de respaldo y que no leyeron las respuestas. La etiqueta es `.source-note`, sin color propio ni
 ícono de "IA" — un destello o un degradado de chispa es justo el lenguaje de dashboard SaaS que
 este sistema rechaza.
+
+### La regla de la Escala Cerrada
+
+**Ningún tamaño de letra ni radio se escribe suelto.** Salen de los tokens `--text-*` y
+`--radius-*` de `index.css`, y DESIGN.md los lista en su frontmatter. Antes del pulido de octubre
+convivían una veintena de tamaños (0.75, 0.8, 0.82, 0.85, 0.875, 0.9, 0.925rem…) y nueve radios
+(7, 12, 14, 16, 18, 20, 22, 24, 28px): diferencias que el ojo no nombra pero que juntas se leen como
+descuido. Si un rol nuevo pide un paso que no existe, se agrega a la escala con su porqué; no se
+escribe al lado.
 
 ### Movimiento
 
@@ -460,7 +508,8 @@ a varias revisiones: el costo no es cómo se ven hoy, es que el día que la esca
 enteren. Cuando haga falta el mismo tamaño con otro color, se pisa el color sobre la clase
 (`.eyebrow text-gold-light`), no se reescribe la clase.
 
-**La regla de la Franja de Lectura.** Todo texto que cae sobre la fotografía del vitral se apoya en
+**La regla de la Franja de Lectura.** *(El pie del rediseño la incumple a propósito: va al 42%. Ver
+Redesign 2026-10 → Estructura.)* Todo texto que cae sobre la fotografía del vitral se apoya en
 una franja de `Tinta` al **72%** (`.vitral-scrim`) que va a plena fuerza donde cae el contenido y se
 desvanece en los `24px` de canalón de arriba y abajo, donde nunca hay letras. Encima sigue el
 `text-shadow` —`0 2px 10px rgb(0 0 0 / 70%)` para la marca, `0 1px 6px rgb(0 0 0 / 75%)` para el

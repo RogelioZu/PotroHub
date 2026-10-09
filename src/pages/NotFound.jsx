@@ -15,7 +15,7 @@ function NotFound() {
       <img
         src="/images/potro-mascota.webp"
         alt=""
-        className="h-28 w-auto rounded-2xl bg-paper p-2 ring-1 ring-ink/10"
+        className="h-28 w-auto rounded-md bg-paper p-2 ring-1 ring-ink/10"
       />
       <p className="eyebrow">Error 404</p>
       <h1 className="h1 max-w-2xl">Esta página no está en el mapa.</h1>

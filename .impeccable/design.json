@@ -311,19 +311,36 @@
           "display": "-0.045em",
           "headline": "-0.035em",
           "title": "-0.015em",
-          "label": "0.14em"
+          "label": "0.14em",
+          "figure": "-0.05em"
         },
         "headingWeight": 600,
-        "base": "html 112.5% (18px)"
+        "base": "html 112.5% (18px)",
+        "displayCompact": "clamp(2.1rem, 4vw, 3.5rem) / 1.06",
+        "figure": "clamp(3.5rem, 8vw, 4.5rem) / 1",
+        "small": "0.9rem / 1.6 (text-sm de Tailwind)",
+        "caption": "0.8rem / 1.55 (text-xs de Tailwind)",
+        "brand": "1.75rem, 700, -0.035em",
+        "rule": "Escala cerrada: tokens --text-* en @theme; ningún tamaño suelto",
+        "wordSpacing": {
+          "display": "0.03em"
+        }
       },
       "layout": {
         "container": "1152px",
         "gutter": "24px",
         "sectionY": "64px / 96px desde md",
-        "cardRadius": "20px",
-        "focalRadius": "28px",
+        "cardRadius": "20px (--radius-md)",
+        "focalRadius": "28px desde md, 20px en teléfono (--radius-focal)",
         "header": "papel, marca de texto y franja de vitral de 16px con desplazamiento lento",
-        "footer": "vitral completo con filete dorado de 2px y franja de lectura al 72%"
+        "footer": "vitral completo con filete dorado de 2px y franja de lectura al 42% más sombra de texto; deuda registrada contra la regla de la Franja de Lectura (72%); una columna en teléfono",
+        "radii": {
+          "xs": "8px",
+          "sm": "12px",
+          "md": "20px",
+          "focal": "28px",
+          "full": "9999px"
+        }
       },
       "tokens": {
         "line": "rgb(37 37 37 / 12%)",
@@ -343,7 +360,8 @@
         "Directorio de comunidad por interés",
         "Tarjeta IEEE con logo, propósito y estado",
         "Galería editorial con pies verificados",
-        "Testimonios condicionados a autorización"
+        "Testimonios condicionados a autorización",
+        "Íconos de trazo propios (Icon.jsx): flechas, menú y cerrar"
       ],
       "motion": {
         "principle": "CSS sin librerías; ningún contenido depende de una animación",
@@ -382,7 +400,12 @@
         "Barra fija de exploración con nombres cortos",
         "01 Aprende · 02 Acredita · 03 Conoce el rol · 04 Busca",
         "Comunidad y reinicio"
-      ]
+      ],
+      "browserSurfaces": {
+        "selection": "Oro Claro al 75% con Tinta",
+        "caret": "verde profundo",
+        "underline": "1px a 5px del texto"
+      }
     }
   },
   "components": [

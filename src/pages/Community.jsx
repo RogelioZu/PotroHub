@@ -1,4 +1,5 @@
 import { Link, useSearchParams } from 'react-router-dom'
+import Icon from '../components/ui/Icon'
 import { AREAS, AREA_BY_ID } from '../data/areas'
 import { CHAPTERS, EVENTS, GALLERY, INTERESTS, TEAMS_JOIN_URL } from '../data/community'
 import { useDocumentTitle } from '../lib/useDocumentTitle'
@@ -20,6 +21,25 @@ import { useDocumentTitle } from '../lib/useDocumentTitle'
  * Las filas que volteaban se retiraron: pulsar un canal revelaba una
  * descripción y no abría ningún canal, que es lo que el gesto prometía.
  */
+
+/** Área visible común de los logotipos IEEE, en px², y su alto máximo. */
+const LOGO_AREA = 8000
+const LOGO_MAX_HEIGHT = 88
+
+/**
+ * El ancho que iguala el área de un logotipo con la de los demás.
+ *
+ * A una misma altura, el de Computer Society (3.2 : 1) ocupaba tres veces el
+ * área del de Women in Engineering (1 : 1), y la rejilla se leía como si una
+ * sociedad pesara más que otra. Igualar áreas es la corrección óptica usual
+ * para una fila de logotipos. El tope de alto evita que el cuadrado crezca
+ * más que la caja; el ancho se recalcula con él para no deformarlo.
+ */
+function logoWidth({ width, height }) {
+  const ratio = width / height
+  return `${Math.round(Math.min(Math.sqrt(LOGO_AREA * ratio), LOGO_MAX_HEIGHT * ratio))}px`
+}
+
 function Community() {
   useDocumentTitle('Comunidad — Aprende con otros · PotroPath')
   const [params, setParams] = useSearchParams()
@@ -45,10 +65,10 @@ function Community() {
             style={{ '--d': 3 }}
           >
             <a href="#especialidades" className="btn-green">
-              Encontrar mi espacio <span aria-hidden="true">↓</span>
+              Encontrar mi espacio <Icon name="arrow-down" />
             </a>
             <a href="#experiencias" className="text-link">
-              Ver experiencias <span aria-hidden="true">↓</span>
+              Ver experiencias <Icon name="arrow-down" />
             </a>
           </div>
         </div>
@@ -150,7 +170,7 @@ function Community() {
                   rel="noreferrer"
                   className="btn-light mt-4"
                 >
-                  Abrir el acceso en Teams <span aria-hidden="true">↗</span>
+                  Abrir el acceso en Teams <Icon name="arrow-up-right" />
                 </a>
               ) : (
                 <>
@@ -196,12 +216,13 @@ function Community() {
                       alt={`Logotipo de IEEE ${chapter.name}`}
                       width={chapter.logo.width}
                       height={chapter.logo.height}
+                      style={{ width: logoWidth(chapter.logo) }}
                       loading="lazy"
                     />
                   </div>
                   <h3 className="h3">{chapter.name}</h3>
                   <p className="mt-2 text-sm muted">{chapter.focus}</p>
-                  <p className="source-note mt-4">Actividad local por confirmar</p>
+                  <p className="source-note">Actividad local por confirmar</p>
                 </article>
               ))}
             </div>
@@ -252,11 +273,11 @@ function Community() {
               y compartirlo con compañeros de clase.
             </p>
             <Link to="/resultados" className="btn-green mt-6">
-              Volver a mi ruta <span aria-hidden="true">↗</span>
+              Volver a mi ruta <Icon name="arrow-up-right" />
             </Link>
           </div>
 
-          <div className="rounded-2xl bg-green-soft p-6">
+          <div className="rounded-md bg-green-soft p-6">
             <h3 className="h3">Próximos eventos</h3>
             {EVENTS.length === 0 ? (
               <p className="mt-3 text-sm muted">

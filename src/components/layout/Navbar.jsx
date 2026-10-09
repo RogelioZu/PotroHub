@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { QUESTIONS } from '../../data/questions'
 import { useQuizStore } from '../../store/quizStore'
+import Icon from '../ui/Icon'
 
 /*
  * Cuatro destinos, en el orden del recorrido. "Mi ruta" no existía en la
@@ -68,7 +69,7 @@ function Navbar() {
         </nav>
 
         <Link to={cta.to} className="btn-green nav-cta">
-          {cta.label} <span aria-hidden="true">↗</span>
+          {cta.label} <Icon name="arrow-up-right" />
         </Link>
 
         <button
@@ -78,7 +79,7 @@ function Navbar() {
           aria-controls="menu-movil"
           onClick={() => setOpenOn(open ? null : pathname)}
         >
-          {open ? 'Cerrar' : 'Menú'} <span aria-hidden="true">{open ? '×' : '☰'}</span>
+          {open ? 'Cerrar' : 'Menú'} <Icon name={open ? 'close' : 'menu'} />
         </button>
       </div>
 
@@ -96,7 +97,7 @@ function Navbar() {
             </NavLink>
           ))}
           <Link to={cta.to} className="btn-green mt-2" onClick={() => setOpenOn(null)}>
-            {cta.label} <span aria-hidden="true">↗</span>
+            {cta.label} <Icon name="arrow-up-right" />
           </Link>
         </nav>
       )}

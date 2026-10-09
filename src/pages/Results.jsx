@@ -5,6 +5,7 @@ import CredentialExplorer from '../components/results/CredentialExplorer'
 import SkillPath from '../components/results/SkillPath'
 import RefinePanel from '../components/results/RefinePanel'
 import ConfirmButton from '../components/ui/ConfirmButton'
+import Icon from '../components/ui/Icon'
 import { AREAS, AREA_BY_ID } from '../data/areas'
 import { CREDENTIALS } from '../data/credentials'
 import { QUESTIONS } from '../data/questions'
@@ -56,7 +57,7 @@ function EmptyState({ answered }) {
           </p>
           <Link to="/quiz" className="btn-light mt-8">
             {answered > 0 ? 'Continuar diagnóstico' : 'Descubrir mi ruta'}{' '}
-            <span aria-hidden="true">↗</span>
+            <Icon name="arrow-up-right" />
           </Link>
         </div>
         {/* La mascota de la universidad: el único guiño de esta pantalla. Va
@@ -64,7 +65,7 @@ function EmptyState({ answered }) {
         <img
           src="/images/potro-mascota.webp"
           alt=""
-          className="hidden h-36 w-auto rounded-2xl bg-paper p-2 md:block"
+          className="hidden h-36 w-auto rounded-md bg-paper p-2 md:block"
         />
       </div>
     </section>
@@ -136,7 +137,7 @@ function FirstStep({ area, route, focus, isTie }) {
             {active ? `Después: ${nextSkills.join(' · ')}.` : skill.purpose}
           </p>
           <a href="#habilidades" className="text-link">
-            Ver la ruta de habilidades <span aria-hidden="true">↓</span>
+            Ver la ruta de habilidades <Icon name="arrow-down" />
           </a>
         </li>
         <li>
@@ -145,7 +146,7 @@ function FirstStep({ area, route, focus, isTie }) {
           <h3 className="h3">Tu primer entregable</h3>
           <p className="text-sm muted">{active ? active.firstStep : skill.project}</p>
           <a href="#credenciales" className="text-link">
-            Cuando quieras acreditarlo: {credential.name} <span aria-hidden="true">↓</span>
+            Cuando quieras acreditarlo: {credential.name} <Icon name="arrow-down" />
           </a>
         </li>
         <li>
@@ -156,7 +157,7 @@ function FirstStep({ area, route, focus, isTie }) {
             Conoce las ideas para aprender en equipo y los espacios de la facultad para {area.name}.
           </p>
           <Link to={`/comunidad?area=${area.id}#especialidades`} className="text-link">
-            Ir a la comunidad <span aria-hidden="true">↗</span>
+            Ir a la comunidad <Icon name="arrow-up-right" />
           </Link>
         </li>
       </ol>
@@ -249,9 +250,14 @@ function ResultsView({ results, answers, chosenFocus, onRetake }) {
       <div className="page-shell">
         <div className="enter flex flex-wrap items-center justify-between gap-4 pt-10 pb-6">
           <p className="eyebrow">Tu diagnóstico · Completado</p>
-          <span className="pill bg-green-soft">
-            {QUESTIONS.length} de {QUESTIONS.length} respuestas · guardadas en este navegador
-          </span>
+          {/* Dos piezas y no una píldora larga: a 390px el texto completo no
+              cabía en una línea y la cápsula se deformaba en dos. */}
+          <p className="flex flex-wrap items-center gap-x-3 gap-y-1">
+            <span className="pill bg-green-soft">
+              {QUESTIONS.length} de {QUESTIONS.length} respuestas
+            </span>
+            <span className="source-note">Guardadas en este navegador</span>
+          </p>
         </div>
 
         <div className="result-grid">
@@ -271,14 +277,14 @@ function ResultsView({ results, answers, chosenFocus, onRetake }) {
               <div>
                 <p className="result-number number">
                   {top.percentage}
-                  <span className="ml-1 text-2xl">%</span>
+                  <span className="result-unit">%</span>
                 </p>
                 <p className="mt-3 text-xs text-paper/80">
                   {isTie ? 'Afinidad compartida más alta' : 'Afinidad con tus intereses'}
                 </p>
               </div>
               <a href="#primer-paso" className="btn-light">
-                Ver mi primer paso <span aria-hidden="true">↓</span>
+                Ver mi primer paso <Icon name="arrow-down" />
               </a>
             </div>
           </section>
@@ -298,7 +304,7 @@ function ResultsView({ results, answers, chosenFocus, onRetake }) {
               que te interesa, no una calificación de tus capacidades.
             </p>
             <details className="mt-1 text-xs muted">
-              <summary className="py-3 font-semibold underline underline-offset-4">
+              <summary className="py-3 font-semibold underline">
                 Cómo se calcula
               </summary>
               <p className="pb-2">
@@ -363,7 +369,7 @@ function ResultsView({ results, answers, chosenFocus, onRetake }) {
               <h2 className="h3 mt-2">Encuentra personas con tus mismos intereses.</h2>
             </div>
             <Link to={`/comunidad?area=${exploringId}#especialidades`} className="btn-green">
-              Explorar comunidad de {exploring.name} <span aria-hidden="true">↗</span>
+              Explorar comunidad de {exploring.name} <Icon name="arrow-up-right" />
             </Link>
           </div>
 
