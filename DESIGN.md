@@ -9,7 +9,9 @@ colors:
   papel: "#ffffff"
   papel-gris: "#f2f2f2"
   verde-bruma: "#e8ece7"
+  oro-bruma: "#f8f1e7"
   oro-claro: "#e3c48a"
+  ambar-hondo: "#91581b"
   tinta: "#252525"
   tinta-suave: "#5c5c5c"
 typography:
@@ -187,7 +189,7 @@ comunidad) y Linear (jerarquía y agrupación). No se copia ninguna identidad.
 
 | Elemento | Valor |
 |---|---|
-| Colores | Los cinco oficiales y sus derivados, sin cambios (ver *Colors*) |
+| Colores | Los cinco oficiales y sus derivados (ver *Colors*). Dos derivados nuevos para las bandas de Mi ruta: `Oro Bruma` y `Ámbar Hondo` (ver *La regla de las Bandas*) |
 | Base | `html { font-size: 112.5% }`: 18px. Todo lo que está en `rem` crece ×1.125 en proporción |
 | Escala tipográfica | Once pasos, uno por rol, como tokens `--text-*` en `@theme` (ver *La regla de la Escala Cerrada*) |
 | `display` · `.h1` | `clamp(2.1rem, 5vw, 4rem)` / 1.06, 600, −0.045em, `word-spacing: 0.03em`, `text-wrap: balance` |
@@ -199,11 +201,11 @@ comunidad) y Linear (jerarquía y agrupación). No se copia ninguna identidad.
 | `body` | 1rem / 1.65; párrafos con `text-wrap: pretty` |
 | `small` | 0.9rem (16.2px): botones, enlaces, chips, opciones, campos, texto secundario. `text-sm` de Tailwind apunta aquí |
 | `caption` | 0.8rem (14.4px): `.source-note`, pies de foto, metadatos, índices compactos. `text-xs` apunta aquí |
-| `label` · `.eyebrow` | 0.72rem / 1.5, 700, 0.14em, mayúsculas, `Ámbar Quemado`; también píldoras, teclas e índices de paso |
+| `label` · `.eyebrow` | 0.72rem / 1.5, 700, 0.14em, mayúsculas, `Ámbar Quemado` —`Ámbar Hondo` sobre un tinte, vía `--eyebrow`—; también píldoras, teclas e índices de paso |
 | `brand` | 1.75rem, 700, −0.035em: la marca, igual en cabecera y pie |
 | Marca | Sólo texto: "Potro" en `Verde Universitario`, "Path" en oro derivado (60% `Oro Viejo` + 40% `Ámbar Quemado`, 3.26:1 sobre papel); nunca menos de 24px en negrita |
 | Contenedor | `.page-shell`: 1152px con canalón de 24px |
-| Ritmo | `.section-py`: 64px, 96px desde `md` |
+| Ritmo | `.section-py`: 64px, 96px desde `md`. Bandas de Mi ruta (`.band`): 64px, 80px desde `md` |
 | Radios | `--radius-xs` 8px (teclas) · `--radius-sm` 12px (controles y cajas internas: opciones, campos, puestos, entregable, marcas) · `--radius-md` 20px (tarjetas y fotos) · `--radius-focal` 28px (panel verde profundo y foto del hero), **20px en teléfono** · píldora para acciones y etiquetas. En JSX, `rounded-md` es 20px |
 | Íconos | `Icon.jsx`: seis trazos propios de 1.6px en retícula de 16 (flechas ↗ ↓ → ←, menú, cerrar), a 1em y en `currentColor`. La flecha de una acción avanza 3px en su propia dirección al pasar el cursor |
 | Superficies del navegador | Selección en `Oro Claro` al 75%, cursor de texto en verde profundo, subrayado de 1px a 5px del texto en todo enlace |
@@ -211,6 +213,7 @@ comunidad) y Linear (jerarquía y agrupación). No se copia ninguna identidad.
 | Acciones | `.btn-green` (verde profundo), `.btn-outline`, `.btn-light` (sobre verde); mínimo 48px. Controles repetidos y enlaces, mínimo 44px |
 | Datos | `.number` con cifras tabulares; barras con valor explícito y marca del 60% neutral |
 | "Todavía no" | `.status-pending`: borde punteado. Una sola forma para todo lo pendiente |
+| Nota de alcance | `.source-note.caveat-note`: itálica y un `*` generado en el ámbar de la superficie (`--eyebrow`), fuera del lector de pantalla. Sólo para la letra pequeña que acota lo que algo **no** es —no es requisito, no garantiza, no mide dominio—; no para fuentes con fecha, avisos de privacidad ni la procedencia de la IA, que siguen como `.source-note` sola |
 
 ### Estructura
 
@@ -242,7 +245,8 @@ comunidad) y Linear (jerarquía y agrupación). No se copia ninguna identidad.
   explorada (nombres cortos) y las cuatro partes de la ruta; (5) 01 Aprende, 02 Acredita, 03 Conoce
   el rol y 04 Busca, cada una con una etiqueta del área explorada; (6) comunidad y reinicio. La
   barra existe porque, ya en credenciales o puestos, era fácil olvidar de qué área era el
-  contenido.
+  contenido. Del paso (2) en adelante, cada parte es una banda a lo ancho con su propio tono (ver
+  *La regla de las Bandas*).
 - **Comunidad:** hero dividido con foto de Talent Land; directorio de cinco intereses ligado a la
   URL; Rama IEEE con logo, propósito y estado en una tarjeta por sociedad; galería editorial de seis
   fotos verificadas; agenda vacía compacta.
@@ -291,6 +295,42 @@ respuestas". Y lo que no es de la IA no se hace pasar por ella: las preguntas de
 son de respaldo y que no leyeron las respuestas. La etiqueta es `.source-note`, sin color propio ni
 ícono de "IA" — un destello o un degradado de chispa es justo el lenguaje de dashboard SaaS que
 este sistema rechaza.
+
+### La regla de las Bandas
+
+**En Mi ruta, cada parte que responde una pregunta distinta es una banda a lo ancho con su propio
+fondo, y dos bandas contiguas nunca comparten tono.** Antes todo era papel blanco con filetes de
+`--line` (tinta al 12%, 1.2:1 contra el papel): en 390px y en 1440px las cuatro partes de la ruta
+se fundían en una sola columna y no se sabía dónde terminaba Aprende y empezaba Acredita.
+
+El tono no es una alternancia mecánica; dice qué clase de bloque es:
+
+| Banda | Tono | Por qué |
+|---|---|---|
+| Resultado | `Papel` | Ya tiene su panel focal; la banda no compite con él |
+| Para esta semana (Afina tu ruta + Tu primer paso) | `Verde Bruma` (`.band-mist`) | Lo que el estudiante hace. Van juntos porque el afinado reescribe el primer paso que tiene debajo |
+| Apertura "Tu ruta en …" | `Verde Profundo` (`.band-deep .route-opening`) | Abre el capítulo de la ruta. Comparte tono con el panel del resultado y con "Busca", así que la distingue la jerarquía: el nombre del área a tamaño `.h1`, la frase de la ruta como subtítulo `.h3`, la etiqueta en píldora de `Oro Claro` con texto `Verde Profundo` (6.43:1) y la foto con anillo de 2px del mismo oro. Se probó en `Verde Universitario` y se volvió al profundo por decisión |
+| 01 Aprende | `Papel` | Lectura |
+| 02 Acredita | `Oro Bruma` (`.band-gold`) | Papel de diploma: el tono de lo que acredita |
+| 03 Conoce el rol | `Papel` | Lectura |
+| 04 Busca | `Verde Profundo` (`.band-deep`) | Momento focal: cierra la ruta con la acción hacia fuera |
+| Comunidad y reinicio | `Papel`, con la invitación en tarjeta `Verde Bruma` | Lo que haces, otra vez en verde bruma |
+
+Dos detalles que conviene no deshacer:
+
+- **El filete de un tinte sale de su propio color, no de un gris**: verde bruma lleva arriba un
+  filete de `Verde Universitario` al 25% sobre su fondo, y oro bruma lleva arriba y abajo uno de
+  `Oro Viejo` al 40%. El cambio de tono solo (1.19:1 y 1.12:1 contra el papel) se percibe, pero
+  el filete es lo que lo vuelve una división decidida. Verde bruma no lleva filete abajo porque ahí
+  empieza la barra fija, que ya trae el suyo.
+- **Sobre un tinte, la etiqueta usa `Ámbar Hondo`.** `Ámbar Quemado` sobre verde bruma da
+  **4.33:1**, por debajo del 4.5:1 que pide texto de 13px; el fallo ya existía en la caja "Conecta
+  con tu ruta" y las bandas lo habrían multiplicado. Las superficies teñidas (`.band-mist`,
+  `.band-gold`, `.bg-green-soft`) redefinen `--eyebrow`, y `.eyebrow` lo lee.
+
+Las tarjetas que viven en una banda teñida pasan a `Papel`: "Tu primer paso" era verde bruma y
+sobre la banda del mismo tono habría desaparecido. Las bandas son de Mi ruta; si otra página las
+adopta, se escribe aquí con su tabla.
 
 ### La regla de la Escala Cerrada
 
@@ -427,6 +467,11 @@ sin un solo color puro ni saturado en todo el sistema.
 - **Verde Bruma** (`#e8ece7`): la tercera capa, teñida. Bloques que deben leerse como nota o aparte
   (privacidad y moderación en Comunidad), y el relleno de una opción seleccionada en el
   cuestionario.
+- **Oro Bruma** (`#f8f1e7`): 14% `Oro Viejo` sobre `Papel`. Sólo el fondo de la banda "Acredita" de
+  Mi ruta (ver *La regla de las Bandas*). Es superficie, no firma ni dato: nada que se pulse es de
+  este tono. `Tinta Suave` da **5.96:1** encima y `Ámbar Hondo` **5.18:1**.
+- **Ámbar Hondo** (`#91581b`): 85% `Ámbar Quemado` + 15% `Verde Profundo`. El ámbar de las etiquetas
+  sobre un tinte: **4.86:1** sobre `Verde Bruma`, donde `Ámbar Quemado` se queda en 4.33:1.
 - **Oro Claro** (`#e3c48a`): oro sobre fondo oscuro. Existe únicamente para el vitral: la mitad
   "Path" de la marca, el enlace activo del nav y el subrayado que lo señala. Sobre la franja de
   tinta da **3.63:1**, así que sólo puede llevar texto que califique como grande —de ahí que el
@@ -440,8 +485,8 @@ sin un solo color puro ni saturado en todo el sistema.
 ### Named Rules
 
 **La regla de la Paleta Cerrada.** Los cinco colores del manual de identidad de la UAEMéx son la
-paleta completa. Los cinco neutrales derivados (`Papel`, `Papel Gris`, `Verde Bruma`, `Oro Claro`,
-`Tinta`, `Tinta Suave`) existen solo como tintes y textos derivados de esos cinco. Nunca se
+paleta completa. Los derivados (`Papel`, `Papel Gris`, `Verde Bruma`, `Oro Bruma`, `Oro Claro`,
+`Ámbar Hondo`, `Tinta`, `Tinta Suave`) existen solo como tintes y textos derivados de esos cinco. Nunca se
 introduce un color suelto: si hace falta un matiz nuevo, se deriva, no se inventa.
 
 **La regla del Oro que Firma.** El oro firma; el verde trabaja. El oro marca dónde habla la marca

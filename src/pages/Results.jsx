@@ -247,7 +247,7 @@ function ResultsView({ results, answers, chosenFocus, onRetake }) {
 
   return (
     <>
-      <div className="page-shell">
+      <div className="page-shell pb-14 md:pb-18">
         <div className="enter flex flex-wrap items-center justify-between gap-4 pt-10 pb-6">
           <p className="eyebrow">Tu diagnóstico · Completado</p>
           {/* Dos piezas y no una píldora larga: a 390px el texto completo no
@@ -316,54 +316,66 @@ function ResultsView({ results, answers, chosenFocus, onRetake }) {
             </details>
           </section>
         </div>
+      </div>
 
-        {/* Las detonadoras eligen un enfoque dentro de las áreas que van
-            arriba. Con todo en "Neutral" van las cinco, y el recorte a seis
-            enfoques caería en el orden del catálogo: decidir por el orden en
-            que alguien escribió un archivo, justo lo que el titular evita. */}
-        {allNeutral ? (
-          <p className="source-note reveal mt-12 max-w-2xl">
-            Afinar tu ruta elige un enfoque dentro del área que va arriba. Con todas tus respuestas
-            en «Neutral» ninguna va arriba, así que aquí no se ofrece.
-          </p>
-        ) : (
-          <RefinePanel areas={tied.map((result) => AREA_BY_ID[result.areaId])} focus={focus} />
-        )}
+      {/* "Para esta semana": lo que el estudiante hace con su resultado —afinarlo
+          y dar el primer paso— va junto en una banda verde bruma, porque el
+          afinado reescribe el primer paso que tiene justo debajo. */}
+      <div className="band band-mist">
+        <div className="page-shell">
+          {/* Las detonadoras eligen un enfoque dentro de las áreas que van
+              arriba. Con todo en "Neutral" van las cinco, y el recorte a seis
+              enfoques caería en el orden del catálogo: decidir por el orden en
+              que alguien escribió un archivo, justo lo que el titular evita. */}
+          {allNeutral ? (
+            <p className="source-note reveal max-w-2xl">
+              Afinar tu ruta elige un enfoque dentro del área que va arriba. Con todas tus respuestas
+              en «Neutral» ninguna va arriba, así que aquí no se ofrece.
+            </p>
+          ) : (
+            <RefinePanel areas={tied.map((result) => AREA_BY_ID[result.areaId])} focus={focus} />
+          )}
 
-        <FirstStep area={exploring} route={route} focus={focus} isTie={isTie} />
+          <FirstStep area={exploring} route={route} focus={focus} isTie={isTie} />
+        </div>
       </div>
 
       {/* La zona de la ruta contiene a la barra fija: `position: sticky` se
           pega mientras su contenedor sigue en pantalla, y se suelta al
-          llegar a la invitación final. */}
-      <div id="ruta" className="route-zone mt-16">
+          llegar a la invitación final. Dentro, cada parte es una banda a lo
+          ancho (ver `.band` en index.css): la apertura y "Busca" en verde
+          profundo, "Acredita" en oro bruma, y la lectura en papel. */}
+      <div id="ruta" className="route-zone">
         <RouteBar exploringId={exploringId} onExplore={setExploringId} />
 
-        <div className="page-shell pb-16">
-          <section className="route-intro" aria-live="polite">
+        <section className="band band-deep route-opening" aria-live="polite">
+          <div className="page-shell route-intro">
             <div key={exploringId} className="swap-in">
-              <p className="eyebrow mb-3">Tu ruta en {exploring.name}</p>
-              <h2 className="h2">{route.headline}</h2>
-              <p className="mt-4 max-w-2xl muted">{route.intro}</p>
+              <p className="eyebrow mb-4">Tu ruta en</p>
+              <h2 className="h1">{exploring.name}</h2>
+              <p className="h3 route-opening-headline">{route.headline}</p>
+              <p className="mt-3 max-w-2xl muted">{route.intro}</p>
               <p className="source-note mt-3">
                 Cambiar de área no modifica tus respuestas ni tus porcentajes.
               </p>
             </div>
             <img src={exploring.image} alt="" loading="lazy" />
-          </section>
+          </div>
+        </section>
 
-          {/* La `key` reinicia cada explorador al cambiar de área: la
-              habilidad, la comparación y el puesto elegidos pertenecían a la
-              ruta anterior. */}
-          <SkillPath key={`habilidades-${exploringId}`} route={route} areaName={exploring.name} />
-          <CredentialExplorer
-            key={`credenciales-${exploringId}`}
-            ids={route.credentialIds}
-            areaName={exploring.name}
-          />
-          <CareerExplorer key={`puestos-${exploringId}`} areaId={exploringId} />
+        {/* La `key` reinicia cada explorador al cambiar de área: la
+            habilidad, la comparación y el puesto elegidos pertenecían a la
+            ruta anterior. */}
+        <SkillPath key={`habilidades-${exploringId}`} route={route} areaName={exploring.name} />
+        <CredentialExplorer
+          key={`credenciales-${exploringId}`}
+          ids={route.credentialIds}
+          areaName={exploring.name}
+        />
+        <CareerExplorer key={`puestos-${exploringId}`} areaId={exploringId} />
 
-          <div className="reveal surface panel-pad flex flex-wrap items-center justify-between gap-6">
+        <div className="band page-shell">
+          <div className="reveal surface panel-pad flex flex-wrap items-center justify-between gap-6 bg-green-soft">
             <div>
               <p className="eyebrow">El siguiente paso también se da en equipo</p>
               <h2 className="h3 mt-2">Encuentra personas con tus mismos intereses.</h2>
@@ -374,7 +386,7 @@ function ResultsView({ results, answers, chosenFocus, onRetake }) {
           </div>
 
           <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
-            <p className="source-note">
+            <p className="source-note caveat-note">
               Tus intereses pueden cambiar. Esta ruta es un punto de partida.
             </p>
             <ConfirmButton

@@ -33,6 +33,11 @@
   --color-paper: #ffffff;
   --color-green-soft: #e8ece7;
   --color-gold-light: #e3c48a;
+  /* 14% Oro Viejo sobre Papel: papel de diploma, la banda de "Acredita". */
+  --color-gold-soft: #f8f1e7;
+  /* 85% Ámbar Quemado + 15% Verde Profundo: el ámbar legible sobre los tintes.
+     Ámbar Quemado sobre Verde Bruma da 4.33:1; éste da 4.86:1. */
+  --color-amber-deep: #91581b;
 
   --font-sans: "DM Sans", "Inter", "system-ui", sans-serif;
 }
@@ -251,14 +256,18 @@
     color: var(--color-ink-soft);
   }
 
-  /** Etiqueta de contexto: ámbar quemado, el único oro legible sobre papel. */
+  /**
+   * Etiqueta de contexto: ámbar quemado, el único oro legible sobre papel.
+   * Una superficie teñida redefine `--eyebrow` con el ámbar hondo, porque a
+   * 13px el ámbar quemado no llega a 4.5:1 sobre verde bruma.
+   */
   .eyebrow {
     font-size: var(--text-label);
     line-height: 1.5;
     letter-spacing: 0.14em;
     font-weight: 700;
     text-transform: uppercase;
-    color: var(--color-gold-dark);
+    color: var(--eyebrow, var(--color-gold-dark));
   }
 
   .muted {
@@ -275,6 +284,32 @@
     font-size: var(--text-caption);
     line-height: 1.55;
     color: var(--color-ink-soft);
+  }
+
+  /*
+   * Nota de alcance: la letra pequeña que acota lo que un contenido no es
+   * —no es requisito, no garantiza, no mide dominio—. La itálica y el
+   * asterisco la separan del contenido que acota, para que no se lea como
+   * parte de él. El asterisco es generado y su texto alternativo vacío lo
+   * deja fuera del lector de pantalla: es una marca, no una palabra. Toma el
+   * ámbar de la superficie (`--eyebrow`), así que sobre un tinte o sobre
+   * verde profundo sigue siendo legible.
+   */
+  .caveat-note {
+    font-style: italic;
+  }
+
+  .caveat-note::before {
+    /* Sin soporte de texto alternativo en `content`, queda el asterisco. */
+    content: "*";
+    content: "*" / "";
+    margin-right: 0.2em;
+    color: var(--eyebrow, var(--color-gold-dark));
+    font-style: normal;
+    font-weight: 700;
+    font-size: 1.35em;
+    line-height: 0;
+    vertical-align: -0.12em;
   }
 
   /* ── Acciones ───────────────────────────────────────────────────────── */
@@ -410,24 +445,99 @@
    * búsqueda, IEEE). Verde profundo con texto papel, radio de 28px. Dentro,
    * el foco pasa a oro claro, que es el que se ve sobre verde.
    */
-  .dark-panel {
+  .dark-panel,
+  .band-deep {
     --focus-ring: var(--color-gold-light);
+    --eyebrow: var(--color-gold-light);
     background: var(--color-green);
     color: var(--color-paper);
+  }
+
+  .dark-panel {
     border-radius: var(--radius-focal);
     padding: clamp(24px, 4vw, 48px);
   }
 
-  .dark-panel :is(.h1, .h2, .h3) {
+  :is(.dark-panel, .band-deep) :is(.h1, .h2, .h3) {
     color: var(--color-paper);
   }
 
-  .dark-panel .eyebrow {
+  :is(.dark-panel, .band-deep) .eyebrow {
     color: var(--color-gold-light);
   }
 
-  .dark-panel .source-note {
+  :is(.dark-panel, .band-deep) .source-note {
     color: rgb(255 255 255 / 78%);
+  }
+
+  :is(.dark-panel, .band-deep) .muted {
+    color: rgb(255 255 255 / 85%);
+  }
+
+  /*
+   * Bandas de Mi ruta: cada parte que responde una pregunta distinta ocupa
+   * el ancho completo con su propio fondo, y dos bandas contiguas nunca
+   * comparten tono. Sobre papel blanco con filetes al 12%, las cuatro partes
+   * de la ruta se fundían y no se sabía dónde terminaba una.
+   *
+   * El tono dice qué clase de bloque es: verde bruma, lo que haces esta
+   * semana; oro bruma, lo que acredita (papel de diploma); verde profundo,
+   * los momentos focales que abren y cierran la ruta; papel, la lectura. El
+   * filete de cada tinte sale de su propio color, no de un gris.
+   */
+  .band {
+    padding-block: 64px;
+  }
+
+  @media (width >= 48rem) {
+    .band {
+      padding-block: 80px;
+    }
+  }
+
+  .band-mist,
+  .bg-green-soft {
+    --eyebrow: var(--color-amber-deep);
+  }
+
+  .band-mist {
+    border-top: 1px solid color-mix(in srgb, var(--color-green-mid) 25%, var(--color-green-soft));
+    background: var(--color-green-soft);
+  }
+
+  .band-gold {
+    --eyebrow: var(--color-amber-deep);
+    border-block: 1px solid color-mix(in srgb, var(--color-gold) 40%, var(--color-gold-soft));
+    background: var(--color-gold-soft);
+  }
+
+  /*
+   * La apertura de la ruta: verde profundo, como el panel del resultado y
+   * "Busca", así que lo que la distingue no es el tono sino la jerarquía. El
+   * nombre del área va a tamaño de titular de página —es el capítulo que
+   * empieza— y la frase de la ruta baja a subtítulo. La etiqueta se vuelve
+   * una píldora de Oro Claro con texto Verde Profundo (6.43:1) y la foto lleva
+   * un anillo del mismo oro. El texto secundario sube al 90% (9.1:1).
+   */
+  .route-opening .eyebrow {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: var(--color-gold-light);
+    color: var(--color-green);
+  }
+
+  .route-opening :is(.muted, .source-note) {
+    color: rgb(255 255 255 / 90%);
+  }
+
+  .route-opening-headline {
+    max-width: 34ch;
+    margin-top: 18px;
+  }
+
+  .route-opening .route-intro img {
+    box-shadow: 0 0 0 2px var(--color-gold-light);
   }
 
   .pill {
@@ -985,7 +1095,7 @@
     display: grid;
     grid-template-columns: 1.05fr 1fr;
     gap: 24px;
-    margin-block: 8px 32px;
+    margin-top: 8px;
   }
 
   .result-grid .h1 {
@@ -1083,7 +1193,6 @@
     grid-template-columns: 1fr 240px;
     gap: 32px;
     align-items: center;
-    margin-block: 32px 8px;
   }
 
   .route-intro img {
@@ -1091,11 +1200,6 @@
     height: 160px;
     object-fit: cover;
     border-radius: var(--radius-md);
-  }
-
-  .route-block {
-    padding-block: 56px;
-    border-top: 1px solid var(--line);
   }
 
   /* Habilidades: secuencia vertical con puntos y detalle al lado. */
@@ -1798,6 +1902,7 @@
    * La síntesis accionable de la ruta en tres pasos, antes del detalle:
    * qué aprender, qué entregar y con quién compartirlo. Es el principio 2
    * de PRODUCT.md hecho tarjeta: ningún resultado termina en una etiqueta.
+   * Es papel porque vive en la banda verde bruma de "Para esta semana".
    */
   .first-step {
     display: grid;
@@ -1805,7 +1910,7 @@
     gap: 0;
     overflow: hidden;
     border-radius: var(--radius-md);
-    background: var(--color-green-soft);
+    background: var(--color-paper);
   }
 
   .first-step > li {

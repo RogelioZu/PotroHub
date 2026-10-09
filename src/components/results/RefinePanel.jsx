@@ -68,7 +68,7 @@ function RefinePanel({ areas, focus }) {
   }, [questions])
 
   return (
-    <section className="reveal mt-12" aria-labelledby="afina" aria-busy={refining}>
+    <section className="reveal" aria-labelledby="afina" aria-busy={refining}>
       <p className="eyebrow">Dos preguntas más</p>
       <h2 id="afina" className="h2 mt-2 mb-6">
         Afina tu ruta.
