@@ -174,11 +174,12 @@ semestre, aquí".
 - Diez credenciales y cinco perfiles profesionales con fuente oficial y fecha de revisión.
 - El contenido de ruta por área: habilidades demandadas y certificaciones de referencia para las
   cinco áreas.
-- El catálogo de quince enfoques (`src/data/focuses.js`) con sus habilidades, certificaciones y un
-  primer paso para esta semana, y las detonadoras de respaldo (`src/data/fallbackTriggers.js`).
-  Tienen la misma procedencia que el contenido de ruta por área —conocimiento general de la
-  industria, redactado por el equipo—, no un estudio de mercado. Las certificaciones deben revisarse
-  contra su vigencia cada semestre: los programas se retiran sin aviso.
+- El catálogo de quince enfoques (`src/data/focuses.js`) con sus habilidades y un primer paso para
+  esta semana, y las detonadoras de respaldo (`src/data/fallbackTriggers.js`). Tienen la misma
+  procedencia que el contenido de ruta por área —conocimiento general de la industria, redactado
+  por el equipo—, no un estudio de mercado. Los enfoques no traen credenciales propias: la primera
+  versión listaba unas cuarenta sin fuente ni fecha de revisión, y se retiraron. Las credenciales
+  son las diez del área, que sí las tienen.
 - La fotografía del vitral y la mascota (rutas arriba).
 - Cuatro nombres de capítulos IEEE (Computer Society, Robotics and Automation, Power & Energy
   Society, Women in Engineering) — actualmente marcados en la interfaz como pendientes de confirmar

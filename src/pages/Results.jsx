@@ -3,8 +3,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import CareerExplorer from '../components/results/CareerExplorer'
 import CredentialExplorer from '../components/results/CredentialExplorer'
 import SkillPath from '../components/results/SkillPath'
+import RefinePanel from '../components/results/RefinePanel'
 import ConfirmButton from '../components/ui/ConfirmButton'
-import RefinePanel from '../components/ui/RefinePanel'
 import { AREAS, AREA_BY_ID } from '../data/areas'
 import { CREDENTIALS } from '../data/credentials'
 import { QUESTIONS } from '../data/questions'
@@ -101,23 +101,40 @@ function AffinityBars({ results, topPercentage }) {
  * La síntesis de la ruta en tres acciones concretas, antes del detalle:
  * la primera habilidad, su entregable y la comunidad del área. Todo sale de
  * los mismos datos que las secciones de abajo; no hay contenido nuevo.
+ *
+ * Con un enfoque elegido en "Afina tu ruta" y explorando su área, los pasos 1
+ * y 2 salen del enfoque: sus habilidades y su primer paso son más concretos
+ * que los del área entera. Al explorar otra área vuelve el paso del área —el
+ * enfoque no se borra, sólo es de otra— y regresa al volver a la suya.
  */
-function FirstStep({ area, route }) {
+function FirstStep({ area, route, focus, isTie }) {
   const skill = route.learning[0]
   const credential = CREDENTIALS[route.credentialIds[0]]
+  const active = focus?.areaId === area.id ? focus : null
+  const [firstSkill, ...nextSkills] = active?.skills ?? []
 
   return (
     <section className="reveal mt-12" aria-labelledby="primer-paso">
       <p className="eyebrow">Para esta semana</p>
-      <h2 id="primer-paso" className="h2 mt-2 mb-6">
-        Tu primer paso en {area.name}.
+      <h2 id="primer-paso" className="h2 mt-2">
+        Tu primer paso en {active ? active.name : area.name}.
       </h2>
-      <ol key={area.id} className="first-step swap-in">
+      {/* El titular sigue nombrando el empate, porque las cincuenta sí
+          empataron; lo que inclinó la balanza se dice aquí, donde se ve. */}
+      {active && isTie && (
+        <p className="source-note mt-3">
+          Tus dos preguntas finales inclinaron la ruta hacia {area.name}. Las otras áreas del
+          empate te quedan igual de cerca.
+        </p>
+      )}
+      <ol key={active ? active.id : area.id} className="first-step swap-in mt-6">
         <li>
           <span className="first-step-index">1</span>
           <p className="source-note mt-2">Aprende</p>
-          <h3 className="h3">{skill.name}</h3>
-          <p className="text-sm muted">{skill.purpose}</p>
+          <h3 className="h3">{active ? firstSkill : skill.name}</h3>
+          <p className="text-sm muted">
+            {active ? `Después: ${nextSkills.join(' · ')}.` : skill.purpose}
+          </p>
           <a href="#habilidades" className="text-link">
             Ver la ruta de habilidades <span aria-hidden="true">↓</span>
           </a>
@@ -126,7 +143,7 @@ function FirstStep({ area, route }) {
           <span className="first-step-index">2</span>
           <p className="source-note mt-2">Practica</p>
           <h3 className="h3">Tu primer entregable</h3>
-          <p className="text-sm muted">{skill.project}</p>
+          <p className="text-sm muted">{active ? active.firstStep : skill.project}</p>
           <a href="#credenciales" className="text-link">
             Cuando quieras acreditarlo: {credential.name} <span aria-hidden="true">↓</span>
           </a>
@@ -186,14 +203,27 @@ function RouteBar({ exploringId, onExplore }) {
   )
 }
 
-function ResultsView({ results, answers, focus, onRetake }) {
+function ResultsView({ results, answers, chosenFocus, onRetake }) {
   const { top, tied, isTie, allNeutral } = summarizeAffinity(results, answers)
   const topArea = AREA_BY_ID[top.areaId]
 
+  // Con todo en "Neutral" no se ofrece el afinado (ver abajo), y uno guardado
+  // de antes tampoco cuenta: no hay un área arriba que afinar.
+  const focus = allNeutral ? null : chosenFocus
+
   // El área explorada empieza en el primer resultado, pero es una elección
   // del estudiante: cambiarla no toca respuestas ni porcentajes. Con empate,
-  // ese estado inicial no es una recomendación — el titular lo dice.
-  const [exploringId, setExploringId] = useState(top.areaId)
+  // ese estado inicial no es una recomendación — el titular lo dice. Un
+  // enfoque elegido en "Afina tu ruta" sí lo es: en un empate decide cuál de
+  // las empatadas se explora primero. Al elegirlo, la vista pasa a su área
+  // para que el primer paso que cambió quede justo debajo; se ajusta durante
+  // el render y no en un efecto para no pintar antes el área anterior.
+  const [exploringId, setExploringId] = useState(focus?.areaId ?? top.areaId)
+  const [shownFocusId, setShownFocusId] = useState(focus?.id ?? null)
+  if ((focus?.id ?? null) !== shownFocusId) {
+    setShownFocusId(focus?.id ?? null)
+    if (focus) setExploringId(focus.areaId)
+  }
   const exploring = AREA_BY_ID[exploringId]
   const route = ROADMAP[exploringId]
 
@@ -209,7 +239,9 @@ function ResultsView({ results, answers, focus, onRetake }) {
   }
 
   useDocumentTitle(
-    isTie ? 'Tu perfil de afinidad — PotroPath' : `Tu ruta: ${topArea.name} — PotroPath`,
+    isTie
+      ? 'Tu perfil de afinidad — PotroPath'
+      : `Tu ruta: ${focus ? focus.name : topArea.name} — PotroPath`,
   )
 
   return (
@@ -279,13 +311,20 @@ function ResultsView({ results, answers, focus, onRetake }) {
           </section>
         </div>
 
-        <RefinePanel
-          areas={tied.map((result) => AREA_BY_ID[result.areaId])}
-          focus={focus}
-          routeArea={focus ? AREA_BY_ID[focus.areaId] : topArea}
-        />
+        {/* Las detonadoras eligen un enfoque dentro de las áreas que van
+            arriba. Con todo en "Neutral" van las cinco, y el recorte a seis
+            enfoques caería en el orden del catálogo: decidir por el orden en
+            que alguien escribió un archivo, justo lo que el titular evita. */}
+        {allNeutral ? (
+          <p className="source-note reveal mt-12 max-w-2xl">
+            Afinar tu ruta elige un enfoque dentro del área que va arriba. Con todas tus respuestas
+            en «Neutral» ninguna va arriba, así que aquí no se ofrece.
+          </p>
+        ) : (
+          <RefinePanel areas={tied.map((result) => AREA_BY_ID[result.areaId])} focus={focus} />
+        )}
 
-        <FirstStep area={exploring} route={route} />
+        <FirstStep area={exploring} route={route} focus={focus} isTie={isTie} />
       </div>
 
       {/* La zona de la ruta contiene a la barra fija: `position: sticky` se
@@ -363,7 +402,7 @@ function Results() {
     <ResultsView
       results={computeResults()}
       answers={answers}
-      focus={pickFocus(refinement?.picks, answers)}
+      chosenFocus={pickFocus(refinement?.picks, answers)}
       onRetake={handleRetake}
     />
   )

@@ -201,14 +201,57 @@ comunidad) y Linear (jerarquía y agrupación). No se copia ninguna identidad.
   guardadas, atajos 1–5 y Enter en laptop, "Ir a la primera pendiente" al final si falta alguna,
   reinicio confirmado.
 - **Resultados**, en el orden en que se lee: (1) panel focal con el resultado o el empate reconocido
-  junto a la comparación de cinco áreas con marca del 60%; (2) **Tu primer paso**, tres acciones
-  —aprende, practica, comparte— tomadas de la ruta; (3) una **barra fija** con el área explorada
-  (nombres cortos) y las cuatro partes de la ruta; (4) 01 Aprende, 02 Acredita, 03 Conoce el rol y
-  04 Busca, cada una con una etiqueta del área explorada; (5) comunidad y reinicio. La barra existe
-  porque, ya en credenciales o puestos, era fácil olvidar de qué área era el contenido.
+  junto a la comparación de cinco áreas con marca del 60%; (2) **Afina tu ruta**, opcional (ver
+  abajo); (3) **Tu primer paso**, tres acciones —aprende, practica, comparte— tomadas de la ruta o,
+  con un enfoque elegido y explorando su área, del enfoque; (4) una **barra fija** con el área
+  explorada (nombres cortos) y las cuatro partes de la ruta; (5) 01 Aprende, 02 Acredita, 03 Conoce
+  el rol y 04 Busca, cada una con una etiqueta del área explorada; (6) comunidad y reinicio. La
+  barra existe porque, ya en credenciales o puestos, era fácil olvidar de qué área era el
+  contenido.
 - **Comunidad:** hero dividido con foto de Talent Land; directorio de cinco intereses ligado a la
   URL; Rama IEEE con logo, propósito y estado en una tarjeta por sociedad; galería editorial de seis
   fotos verificadas; agenda vacía compacta.
+
+### Afina tu ruta
+
+El bloque opcional de `/resultados` donde dos preguntas más eligen uno de los tres enfoques del área
+(`src/components/results/RefinePanel.jsx`). Va **entre el resultado y "Tu primer paso"** porque es lo
+que lo cambia: el enfoque elegido reescribe los pasos 1 y 2, y el estudiante ve el efecto justo
+debajo de su respuesta. Puesto al final, como en la primera versión, quedaba bajo la barra fija de
+"Explorando", que puede estar en otra área, y se leía como parte de esa ruta.
+
+- **Encabezado y contenedor:** el mismo patrón que "Tu primer paso" —`.eyebrow` ("Dos preguntas
+  más") y `.h2` fuera, el contenido en una `.surface .panel-pad`—, con `.reveal`.
+- **Reposo:** el párrafo en `.muted` y debajo, en `.source-note`, el aviso de qué se envía y a quién.
+  **El aviso va antes del botón** en el orden de lectura, no después ni en un tooltip: nada sale del
+  navegador hasta el clic, y un aviso que se lee cuando los datos ya salieron no avisa. El botón es
+  `.btn-green`, a la derecha desde que cabe.
+- **Espera:** el mismo botón cambia su etiqueta a "Redactando tus preguntas…" con `aria-live` —el
+  patrón de `ConfirmButton`— y queda `aria-disabled` con `cursor-wait`, no `disabled`: un botón
+  deshabilitado suelta el foco justo después del clic. No hay spinner; la espera tiene tope de 8 s.
+- **Preguntas:** dos columnas desde `md`, una en teléfono. El enunciado es `.h3`, enfocable por
+  programa (`tabIndex={-1}`), y el foco salta al primero cuando las preguntas reemplazan al botón
+  —el mismo salto que hace el cuestionario—; unas restauradas de `localStorage` no roban el foco.
+  Las opciones son **radios nativos en `.quiz-option`**, la misma fila que el diagnóstico, sin la
+  tecla: son tres por pregunta y no hay atajo que enseñar. Entran con `.swap-in`.
+- **Cierre:** con las dos respondidas, bajo un filete (`border-ink/12`, el valor de `--line`): el
+  `.eyebrow` "Tu enfoque dentro de {área}", el nombre en `.h3`, la descripción, la frase que dice por
+  qué ganó —comprobable a mano— y un `.text-link` a "Tu primer paso". Habilidades y primer paso
+  **no** se repiten aquí: viven en "Tu primer paso", para que la página no tenga dos.
+- **Tu primer paso con enfoque:** el título nombra el enfoque, el paso 1 muestra su primera
+  habilidad y las demás separadas por `·`, y el paso 2 su primer paso de la semana. La credencial y
+  el paso 3 siguen siendo del área. En un empate, una `.source-note` bajo el título dice hacia dónde
+  inclinaron las dos preguntas; el titular del resultado sigue nombrando el empate.
+- **Con todo en "Neutral"** el bloque no aparece; en su lugar, una `.source-note` explica por qué.
+- **Lector de pantalla:** una región viva `sr-only` existe desde antes de que haya enfoque y dice
+  una sola línea —"Tu enfoque: …. Tu primer paso cambió."—, no el bloque entero.
+
+**La regla de la Fuente Dicha.** Todo texto redactado por un modelo de IA lleva su procedencia a la
+vista, en la misma pantalla y sin interacción: "Redactadas por IA (Qwen) a partir de tus 50
+respuestas". Y lo que no es de la IA no se hace pasar por ella: las preguntas de respaldo dicen que
+son de respaldo y que no leyeron las respuestas. La etiqueta es `.source-note`, sin color propio ni
+ícono de "IA" — un destello o un degradado de chispa es justo el lenguaje de dashboard SaaS que
+este sistema rechaza.
 
 ### Movimiento
 
@@ -1161,50 +1204,6 @@ depender de un padding adivinado.
 blanco de la insignia no se notaba, pero sobre cualquier superficie de color aparecía un rectángulo
 claro detrás de la mascota. El fondo se rellenó desde los bordes, no por color, para no tocar los
 blancos interiores — ojos, dientes, camisa.
-
-### Afina tu ruta (detonadoras)
-
-El bloque opcional de `/resultados` donde dos preguntas más eligen uno de los tres enfoques del
-área (`src/components/ui/RefinePanel.jsx`). Va **después** de las tarjetas de ruta del área y antes
-de las acciones finales: se lee de lo general a lo específico. Puesto arriba, las tarjetas del área
-quedaban debajo del encabezado "Afina tu ruta" y se leían como parte del afinado.
-
-- **Contenedor:** no es una tarjeta, es una sección dentro del ancho de lectura —
-  `border-t border-ink/10 pt-10`, `.eyebrow` ("Dos preguntas más") y `.h2` ("Afina tu ruta")—. Es una
-  tarea más de la página, no un aparte, así que vive sobre `Papel` como el cuestionario.
-- **Reposo:** el párrafo en `Tinta Suave`, y debajo, en `text-xs`, el aviso de qué se envía y a
-  quién. **El aviso va antes del botón**, no después ni en un tooltip: nada sale del navegador hasta
-  el clic, y un aviso que se lee cuando los datos ya salieron no avisa. El botón es `btn-green`.
-- **Espera:** el mismo botón cambia su etiqueta a "Redactando tus preguntas…" con `aria-live` —el
-  patrón de `ConfirmButton`— y queda `aria-disabled` con `cursor-wait`, no `disabled`: un botón
-  deshabilitado suelta el foco justo después del clic. No hay spinner; la espera tiene tope de 8 s.
-- **Preguntas:** el enunciado es `.h3` en `Tinta`, enfocable por programa (`tabIndex={-1}`), y el
-  foco salta a él cuando las preguntas reemplazan al botón —el mismo salto que hace el cuestionario—.
-  Unas preguntas restauradas de `localStorage` no roban el foco. Las opciones toman la geometría de
-  la *Quiz Option* (`12px`, `border-green-mid/70`, `py-3` para `44px`, `text-sm`, grupo de radios con
-  `aria-checked`), pero el estado elegido es un cambio de color a `Verde Bruma` y no el barrido: son
-  seis toques, no doscientos cincuenta, y el barrido es la firma de la tarea larga. El
-  `transition-colors` se apaga con `motion-reduce:transition-none`.
-- **Tarjeta de enfoque:** `Papel Gris`, `p-6`. `.eyebrow` "Tu enfoque dentro de {área}", el nombre
-  en `.h3` `Verde Profundo` —el verde de los títulos con más peso—, la descripción, y una frase que
-  dice por qué ganó, comprobable a mano. Habilidades y certificaciones llevan etiquetas en línea
-  (`font-semibold text-ink`), no encabezados: un cuarto nivel de encabezado dentro de una tarjeta
-  pediría un tamaño fuera de la escala, que es justo lo que prohíbe *La regla del Tamaño Decidido*.
-  El primer paso de la semana es el aparte de la tarjeta y va en la capa de nota (`Verde Bruma`,
-  `p-4`).
-- **Movimiento:** la sección entra con el escalonado `[data-card]` del resto de resultados. Las
-  preguntas, sólo cuando llegan tras el clic, entran con `gsap.from` (`y: SHIFT / 2`, `DUR.view`,
-  `EASE.enter`, `STAGGER.tight`); la tarjeta de enfoque, sólo cuando aparece o cambia (`y: SHIFT`).
-  Todo dentro de `FULL_MOTION`.
-- **Lector de pantalla:** una región viva `sr-only` existe desde antes de que haya enfoque y dice
-  una sola línea —"Tu enfoque: …"—, no la tarjeta entera.
-
-**La regla de la Fuente Dicha.** Todo texto redactado por un modelo de IA lleva su procedencia a la
-vista, en la misma pantalla y sin interacción: "Redactadas por IA (Qwen) a partir de tus 50
-respuestas". Y lo que no es de la IA no se hace pasar por ella: las preguntas de respaldo dicen que
-son de respaldo y que no leyeron las respuestas. La etiqueta es `text-xs` en `Tinta Suave`, sin
-color propio ni ícono de "IA" — un destello o un degradado de chispa es justo el lenguaje de
-dashboard SaaS que este sistema rechaza.
 
 ### Tarjeta de vista previa (Open Graph)
 

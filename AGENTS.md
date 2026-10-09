@@ -133,10 +133,10 @@ src/
   components/
     layout/                 Navbar, Footer, Layout
     motion/RouteTransition  Foco y anclas al cambiar de ruta (ya sin animación)
-    results/                SkillPath, CredentialExplorer, CareerExplorer
+    results/                SkillPath, CredentialExplorer, CareerExplorer y RefinePanel
+                            ("Afina tu ruta", que alimenta "Tu primer paso")
     home/Testimonials       Voces del piloto, sólo si existen
     ui/ConfirmButton        Confirmación en dos toques para borrar respuestas
-    ui/RefinePanel          "Afina tu ruta" en /resultados
   pages/                    Home, Quiz, Results, Community, NotFound
 api/
   detonadoras.js            POST /api/detonadoras (Vercel). Su cabecera es el contrato
