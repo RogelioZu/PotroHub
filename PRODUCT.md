@@ -89,11 +89,12 @@ semestre, aquí".
 
 ## Capabilities and Constraints
 
-- **Del lado del cliente, con una sola excepción que el estudiante dispara.** React + Vite, Tailwind
-  CSS v4, React Router, Zustand (persistido) y GSAP para el movimiento. Sin ida y vuelta al servidor
-  durante el diagnóstico. La excepción es `POST /api/detonadoras`, una función de Vercel que existe
-  porque la llave del modelo no puede viajar en el bundle — lo que llega al navegador lo lee
-  cualquiera. Reglas que la sostienen:
+- **Un sitio estático, con una sola excepción opcional que el estudiante dispara.** React + Vite,
+  Tailwind CSS v4, React Router y Zustand (persistido), con scroll nativo y sin librerías de
+  animación. Sin ida y vuelta al servidor durante el diagnóstico. La excepción es
+  `POST /api/detonadoras`, una función de Vercel que existe porque la llave del modelo no puede
+  viajar en el bundle — lo que llega al navegador lo lee cualquiera. La arquitectura y el flujo de
+  procesamiento están en `docs/ARQUITECTURA.md`. Reglas que sostienen la excepción:
   - **Sólo sale con un clic.** Nada se envía hasta que el estudiante pulsa "Afinar mi ruta", y el
     aviso de qué se envía y a quién está escrito encima del botón. Un aviso leído después de que los
     datos ya salieron no avisa de nada.
@@ -101,24 +102,36 @@ semestre, aquí".
     las 50 respuestas de 1 a 5: no hay texto libre que pueda volverse instrucción para el modelo, y
     no hay nada que identifique a nadie. El servidor no las escribe en ningún log.
   - **La IA redacta, no decide.** Escribe las dos preguntas y sus opciones; cada opción va atada a un
-    enfoque del catálogo cerrado (`src/data/focuses.js`) y el servidor lo revalida. Habilidades,
-    certificaciones y primer paso son siempre contenido revisado por personas.
-  - **Nunca es indispensable.** Si el modelo falla o no responde en 8 segundos, entran dos preguntas
-    de respaldo escritas a mano, y la interfaz dice que son de respaldo. El sitio funciona completo
-    sin Alibaba Cloud — también frente al jurado.
+    enfoque del catálogo cerrado (`src/data/focuses.js`) y el servidor lo revalida. Habilidades y
+    primer paso son siempre contenido revisado por personas.
+  - **Nunca es indispensable.** Si el modelo falla, no responde en 8 segundos o la función no existe
+    —un hosting estático, `npm run dev`—, entran dos preguntas de respaldo escritas a mano, y la
+    interfaz dice que son de respaldo. El sitio funciona completo sin Alibaba Cloud y sin la
+    función — también frente al jurado.
 - **El contenido son módulos de datos estáticos**, no un CMS: preguntas, áreas y ruta viven en
   `src/data/`. Cambiarlos es un cambio de código.
 - **Cinco áreas fijas:** Inteligencia Artificial, Ciberseguridad, Cloud Computing, Ciencia de Datos
   y Desarrollo de Software. Cada una se divide en **tres enfoques fijos** (quince en total), que son
   lo que eligen las detonadoras.
 - **Modelo de puntaje:** cada pregunta suma únicamente a su propia área; los totales por área se
-  normalizan a un porcentaje de afinidad de 0 a 100 y se ordenan. Se muestran los cinco puntajes, no
-  solo el ganador. Las detonadoras **no** tocan esos porcentajes: eligen un enfoque dentro del área.
-  Gana el enfoque con más votos de las dos; si apuntan a dos distintos, desempata el promedio de las
-  preguntas del banco que alimentan a cada uno, y si también empata, el orden del catálogo. Es
-  determinista a propósito — lo no determinista son las preguntas, no la cuenta, y una valoración
-  técnica tiene que poder rehacerla a mano. En un empate de áreas, las detonadoras ofrecen enfoques
-  de todas las empatadas y el elegido decide qué ruta de área se muestra.
+  expresan como porcentaje del máximo posible —de 20 a 100 con el diagnóstico completo; diez
+  respuestas "Neutral" dan 60— y se ordenan. Se muestran los cinco puntajes, no solo el ganador. Un
+  empate se nombra como empate y responder "Neutral" a todo se presenta como "Tu camino aún está
+  abierto", nunca como un ganador. La función vive en `src/lib/affinity.js` con pruebas en `tests/`.
+- **Detonadoras.** No tocan los porcentajes: eligen un enfoque dentro del área. Gana el enfoque con
+  más votos de las dos; si apuntan a dos distintos, desempata el promedio de las preguntas del banco
+  que alimentan a cada uno, y si también empata, el orden del catálogo. Es determinista a propósito
+  — lo no determinista son las preguntas, no la cuenta, y una valoración técnica tiene que poder
+  rehacerla a mano. En un empate de áreas, las detonadoras ofrecen enfoques de todas las empatadas y
+  el elegido decide qué área se explora primero; el titular sigue nombrando el empate, porque las
+  cincuenta sí empataron. Con todo en "Neutral" no se ofrecen: no hay entre qué afinar.
+- **Ruta profesional.** Por área: cinco habilidades en tres etapas con un entregable sugerido, dos
+  credenciales comparables (tipo, nivel, preparación, evaluación, enfoque) y un perfil profesional
+  publicado por una empresa tecnológica, con requisitos mínimos y deseables separados. Cada fuente
+  lleva enlace y fecha de revisión; los perfiles son ejemplos, no vacantes vigentes, convenios ni
+  una evaluación de elegibilidad. La afinidad no mide dominio ni preparación laboral.
+- **Búsqueda en LinkedIn.** Formulario GET con puesto y ubicación editable (México por defecto). No
+  envía respuestas del diagnóstico, no extrae resultados y no simula un feed de vacantes.
 - **Supabase (PostgreSQL) está planeado solo para analíticas anónimas agregadas** — recolectar
   resultados finales sin autenticación y sin perfiles de usuario, para que medir nunca cueste
   participación.
@@ -143,9 +156,9 @@ semestre, aquí".
   sobre tipografía, layout o movimiento — esos siguen siendo decisiones de diseño abiertas, no
   restricciones heredadas.
 - **Activos institucionales reales disponibles:**
-  - `public/images/vitral-biblioteca.png` — fotografía del vitral real de la biblioteca de la
+  - `public/images/vitral-biblioteca.webp` — fotografía del vitral real de la biblioteca de la
     Facultad de Ingeniería; un panorámico muy ancho (~8.9:1) de sus cuatro paneles de vidrio.
-  - `public/images/potro-mascota.png` — la mascota de la universidad, recortada de su fondo
+  - `public/images/potro-mascota.webp` — la mascota de la universidad, recortada de su fondo
     original.
 - **Voz:** español, directa y sin condescendencia — se dirige a los estudiantes como futuros
   profesionales que están tomando una decisión real, no como niños a los que se orienta.
@@ -155,6 +168,10 @@ semestre, aquí".
 **Real y utilizable hoy:**
 
 - El banco de 50 preguntas (10 por área) y la escala de acuerdo de 1 a 5.
+- Seis fotografías de estudiantes de la facultad con evento y lugar verificables (Rama IEEE UAEMéx,
+  Talent Land 2026, Women in Engineering, Axolotl Tournament y visita a UAM Lerma, PoliHacks), ver
+  `public/images/comunidad/README.md`.
+- Diez credenciales y cinco perfiles profesionales con fuente oficial y fecha de revisión.
 - El contenido de ruta por área: habilidades demandadas y certificaciones de referencia para las
   cinco áreas.
 - El catálogo de quince enfoques (`src/data/focuses.js`) con sus habilidades, certificaciones y un
@@ -170,8 +187,11 @@ semestre, aquí".
 **Confirmado como próximo, pero todavía no real.** Cada uno de estos llegará a ser dato real; hasta
 entonces debe presentarse honestamente como pendiente y nunca simularse como si existiera:
 
-- El código de invitación a los canales de Microsoft Teams (`TEAMS_JOIN_CODE` es actualmente `null`).
-- La lista confirmada de capítulos IEEE y una agenda real de eventos (`events` está vacío).
+- El acceso a los canales de Microsoft Teams (`TEAMS_JOIN_URL` en `src/data/community.js` es `null`).
+- La lista confirmada de capítulos IEEE y una agenda real de eventos (`EVENTS` está vacío).
+- La prueba piloto con estudiantes: protocolo listo en `docs/PILOTO.md`, sin ejecutar. Hasta que haya
+  citas reales y autorizadas, `TESTIMONIALS` en `src/data/testimonials.js` está vacío e Inicio no
+  muestra la sección.
 - La estadística de titulación de la UAEMéx que sustentará el planteamiento (nota placeholder en el
   README).
 - El backend de analíticas anónimas en Supabase.
@@ -208,9 +228,9 @@ cierra.
 
 - **Contenido en español primero (es-MX)**; el idioma de la interfaz no es negociable para esta
   audiencia.
-- **El movimiento reducido ya es un compromiso honrado.** Todo el movimiento está condicionado a la
-  preferencia `prefers-reduced-motion` del usuario; es un requisito permanente, no una mejora
-  opcional.
+- **El movimiento reducido ya es un compromiso honrado.** Ningún contenido depende de una animación,
+  y las pocas transiciones de color se anulan con `prefers-reduced-motion`; es un requisito
+  permanente, no una mejora opcional.
 - **Los teléfonos con una red de campus posiblemente mala son un caso primario**, no un respaldo. El
   peso y la respuesta son requisitos de producto, no pulido. Por eso el modelo de las detonadoras es
   de la familia rápida (Flash) y sin razonamiento, y por eso la espera tiene un tope de 8 segundos

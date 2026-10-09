@@ -9,40 +9,59 @@ respaldo (ver PRODUCT.md → *Accessibility*): cualquier imagen que se agregue
 aquí pasa por la misma conversión, y el original sin optimizar no entra al
 repositorio.
 
+`vitral-franja.webp` (2400x48, 26 KB) es la franja de 16px de la cabecera
+(`.brand-ribbon` en `index.css`), con 48px de alto para verse nítida en
+pantallas 2x y 3x.
+Es una banda horizontal (22% del alto) recortada alrededor del 52% de alto del master
+`assets-src/institucional/vitral-biblioteca.png` y estirada a 2400x48. Antes la
+franja cargaba el panorámico completo de 207 KB para pintar 8px, y eso costaba
+medio segundo de primer pintado en un teléfono (ver `docs/RENDIMIENTO.md`).
+
 `vitral-biblioteca.webp` es la fotografía real del vitral de la biblioteca de
 la Facultad de Ingeniería (UAEMéx): un panorámico muy ancho (~8.9:1) de los
-cuatro paneles de vidrio, a 2736x308. La consume `VitralBackdrop`, el fondo
-del header y del footer. Si el archivo llegara a faltar, cae a un placeholder
-con el acento decorativo `vitral-accent` en vez de romper el layout.
+cuatro paneles de vidrio, a 2736x308. Es el fondo completo del pie
+(`Footer.jsx`), servido como `<img loading="lazy">`: siempre queda bajo el
+pliegue y así no compite con la primera carga.
 
 `potro-mascota.webp` es la mascota de la universidad, con canal alfa. El
 original venía en RGB con el fondo gris incrustado: sobre el papel blanco de
 la insignia no se notaba, pero sobre cualquier superficie de color aparecía un
 rectángulo claro detrás del potro. El fondo se rellenó desde los bordes —no
 por color— para no tocar los blancos interiores (ojos, dientes, camisa). La
-usa `Results`.
+usan el estado sin resultados de `Results` y la página 404, sobre recuadro de
+papel.
 
 `areas/*.webp` son las cinco fotografías de las áreas de especialización, a
 1200px de ancho y 308 KB entre las cinco, referenciadas desde
 `src/data/areas.js`. Las consumen **dos** superficies: la rejilla de áreas de
-Inicio y las miniaturas de canal de Comunidad, que las toman del mismo campo
-`image` de `AREAS` en vez de tener copias propias — ver
-`comunidad/README.md` → *Miniaturas de canal*. Llegaron como JPEG de 2432px con extensión `.png` y unos
+Inicio y las miniaturas del directorio de Comunidad (y la ilustración de la
+ruta explorada en Resultados), que las toman del mismo campo `image` de
+`AREAS` en vez de tener copias propias — ver `comunidad/README.md` →
+*Miniaturas del directorio de especialidades*. Llegaron como JPEG de 2432px con extensión `.png` y unos
 2 MB cada una — 9.7 MB en la portada. A 1200px siguen alcanzando para la
 tarjeta más ancha de la rejilla de Inicio, que mide unos 560px y a 2x pide
 1120px.
 
-`estudiante-ico.png`, `trabajo-equipo.png` y `estudiante-redes.png` son las
-tres fotografías que hoy ocupan celdas del mosaico del hero
-(`src/components/ui/HeroMosaic.jsx`); el resto de las celdas son bloques de
-color en espera. Los recortes pendientes del collage están descritos en
-`hero/README.md`, y las fotos de Comunidad en `comunidad/README.md`.
+`inicio-rama-ieee.webp` (1200x750, 175 KB) es la fotografía del hero de
+Inicio: integrantes de la Rama Estudiantil IEEE UAEMéx con el vehículo todo
+terreno del equipo. Sale de `assets-src/comunidad/rama-ieee-uaemex.jpeg`
+(4096x3072) con un recorte 16:10 centrado en el grupo —`extract` en
+`left 180, top 720, 3200x2000`, reducido a 1200px, WebP calidad 76; la
+variante `inicio-rama-ieee-720.webp` (66 KB, calidad 74) es la que reciben los
+teléfonos por `srcset`— que deja
+fuera casi todo el estacionamiento vacío de abajo. Es la misma foto que
+`comunidad/galeria-rama-ieee.webp` con otro encuadre: el lienzo del fondo dice
+"Rama Estudiantil · UAEMéx · IEEE", así que la imagen se verifica sola, y por
+eso abre el sitio.
 
-**Sus extensiones mienten:** `estudiante-ico.png` y `trabajo-equipo.png` son
-AVIF, y `estudiante-redes.png` es WebP. Funciona porque el navegador detecta el
-formato por los bytes, pero cualquier herramienta que confíe en la extensión se
-equivocará. Las copias de archivo en `assets-src/` sí llevan la extensión real;
-renombrar éstas es un cambio aparte, porque toca las rutas de `Home.jsx`.
+`estudiante-ico.png`, `trabajo-equipo.png` y `estudiante-redes.png` ocupaban
+las celdas del mosaico del hero anterior. **Son fotografías de banco** (sin
+procedencia de la facultad en `assets-src/README.md`) y ya no se muestran:
+abrir un producto cuyo principio es "la verdad local le gana al consejo
+genérico" con una foto de stock lo contradecía. Se conservan aquí y en
+`assets-src/inicio/` por si se necesitan para otra cosa; no deben volver al
+sitio presentadas como estudiantes de la facultad. **Sus extensiones mienten:**
+dos son AVIF y una WebP, las tres con `.png`.
 
 Los cuatro logotipos de `comunidad/ieee-*.webp` son las marcas de los capítulos
 de la Rama IEEE, una por recuadro en la tarjeta de Comunidad:

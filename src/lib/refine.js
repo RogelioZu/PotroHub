@@ -1,6 +1,6 @@
 import { FALLBACK_TRIGGERS } from '../data/fallbackTriggers.js'
 import { FOCUSES } from '../data/focuses.js'
-import { computeResults } from './scoring.js'
+import { computeAffinity } from './affinity.js'
 
 /**
  * La lógica de las preguntas detonadoras, sin React ni red: la comparten el
@@ -21,7 +21,7 @@ export const SOURCES = new Set(['ia', 'respaldo'])
 
 /** Las áreas que comparten el porcentaje más alto. Casi siempre es una. */
 export function tiedTopAreaIds(answers) {
-  const results = computeResults(answers)
+  const results = computeAffinity(answers)
   return results.filter((result) => result.percentage === results[0].percentage).map((result) => result.areaId)
 }
 

@@ -1,243 +1,217 @@
-import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import Reveal from '../components/motion/Reveal'
-import SectionDivider from '../components/motion/SectionDivider'
-import HeroMosaic from '../components/ui/HeroMosaic'
+import Testimonials from '../components/home/Testimonials'
 import { AREAS } from '../data/areas'
 import { QUESTIONS } from '../data/questions'
-import { gsap, SplitText, useGSAP } from '../lib/gsap'
-import { DUR, EASE, FULL_MOTION, STAGGER } from '../lib/motion'
 import { useDocumentTitle } from '../lib/useDocumentTitle'
 import { useQuizStore } from '../store/quizStore'
 
+const STEPS = [
+  {
+    title: 'Descubre lo que te interesa',
+    text: 'Responde afirmaciones sobre lo que disfrutas. No hay respuestas correctas ni incorrectas.',
+  },
+  {
+    title: 'Dale forma a tu ruta',
+    text: 'Explora habilidades por etapas, compara credenciales y entiende qué se hace en puestos de empresas tech.',
+  },
+  {
+    title: 'Encuentra con quién avanzar',
+    text: 'Conoce la Rama IEEE, los espacios por especialidad y las experiencias de estudiantes de tu facultad.',
+  },
+]
+
 /**
- * El botón principal decía siempre "Comenzar diagnóstico", pero el store
- * rehidrata `currentIndex` desde `localStorage`: quien volvía con treinta y
- * cuatro respondidas pulsaba "comenzar" y aterrizaba en la pregunta 34 sin
- * ningún aviso. El CTA ahora dice en qué estado está la sesión guardada, que
- * además es la única señal en toda la portada de que el avance se conserva.
+ * El CTA dice en qué estado está la sesión guardada: quien vuelve con
+ * respuestas a medias no "comienza", continúa, y quien terminó va directo a
+ * su ruta. Es además la única señal de la portada de que el avance se guarda.
  */
-function resumeCta(answeredCount, currentIndex) {
-  if (answeredCount === 0) return { to: '/quiz', label: 'Comenzar diagnóstico' }
-  if (answeredCount < QUESTIONS.length) {
-    return { to: '/quiz', label: `Continuar — pregunta ${currentIndex + 1} de ${QUESTIONS.length}` }
-  }
-  return { to: '/resultados', label: 'Ver mi ruta' }
+function primaryAction(answered) {
+  if (answered === QUESTIONS.length) return { to: '/resultados', label: 'Explorar mi ruta' }
+  if (answered > 0) return { to: '/quiz', label: 'Continuar mi diagnóstico' }
+  return { to: '/quiz', label: 'Descubrir mi ruta' }
 }
 
 function Home() {
-  const hero = useRef(null)
-  const heading = useRef(null)
-  // Qué tarjetas de área están volteadas. Es un mapa y no un solo id: en
-  // escritorio el volteo por :hover ya es excluyente por sí mismo (sólo se
-  // puede pasar el mouse sobre una a la vez), pero en teléfono el toque fija
-  // el estado, y fijar más de una a la vez para comparar dos áreas es
-  // razonable — no hay motivo para forzarlas a cerrarse entre sí.
-  const [flipped, setFlipped] = useState({})
-  const answers = useQuizStore((state) => state.answers)
-  const currentIndex = useQuizStore((state) => state.currentIndex)
-  const primary = resumeCta(Object.keys(answers).length, currentIndex)
-
-  useDocumentTitle('PotroPath — Encuentra tu ruta en Ingeniería en Computación')
-
-  // Momento focal del sitio. La columna de texto se arma por palabras dentro
-  // de una máscara por líneas —"ruta" entra escalonada con las demás, sin
-  // tratamiento propio— y al final se acomodan las celdas del mosaico.
-  useGSAP(
-    () => {
-      const mm = gsap.matchMedia()
-
-      mm.add(FULL_MOTION, () => {
-        let split
-        let tl
-        let cancelled = false
-
-        // El titular se oculta ya, antes del primer pintado, para que no se
-        // vea saltar cuando la fuente termine de cargar y se pueda partir.
-        gsap.set(heading.current, { opacity: 0 })
-
-        // Se construye tras la carga de la fuente, es decir fuera de la
-        // ejecución síncrona de `useGSAP`, donde el `scope` ya no alcanza a los
-        // selectores de texto: aquí se resuelven los elementos a mano.
-        const build = () => {
-          if (cancelled || !heading.current) return
-
-          const pick = (selector) => hero.current.querySelector(selector)
-          const eyebrow = pick('[data-hero-eyebrow]')
-          const body = pick('[data-hero-body]')
-          const ctas = gsap.utils.toArray('[data-hero-cta] > *', hero.current)
-          const cells = gsap.utils.toArray('[data-mosaic-cell]', hero.current)
-
-          split = SplitText.create(heading.current, { type: 'lines,words', mask: 'lines' })
-
-          // Al terminar se deshace la partición: el DOM vuelve a su forma
-          // normal y los cambios de línea al redimensionar son los del navegador.
-          tl = gsap.timeline({ onComplete: () => split.revert() })
-
-          tl.set(heading.current, { opacity: 1 })
-            .from(eyebrow, { opacity: 0, y: 12, duration: DUR.state, ease: EASE.enter })
-            .addLabel('words', '-=0.2')
-            .from(
-              split.words,
-              { yPercent: 110, duration: DUR.focal, ease: EASE.enter, stagger: STAGGER.words },
-              'words',
-            )
-            .from(
-              [body, ...ctas],
-              { opacity: 0, y: 16, duration: DUR.view, ease: EASE.enter, stagger: STAGGER.tight },
-              'words+=0.35',
-            )
-            // Las celdas se acomodan como piezas que caen en su hueco: entran
-            // desde una escala apenas menor, sin rebote — el rebote es del potro.
-            .from(
-              cells,
-              {
-                opacity: 0,
-                scale: 0.92,
-                duration: DUR.view,
-                ease: EASE.enter,
-                stagger: STAGGER.tight,
-              },
-              'words+=0.5',
-            )
-        }
-
-        // Partir antes de que cargue la fuente produce saltos de línea que no
-        // son los definitivos, pero `document.fonts.ready` espera a que TODA la
-        // página termine. Basta con la familia del titular, y con un tope de
-        // 400 ms para que una red lenta nunca deje el hero escondido.
-        Promise.race([
-          document.fonts.load('700 3rem "DM Sans"').catch(() => {}),
-          new Promise((resolve) => setTimeout(resolve, 400)),
-        ]).then(build)
-
-        return () => {
-          cancelled = true
-          // `revert()` y no `kill()`: matar el timeline deja pegado el estado
-          // inicial de los `from`, y con el doble montaje de StrictMode el
-          // segundo intento animaría de 0 a 0 y el texto no volvería nunca.
-          // El timeline se crea fuera del contexto síncrono de `useGSAP`, así
-          // que `mm.revert()` no lo alcanza y hay que revertirlo aquí.
-          tl?.revert()
-          split?.revert()
-          gsap.set(heading.current, { clearProps: 'opacity' })
-        }
-      })
-
-      return () => mm.revert()
-    },
-    { scope: hero },
-  )
+  useDocumentTitle('PotroPath — Tu siguiente paso en Ingeniería en Computación')
+  const answered = useQuizStore((state) => Object.keys(state.answers).length)
+  const action = primaryAction(answered)
+  const inProgress = answered > 0 && answered < QUESTIONS.length
 
   return (
     <>
-      <section
-        ref={hero}
-        className="pt-16 pb-8 mx-auto grid max-w-6xl gap-10 px-6 md:pt-24 md:pb-12 md:grid-cols-2 md:items-center"
-      >
+      {/*
+        El hero abre con una fotografía real de la Rama Estudiantil IEEE
+        UAEMéx, no con una foto de banco: el lienzo del fondo dice "Rama
+        Estudiantil · Universidad Autónoma del Estado de México · IEEE", así
+        que la imagen se verifica sola. La especificidad local es toda la
+        ventaja del producto (PRODUCT.md → Product Principles, 4).
+      */}
+      <section className="page-shell editorial-hero">
         <div>
-          <p data-hero-eyebrow className="eyebrow">
-            Facultad de Ingeniería · UAEMéx
-          </p>
-          <h1 ref={heading} className="mt-3 h1">
-            Encuentra tu <span className="text-gold-dark">ruta</span> dentro de la Ingeniería en
-            Computación
+          <p className="eyebrow enter">Facultad de Ingeniería · UAEMéx</p>
+          <h1 className="h1 enter" style={{ '--d': 1 }}>
+            Ya elegiste Computación.{' '}
+            <span className="text-green-mid">Ahora encuentra tu camino.</span>
           </h1>
-          {/*
-            Decía "50 preguntas basadas en escenarios reales de la industria".
-            El banco (`src/data/questions.js`) son afirmaciones de interés
-            —"Disfruto…", "Me atrae…"— en escala de acuerdo, no escenarios: la
-            primera afirmación del producto se desmentía abriendo /quiz. Esta
-            versión describe lo que el diagnóstico realmente hace.
-          */}
-          <p data-hero-body className="mt-5 lead">
-            Cincuenta afirmaciones sobre lo que disfrutas y lo que te atrae miden tu afinidad con
-            Inteligencia Artificial, Ciberseguridad, Cloud Computing, Ciencia de Datos y Desarrollo
-            de Software, y la convierten en habilidades, certificaciones y una comunidad donde
-            empezar.
+          <p className="lead enter max-w-lg" style={{ '--d': 2 }}>
+            Descubre qué te mueve, qué puedes aprender y dónde puedes llevarlo. Tu siguiente paso
+            empieza con tus intereses, no con lo que ya dominas.
           </p>
-          <div data-hero-cta className="mt-8 flex flex-wrap gap-4">
-            <Link to={primary.to} className="btn-green">
-              {primary.label}
+          <div
+            className="enter mt-8 flex flex-wrap items-center gap-x-6 gap-y-3"
+            style={{ '--d': 3 }}
+          >
+            <Link className="btn-green" to={action.to}>
+              {action.label} <span aria-hidden="true">↗</span>
             </Link>
-            <Link to="/comunidad" className="btn-outline">
-              Conoce la comunidad
+            <a href="#como-funciona" className="text-link">
+              Cómo funciona <span aria-hidden="true">↓</span>
+            </a>
+          </div>
+          <p className="hero-facts enter" style={{ '--d': 4 }}>
+            {inProgress ? (
+              <span>
+                <strong className="number">{answered}</strong> de {QUESTIONS.length} respuestas
+                guardadas en este navegador. Continúa a tu ritmo.
+              </span>
+            ) : (
+              <>
+                <span>
+                  <strong>{QUESTIONS.length}</strong> afirmaciones
+                </span>
+                <span>
+                  <strong>{AREAS.length}</strong> especialidades
+                </span>
+                <span>
+                  <strong>Sin</strong> registro
+                </span>
+              </>
+            )}
+          </p>
+        </div>
+
+        <figure className="hero-picture enter" style={{ '--d': 2 }}>
+          <img
+            src="/images/inicio-rama-ieee.webp"
+            srcSet="/images/inicio-rama-ieee-720.webp 720w, /images/inicio-rama-ieee.webp 1200w"
+            sizes="(min-width: 768px) 520px, calc(100vw - 48px)"
+            alt="Integrantes de la Rama Estudiantil IEEE UAEMéx reunidos de noche alrededor de un vehículo todo terreno construido por el equipo, frente a su lona"
+            width={1200}
+            height={750}
+            fetchPriority="high"
+          />
+          <figcaption className="photo-caption">
+            Rama Estudiantil IEEE UAEMéx · Facultad de Ingeniería
+          </figcaption>
+        </figure>
+      </section>
+
+      <section
+        id="como-funciona"
+        className="bg-paper-alt section-py"
+        aria-labelledby="pasos-titulo"
+      >
+        <div className="page-shell">
+          <div className="section-heading">
+            <div>
+              <p className="eyebrow">Un poco de claridad para tu siguiente paso</p>
+              <h2 id="pasos-titulo" className="h2">
+                No tienes que resolverlo todo hoy.
+              </h2>
+            </div>
+            <p className="section-note">
+              PotroPath no elige por ti ni mide lo que sabes: te ayuda a ordenar lo que te interesa
+              y a convertirlo en un primer paso concreto.
+            </p>
+          </div>
+          <ol className="step-grid reveal-group">
+            {STEPS.map((step, index) => (
+              <li key={step.title} className="step-card">
+                <span className="step-index number">0{index + 1} /</span>
+                <h3 className="h3 mt-4 mb-2">{step.title}</h3>
+                <p className="text-sm muted">{step.text}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      {/*
+        Las cinco áreas con el mismo tratamiento y la descripción siempre
+        visible: el diagnóstico las mide, no las rankea, y destacar una antes
+        de responder sugeriría una recomendación que todavía no se hizo.
+      */}
+      <section className="page-shell section-py" aria-labelledby="areas-titulo">
+        <div className="section-heading">
+          <div>
+            <p className="eyebrow">Cinco formas de construir el futuro</p>
+            <h2 id="areas-titulo" className="h2">
+              ¿Qué despierta tu curiosidad?
+            </h2>
+          </div>
+          <p className="section-note">
+            No son caminos cerrados. Las especialidades se conectan y tus intereses pueden cambiar.
+          </p>
+        </div>
+
+        <div className="area-grid reveal-group">
+          {AREAS.map((area, index) => (
+            <article key={area.id} className="surface area-card">
+              <img src={area.image} alt="" loading="lazy" />
+              <div className="area-card-body">
+                <p className="eyebrow">Especialidad · 0{index + 1}</p>
+                <h3 className="h3 mt-2">{area.name}</h3>
+                <p>{area.description}</p>
+                <Link to={`/comunidad?area=${area.id}#especialidades`} className="text-link">
+                  Ver su comunidad <span aria-hidden="true">↗</span>
+                </Link>
+              </div>
+            </article>
+          ))}
+
+          <div className="dark-panel area-invite">
+            <div>
+              <p className="eyebrow">¿No sabes por cuál empezar?</p>
+              <h3 className="h2 mt-3">Tus respuestas lo ordenan por ti.</h3>
+              <p className="mt-4 text-sm text-paper/85">
+                El diagnóstico compara tu afinidad con las cinco y te deja explorar cualquiera.
+              </p>
+            </div>
+            <Link to={action.to} className="btn-light self-start">
+              {action.label} <span aria-hidden="true">↗</span>
             </Link>
           </div>
         </div>
-
-        {/*
-          Tres huecos con fotografía y tres en espera. El scaffold no sabe qué
-          va dentro: aquí se decide, y por eso el `alt` de cada foto vive junto
-          a la foto y no en una tabla de configuración lejos de ella.
-        */}
-        <HeroMosaic physics>
-          <HeroMosaic.Slot name="circle-main">
-            <img src="/images/estudiante-ico.png" alt="Estudiante de Ingeniería en Computación" />
-          </HeroMosaic.Slot>
-          <HeroMosaic.Slot name="square-top">
-            <img src="/images/trabajo-equipo.png" alt="Estudiantes trabajando en equipo" />
-          </HeroMosaic.Slot>
-          <HeroMosaic.Slot name="pill-wide">
-            <img src="/images/estudiante-redes.png" alt="Estudiante del área de redes" />
-          </HeroMosaic.Slot>
-        </HeroMosaic>
       </section>
 
-      <section className="potential-section pt-8 pb-16 bg-paper-alt md:pt-12 md:pb-24">
-        <div className="mx-auto max-w-6xl px-6">
-          <Reveal className="potential-intro">
-            <SectionDivider>
-              <h2 className="min-w-0 h2 sm:shrink-0">¿Dónde está tu potencial?</h2>
-            </SectionDivider>
-            <p className="mx-auto mt-6 max-w-2xl text-center text-ink-soft">
-              Descubre las áreas de Computación que mejor conectan con tus habilidades, intereses y
-              forma de resolver problemas.
+      <Testimonials />
+
+      <section className="page-shell pb-16" aria-labelledby="comunidad-titulo">
+        <div className="dark-panel reveal grid gap-8 md:grid-cols-2 md:items-center">
+          <div>
+            <p className="eyebrow">Tu ruta es tuya. El camino se comparte.</p>
+            <h2 id="comunidad-titulo" className="h2 mt-4">
+              Aprender también sucede fuera del salón.
+            </h2>
+            <p className="mt-5 text-sm text-paper/85">
+              Hackatones, torneos de robótica y capítulos técnicos: conoce lo que ya han vivido
+              estudiantes de la facultad y los espacios donde puedes seguir explorando.
             </p>
-          </Reveal>
-
-          {/*
-            Las cinco áreas tienen el mismo peso visual: tres arriba y dos
-            abajo es una composición, no una jerarquía. Destacar una sola antes
-            de que el estudiante responda sugeriría una recomendación que el
-            diagnóstico todavía no hizo.
-
-            Cada tarjeta es un botón que voltea sobre sí misma: la foto y el
-            nombre al frente, la descripción al fondo. En escritorio basta con
-            pasar el mouse (ver `.area-flip` en index.css, sólo bajo
-            `(hover: hover) and (pointer: fine)`); en teléfono no hay hover,
-            así que tocar la tarjeta la fija volteada por medio de este
-            estado — el mismo botón cubre los dos casos sin ramificar la
-            interacción por dispositivo.
-          */}
-          <Reveal className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
-            {AREAS.map((area, index) => (
-              <button
-                key={area.id}
-                type="button"
-                aria-pressed={Boolean(flipped[area.id])}
-                onClick={() =>
-                  setFlipped((current) => ({ ...current, [area.id]: !current[area.id] }))
-                }
-                className={`area-flip text-left shadow-sm shadow-ink/5 ${
-                  flipped[area.id] ? 'is-flipped' : ''
-                } ${index < 3 ? 'lg:col-span-2' : 'lg:col-span-3'}`}
-              >
-                <span className="area-flip-inner">
-                  <span className="area-flip-face area-flip-front">
-                    <img src={area.image} alt="" className="h-full w-full object-cover" loading="lazy" />
-                    <span className="absolute inset-x-3 bottom-3 rounded-md bg-green/90 px-3 py-2 text-sm font-bold text-paper">
-                      {area.name}
-                    </span>
-                  </span>
-                  <span className="area-flip-face area-flip-back">
-                    <span className="h3 text-green-mid">{area.name}</span>
-                    <span className="mt-2 text-sm text-ink-soft">{area.description}</span>
-                  </span>
-                </span>
-              </button>
-            ))}
-          </Reveal>
+            <Link to="/comunidad" className="btn-light mt-6">
+              Conocer la comunidad <span aria-hidden="true">↗</span>
+            </Link>
+          </div>
+          <figure>
+            <img
+              className="aspect-4/3 w-full rounded-2xl object-cover"
+              src="/images/comunidad/galeria-talent-land.webp"
+              alt="Estudiantes de la Facultad de Ingeniería frente a la entrada de Talent Land México 2026"
+              loading="lazy"
+            />
+            <figcaption className="mt-3 text-xs text-paper/80">
+              Talent Land México 2026 · Estudiantes de la facultad
+            </figcaption>
+          </figure>
         </div>
       </section>
     </>

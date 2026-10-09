@@ -1,10 +1,10 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { QUESTIONS } from '../data/questions'
-import { eligibleFocusIds, fallbackTriggers, SOURCES, validateTriggerSet } from '../lib/refine'
-import { computeResults, isValidAnswer } from '../lib/scoring'
+import { QUESTIONS } from '../data/questions.js'
+import { computeAffinity, isValidAnswer } from '../lib/affinity.js'
+import { eligibleFocusIds, fallbackTriggers, SOURCES, validateTriggerSet } from '../lib/refine.js'
 
-export { MIN_PERCENTAGE, NEUTRAL_PERCENTAGE } from '../lib/scoring'
+export { MIN_PERCENTAGE, NEUTRAL_PERCENTAGE } from '../lib/affinity.js'
 
 /**
  * Cuánto se espera a Qwen antes de usar las detonadoras de respaldo (ms). La
@@ -61,6 +61,12 @@ function sanitize(state) {
   return { answers, currentIndex, refinement: sanitizeRefinement(state?.refinement, answers) }
 }
 
+/** La primera pregunta sin responder, o la última si ya están todas. */
+function firstUnanswered(answers) {
+  const index = QUESTIONS.findIndex((question) => !(question.id in answers))
+  return index === -1 ? QUESTIONS.length - 1 : index
+}
+
 export const useQuizStore = create(
   persist(
     (set, get) => ({
@@ -73,7 +79,9 @@ export const useQuizStore = create(
 
       answerCurrent(value) {
         const question = QUESTIONS[get().currentIndex]
-        if (!question) return
+        // La misma guarda que al rehidratar: un valor fuera de la escala no
+        // entra al estado aunque llegue por un atajo de teclado.
+        if (!question || !isValidAnswer(question.id, value)) return
         set((state) => ({
           answers: { ...state.answers, [question.id]: value },
           // Volver al cuestionario y cambiar una respuesta cambia lo que las
@@ -94,9 +102,18 @@ export const useQuizStore = create(
         }))
       },
 
-      /** Puntaje por área normalizado a porcentaje (0-100) de afinidad. */
+      /**
+       * Al llegar a la última pregunta con alguna pendiente (porque se
+       * retrocedió o se saneó una sesión vieja), esto lleva directo a la
+       * primera que falta en vez de obligar a buscarla con "Anterior".
+       */
+      goToFirstUnanswered() {
+        set((state) => ({ currentIndex: firstUnanswered(state.answers) }))
+      },
+
+      /** Afinidad por área: porcentaje del máximo, escala 20–100 con la sesión completa. */
       computeResults() {
-        return computeResults(get().answers)
+        return computeAffinity(get().answers)
       },
 
       /**

@@ -16,7 +16,7 @@
  * instrucciones para el modelo: el prompt lo arma este servidor, entero.
  */
 import { QUESTIONS } from '../src/data/questions.js'
-import { isValidAnswer } from '../src/lib/scoring.js'
+import { isValidAnswer } from '../src/lib/affinity.js'
 import { generateTriggers } from './_qwen.js'
 
 /** Cincuenta pares id–valor caben en ~1.5 KB; el resto es otra cosa. */

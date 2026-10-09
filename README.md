@@ -43,15 +43,48 @@ A diferencia de los test vocacionales tradicionales que se enfocan en elegir una
 
 ### 4. Arquitectura y stack tecnológico
 
-Para la construcción del MVP se optó por un enfoque orientado a la velocidad de despliegue y validación temprana, utilizando tecnologías de dominio actual del equipo, con una arquitectura modular que facilita su futura integración institucional.
+Para la construcción del MVP se optó por un enfoque orientado a la velocidad de despliegue y validación temprana, utilizando tecnologías de dominio actual del equipo, con una arquitectura modular que facilita su futura integración institucional. El detalle completo —componentes, flujo de datos, fórmula con ejemplo numérico y decisiones— está en [`docs/ARQUITECTURA.md`](docs/ARQUITECTURA.md).
 
-- **Frontend (agilidad y experiencia de usuario):** interfaz desarrollada con **React 19** y **Vite**, estilizada con **Tailwind CSS v4** y animada con **GSAP**. Opera del lado del cliente: no hay ida y vuelta al servidor durante el diagnóstico, no hay sesión y no se recogen datos personales. La única excepción es el afinado opcional, descrito abajo.
-- **Gestión de datos locales:** las 50 preguntas, las cinco áreas y el contenido de ruta son módulos JavaScript estáticos en `src/data/` — no un CMS: cambiarlos es un cambio de código. El estado del cuestionario lo administra **Zustand** y persiste en `localStorage` (clave `potropath-quiz`), de modo que una sesión sobrevive al cierre de la pestaña sin pedir registro.
-- **Modelo de puntaje:** cada pregunta suma únicamente a su propia área; los totales se normalizan a un porcentaje de afinidad de 0 a 100 y se ordenan. Se muestran los cinco puntajes, no sólo el ganador.
-- **Movimiento y accesibilidad:** todo el movimiento está condicionado a `prefers-reduced-motion` y todo revelado se construye de manera que el estado por defecto del HTML sea el visible — si el JavaScript falla o tarda, la página se ve completa. **Matter.js** (física del mosaico de la portada) se carga sólo bajo demanda, en el primer arrastre, para no cobrarle 26 KB comprimidos a quien únicamente lee la portada desde un teléfono con red de campus mala.
-- **Afinado con IA (función serverless):** una sola función de Vercel, `POST /api/detonadoras`, guarda la llave de Alibaba Cloud Model Studio y arma el prompt. Sólo se llama cuando el estudiante pulsa "Afinar mi ruta", después de leer en pantalla qué se envía: exclusivamente las 50 respuestas numéricas, sin ningún dato que lo identifique. El modelo es de la familia rápida de Qwen (`qwen3.8-flash`), sin modo de razonamiento y con salida validada contra un esquema JSON, de modo que cada opción queda atada a un enfoque del catálogo. Si el modelo falla o tarda más de 8 segundos, el sitio usa dos preguntas de respaldo escritas a mano y lo dice.
-- **Backend y base de datos (analíticas anónimas):** ⏳ *pendiente de definir* — se contempla **Supabase** (PostgreSQL) con el único fin de recolectar estadísticas anónimas de los resultados finales, sin sistemas de autenticación ni perfiles de usuario, para maximizar la participación.
-- **Proyección institucional y escalabilidad:** aunque el MVP se ejecuta sobre un entorno serverless moderno, el proyecto contempla en fases posteriores la viabilidad de migrar su backend a PHP y bases de datos locales, alineándose a los estándares e infraestructura tecnológica actual de la UAEMéx para asegurar su adopción oficial y mantenimiento a largo plazo.
+```mermaid
+flowchart LR
+  E[Estudiante] --> UI[React: Inicio · Diagnóstico · Mi ruta · Comunidad]
+  UI --> R[React Router]
+  UI <--> S[Zustand: respuestas, índice y afinado]
+  S <--> L[(localStorage del navegador)]
+  Q[Preguntas y áreas estáticas] --> F[Función de afinidad]
+  S --> F
+  F --> V[Resultados: porcentajes, empates, caso neutral]
+  D[Habilidades · credenciales · perfiles] --> V
+  C[Datos de comunidad] --> UI
+  V --> X[Enlaces a fuentes oficiales]
+  V --> LI[Búsqueda externa en LinkedIn]
+  V -. sólo con «Afinar mi ruta» .-> API[Función /api/detonadoras]
+  API -.-> QW[Qwen · Alibaba Cloud]
+  K[Enfoques y preguntas de respaldo] --> V
+```
+
+*Arquitectura actual. El sitio es estático: no hay cuentas ni base de datos, y las respuestas se quedan en el navegador. Sólo salen en dos casos que el estudiante dispara: los dos términos que escribe en la búsqueda de LinkedIn, y las 50 respuestas numéricas cuando pulsa «Afinar mi ruta» (línea punteada). Sin esa función, el afinado usa preguntas de respaldo escritas a mano.*
+
+- **Frontend:** **React 19** y **Vite**, estilizado con **Tailwind CSS v4** sobre un sistema editorial propio. Opera del lado del cliente; sin librerías de animación —el contenido nunca espera a una animación para aparecer—.
+- **Gestión de datos locales:** preguntas, áreas, ruta de habilidades, credenciales, perfiles profesionales, enfoques y comunidad son módulos JavaScript estáticos en `src/data/`. El estado del cuestionario lo administra **Zustand** y persiste en `localStorage` (clave `potropath-quiz`), saneado al rehidratar.
+- **Procesamiento:** cada respuesta (1–5) suma sólo a su área; el total se expresa como porcentaje del máximo de 50 puntos. Con el diagnóstico completo la escala va de 20% a 100% y 60% es el punto neutral. Los empates se reconocen y responder "Neutral" a todo no produce un ganador. Las recomendaciones son asociaciones estáticas área → habilidades → credenciales → perfiles: **la IA no recomienda nada ni predice empleabilidad.** La función es pura (`src/lib/affinity.js`) y está cubierta por pruebas.
+- **Afinado con IA (función opcional):** una sola función de Vercel, `POST /api/detonadoras`, guarda la llave de Alibaba Cloud Model Studio y arma el prompt. Sólo se llama cuando el estudiante pulsa "Afinar mi ruta", después de leer en pantalla qué se envía: exclusivamente las 50 respuestas numéricas, sin ningún dato que lo identifique. Qwen (`qwen3.8-flash`, sin modo de razonamiento y con salida validada contra un esquema JSON) redacta dos preguntas; cada opción queda atada a uno de los quince enfoques del catálogo, y la cuenta que elige el enfoque es determinista. Si el modelo falla, tarda más de 8 segundos o la función no existe, el sitio usa dos preguntas de respaldo escritas a mano y lo dice.
+- **Calidad:** pruebas automatizadas (`npm test`), lint sin advertencias y verificación en navegador a 390 y 1440 px. Rendimiento medido con Lighthouse en [`docs/RENDIMIENTO.md`](docs/RENDIMIENTO.md).
+- **Backend y base de datos (analíticas anónimas):** ⏳ *pendiente de decidir tras el piloto* — se contempla **Supabase** (PostgreSQL) o la infraestructura que defina la universidad, sólo para eventos agregados y sin perfiles de usuario. Ver [`docs/PLAN-INSTITUCIONAL.md`](docs/PLAN-INSTITUCIONAL.md).
+- **Proyección institucional y escalabilidad:** al ser un sitio estático, puede alojarse en cualquier servidor web de la UAEMéx sin dependencias de ejecución; ahí el afinado funciona con las preguntas de respaldo. Llevar también la IA exige una función equivalente a `/api/detonadoras`, cuyo contrato está escrito para poder reimplementarse en PHP. Una migración a PHP y bases de datos locales sólo se justifica si un servicio de datos llega a ser necesario; el plan por etapas está en el documento institucional.
+
+### 5. Validación y evidencia
+
+| Pregunta | Dónde está la respuesta | Estado |
+| --- | --- | --- |
+| ¿Cómo está construido y cómo procesa? | [`docs/ARQUITECTURA.md`](docs/ARQUITECTURA.md) | ✅ Documentado y contrastado con el código |
+| ¿Qué tan rápido carga? | [`docs/RENDIMIENTO.md`](docs/RENDIMIENTO.md) | ✅ Medido (laboratorio, condiciones declaradas) |
+| ¿Lo entienden y les sirve a los estudiantes? | [`docs/PILOTO.md`](docs/PILOTO.md) | ⏳ Protocolo, instrumentos y metas listos; piloto sin ejecutar |
+| ¿Cómo se adopta en la facultad? | [`docs/PLAN-INSTITUCIONAL.md`](docs/PLAN-INSTITUCIONAL.md) | ⏳ Plan por etapas; responsables por confirmar |
+| ¿En qué se distingue de herramientas similares? | [`docs/COMPARATIVA.md`](docs/COMPARATIVA.md) | ✅ Matriz con fuentes y fecha |
+| ¿Qué cambió en el rediseño y cómo se verificó? | [`docs/REDISENO.md`](docs/REDISENO.md) | ✅ Implementado y verificado |
+
+**Ningún resultado del piloto se presenta como obtenido antes de ejecutarlo.** Los testimonios de Inicio aparecerán sólo con citas reales y autorización de cada participante.
 
 ## Stack técnico
 
@@ -64,9 +97,8 @@ Las versiones exactas las fija `package-lock.json`; `npm ci` las reproduce tal c
 | Estilos                   | [Tailwind CSS](https://tailwindcss.com/)             | 4       | ✅ Configurado |
 | Enrutamiento              | [React Router](https://reactrouter.com/)             | 7       | ✅ Configurado |
 | Estado global             | [Zustand](https://zustand.docs.pmnd.rs/)             | 5       | ✅ Configurado |
-| Animación                 | [GSAP](https://gsap.com/) + `@gsap/react`            | 3       | ✅ Configurado |
-| Física del mosaico        | [Matter.js](https://brm.io/matter-js/) (bajo demanda) | 0.20    | ✅ Configurado |
 | Linter                    | [oxlint](https://oxc.rs/docs/guide/usage/linter)     | 1       | ✅ Configurado |
+| Pruebas                   | Runner nativo de Node (`node --test`)                | 20+     | ✅ Configurado |
 | Función del afinado       | [Vercel Functions](https://vercel.com/docs/functions) | —       | ✅ Configurado |
 | Modelo de las detonadoras | [Qwen en Alibaba Cloud Model Studio](https://www.alibabacloud.com/help/en/model-studio/models) | 3.8 Flash | ⏳ Por evaluar contra 3.7 Plus |
 | Backend / DB analítica    | [Supabase](https://supabase.com/)                    | —       | ⏳ Pendiente   |
@@ -128,6 +160,7 @@ npm run preview   # sirve dist/ en http://localhost:4173
 | `npm run build` | Build de producción en `dist/` |
 | `npm run preview` | Sirve el build ya generado (`localhost:4173`), para revisarlo tal como se publicaría |
 | `npm run lint` | oxlint sobre todo el repositorio, con las reglas de `.oxlintrc.json` |
+| `npm test` | Pruebas de afinidad, integridad de datos profesionales y búsqueda (`tests/`) |
 | `npx vercel dev` | El sitio más la función `/api/detonadoras`, con las variables de `.env` (`localhost:3000`) |
 | `npm run eval:detonadoras` | Corre diez perfiles sintéticos contra Qwen e imprime las preguntas, para elegir el modelo leyendo. Gasta tokens reales. `QWEN_EVAL_MODELS=qwen3.8-flash,qwen3.7-plus` compara dos |
 
@@ -143,10 +176,9 @@ Probar en un teléfono real vale la pena: el teléfono con red de campus mala es
 
 ### Verificación de un cambio
 
-No hay suite de pruebas automatizadas. La verificación real de un cambio es:
-
 ```bash
-npm run lint      # sin errores nuevos
+npm run lint      # sin errores ni advertencias
+npm test          # todas las pruebas en verde
 npm run build     # el build pasa
 ```
 
@@ -158,8 +190,8 @@ npm run build     # el build pasa
 | --- | --- | --- |
 | `/` | Inicio | Presentación y entrada al diagnóstico |
 | `/quiz` | Diagnóstico | Las 50 preguntas, una por pantalla, con progreso reanudable |
-| `/resultados` | Mi ruta | Los cinco puntajes de afinidad, habilidades y certificaciones del área ganadora |
-| `/comunidad` | Comunidad | Canales de Teams por especialidad y Rama Estudiantil IEEE UAEMéx |
+| `/resultados` | Mi ruta | Afinidad en las cinco áreas (con empates), el afinado opcional a uno de los tres enfoques del área, y por cualquier área: habilidades por etapas, credenciales comparables, perfiles profesionales y búsqueda en LinkedIn |
+| `/comunidad` | Comunidad | Directorio por especialidad (`?area=`), Rama Estudiantil IEEE UAEMéx, galería de experiencias y agenda |
 | cualquier otra | 404 | Página de no encontrado |
 
 Además, `POST /api/detonadoras` es la función del afinado. Su contrato está escrito en la cabecera de `api/detonadoras.js`, pensado para que un reemplazo en PHP pueda cumplirlo tal cual.
@@ -168,24 +200,22 @@ Además, `POST /api/detonadoras` es la función del afinado. Su contrato está e
 
 ```
 src/
-  main.jsx                  Punto de entrada
-  App.jsx                   Rutas: / · /quiz · /resultados · /comunidad · *
-  index.css                 @theme de Tailwind v4 (tokens), utilidades y clases de componente
-  data/                     Contenido estático — no es un CMS; cambiarlo es cambiar código
-    questions.js            50 preguntas (10 por área), escala 1–5
-    areas.js                Las cinco áreas fijas
-    roadmap.js              Habilidades y certificaciones por área
-    focuses.js              Los 15 enfoques (3 por área) que eligen las preguntas detonadoras
-    fallbackTriggers.js     Preguntas detonadoras de respaldo, escritas a mano
+  main.jsx · App.jsx        Entrada y rutas: / · /quiz · /resultados · /comunidad · *
+  index.css                 Tokens de Tailwind v4 y sistema editorial
+  data/                     Contenido estático: preguntas, áreas, ruta, credenciales,
+                            perfiles, comunidad, testimonios (vacío hasta el piloto),
+                            los 15 enfoques y las preguntas detonadoras de respaldo
   store/quizStore.js        Zustand persistido en localStorage (clave `potropath-quiz`)
-  lib/                      Registro único de GSAP, tokens de movimiento y hooks compartidos
-  components/               layout/ · ui/ · motion/
+  lib/                      Afinidad y detonadoras (funciones puras), búsqueda LinkedIn,
+                            formato y título
+  components/               layout/ · results/ · home/ · ui/ · motion/
   pages/                    Home, Quiz, Results, Community, NotFound
 api/                        La función de Vercel del afinado y su conversación con Qwen
 scripts/                    Evaluación manual de las preguntas detonadoras
-public/images/              Activos que se publican tal cual (vitral, mascota, fotos de área
-                            y de comunidad). Sus README documentan cada imagen y la
-                            especificación de las que todavía faltan
+tests/                      Pruebas con `node --test`
+docs/                       Arquitectura, rendimiento, piloto, plan institucional,
+                            comparativa y bitácora del rediseño
+public/images/              Activos publicados; sus README documentan procedencia
 assets-src/                 Masters sin comprimir; fuera de public/, no entran al build
 dist/                       Salida de `npm run build` (ignorada por Git)
 ```
@@ -205,14 +235,15 @@ En decisiones visuales manda `DESIGN.md`; en verdad de producto y voz manda `PRO
 
 ## Estado del proyecto
 
-**Real y utilizable hoy:** el banco de 50 preguntas y su escala, el contenido de ruta (habilidades y certificaciones) de las cinco áreas, el catálogo de quince enfoques con su primer paso y las preguntas de respaldo, la fotografía del vitral de la biblioteca de la facultad y la mascota universitaria, y el sitio completo navegable de punta a punta.
+**Real y utilizable hoy:** el banco de 50 preguntas y su escala; 25 habilidades con entregables, 10 credenciales y 5 perfiles profesionales con fuente y fecha de revisión; el catálogo de quince enfoques con su primer paso y las preguntas de respaldo; seis fotografías verificadas de estudiantes de la facultad; el vitral y la mascota; y el sitio completo navegable de punta a punta, con pruebas automatizadas.
 
 **Pendiente, declarado como pendiente en la propia interfaz** — ninguno de estos se simula como si ya existiera:
 
-- El código de invitación a los canales de Microsoft Teams (`TEAMS_JOIN_CODE_URL` es `null`).
+- El acceso a los canales de Microsoft Teams (`TEAMS_JOIN_URL` en `src/data/community.js` es `null`).
+- La prueba piloto con estudiantes y, después de ella, los testimonios autorizados (protocolo en `docs/PILOTO.md`).
 - La agenda real de eventos de la Rama IEEE y la confirmación de sus capítulos activos.
 - La estadística de titulación de la UAEMéx que sustentará el planteamiento.
 - El backend de analíticas anónimas en Supabase.
 - La elección final del modelo de Qwen (`npm run eval:detonadoras`) y la confirmación de que Model Studio acepta JSON Schema en la región Singapur; mientras tanto, `QWEN_RESPONSE_FORMAT=json_object` es la salida de emergencia.
 
-**Ningún estudiante ha usado todavía el producto.** No hay testimonios, conteos de usuarios, cifras de adopción, convenios ni aprobación institucional, y nada de eso debe aparecer como contenido del sitio.
+**Ningún estudiante ha usado todavía el producto fuera de las pruebas de desarrollo.** No hay testimonios, conteos de usuarios, cifras de adopción, convenios ni aprobación institucional, y nada de eso debe aparecer como contenido del sitio.

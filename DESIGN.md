@@ -1,6 +1,6 @@
 ---
 name: PotroPath
-description: El vitral de la Facultad de Ingeniería en los bordes, papel silencioso en el centro.
+description: Guía editorial universitaria — papel, verde institucional y fotografía real de la facultad; el vitral firma en una franja.
 colors:
   verde-universitario: "#526855"
   oro-viejo: "#ca9e52"
@@ -15,54 +15,56 @@ colors:
 typography:
   brand:
     fontFamily: "DM Sans, Inter, system-ui, sans-serif"
-    fontSize: "1.875rem"
-    fontWeight: 700
-    lineHeight: "2.25rem"
-    letterSpacing: "normal"
-  display:
-    fontFamily: "DM Sans, Inter, system-ui, sans-serif"
-    fontSize: "2.25rem"
-    fontWeight: 700
-    lineHeight: "1.25"
-    letterSpacing: "normal"
-  headline:
-    fontFamily: "DM Sans, Inter, system-ui, sans-serif"
     fontSize: "1.5rem"
     fontWeight: 700
-    lineHeight: "2rem"
-    letterSpacing: "normal"
+    lineHeight: "1.1"
+    letterSpacing: "-0.04em"
+  display:
+    fontFamily: "DM Sans, Inter, system-ui, sans-serif"
+    fontSize: "clamp(2.25rem, 5vw, 4.25rem)"
+    fontWeight: 600
+    lineHeight: "1.06"
+    letterSpacing: "-0.045em"
+  headline:
+    fontFamily: "DM Sans, Inter, system-ui, sans-serif"
+    fontSize: "clamp(1.65rem, 3vw, 2.5rem)"
+    fontWeight: 600
+    lineHeight: "1.15"
+    letterSpacing: "-0.035em"
   title:
     fontFamily: "DM Sans, Inter, system-ui, sans-serif"
     fontSize: "1.125rem"
-    fontWeight: 700
-    lineHeight: "1.75rem"
-    letterSpacing: "normal"
+    fontWeight: 600
+    lineHeight: "1.4"
+    letterSpacing: "-0.015em"
   lead:
     fontFamily: "DM Sans, Inter, system-ui, sans-serif"
-    fontSize: "1.125rem"
+    fontSize: "1.075rem"
     fontWeight: 400
-    lineHeight: "1.75rem"
+    lineHeight: "1.75"
     letterSpacing: "normal"
   body:
     fontFamily: "DM Sans, Inter, system-ui, sans-serif"
     fontSize: "1rem"
     fontWeight: 400
-    lineHeight: "1.5rem"
+    lineHeight: "1.65"
     letterSpacing: "normal"
   label:
     fontFamily: "DM Sans, Inter, system-ui, sans-serif"
-    fontSize: "0.875rem"
-    fontWeight: 600
-    lineHeight: "1.25rem"
-    letterSpacing: "0.1em"
+    fontSize: "0.7rem"
+    fontWeight: 700
+    lineHeight: "1.5"
+    letterSpacing: "0.14em"
 rounded:
-  sm: "6px"
-  md: "12px"
+  sm: "12px"
+  md: "20px"
+  focal: "28px"
   full: "9999px"
 spacing:
   gutter: "24px"
-  card: "20px"
-  gap: "24px"
+  container: "1152px"
+  card: "28px"
+  gap: "20px"
   section-y: "64px"
   section-y-md: "96px"
 components:
@@ -129,7 +131,116 @@ components:
      canónicas del formato DESIGN.md y de las herramientas que lo leen. El
      contenido es español. -->
 
+## Redesign 2026-10 — especificación vigente
+
+**Esta sección manda.** Sustituye cualquier decisión histórica de las secciones siguientes que
+entre en conflicto con ella. Lo que viene después de *Overview* conserva el razonamiento de la
+primera versión —por qué la paleta es cerrada, por qué el oro firma y el verde trabaja, cómo se
+midió el contraste— y sigue valiendo donde no choca con esto. La paleta institucional y la verdad
+de producto (`PRODUCT.md`) no cambian.
+
+### Por qué se rediseñó
+
+Una captura de la portada anterior sin interacción mostraba el titular del hero **invisible** y
+cuatro de cinco tarjetas de área a medio revelar: el contenido dependía de que GSAP terminara de
+animarlo. Además, la navegación no tenía "Mi ruta", las descripciones de área vivían detrás de un
+giro 3D, Resultados anunciaba un ganador arbitrario en un empate y Comunidad mostraba filas que
+volteaban en lugar de abrir algo. El sistema visual era fuerte; el sistema de uso no.
+
+### Dirección: guía editorial universitaria
+
+Cada bloque responde una pregunta y ofrece una acción: ¿qué me interesa? (diagnóstico), ¿qué
+puedo aprender? (habilidades por etapas), ¿cómo lo respaldo? (credenciales comparables), ¿dónde se
+usa? (perfiles documentados), ¿cómo busco? (LinkedIn), ¿con quién avanzo? (comunidad). Titulares
+amplios con tracking negativo, numeración editorial de secciones (`01 / …`), superficies papel y
+verde bruma, paneles focales verde profundo y **fotografía real con pie** que nombra evento y lugar.
+
+Se estudiaron patrones de roadmap.sh (rutas por etapas), IxDF (separar aprendizaje, credencial y
+comunidad) y Linear (jerarquía y agrupación). No se copia ninguna identidad.
+
+### Tokens
+
+| Elemento | Valor |
+|---|---|
+| Colores | Los cinco oficiales y sus derivados, sin cambios (ver *Colors*) |
+| Base | `html { font-size: 112.5% }`: 18px. Todo lo que está en `rem` crece ×1.125 en proporción |
+| `.h1` | `clamp(2.1rem, 5vw, 4rem)` / 1.06, 600, −0.045em, `text-wrap: balance` |
+| `.h2` | `clamp(1.6rem, 3vw, 2.4rem)` / 1.15, 600, −0.035em |
+| `.h3` | 1.125rem / 1.4, 600, −0.015em |
+| `.lead` | 1.075rem / 1.75, `Tinta Suave` |
+| Cuerpo | 1rem / 1.65 |
+| `.eyebrow` | 0.72rem / 1.5, 700, 0.14em, mayúsculas, `Ámbar Quemado` |
+| Marca | Sólo texto: "Potro" en `Verde Universitario`, "Path" en oro derivado (60% `Oro Viejo` + 40% `Ámbar Quemado`, 3.26:1 sobre papel); nunca menos de 24px en negrita |
+| Contenedor | `.page-shell`: 1152px con canalón de 24px |
+| Ritmo | `.section-py`: 64px, 96px desde `md` |
+| Radios | 20px tarjeta (`.surface`), 28px panel focal (`.dark-panel`), 12–14px controles internos, píldora para acciones |
+| Bordes | Tinta al 12% (`--line`), 22% en controles (`--line-strong`) |
+| Acciones | `.btn-green` (verde profundo), `.btn-outline`, `.btn-light` (sobre verde); mínimo 48px. Controles repetidos y enlaces, mínimo 44px |
+| Datos | `.number` con cifras tabulares; barras con valor explícito y marca del 60% neutral |
+| "Todavía no" | `.status-pending`: borde punteado. Una sola forma para todo lo pendiente |
+
+### Estructura
+
+- **Cabecera de papel** con franja de vitral de 16px que se desplaza muy lento (`vitral-franja.webp`,
+  26 KB), marca de puro texto verde y oro, cuatro destinos —Inicio, Diagnóstico, Mi ruta, Comunidad— y un CTA que
+  cambia con el avance guardado. Bajo 1024px, menú desplegable que cierra con Escape y al navegar.
+  Enlace "Saltar al contenido".
+- **Pie sobre el vitral completo**, con el filete dorado de 2px arriba, como en la primera versión.
+  El texto se apoya en `.footer-scrim` (tinta al 72%, desvanecida en los 24px de arriba y abajo):
+  es *La regla de la Franja de Lectura* aplicada de nuevo. Todo el texto pequeño va en `Papel` a
+  opacidad plena; `Oro Claro` sólo en "Path", que a 24px en negrita es texto grande. La foto es un
+  `<img loading="lazy">` porque siempre está bajo el pliegue y pesa 207 KB.
+
+### Vistas
+
+- **Inicio:** hero dividido con la foto real de la Rama Estudiantil IEEE UAEMéx (el lienzo se lee en
+  la imagen); tres pasos; cinco áreas con descripción siempre visible y una sexta celda que invita
+  al diagnóstico en vez de estirar una tarjeta; testimonios sólo si existen y están autorizados;
+  panel de comunidad. Las fotos de banco del mosaico anterior ya no se muestran.
+- **Diagnóstico:** columna de 720px, radios nativos en filas de 58px, progreso por respuestas
+  guardadas, atajos 1–5 y Enter en laptop, "Ir a la primera pendiente" al final si falta alguna,
+  reinicio confirmado.
+- **Resultados**, en el orden en que se lee: (1) panel focal con el resultado o el empate reconocido
+  junto a la comparación de cinco áreas con marca del 60%; (2) **Tu primer paso**, tres acciones
+  —aprende, practica, comparte— tomadas de la ruta; (3) una **barra fija** con el área explorada
+  (nombres cortos) y las cuatro partes de la ruta; (4) 01 Aprende, 02 Acredita, 03 Conoce el rol y
+  04 Busca, cada una con una etiqueta del área explorada; (5) comunidad y reinicio. La barra existe
+  porque, ya en credenciales o puestos, era fácil olvidar de qué área era el contenido.
+- **Comunidad:** hero dividido con foto de Talent Land; directorio de cinco intereses ligado a la
+  URL; Rama IEEE con logo, propósito y estado en una tarjeta por sociedad; galería editorial de seis
+  fotos verificadas; agenda vacía compacta.
+
+### Movimiento
+
+Todo es CSS; no hay GSAP, Matter.js ni ScrollSmoother. La regla que no se negocia: **ningún
+contenido depende de una animación para existir.**
+
+| Pieza | Comportamiento |
+|---|---|
+| `.page-enter` | Fundido de 380ms al cambiar de vista (sólo opacidad, para no transformar el ancestro de la barra fija) |
+| `.enter` + `--d` | Entrada escalonada del primer pliegue: 620ms, 90ms entre piezas |
+| `.hero-picture img` | La foto se asienta desde 1.06× en 1.2s |
+| `.reveal`, `.reveal-group > *` | Aparición al hacer scroll con `animation-timeline: view()` en los primeros 200px de entrada, dentro de `@supports`: sin soporte, el contenido está quieto y visible. Rango en px y no en %, para que un bloque alto no quede medio transparente mientras se lee |
+| `.swap-in` | Contenido reemplazado en sitio (pregunta, habilidad, puesto, área): la `key` lo remonta y entra en 420ms. `aria-live` va en un contenedor estable, no en el elemento con `key` |
+| Barras de afinidad | Se llenan en orden (1.1s, 90ms entre barras) |
+| Franja del vitral | Se desplaza en 45s, ida y vuelta |
+| Microinteracciones | Flecha de las acciones avanza 3px; chips y botones de selección ceden a 0.98 al pulsar; tarjetas de área se levantan 4px con sombra y acercan su foto, sólo con puntero |
+
+Tokens: `--ease-out` `cubic-bezier(0.22, 1, 0.36, 1)`, `--dur-fast` 180ms, `--dur-enter` 620ms.
+Con `prefers-reduced-motion: reduce`, una regla en `@layer base` apaga todo. Sustituye *Motion* y
+sus reglas del `from` y del Único Rebote, que quedan como historia; la regla de *botones que no se
+mueven* se relaja sólo en la flecha y en la presión de los chips.
+
+### Retirado, para no reintroducirlo por accidente
+
+Mosaico con física, tarjetas y filas que voltean, carruseles, `SectionDivider` animado, el símbolo
+`p↗` de la marca, `HeroMosaic`, `PhotoCard`, `Reveal`, `SmoothScroller`, `VitralBackdrop`,
+`src/lib/gsap.js`, `src/lib/motion.js`. Todo está en el historial de git.
+
 ## Overview
+
+> **Histórico.** Esta sección y las siguientes describen la primera versión. Donde contradigan a
+> *Redesign 2026-10*, manda la especificación vigente.
 
 **Creative North Star: "El vitral y el papel"**
 

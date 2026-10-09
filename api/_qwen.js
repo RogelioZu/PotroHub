@@ -20,7 +20,7 @@ import {
   tiedTopAreaIds,
   validateTriggerSet,
 } from '../src/lib/refine.js'
-import { computeResults } from '../src/lib/scoring.js'
+import { computeAffinity } from '../src/lib/affinity.js'
 
 /** Corta antes que el navegador (8 s) para que su error llegue primero. */
 const TIMEOUT_MS = 7000
@@ -64,7 +64,7 @@ function answerLine(questionId, answers) {
  * navegador no manda nada de eso.
  */
 export function buildUserMessage(answers, candidates) {
-  const results = computeResults(answers)
+  const results = computeAffinity(answers)
   const tied = new Set(tiedTopAreaIds(answers))
 
   const affinity = results

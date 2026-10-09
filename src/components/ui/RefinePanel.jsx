@@ -1,7 +1,5 @@
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { FOCUS_BY_ID } from '../../data/focuses'
-import { gsap, useGSAP } from '../../lib/gsap'
-import { DUR, EASE, FULL_MOTION, SHIFT, STAGGER } from '../../lib/motion'
 import { useQuizStore } from '../../store/quizStore'
 
 /**
@@ -25,7 +23,7 @@ function reasonFor(focus, picks) {
 
 function FocusCard({ focus, area, picks }) {
   return (
-    <div data-focus-card className="mt-10 rounded-xl bg-paper-alt p-6 text-sm text-ink-soft">
+    <div className="mt-10 rounded-xl bg-paper-alt p-6 text-sm text-ink-soft">
       <p className="eyebrow">Tu enfoque dentro de {area.name}</p>
       <h3 className="mt-2 h3 text-green">{focus.name}</h3>
       <p className="mt-2">{focus.description}</p>
@@ -77,10 +75,8 @@ function RefinePanel({ areas, focus, routeArea }) {
   const requestRefinement = useQuizStore((state) => state.requestRefinement)
   const pickOption = useQuizStore((state) => state.pickOption)
 
-  const root = useRef(null)
   const firstPrompt = useRef(null)
   const justRequested = useRef(false)
-  const lastFocusId = useRef(focus?.id ?? null)
 
   const questions = refinement?.questions
   const areaNames = new Intl.ListFormat('es-MX', { type: 'disjunction' }).format(areas.map((area) => area.name))
@@ -94,51 +90,15 @@ function RefinePanel({ areas, focus, routeArea }) {
   // Las preguntas reemplazan al botón que tenía el foco: sin moverlo, quien
   // navega con teclado se queda en un elemento que ya no existe. Es el mismo
   // salto al enunciado que hace el cuestionario. Sólo tras pedirlas: unas
-  // preguntas restauradas de `localStorage` no le roban el foco a nadie, y
-  // entran con el resto de la vista.
-  useGSAP(
-    () => {
-      if (!questions || !justRequested.current) return
-      justRequested.current = false
-      firstPrompt.current?.focus()
-
-      const mm = gsap.matchMedia()
-      mm.add(FULL_MOTION, () => {
-        gsap.from('[data-trigger]', {
-          opacity: 0,
-          y: SHIFT / 2,
-          duration: DUR.view,
-          ease: EASE.enter,
-          stagger: STAGGER.tight,
-        })
-      })
-      return () => mm.revert()
-    },
-    { dependencies: [questions], scope: root },
-  )
-
-  // El enfoque aparece, o cambia si el estudiante cambia una respuesta. La
-  // tarjeta ya está en el HTML: esto sólo la trae desde abajo.
-  useGSAP(
-    () => {
-      const id = focus?.id ?? null
-      const changed = id !== lastFocusId.current
-      lastFocusId.current = id
-      if (!id || !changed) return
-
-      const mm = gsap.matchMedia()
-      mm.add(FULL_MOTION, () => {
-        gsap.from('[data-focus-card]', { opacity: 0, y: SHIFT, duration: DUR.view, ease: EASE.enter })
-      })
-      return () => mm.revert()
-    },
-    { dependencies: [focus?.id], scope: root },
-  )
+  // preguntas restauradas de `localStorage` no le roban el foco a nadie.
+  useEffect(() => {
+    if (!questions || !justRequested.current) return
+    justRequested.current = false
+    firstPrompt.current?.focus()
+  }, [questions])
 
   return (
     <section
-      ref={root}
-      data-card
       aria-labelledby="refine-title"
       aria-busy={refining}
       className="mt-12 border-t border-ink/10 pt-10"
@@ -179,7 +139,7 @@ function RefinePanel({ areas, focus, routeArea }) {
           <p className="mt-3 text-xs text-ink-soft">{SOURCE_NOTE[refinement.source]}</p>
 
           {questions.map((question, questionIndex) => (
-            <div key={questionIndex} data-trigger className="mt-8">
+            <div key={questionIndex} className="mt-8">
               <h3
                 ref={questionIndex === 0 ? firstPrompt : undefined}
                 id={`trigger-${questionIndex}`}
