@@ -63,7 +63,7 @@ function Testimonials() {
           </p>
         </div>
 
-        <div className="quote-grid">
+        <div className="quote-grid reveal-group">
           {TESTIMONIALS.map((item) => (
             <figure key={item.id} className="surface quote-card">
               <blockquote>

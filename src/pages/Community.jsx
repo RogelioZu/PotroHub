@@ -25,23 +25,25 @@ function Community() {
   const [params, setParams] = useSearchParams()
   const selected = AREA_BY_ID[params.get('area')] ?? AREAS[0]
 
-  const selectArea = (id) =>
-    setParams({ area: id }, { replace: true, preventScrollReset: true })
+  const selectArea = (id) => setParams({ area: id }, { replace: true, preventScrollReset: true })
 
   return (
     <>
       <section className="page-shell editorial-hero">
         <div>
-          <p className="eyebrow">La comunidad de tu facultad</p>
-          <h1 className="h1">
+          <p className="eyebrow enter">La comunidad de tu facultad</p>
+          <h1 className="h1 enter" style={{ '--d': 1 }}>
             Tu camino es propio.{' '}
             <span className="text-green-mid">No tienes que recorrerlo solo.</span>
           </h1>
-          <p className="lead">
+          <p className="lead enter" style={{ '--d': 2 }}>
             Hay conversaciones, proyectos y competencias que empiezan cuando termina la clase.
             Encuentra lo que te gustaría explorar con otros.
           </p>
-          <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
+          <div
+            className="enter mt-8 flex flex-wrap items-center gap-x-6 gap-y-3"
+            style={{ '--d': 3 }}
+          >
             <a href="#especialidades" className="btn-green">
               Encontrar mi espacio <span aria-hidden="true">↓</span>
             </a>
@@ -50,7 +52,7 @@ function Community() {
             </a>
           </div>
         </div>
-        <figure className="hero-picture">
+        <figure className="hero-picture enter" style={{ '--d': 2 }}>
           <img
             src="/images/comunidad/quienes-somos.webp"
             srcSet="/images/comunidad/quienes-somos-720.webp 720w, /images/comunidad/quienes-somos.webp 1216w"
@@ -83,7 +85,11 @@ function Community() {
         </nav>
       </div>
 
-      <section id="especialidades" className="page-shell section-py" aria-labelledby="especialidades-titulo">
+      <section
+        id="especialidades"
+        className="page-shell section-py"
+        aria-labelledby="especialidades-titulo"
+      >
         <div className="section-heading">
           <div>
             <p className="eyebrow">01 / Encuentra tu espacio</p>
@@ -97,7 +103,7 @@ function Community() {
         </div>
 
         <div className="community-directory">
-          <div className="grid gap-3" role="group" aria-label="Especialidades">
+          <div className="reveal-group grid gap-3" role="group" aria-label="Especialidades">
             {AREAS.map((area, index) => (
               <button
                 key={area.id}
@@ -118,8 +124,10 @@ function Community() {
 
           <div id="interes-comunidad" className="dark-panel" aria-live="polite">
             <p className="eyebrow">Un interés en común</p>
-            <h3 className="h2 mt-4">{selected.name}</h3>
-            <p className="mt-4 text-sm text-paper/85">{selected.description}</p>
+            <div key={selected.id} className="swap-in">
+              <h3 className="h2 mt-4">{selected.name}</h3>
+              <p className="mt-4 text-sm text-paper/85">{selected.description}</p>
+            </div>
 
             <p className="eyebrow mt-8">Ideas para aprender en equipo</p>
             <ul className="mt-4 space-y-3 text-sm">
@@ -136,15 +144,20 @@ function Community() {
             <div className="mt-8 border-t border-paper/20 pt-6">
               <p className="text-sm font-semibold">Canal de Microsoft Teams</p>
               {TEAMS_JOIN_URL ? (
-                <a href={TEAMS_JOIN_URL} target="_blank" rel="noreferrer" className="btn-light mt-4">
+                <a
+                  href={TEAMS_JOIN_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="btn-light mt-4"
+                >
                   Abrir el acceso en Teams <span aria-hidden="true">↗</span>
                 </a>
               ) : (
                 <>
                   <span className="status-pending mt-3 text-gold-light">Acceso en preparación</span>
                   <p className="mt-3 text-xs text-paper/80">
-                    Publicaremos aquí el acceso, con tu cuenta institucional, cuando esté confirmado.
-                    Las ideas de arriba son sugerencias, no actividades programadas.
+                    Publicaremos aquí el acceso, con tu cuenta institucional, cuando esté
+                    confirmado. Las ideas de arriba son sugerencias, no actividades programadas.
                   </p>
                 </>
               )}
@@ -155,7 +168,7 @@ function Community() {
 
       <section id="ieee" className="bg-paper-alt section-py" aria-labelledby="ieee-titulo">
         <div className="page-shell">
-          <div className="dark-panel">
+          <div className="dark-panel reveal">
             <p className="eyebrow">02 / Conecta con una comunidad técnica</p>
             <div className="mt-4 mb-8 grid gap-6 md:grid-cols-2">
               <h2 id="ieee-titulo" className="h2">
@@ -174,7 +187,7 @@ function Community() {
               </div>
             </div>
 
-            <div className="chapter-grid">
+            <div className="chapter-grid reveal-group">
               {CHAPTERS.map((chapter) => (
                 <article key={chapter.name} className="chapter-card">
                   <div className="chapter-logo">
@@ -196,7 +209,11 @@ function Community() {
         </div>
       </section>
 
-      <section id="experiencias" className="page-shell section-py" aria-labelledby="experiencias-titulo">
+      <section
+        id="experiencias"
+        className="page-shell section-py"
+        aria-labelledby="experiencias-titulo"
+      >
         <div className="section-heading">
           <div>
             <p className="eyebrow">03 / Fuera del salón</p>
@@ -210,7 +227,7 @@ function Community() {
           </p>
         </div>
 
-        <div className="gallery-grid">
+        <div className="gallery-grid reveal-group">
           {GALLERY.map((photo) => (
             <figure key={photo.src}>
               <img src={photo.src} alt={photo.alt} loading="lazy" />
@@ -224,7 +241,7 @@ function Community() {
       </section>
 
       <section id="participar" className="page-shell pb-16" aria-labelledby="participar-titulo">
-        <div className="surface panel-pad grid gap-8 md:grid-cols-2">
+        <div className="surface panel-pad reveal grid gap-8 md:grid-cols-2">
           <div>
             <p className="eyebrow">04 / Tu siguiente paso</p>
             <h2 id="participar-titulo" className="h2 mt-4">

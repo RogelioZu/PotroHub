@@ -48,15 +48,19 @@ function Home() {
       */}
       <section className="page-shell editorial-hero">
         <div>
-          <p className="eyebrow">Facultad de Ingeniería · UAEMéx</p>
-          <h1 className="h1">
-            Ya elegiste Computación. <span className="text-green-mid">Ahora encuentra tu camino.</span>
+          <p className="eyebrow enter">Facultad de Ingeniería · UAEMéx</p>
+          <h1 className="h1 enter" style={{ '--d': 1 }}>
+            Ya elegiste Computación.{' '}
+            <span className="text-green-mid">Ahora encuentra tu camino.</span>
           </h1>
-          <p className="lead max-w-lg">
+          <p className="lead enter max-w-lg" style={{ '--d': 2 }}>
             Descubre qué te mueve, qué puedes aprender y dónde puedes llevarlo. Tu siguiente paso
             empieza con tus intereses, no con lo que ya dominas.
           </p>
-          <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
+          <div
+            className="enter mt-8 flex flex-wrap items-center gap-x-6 gap-y-3"
+            style={{ '--d': 3 }}
+          >
             <Link className="btn-green" to={action.to}>
               {action.label} <span aria-hidden="true">↗</span>
             </Link>
@@ -64,7 +68,7 @@ function Home() {
               Cómo funciona <span aria-hidden="true">↓</span>
             </a>
           </div>
-          <p className="hero-facts">
+          <p className="hero-facts enter" style={{ '--d': 4 }}>
             {inProgress ? (
               <span>
                 <strong className="number">{answered}</strong> de {QUESTIONS.length} respuestas
@@ -86,7 +90,7 @@ function Home() {
           </p>
         </div>
 
-        <figure className="hero-picture">
+        <figure className="hero-picture enter" style={{ '--d': 2 }}>
           <img
             src="/images/inicio-rama-ieee.webp"
             srcSet="/images/inicio-rama-ieee-720.webp 720w, /images/inicio-rama-ieee.webp 1200w"
@@ -102,7 +106,11 @@ function Home() {
         </figure>
       </section>
 
-      <section id="como-funciona" className="bg-paper-alt section-py" aria-labelledby="pasos-titulo">
+      <section
+        id="como-funciona"
+        className="bg-paper-alt section-py"
+        aria-labelledby="pasos-titulo"
+      >
         <div className="page-shell">
           <div className="section-heading">
             <div>
@@ -116,7 +124,7 @@ function Home() {
               y a convertirlo en un primer paso concreto.
             </p>
           </div>
-          <ol className="step-grid">
+          <ol className="step-grid reveal-group">
             {STEPS.map((step, index) => (
               <li key={step.title} className="step-card">
                 <span className="step-index number">0{index + 1} /</span>
@@ -146,7 +154,7 @@ function Home() {
           </p>
         </div>
 
-        <div className="area-grid">
+        <div className="area-grid reveal-group">
           {AREAS.map((area, index) => (
             <article key={area.id} className="surface area-card">
               <img src={area.image} alt="" loading="lazy" />
@@ -179,7 +187,7 @@ function Home() {
       <Testimonials />
 
       <section className="page-shell pb-16" aria-labelledby="comunidad-titulo">
-        <div className="dark-panel grid gap-8 md:grid-cols-2 md:items-center">
+        <div className="dark-panel reveal grid gap-8 md:grid-cols-2 md:items-center">
           <div>
             <p className="eyebrow">Tu ruta es tuya. El camino se comparte.</p>
             <h2 id="comunidad-titulo" className="h2 mt-4">
