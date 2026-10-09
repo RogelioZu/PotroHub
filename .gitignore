@@ -12,6 +12,12 @@ dist
 dist-ssr
 *.local
 
+# Llaves de Model Studio y el enlace local de Vercel: nunca al repositorio
+.env
+.env.*
+!.env.example
+.vercel
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

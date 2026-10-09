@@ -5,7 +5,9 @@ Facultad de Ingeniería de la UAEMéx. 50 preguntas → área de mayor afinidad 
 certificaciones y comunidad. Sin registro, sin datos personales, todo del lado del cliente.
 
 React 19 + Vite + Tailwind CSS v4 + React Router + Zustand (persistido) + GSAP. Español (es-MX).
-Matter.js sólo para la física del mosaico del hero, cargado bajo demanda.
+Matter.js sólo para la física del mosaico del hero, cargado bajo demanda. Una sola función de servidor
+(Vercel, `api/detonadoras.js`) para las dos preguntas detonadoras que redacta Qwen — y sólo cuando el
+estudiante pulsa "Afinar mi ruta".
 
 ---
 
@@ -53,21 +55,31 @@ Todo lo demás está en los documentos. Estos cuatro se equivocan rápido y cues
 ## Comandos
 
 ```bash
-npm run dev       # servidor de desarrollo (Vite)
-npm run build     # build de producción
-npm run preview   # previsualizar el build
-npm run lint      # oxlint
+npm run dev               # servidor de desarrollo (Vite). /api no existe aquí: el afinado usa el respaldo
+npx vercel dev            # sitio + función /api/detonadoras, con las variables de .env
+npm run build             # build de producción
+npm run preview           # previsualizar el build
+npm run lint              # oxlint
+npm run eval:detonadoras  # perfiles sintéticos contra Qwen (gasta tokens reales; lee .env)
 ```
 
 No hay suite de pruebas. La verificación real de un cambio de UI es: `npm run lint`, `npm run build`,
 el detector de Impeccable, y **mirar la página** en los anchos que importan (390px y 1440px).
 
 ```bash
-node ~/.claude/skills/impeccable/scripts/detect.mjs --json src index.html
+~/.claude/skills/impeccable/scripts/impeccable detect --json src index.html
 ```
 
-Un solo hallazgo es esperado y **no** es un defecto: `single-font` en `index.html`. `DESIGN.md`
-compromete deliberadamente una sola familia tipográfica cargando la jerarquía por tamaño y peso.
+El único hallazgo que puede aparecer y **no** es un defecto es `single-font` en `index.html`.
+`DESIGN.md` compromete deliberadamente una sola familia tipográfica cargando la jerarquía por tamaño y
+peso.
+
+### Variables de entorno (sólo la función de `/api`)
+
+`.env.example` las lista: `DASHSCOPE_API_KEY`, `DASHSCOPE_BASE_URL`, `QWEN_MODEL`,
+`QWEN_RESPONSE_FORMAT` y `ALLOWED_ORIGIN`. **Ninguna lleva prefijo `VITE_`, y ninguna debe llevarlo
+nunca:** Vite mete al bundle toda variable con ese prefijo, y la llave quedaría a la vista de
+cualquiera. Después de un build, `grep -r "DASHSCOPE" dist/` debe salir vacío.
 
 ---
 
@@ -82,17 +94,29 @@ src/
     questions.js            50 preguntas (10 por área), escala 1–5. ids: `<areaId>-<n>`
     areas.js                Las cinco áreas fijas
     roadmap.js              Habilidades y certificaciones por área
-  store/quizStore.js        Zustand persistido en localStorage, clave `potropath-quiz`
+    focuses.js              Los 15 enfoques (3 por área) que eligen las detonadoras; catálogo cerrado
+    fallbackTriggers.js     Detonadoras de respaldo escritas a mano, misma forma que las de Qwen
+  store/quizStore.js        Zustand persistido en localStorage, clave `potropath-quiz`; guarda
+                            también `refinement` (detonadoras + elecciones), saneado al rehidratar
   lib/
+    scoring.js              El puntaje por área. Puro: lo importan el store y la función de /api
+    refine.js               Candidatos, validación y regla de decisión de las detonadoras. Puro
     gsap.js                 Punto ÚNICO de registro de GSAP y sus plugins
     motion.js               Tokens de movimiento: DUR, EASE, STAGGER, media queries
     useDocumentTitle.js     Título por vista
     useMosaicPhysics.js     Física del mosaico del hero (matter-js, carga diferida)
   components/
     layout/                 Navbar, Footer, Layout
-    ui/                     VitralBackdrop, HeroMosaic, PhotoCard, ConfirmButton, Carousel
+    ui/                     VitralBackdrop, HeroMosaic, PhotoCard, ConfirmButton, Carousel,
+                            RefinePanel ("Afina tu ruta" en /resultados)
     motion/                 Reveal, SectionDivider, RouteTransition, SmoothScroller
   pages/                    Home, Quiz, Results, Community, NotFound
+api/
+  detonadoras.js            POST /api/detonadoras (Vercel). Su cabecera es el contrato
+  _qwen.js                  Prompt, esquema y llamada a Model Studio. El `_` evita que Vercel
+                            lo publique como función
+scripts/eval-detonadoras.mjs  Evaluación manual de modelos con perfiles sintéticos
+vercel.json                 Rewrite de SPA: todo lo que no es /api va a index.html
 assets-src/                 Masters. Fuera de public/, no entran al build, y por
                             eso mover un archivo aquí lo borra del sitio. Cuatro
                             carpetas por destino: comunidad/, logotipos-ieee/,
@@ -133,6 +157,14 @@ absolutizar `og:image` en `index.html` y añadir `og:url` — está marcado ahí
 - **Los escalonados de GSAP usan `amount`, nunca `each`**, para que el retardo total quede acotado
   sin importar el largo de la lista.
 - Tailwind v4 configurado **en CSS** (`@theme` en `index.css`). No hay `tailwind.config.js`.
+- **Lo que se importa desde `api/` lleva extensión `.js` explícita**, también dentro de `src/data/`
+  y `src/lib/` cuando el módulo lo usa el servidor: Node no resuelve rutas sin extensión como Vite.
+- **La IA redacta, nunca escribe la ruta.** Qwen sólo produce preguntas y opciones, cada opción atada
+  a un `focusId` del catálogo y revalidada por `validateTriggerSet` en el servidor y al rehidratar.
+  Si una tarea pide que el modelo genere habilidades, recursos o cualquier cosa que se lea como
+  hecho, choca con el error caro número 1: detente y pregunta.
+- **`api/_qwen.js` nunca se importa desde `src/`.** La llave se lee de `process.env` al llamar, pero
+  el prompt entero acabaría en el bundle.
 
 ---
 

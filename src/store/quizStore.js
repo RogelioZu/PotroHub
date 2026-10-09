@@ -1,12 +1,38 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { AREAS } from '../data/areas'
-import { QUESTIONS, SCALE } from '../data/questions'
+import { QUESTIONS } from '../data/questions'
+import { eligibleFocusIds, fallbackTriggers, SOURCES, validateTriggerSet } from '../lib/refine'
+import { computeResults, isValidAnswer } from '../lib/scoring'
 
-const QUESTIONS_PER_AREA = QUESTIONS.length / AREAS.length
-const MAX_SCORE_PER_AREA = QUESTIONS_PER_AREA * 5
-const VALID_VALUES = new Set(SCALE.map((step) => step.value))
-const QUESTION_IDS = new Set(QUESTIONS.map((question) => question.id))
+export { MIN_PERCENTAGE, NEUTRAL_PERCENTAGE } from '../lib/scoring'
+
+/**
+ * Cuánto se espera a Qwen antes de usar las detonadoras de respaldo (ms). La
+ * función del servidor corta a los 7 s; este segundo de más es para que su
+ * error llegue antes que el del navegador y no se pague dos veces la espera.
+ */
+const REFINE_TIMEOUT = 8000
+
+/**
+ * Las detonadoras guardadas se revisan igual que las de Qwen: `localStorage`
+ * es tan ajeno como la respuesta de un modelo. Si las respuestas cambiaron y
+ * los enfoques en juego ya no son los mismos, se descartan — fueron escritas
+ * para otro estudiante.
+ */
+function sanitizeRefinement(refinement, answers) {
+  if (!refinement || Object.keys(answers).length < QUESTIONS.length) return null
+  if (!SOURCES.has(refinement.source)) return null
+
+  const questions = validateTriggerSet(refinement.questions, eligibleFocusIds(answers))
+  if (!questions) return null
+
+  const picks = questions.map((question, index) => {
+    const pick = refinement.picks?.[index]
+    return question.options.some((option) => option.focusId === pick) ? pick : null
+  })
+
+  return { source: refinement.source, questions, picks }
+}
 
 /**
  * El estado guardado viene de `localStorage`, que es escritura de terceros:
@@ -17,12 +43,14 @@ const QUESTION_IDS = new Set(QUESTIONS.map((question) => question.id))
  * y ocho minutos de trabajo perdidos, sin nada que lo explique.
  *
  * Se sanea al rehidratar y no al leer, para que el resto del store pueda dar
- * por hecho que su estado es válido.
+ * por hecho que su estado es válido. Por eso añadir `refinement` no obligó a
+ * subir la `version` del persist: un estado guardado antes de que existiera
+ * simplemente no lo trae, y aquí eso ya significa `null`.
  */
 function sanitize(state) {
   const answers = {}
   for (const [id, value] of Object.entries(state?.answers ?? {})) {
-    if (QUESTION_IDS.has(id) && VALID_VALUES.has(value)) answers[id] = value
+    if (isValidAnswer(id, value)) answers[id] = value
   }
 
   const index = Number(state?.currentIndex)
@@ -30,7 +58,7 @@ function sanitize(state) {
     ? Math.min(Math.max(index, 0), QUESTIONS.length - 1)
     : 0
 
-  return { answers, currentIndex }
+  return { answers, currentIndex, refinement: sanitizeRefinement(state?.refinement, answers) }
 }
 
 export const useQuizStore = create(
@@ -38,12 +66,19 @@ export const useQuizStore = create(
     (set, get) => ({
       currentIndex: 0,
       answers: {},
+      /** `{ source, questions, picks }` de las dos detonadoras, o `null`. */
+      refinement: null,
+      /** Sólo en memoria: una espera no sobrevive a cerrar la pestaña. */
+      refining: false,
 
       answerCurrent(value) {
         const question = QUESTIONS[get().currentIndex]
         if (!question) return
         set((state) => ({
           answers: { ...state.answers, [question.id]: value },
+          // Volver al cuestionario y cambiar una respuesta cambia lo que las
+          // detonadoras leyeron. Repetir la misma no las invalida.
+          refinement: state.answers[question.id] === value ? state.refinement : null,
         }))
       },
 
@@ -61,40 +96,70 @@ export const useQuizStore = create(
 
       /** Puntaje por área normalizado a porcentaje (0-100) de afinidad. */
       computeResults() {
-        const { answers } = get()
-        const totals = Object.fromEntries(AREAS.map((area) => [area.id, 0]))
+        return computeResults(get().answers)
+      },
 
-        for (const question of QUESTIONS) {
-          const value = answers[question.id]
-          if (value) totals[question.areaId] += value
+      /**
+       * Pide las dos detonadoras. Sólo la dispara el botón "Afinar mi ruta":
+       * el aviso de qué se envía y a quién tiene que leerse antes, no después.
+       *
+       * Nunca falla hacia el estudiante. Un error, una respuesta que no pasa la
+       * validación o los 8 s sin respuesta terminan igual: en las detonadoras
+       * de respaldo, marcadas como tales.
+       */
+      async requestRefinement() {
+        if (get().refining) return
+        const { answers } = get()
+        set({ refining: true })
+
+        let questions = null
+        try {
+          const response = await fetch('/api/detonadoras', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ answers }),
+            signal: AbortSignal.timeout(REFINE_TIMEOUT),
+          })
+          if (response.ok) {
+            const data = await response.json()
+            questions = validateTriggerSet(data?.questions, eligibleFocusIds(answers))
+          }
+        } catch {
+          // Red caída o tiempo agotado: el respaldo de abajo ya cubre los dos.
         }
 
-        const scores = AREAS.map((area) => ({
-          areaId: area.id,
-          score: totals[area.id],
-          percentage: Math.round((totals[area.id] / MAX_SCORE_PER_AREA) * 100),
-        })).sort((a, b) => b.percentage - a.percentage)
+        // Si mientras esperaba se reinició el diagnóstico o cambió una
+        // respuesta, estas preguntas ya no le corresponden a nadie.
+        if (get().answers !== answers) {
+          set({ refining: false })
+          return
+        }
 
-        return scores
+        set({
+          refining: false,
+          refinement: questions
+            ? { source: 'ia', questions, picks: [null, null] }
+            : { source: 'respaldo', questions: fallbackTriggers(answers), picks: [null, null] },
+        })
+      },
+
+      pickOption(questionIndex, focusId) {
+        set((state) => {
+          if (!state.refinement) return {}
+          const picks = [...state.refinement.picks]
+          picks[questionIndex] = focusId
+          return { refinement: { ...state.refinement, picks } }
+        })
       },
 
       reset() {
-        set({ currentIndex: 0, answers: {} })
+        set({ currentIndex: 0, answers: {}, refinement: null })
       },
     }),
     {
       name: 'potropath-quiz',
+      partialize: ({ currentIndex, answers, refinement }) => ({ currentIndex, answers, refinement }),
       merge: (persisted, current) => ({ ...current, ...sanitize(persisted) }),
     },
   ),
 )
-
-/**
- * El porcentaje mínimo posible: diez preguntas por área respondidas todas con
- * "Totalmente en desacuerdo". No es cero, y la pantalla de resultados lo dice
- * en voz alta en vez de dejar que el estudiante suponga una escala de 0 a 100.
- */
-export const MIN_PERCENTAGE = Math.round((QUESTIONS_PER_AREA * 1) / MAX_SCORE_PER_AREA * 100)
-
-/** El porcentaje que produce responder "Neutral" a las diez de un área. */
-export const NEUTRAL_PERCENTAGE = Math.round((QUESTIONS_PER_AREA * 3) / MAX_SCORE_PER_AREA * 100)

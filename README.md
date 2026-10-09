@@ -33,6 +33,7 @@ PotroPath se presentará como un Producto Mínimo Viable (MVP) sin fricción de 
 
 - **Motor de Diagnóstico Situacional:** cuestionario de 50 preguntas (10 por área de especialización) basadas en escenarios prácticos de la industria, evaluando afinidad hacia Inteligencia Artificial, Ciberseguridad, Cloud Computing, Ciencia de Datos y Desarrollo de Software.
 - **Dashboard de Resultados y Ruta:** interfaz dinámica que, tras finalizar el test, muestra la rama de mayor compatibilidad, habilidades demandadas en el mercado laboral y certificaciones clave para ese perfil.
+- **Afinado con preguntas detonadoras (opcional):** dentro de los resultados, dos preguntas más redactadas por un modelo de IA (Qwen, en Alibaba Cloud Model Studio) a partir de las 50 respuestas eligen uno de los tres enfoques del área —por ejemplo, dentro de Ciberseguridad: seguridad ofensiva, defensa y respuesta, o AppSec y criptografía— con sus habilidades, certificaciones y un primer paso para esa semana. Las preguntas cambian en cada intento; el catálogo de enfoques es cerrado y revisado por personas.
 - **Sección de Inmersión Universitaria (IEEE):** apartado dedicado a conectar al estudiante con la Rama Estudiantil IEEE UAEMéx, visibilizando los capítulos técnicos y eventos presenciales de la facultad.
 - **Módulo de Comunidad Segura:** integración con canales de Microsoft Teams estructurados por especialidad, a los que se entra con la cuenta institucional — así cada estudiante sabe que comparte el espacio con compañeros de su propia facultad y no con desconocidos —, para fomentar el networking técnico y la formación de equipos, garantizando la privacidad de los datos personales.
 
@@ -44,10 +45,11 @@ A diferencia de los test vocacionales tradicionales que se enfocan en elegir una
 
 Para la construcción del MVP se optó por un enfoque orientado a la velocidad de despliegue y validación temprana, utilizando tecnologías de dominio actual del equipo, con una arquitectura modular que facilita su futura integración institucional.
 
-- **Frontend (agilidad y experiencia de usuario):** interfaz desarrollada con **React 19** y **Vite**, estilizada con **Tailwind CSS v4** y animada con **GSAP**. Opera completamente del lado del cliente: no hay ida y vuelta al servidor durante el diagnóstico, no hay sesión y no se recogen datos personales.
+- **Frontend (agilidad y experiencia de usuario):** interfaz desarrollada con **React 19** y **Vite**, estilizada con **Tailwind CSS v4** y animada con **GSAP**. Opera del lado del cliente: no hay ida y vuelta al servidor durante el diagnóstico, no hay sesión y no se recogen datos personales. La única excepción es el afinado opcional, descrito abajo.
 - **Gestión de datos locales:** las 50 preguntas, las cinco áreas y el contenido de ruta son módulos JavaScript estáticos en `src/data/` — no un CMS: cambiarlos es un cambio de código. El estado del cuestionario lo administra **Zustand** y persiste en `localStorage` (clave `potropath-quiz`), de modo que una sesión sobrevive al cierre de la pestaña sin pedir registro.
 - **Modelo de puntaje:** cada pregunta suma únicamente a su propia área; los totales se normalizan a un porcentaje de afinidad de 0 a 100 y se ordenan. Se muestran los cinco puntajes, no sólo el ganador.
 - **Movimiento y accesibilidad:** todo el movimiento está condicionado a `prefers-reduced-motion` y todo revelado se construye de manera que el estado por defecto del HTML sea el visible — si el JavaScript falla o tarda, la página se ve completa. **Matter.js** (física del mosaico de la portada) se carga sólo bajo demanda, en el primer arrastre, para no cobrarle 26 KB comprimidos a quien únicamente lee la portada desde un teléfono con red de campus mala.
+- **Afinado con IA (función serverless):** una sola función de Vercel, `POST /api/detonadoras`, guarda la llave de Alibaba Cloud Model Studio y arma el prompt. Sólo se llama cuando el estudiante pulsa "Afinar mi ruta", después de leer en pantalla qué se envía: exclusivamente las 50 respuestas numéricas, sin ningún dato que lo identifique. El modelo es de la familia rápida de Qwen (`qwen3.8-flash`), sin modo de razonamiento y con salida validada contra un esquema JSON, de modo que cada opción queda atada a un enfoque del catálogo. Si el modelo falla o tarda más de 8 segundos, el sitio usa dos preguntas de respaldo escritas a mano y lo dice.
 - **Backend y base de datos (analíticas anónimas):** ⏳ *pendiente de definir* — se contempla **Supabase** (PostgreSQL) con el único fin de recolectar estadísticas anónimas de los resultados finales, sin sistemas de autenticación ni perfiles de usuario, para maximizar la participación.
 - **Proyección institucional y escalabilidad:** aunque el MVP se ejecuta sobre un entorno serverless moderno, el proyecto contempla en fases posteriores la viabilidad de migrar su backend a PHP y bases de datos locales, alineándose a los estándares e infraestructura tecnológica actual de la UAEMéx para asegurar su adopción oficial y mantenimiento a largo plazo.
 
@@ -65,6 +67,8 @@ Las versiones exactas las fija `package-lock.json`; `npm ci` las reproduce tal c
 | Animación                 | [GSAP](https://gsap.com/) + `@gsap/react`            | 3       | ✅ Configurado |
 | Física del mosaico        | [Matter.js](https://brm.io/matter-js/) (bajo demanda) | 0.20    | ✅ Configurado |
 | Linter                    | [oxlint](https://oxc.rs/docs/guide/usage/linter)     | 1       | ✅ Configurado |
+| Función del afinado       | [Vercel Functions](https://vercel.com/docs/functions) | —       | ✅ Configurado |
+| Modelo de las detonadoras | [Qwen en Alibaba Cloud Model Studio](https://www.alibabacloud.com/help/en/model-studio/models) | 3.8 Flash | ⏳ Por evaluar contra 3.7 Plus |
 | Backend / DB analítica    | [Supabase](https://supabase.com/)                    | —       | ⏳ Pendiente   |
 
 Tailwind v4 se configura **en CSS** (bloque `@theme` en `src/index.css`): no existe `tailwind.config.js` y no debe crearse.
@@ -79,7 +83,16 @@ Tailwind v4 se configura **en CSS** (bloque `@theme` en `src/index.css`): no exi
 | npm | 10 o superior (viene con Node) | El repositorio usa `package-lock.json` v3 |
 | Git | cualquiera reciente | Sólo para clonar |
 
-No hace falta nada más: **no hay variables de entorno, ni archivo `.env`, ni base de datos, ni servicio externo que levantar.** El proyecto corre completo del lado del cliente.
+Para todo salvo el afinado con IA no hace falta nada más: **no hay base de datos ni servicio que levantar.** `npm run dev` corre el sitio completo; como Vite no sirve la función de `/api`, "Afinar mi ruta" usa ahí las preguntas de respaldo, que es exactamente lo que pasa en producción cuando el modelo no responde.
+
+Para probar el afinado con Qwen hacen falta una llave de [Alibaba Cloud Model Studio](https://www.alibabacloud.com/help/en/model-studio/) en la región Singapur y la CLI de Vercel:
+
+```bash
+cp .env.example .env   # y llenar DASHSCOPE_API_KEY y DASHSCOPE_BASE_URL
+npx vercel dev         # http://localhost:3000, sitio y función juntos
+```
+
+Ninguna variable lleva el prefijo `VITE_`: Vite mete al bundle del navegador toda variable que empiece así, y la llave no puede llegar ahí. `.env` está en `.gitignore`.
 
 ```bash
 node -v   # debe imprimir v20.19+ o v22.12+
@@ -115,6 +128,8 @@ npm run preview   # sirve dist/ en http://localhost:4173
 | `npm run build` | Build de producción en `dist/` |
 | `npm run preview` | Sirve el build ya generado (`localhost:4173`), para revisarlo tal como se publicaría |
 | `npm run lint` | oxlint sobre todo el repositorio, con las reglas de `.oxlintrc.json` |
+| `npx vercel dev` | El sitio más la función `/api/detonadoras`, con las variables de `.env` (`localhost:3000`) |
+| `npm run eval:detonadoras` | Corre diez perfiles sintéticos contra Qwen e imprime las preguntas, para elegir el modelo leyendo. Gasta tokens reales. `QWEN_EVAL_MODELS=qwen3.8-flash,qwen3.7-plus` compara dos |
 
 ### Casos frecuentes
 
@@ -147,6 +162,8 @@ npm run build     # el build pasa
 | `/comunidad` | Comunidad | Canales de Teams por especialidad y Rama Estudiantil IEEE UAEMéx |
 | cualquier otra | 404 | Página de no encontrado |
 
+Además, `POST /api/detonadoras` es la función del afinado. Su contrato está escrito en la cabecera de `api/detonadoras.js`, pensado para que un reemplazo en PHP pueda cumplirlo tal cual.
+
 ## Estructura del repositorio
 
 ```
@@ -158,10 +175,14 @@ src/
     questions.js            50 preguntas (10 por área), escala 1–5
     areas.js                Las cinco áreas fijas
     roadmap.js              Habilidades y certificaciones por área
+    focuses.js              Los 15 enfoques (3 por área) que eligen las preguntas detonadoras
+    fallbackTriggers.js     Preguntas detonadoras de respaldo, escritas a mano
   store/quizStore.js        Zustand persistido en localStorage (clave `potropath-quiz`)
   lib/                      Registro único de GSAP, tokens de movimiento y hooks compartidos
   components/               layout/ · ui/ · motion/
   pages/                    Home, Quiz, Results, Community, NotFound
+api/                        La función de Vercel del afinado y su conversación con Qwen
+scripts/                    Evaluación manual de las preguntas detonadoras
 public/images/              Activos que se publican tal cual (vitral, mascota, fotos de área
                             y de comunidad). Sus README documentan cada imagen y la
                             especificación de las que todavía faltan
@@ -184,7 +205,7 @@ En decisiones visuales manda `DESIGN.md`; en verdad de producto y voz manda `PRO
 
 ## Estado del proyecto
 
-**Real y utilizable hoy:** el banco de 50 preguntas y su escala, el contenido de ruta (habilidades y certificaciones) de las cinco áreas, la fotografía del vitral de la biblioteca de la facultad y la mascota universitaria, y el sitio completo navegable de punta a punta.
+**Real y utilizable hoy:** el banco de 50 preguntas y su escala, el contenido de ruta (habilidades y certificaciones) de las cinco áreas, el catálogo de quince enfoques con su primer paso y las preguntas de respaldo, la fotografía del vitral de la biblioteca de la facultad y la mascota universitaria, y el sitio completo navegable de punta a punta.
 
 **Pendiente, declarado como pendiente en la propia interfaz** — ninguno de estos se simula como si ya existiera:
 
@@ -192,5 +213,6 @@ En decisiones visuales manda `DESIGN.md`; en verdad de producto y voz manda `PRO
 - La agenda real de eventos de la Rama IEEE y la confirmación de sus capítulos activos.
 - La estadística de titulación de la UAEMéx que sustentará el planteamiento.
 - El backend de analíticas anónimas en Supabase.
+- La elección final del modelo de Qwen (`npm run eval:detonadoras`) y la confirmación de que Model Studio acepta JSON Schema en la región Singapur; mientras tanto, `QWEN_RESPONSE_FORMAT=json_object` es la salida de emergencia.
 
 **Ningún estudiante ha usado todavía el producto.** No hay testimonios, conteos de usuarios, cifras de adopción, convenios ni aprobación institucional, y nada de eso debe aparecer como contenido del sitio.

@@ -1,11 +1,13 @@
 import { useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import ConfirmButton from '../components/ui/ConfirmButton'
+import RefinePanel from '../components/ui/RefinePanel'
 import { AREA_BY_ID } from '../data/areas'
 import { QUESTIONS } from '../data/questions'
 import { ROADMAP } from '../data/roadmap'
 import { gsap, ScrollTrigger, useGSAP } from '../lib/gsap'
 import { DUR, EASE, FULL_MOTION, STAGGER } from '../lib/motion'
+import { pickFocus } from '../lib/refine'
 import { useDocumentTitle } from '../lib/useDocumentTitle'
 import { MIN_PERCENTAGE, NEUTRAL_PERCENTAGE, useQuizStore } from '../store/quizStore'
 
@@ -34,19 +36,26 @@ const BAR_FILL = 0.8
  * corran siempre: `Results` decide antes si hay algo que mostrar, y un hook
  * después de ese `return` rompería las reglas de hooks.
  */
-function ResultsView({ results, onRetake }) {
+function ResultsView({ results, focus, onRetake }) {
   const root = useRef(null)
   const mascot = useRef(null)
   const top = results[0]
-  const topArea = AREA_BY_ID[top.areaId]
-  const topRoadmap = ROADMAP[top.areaId]
 
   // Responder "Neutral" a las cincuenta produce el mismo porcentaje en las
   // cinco áreas. La pantalla no puede seguir diciendo "tu mayor afinidad es X"
   // como si hubiera ganado algo: si hay empate arriba, se nombra.
   const tied = results.filter((result) => result.percentage === top.percentage)
 
-  useDocumentTitle(`Tu ruta: ${topArea.name} — PotroPath`)
+  // En un empate, la primera área del arreglo era la que salía, y eso es
+  // decidir por el orden en que alguien escribió un archivo. Las detonadoras
+  // ofrecen enfoques de todas las empatadas, así que el que elija el
+  // estudiante decide cuál ruta de área se muestra. Sin empate, el enfoque es
+  // siempre del área ganadora y esto no cambia nada.
+  const leadId = focus && tied.some((result) => result.areaId === focus.areaId) ? focus.areaId : top.areaId
+  const topArea = AREA_BY_ID[leadId]
+  const topRoadmap = ROADMAP[leadId]
+
+  useDocumentTitle(`Tu ruta: ${focus ? focus.name : topArea.name} — PotroPath`)
 
   // El pago de 50 preguntas. Es la única secuencia larga del sitio: el titular
   // anuncia el área ganadora y las cinco barras se llenan con su porcentaje
@@ -240,8 +249,10 @@ function ResultsView({ results, onRetake }) {
         {tied.length > 1 && (
           <p className="mt-3 font-medium text-ink">
             Empate: {tied.map((result) => AREA_BY_ID[result.areaId].name).join(', ')} quedaron en el
-            mismo porcentaje. Abajo aparece la ruta de {topArea.name}; las otras te quedan igual de
-            cerca.
+            mismo porcentaje.{' '}
+            {focus
+              ? `Tus dos preguntas finales inclinaron la ruta hacia ${topArea.name}; las otras te quedan igual de cerca.`
+              : `Abajo aparece la ruta de ${topArea.name}; las otras te quedan igual de cerca. Las dos preguntas de abajo pueden desempatar.`}
           </p>
         )}
       </div>
@@ -270,6 +281,17 @@ function ResultsView({ results, onRetake }) {
         </div>
       </div>
 
+      {/*
+        Después de la ruta del área y no antes: se lee de lo general a lo
+        específico, y las tarjetas del área no quedan debajo del encabezado
+        "Afina tu ruta" como si fueran parte del afinado.
+      */}
+      <RefinePanel
+        areas={tied.map((result) => AREA_BY_ID[result.areaId])}
+        focus={focus}
+        routeArea={topArea}
+      />
+
       <div data-cta className="mt-12 flex flex-wrap gap-4">
         <Link to="/comunidad" className="btn-green">
           Unirme a la comunidad
@@ -287,6 +309,7 @@ function ResultsView({ results, onRetake }) {
 function Results() {
   const navigate = useNavigate()
   const answers = useQuizStore((state) => state.answers)
+  const refinement = useQuizStore((state) => state.refinement)
   const computeResults = useQuizStore((state) => state.computeResults)
   const reset = useQuizStore((state) => state.reset)
 
@@ -300,7 +323,13 @@ function Results() {
     navigate('/quiz')
   }
 
-  return <ResultsView results={computeResults()} onRetake={handleRetake} />
+  return (
+    <ResultsView
+      results={computeResults()}
+      focus={pickFocus(refinement?.picks, answers)}
+      onRetake={handleRetake}
+    />
+  )
 }
 
 export default Results

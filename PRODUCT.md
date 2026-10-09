@@ -72,6 +72,12 @@ semestre, aquí".
   que una sesión sobrevive al cierre de la pestaña.
 - **Flujo principal:** Inicio → Diagnóstico → Mi ruta (resultados) → Comunidad. Las rutas son `/`,
   `/quiz`, `/resultados`, `/comunidad`.
+- **Afinado opcional dentro de Mi ruta.** Después de la ruta del área, el bloque "Afina tu ruta"
+  ofrece dos preguntas más, las *detonadoras*, que eligen uno de los tres enfoques del área. Se
+  ofrece, no se cobra: el resultado de las cincuenta ya está en pantalla, y quien no quiera afinar
+  no pierde nada. Las preguntas las redacta un modelo de IA (Qwen, de Alibaba Cloud) a partir de las
+  50 respuestas, así que cambian en cada intento; lo que no cambia es el catálogo de enfoques ni la
+  regla con que se cuentan. Ver *Capabilities and Constraints*.
 - **El diagnóstico son 50 preguntas**, 10 por área, cada una en una escala de acuerdo de 1 a 5, una
   pregunta por pantalla, con barra de progreso visible y estado reanudable. Es lo más grande que
   pide el producto y está en tensión con el posicionamiento sin fricción: es un costo conocido y
@@ -83,22 +89,45 @@ semestre, aquí".
 
 ## Capabilities and Constraints
 
-- **Solo del lado del cliente.** React + Vite, Tailwind CSS v4, React Router, Zustand (persistido) y
-  GSAP para el movimiento. Sin ida y vuelta al servidor durante el diagnóstico.
+- **Del lado del cliente, con una sola excepción que el estudiante dispara.** React + Vite, Tailwind
+  CSS v4, React Router, Zustand (persistido) y GSAP para el movimiento. Sin ida y vuelta al servidor
+  durante el diagnóstico. La excepción es `POST /api/detonadoras`, una función de Vercel que existe
+  porque la llave del modelo no puede viajar en el bundle — lo que llega al navegador lo lee
+  cualquiera. Reglas que la sostienen:
+  - **Sólo sale con un clic.** Nada se envía hasta que el estudiante pulsa "Afinar mi ruta", y el
+    aviso de qué se envía y a quién está escrito encima del botón. Un aviso leído después de que los
+    datos ya salieron no avisa de nada.
+  - **Sólo salen cincuenta números.** El servidor rechaza cualquier cuerpo que no sean exactamente
+    las 50 respuestas de 1 a 5: no hay texto libre que pueda volverse instrucción para el modelo, y
+    no hay nada que identifique a nadie. El servidor no las escribe en ningún log.
+  - **La IA redacta, no decide.** Escribe las dos preguntas y sus opciones; cada opción va atada a un
+    enfoque del catálogo cerrado (`src/data/focuses.js`) y el servidor lo revalida. Habilidades,
+    certificaciones y primer paso son siempre contenido revisado por personas.
+  - **Nunca es indispensable.** Si el modelo falla o no responde en 8 segundos, entran dos preguntas
+    de respaldo escritas a mano, y la interfaz dice que son de respaldo. El sitio funciona completo
+    sin Alibaba Cloud — también frente al jurado.
 - **El contenido son módulos de datos estáticos**, no un CMS: preguntas, áreas y ruta viven en
   `src/data/`. Cambiarlos es un cambio de código.
 - **Cinco áreas fijas:** Inteligencia Artificial, Ciberseguridad, Cloud Computing, Ciencia de Datos
-  y Desarrollo de Software.
+  y Desarrollo de Software. Cada una se divide en **tres enfoques fijos** (quince en total), que son
+  lo que eligen las detonadoras.
 - **Modelo de puntaje:** cada pregunta suma únicamente a su propia área; los totales por área se
   normalizan a un porcentaje de afinidad de 0 a 100 y se ordenan. Se muestran los cinco puntajes, no
-  solo el ganador.
+  solo el ganador. Las detonadoras **no** tocan esos porcentajes: eligen un enfoque dentro del área.
+  Gana el enfoque con más votos de las dos; si apuntan a dos distintos, desempata el promedio de las
+  preguntas del banco que alimentan a cada uno, y si también empata, el orden del catálogo. Es
+  determinista a propósito — lo no determinista son las preguntas, no la cuenta, y una valoración
+  técnica tiene que poder rehacerla a mano. En un empate de áreas, las detonadoras ofrecen enfoques
+  de todas las empatadas y el elegido decide qué ruta de área se muestra.
 - **Supabase (PostgreSQL) está planeado solo para analíticas anónimas agregadas** — recolectar
   resultados finales sin autenticación y sin perfiles de usuario, para que medir nunca cueste
   participación.
 - **La migración institucional es una restricción futura real.** Fases posteriores contemplan mover
   el backend a PHP y bases de datos locales para alinearse a la infraestructura de la UAEMéx y
   asegurar la adopción oficial. La arquitectura debe mantenerse lo bastante modular para no pelearse
-  con eso.
+  con eso. Por eso el contrato de `/api/detonadoras` está escrito en la cabecera de
+  `api/detonadoras.js` y toda la lógica de candidatos y validación vive en módulos puros
+  (`src/lib/refine.js`): reemplazar la función por PHP es traducir un archivo, no rediseñar.
 - **Sin decidir:** si las analíticas agregadas llegan a ser algo que el estudiante ve, y cómo sería
   una capa de cuenta o de seguimiento de progreso post-MVP (deliberadamente fuera de alcance por
   ahora).
@@ -128,6 +157,11 @@ semestre, aquí".
 - El banco de 50 preguntas (10 por área) y la escala de acuerdo de 1 a 5.
 - El contenido de ruta por área: habilidades demandadas y certificaciones de referencia para las
   cinco áreas.
+- El catálogo de quince enfoques (`src/data/focuses.js`) con sus habilidades, certificaciones y un
+  primer paso para esta semana, y las detonadoras de respaldo (`src/data/fallbackTriggers.js`).
+  Tienen la misma procedencia que el contenido de ruta por área —conocimiento general de la
+  industria, redactado por el equipo—, no un estudio de mercado. Las certificaciones deben revisarse
+  contra su vigencia cada semestre: los programas se retiran sin aviso.
 - La fotografía del vitral y la mascota (rutas arriba).
 - Cuatro nombres de capítulos IEEE (Computer Society, Robotics and Automation, Power & Energy
   Society, Women in Engineering) — actualmente marcados en la interfaz como pendientes de confirmar
@@ -146,6 +180,12 @@ entonces debe presentarse honestamente como pendiente y nunca simularse como si 
 No hay testimonios, ni conteos de usuarios, ni cifras de adopción, ni convenios con empresas, ni
 estadísticas de colocación o salario, ni respaldos, ni aprobación institucional. Cualquiera de estas
 cosas apareciendo como contenido sería un invento.
+
+**Lo que escribe la IA no es evidencia.** Las detonadoras redactadas por Qwen son preguntas, no
+datos: el prompt le prohíbe afirmar nada sobre la UAEMéx, empresas, salarios o estadísticas, y sus
+situaciones son hipotéticas. Si algún día se le pidiera al modelo escribir algo que se lea como
+hecho —una recomendación, una cifra, un recurso—, eso entraría por la puerta que este documento
+cierra.
 
 ## Product Principles
 
@@ -172,7 +212,9 @@ cosas apareciendo como contenido sería un invento.
   preferencia `prefers-reduced-motion` del usuario; es un requisito permanente, no una mejora
   opcional.
 - **Los teléfonos con una red de campus posiblemente mala son un caso primario**, no un respaldo. El
-  peso y la respuesta son requisitos de producto, no pulido.
+  peso y la respuesta son requisitos de producto, no pulido. Por eso el modelo de las detonadoras es
+  de la familia rápida (Flash) y sin razonamiento, y por eso la espera tiene un tope de 8 segundos
+  antes del respaldo.
 - **Sin decidir:** si la adopción oficial de la UAEMéx impondría un estándar formal de accesibilidad
   (un nivel WCAG específico, por ejemplo). No se ha establecido tal requisito — no asumir ninguno, y
   no declarar una conformidad que no se ha probado.
