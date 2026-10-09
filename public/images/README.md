@@ -9,18 +9,19 @@ respaldo (ver PRODUCT.md → *Accessibility*): cualquier imagen que se agregue
 aquí pasa por la misma conversión, y el original sin optimizar no entra al
 repositorio.
 
-`vitral-franja.webp` (1600x24, 12 KB) es lo que hoy se ve del vitral: la franja
-de 8px arriba de la cabecera y abajo del pie (`.brand-ribbon` en `index.css`).
-Es una banda horizontal recortada alrededor del 52% de alto del master
-`assets-src/institucional/vitral-biblioteca.png` y estirada a 1600x24. Antes la
+`vitral-franja.webp` (2400x48, 26 KB) es la franja de 16px de la cabecera
+(`.brand-ribbon` en `index.css`), con 48px de alto para verse nítida en
+pantallas 2x y 3x.
+Es una banda horizontal (22% del alto) recortada alrededor del 52% de alto del master
+`assets-src/institucional/vitral-biblioteca.png` y estirada a 2400x48. Antes la
 franja cargaba el panorámico completo de 207 KB para pintar 8px, y eso costaba
 medio segundo de primer pintado en un teléfono (ver `docs/RENDIMIENTO.md`).
 
 `vitral-biblioteca.webp` es la fotografía real del vitral de la biblioteca de
 la Facultad de Ingeniería (UAEMéx): un panorámico muy ancho (~8.9:1) de los
-cuatro paneles de vidrio, a 2736x308. Desde el rediseño editorial ya no se
-sirve en ninguna página (el header y el footer usan `vitral-franja.webp`); se
-conserva como activo institucional y para regenerar la tarjeta Open Graph.
+cuatro paneles de vidrio, a 2736x308. Es el fondo completo del pie
+(`Footer.jsx`), servido como `<img loading="lazy">`: siempre queda bajo el
+pliegue y así no compite con la primera carga.
 
 `potro-mascota.webp` es la mascota de la universidad, con canal alfa. El
 original venía en RGB con el fondo gris incrustado: sobre el papel blanco de

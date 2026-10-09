@@ -301,19 +301,20 @@
       "precedence": "Sustituye los tratamientos históricos en conflicto. Ver DESIGN.md → 'Redesign 2026-10 — especificación vigente'.",
       "direction": "Guía editorial universitaria",
       "typography": {
-        "display": "clamp(2.25rem, 5vw, 4.25rem) / 1.06",
-        "headline": "clamp(1.65rem, 3vw, 2.5rem) / 1.15",
+        "display": "clamp(2.1rem, 5vw, 4rem) / 1.06",
+        "headline": "clamp(1.6rem, 3vw, 2.4rem) / 1.15",
         "title": "1.125rem / 1.4",
         "lead": "1.075rem / 1.75",
         "body": "1rem / 1.65",
-        "label": "0.7rem / 1.5",
+        "label": "0.72rem / 1.5",
         "tracking": {
           "display": "-0.045em",
           "headline": "-0.035em",
           "title": "-0.015em",
           "label": "0.14em"
         },
-        "headingWeight": 600
+        "headingWeight": 600,
+        "base": "html 112.5% (18px)"
       },
       "layout": {
         "container": "1152px",
@@ -321,8 +322,8 @@
         "sectionY": "64px / 96px desde md",
         "cardRadius": "20px",
         "focalRadius": "28px",
-        "header": "papel, marca 24px y franja de vitral de 8px",
-        "footer": "verde profundo con franja de vitral"
+        "header": "papel, marca de texto y franja de vitral de 16px con desplazamiento lento",
+        "footer": "vitral completo con filete dorado de 2px y franja de lectura al 72%"
       },
       "tokens": {
         "line": "rgb(37 37 37 / 12%)",
@@ -344,7 +345,19 @@
         "Galería editorial con pies verificados",
         "Testimonios condicionados a autorización"
       ],
-      "motion": "Scroll nativo y contenido inmediato. Sin GSAP, Matter.js ni revelados; sólo transiciones de color de 140–280ms, anuladas con prefers-reduced-motion.",
+      "motion": {
+        "principle": "CSS sin librerías; ningún contenido depende de una animación",
+        "easeOut": "cubic-bezier(0.22, 1, 0.36, 1)",
+        "durFast": "180ms",
+        "durEnter": "620ms",
+        "pageEnter": "fundido 380ms",
+        "enter": "escalonado 90ms con --d",
+        "reveal": "animation-timeline: view(), entry 0px–200px, dentro de @supports",
+        "swapIn": "420ms al remontar por key",
+        "bars": "1.1s, 90ms entre barras",
+        "ribbon": "45s alternate",
+        "reducedMotion": "apaga todo desde @layer base"
+      },
       "retired": [
         "HeroMosaic y física",
         "tarjetas que voltean",
@@ -353,9 +366,23 @@
         "Reveal",
         "SectionDivider",
         "SmoothScroller",
-        "VitralBackdrop y .vitral-scrim"
+        "VitralBackdrop (el pie usa un img diferido)",
+        "símbolo p↗ de la marca"
       ],
-      "status": "Implementado y verificado a 390px y 1440px el 8 de octubre de 2026"
+      "status": "Implementado y verificado a 390px y 1440px el 8 de octubre de 2026",
+      "brand": {
+        "type": "Sólo texto",
+        "potro": "#526855",
+        "path": "color-mix(in srgb, #ca9e52 60%, #a15c17) ≈ #ba843a, 3.26:1 sobre papel",
+        "minSize": "24px, 700"
+      },
+      "results": [
+        "Resultado y panorama",
+        "Tu primer paso (aprende, practica, comparte)",
+        "Barra fija de exploración con nombres cortos",
+        "01 Aprende · 02 Acredita · 03 Conoce el rol · 04 Busca",
+        "Comunidad y reinicio"
+      ]
     }
   },
   "components": [
