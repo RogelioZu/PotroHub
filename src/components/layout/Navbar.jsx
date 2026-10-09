@@ -53,16 +53,10 @@ function Navbar() {
       <div className="brand-ribbon" aria-hidden="true" />
 
       <div className="page-shell nav-row">
+        {/* La marca es sólo el nombre, partido en los dos colores principales
+            de la UAEMéx: verde en "Potro", oro en "Path". */}
         <Link to="/" className="brand" aria-label="PotroPath, ir al inicio">
-          <span className="brand-symbol" aria-hidden="true">
-            p<small>↗</small>
-          </span>
-          <span>
-            <span className="brand-name">
-              Potro<span className="text-green-mid">Path</span>
-            </span>
-            <span className="brand-context">INGENIERÍA · UAEMÉX</span>
-          </span>
+          Potro<span className="brand-gold">Path</span>
         </Link>
 
         <nav aria-label="Principal" className="desktop-nav">

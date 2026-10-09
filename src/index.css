@@ -405,55 +405,34 @@
     min-height: 84px;
   }
 
+  /*
+   * Marca de texto: "Potro" en Verde Universitario y "Path" en oro.
+   *
+   * El oro oficial (#ca9e52) sobre papel mide 2.46:1, por debajo incluso del
+   * 3:1 de texto grande. "Path" usa un oro derivado —60% oro oficial, 40%
+   * Ámbar Quemado, los dos de la paleta— que mide 3.26:1 y se sigue leyendo
+   * dorado; Ámbar Quemado solo (5.17:1) ya se lee café. Ese 3.26:1 sólo
+   * alcanza para texto grande, así que la marca nunca baja de 24px en negrita.
+   */
   .brand {
     display: inline-flex;
     align-items: center;
-    gap: 12px;
     min-height: 44px;
-  }
-
-  .brand-name {
-    display: block;
-    font-size: 1.5rem;
-    line-height: 1.1;
-    font-weight: 700;
-    letter-spacing: -0.04em;
-  }
-
-  .brand-context {
-    display: block;
-    margin-top: 4px;
-    font-size: 0.6rem;
-    letter-spacing: 0.16em;
-    font-weight: 600;
-    color: var(--color-ink-soft);
-  }
-
-  /*
-   * El símbolo es tipográfico: una "p" con la flecha de avance. Sin logo
-   * inventado ni ícono de librería; la esquina inferior izquierda recta
-   * evoca una pestaña de ruta.
-   */
-  .brand-symbol {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 42px;
-    border-radius: 12px 12px 12px 3px;
-    background: var(--color-green);
-    color: var(--color-paper);
     font-size: 1.75rem;
-    font-weight: 700;
     line-height: 1;
-    letter-spacing: -0.06em;
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    color: var(--color-green-mid);
   }
 
-  .brand-symbol small {
-    align-self: flex-start;
-    margin-top: 6px;
-    font-size: 0.85rem;
-    color: var(--color-gold-light);
+  @media (width >= 48rem) {
+    .brand {
+      font-size: 2rem;
+    }
+  }
+
+  .brand-gold {
+    color: color-mix(in srgb, var(--color-gold) 60%, var(--color-gold-dark));
   }
 
   .desktop-nav {
@@ -525,10 +504,62 @@
     top: 12px;
   }
 
+  /*
+   * Pie sobre el vitral. El filete dorado de 2px marca el paso del papel al
+   * vidrio, como en la primera versión del sitio. Ver Footer.jsx.
+   */
   .site-footer {
     --focus-ring: var(--color-gold-light);
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
     margin-top: auto;
+    border-top: 2px solid var(--color-gold);
     background: var(--color-green);
+    color: var(--color-paper);
+    text-shadow: 0 1px 6px rgb(0 0 0 / 75%);
+  }
+
+  .footer-backdrop {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+
+  .footer-backdrop img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /*
+   * Franja de lectura: tinta al 72% donde cae el texto, desvanecida en los
+   * 24px de arriba y de abajo, donde no hay letras, para que el vidrio
+   * conserve su color justo en los bordes. Bajar el 72% devuelve el problema
+   * de contraste; subirlo apaga la fotografía.
+   */
+  .footer-scrim {
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(
+      to bottom,
+      rgb(37 37 37 / 0%) 0,
+      rgb(37 37 37 / 72%) 1.5rem,
+      rgb(37 37 37 / 72%) calc(100% - 1.5rem),
+      rgb(37 37 37 / 0%) 100%
+    );
+  }
+
+  .footer-brand {
+    font-size: 1.5rem;
+    line-height: 1.1;
+    font-weight: 700;
+    letter-spacing: -0.035em;
+  }
+
+  /* Sobre el vidrio las etiquetas van en papel: el oro claro a 0.7rem no
+     alcanza 4.5:1 sobre la franja. */
+  .site-footer .eyebrow {
     color: var(--color-paper);
   }
 
@@ -536,7 +567,7 @@
     display: grid;
     grid-template-columns: 2fr 1fr 1.2fr;
     gap: 40px;
-    padding-block: 56px 40px;
+    padding-block: 56px 32px;
   }
 
   .footer-grid a {
@@ -551,11 +582,12 @@
     color: var(--color-gold-light);
   }
 
+  /* El relleno inferior deja el texto fuera de los 24px donde la franja se
+     desvanece. */
   .footer-bottom {
-    padding-block: 20px;
-    border-top: 1px solid rgb(255 255 255 / 18%);
-    font-size: 0.75rem;
-    color: var(--color-green-soft);
+    padding-block: 20px 40px;
+    border-top: 1px solid rgb(255 255 255 / 25%);
+    font-size: 0.8rem;
   }
 
   /* ── Hero editorial (Inicio y Comunidad) ───────────────────────────── */
