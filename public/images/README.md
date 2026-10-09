@@ -9,9 +9,9 @@ respaldo (ver PRODUCT.md → *Accessibility*): cualquier imagen que se agregue
 aquí pasa por la misma conversión, y el original sin optimizar no entra al
 repositorio.
 
-`vitral-franja.webp` (2400x48, 26 KB) es la franja de 16px de la cabecera
+`vitral-franja.webp` (2400x48, 26 KB) es la franja de 24px de la cabecera
 (`.brand-ribbon` en `index.css`), con 48px de alto para verse nítida en
-pantallas 2x y 3x.
+pantallas 2x.
 Es una banda horizontal (22% del alto) recortada alrededor del 52% de alto del master
 `assets-src/institucional/vitral-biblioteca.png` y estirada a 2400x48. Antes la
 franja cargaba el panorámico completo de 207 KB para pintar 8px, y eso costaba

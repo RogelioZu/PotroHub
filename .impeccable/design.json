@@ -366,7 +366,7 @@
         "sectionY": "64px / 96px desde md",
         "cardRadius": "20px (--radius-md)",
         "focalRadius": "28px desde md, 20px en teléfono (--radius-focal)",
-        "header": "papel, marca de texto y franja de vitral de 16px con desplazamiento lento",
+        "header": "papel, marca de texto y franja de vitral de 24px con desplazamiento lento",
         "footer": "vitral completo con filete dorado de 2px y franja de lectura al 42% más sombra de texto; deuda registrada contra la regla de la Franja de Lectura (72%); una columna en teléfono",
         "radii": {
           "xs": "8px",

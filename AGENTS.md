@@ -150,7 +150,7 @@ tests/                      Pruebas con el runner nativo de Node (`npm test`)
 docs/                       Arquitectura, rendimiento, piloto, plan institucional, comparativa
 assets-src/                 Masters. Fuera de public/, no entran al build. Su README.md lleva la
                             procedencia de cada fotografía — y ahí importa tanto como la imagen
-public/images/              inicio-rama-ieee.webp (hero de Inicio), vitral (franja de 8px),
+public/images/              inicio-rama-ieee.webp (hero de Inicio), vitral (franja de 24px),
                             mascota, areas/*.webp y og-potropath.png. Ver su README.md
 public/images/comunidad/    Fotos de /comunidad. Su README.md manda: qué archivo va dónde y
                             cuáles ya no se muestran (U-HACKS no es de la UAEMéx)

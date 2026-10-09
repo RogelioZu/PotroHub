@@ -600,19 +600,19 @@
   /* ── Cabecera y pie ─────────────────────────────────────────────────── */
 
   /*
-   * El vitral real de la biblioteca sobrevive como firma: una franja de 8px
-   * arriba de la cabecera y abajo del pie. Ya no hay texto encima del vidrio,
+   * El vitral real de la biblioteca sobrevive como firma: una franja de 24px
+   * arriba de la cabecera. Ya no hay texto encima del vidrio,
    * así que la franja de lectura de la primera versión dejó de hacer falta.
    */
   /*
    * La franja usa `vitral-franja.webp` (2400x48, 26 KB), una banda recortada
    * del vitral, y no el panorámico completo (2736x308, 207 KB): pintarla con
    * la foto entera costaba medio segundo de primer pintado en un teléfono con
-   * 4G lento, medido con Lighthouse (docs/RENDIMIENTO.md). Mide 16px; el
-   * archivo tiene 48px de alto para verse nítido en pantallas 2x y 3x.
+   * 4G lento, medido con Lighthouse (docs/RENDIMIENTO.md). Mide 24px; el
+   * archivo tiene 48px de alto, justo lo que pide una pantalla 2x.
    */
   .brand-ribbon {
-    height: 16px;
+    height: 24px;
     background: var(--color-green) url("/images/vitral-franja.webp") center / cover;
   }
 
@@ -1735,9 +1735,12 @@
     }
   }
 
-  /* El vitral de la cabecera se desplaza muy lento, como luz que cambia. */
+  /* El vitral de la cabecera se desplaza muy lento, como luz que cambia.
+     El piso de 1500px existe porque el archivo es 50:1: a 160% de un
+     teléfono de 390px la imagen mediría 12px de alto y dejaría ver el verde
+     de fondo bajo una franja de 24px. */
   .site-header .brand-ribbon {
-    background-size: 160% auto;
+    background-size: max(160%, 1500px) auto;
     background-position: 0% center;
     animation: drift 45s ease-in-out infinite alternate;
   }
