@@ -72,8 +72,9 @@ semestre, aquí".
   que una sesión sobrevive al cierre de la pestaña.
 - **Flujo principal:** Inicio → Diagnóstico → Mi ruta (resultados) → Comunidad. Las rutas son `/`,
   `/quiz`, `/resultados`, `/comunidad`.
-- **Afinado opcional dentro de Mi ruta.** Después de la ruta del área, el bloque "Afina tu ruta"
-  ofrece dos preguntas más, las *detonadoras*, que eligen uno de los tres enfoques del área. Se
+- **Afinado opcional dentro de Mi ruta.** Entre el resultado y "Tu primer paso", el bloque "Afina tu
+  ruta" ofrece dos preguntas más, las *detonadoras*, que eligen uno de los tres enfoques del área; el
+  enfoque elegido pasa a "Tu primer paso" con sus habilidades y su primer paso de la semana. Se
   ofrece, no se cobra: el resultado de las cincuenta ya está en pantalla, y quien no quiera afinar
   no pierde nada. Las preguntas las redacta un modelo de IA (Qwen, de Alibaba Cloud) a partir de las
   50 respuestas, así que cambian en cada intento; lo que no cambia es el catálogo de enfoques ni la

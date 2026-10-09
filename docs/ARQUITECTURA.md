@@ -1,23 +1,31 @@
 # Arquitectura y procesamiento de PotroPath
 
-Estado: describe el código de la rama `rediseno/guia-editorial` al 8 de octubre de 2026. La sección
-*Arquitectura futura* es una propuesta, no algo implementado.
+Estado: describe el código de `main` al 8 de octubre de 2026, tras fusionar el rediseño editorial
+con las preguntas detonadoras. La sección *Arquitectura futura* es una propuesta, no algo
+implementado.
 
 ## 1. Vista general
 
-PotroPath es una aplicación web de una sola página (SPA) que corre por completo en el navegador del
-estudiante. No hay servidor de aplicación, cuentas ni base de datos. El sitio compilado son
-archivos estáticos (HTML, CSS, JS e imágenes) que cualquier servidor web puede publicar.
+PotroPath es una aplicación web de una sola página (SPA) que corre en el navegador del estudiante.
+No hay cuentas ni base de datos. El sitio compilado son archivos estáticos (HTML, CSS, JS e
+imágenes) que cualquier servidor web puede publicar, y así funciona completo.
+
+La única pieza de servidor es **opcional**: `POST /api/detonadoras`, una función de Vercel que
+redacta con Qwen las dos preguntas de "Afina tu ruta". Existe porque la llave del modelo no puede
+viajar en el bundle. Sólo se llama cuando el estudiante pulsa "Afinar mi ruta", y si no existe —un
+hosting estático, `npm run dev`—, falla o tarda más de 8 s, el afinado usa dos preguntas de respaldo
+escritas a mano y lo dice.
 
 ```mermaid
 flowchart LR
   subgraph Navegador del estudiante
     UI[Vistas React<br/>Inicio · Diagnóstico · Mi ruta · Comunidad]
     R[React Router]
-    S[Store Zustand<br/>respuestas + índice]
+    S[Store Zustand<br/>respuestas + índice + afinado]
     L[(localStorage<br/>potropath-quiz)]
     F[affinity.js<br/>función pura]
-    D[src/data<br/>preguntas · áreas · ruta · credenciales · perfiles · comunidad]
+    RF[refine.js<br/>candidatos · validación · decisión]
+    D[src/data<br/>preguntas · áreas · ruta · credenciales · perfiles · comunidad · enfoques]
   end
   E[Estudiante] --> UI
   UI --> R
@@ -30,6 +38,11 @@ flowchart LR
   UI -- enlace --> X[Sitios oficiales<br/>proveedores y empresas]
   UI -- GET puesto + ubicación --> LI[LinkedIn Jobs]
   H[Servidor estático] -- HTML, CSS, JS, imágenes --> UI
+  S -. "POST 50 cifras, sólo con «Afinar mi ruta»" .-> API[Función opcional<br/>/api/detonadoras]
+  API -. prompt .-> QW[Qwen<br/>Alibaba Cloud Model Studio]
+  API -. preguntas validadas .-> S
+  S --> RF
+  D --> RF
 ```
 
 | Capa | Tecnología | Responsabilidad |
@@ -38,16 +51,17 @@ flowchart LR
 | Navegación | React Router 7 | Rutas `/`, `/quiz`, `/resultados`, `/comunidad`, 404; foco y anclas al cambiar de vista |
 | Estado | Zustand 5 + `persist` | Respuestas e índice de pregunta; saneamiento al rehidratar |
 | Persistencia | `localStorage` | Sobrevive al cierre de pestaña; nunca sale del navegador |
-| Lógica | `src/lib/affinity.js` | Cálculo de afinidad, empates y caso neutral (sin React, probado con Node) |
+| Lógica | `src/lib/affinity.js`, `src/lib/refine.js` | Afinidad, empates y caso neutral; candidatos, validación y decisión de las detonadoras. Puros: los comparten el navegador y la función |
+| Función opcional | Vercel Functions (`api/`) | Guarda la llave de Model Studio, arma el prompt y revalida la respuesta de Qwen |
 | Contenido | `src/data/*.js` | Datos estáticos versionados con el código, con fuente y fecha de revisión |
 | Build | Vite 8 | Empaquetado y optimización; salida en `dist/` |
-| Calidad | oxlint, `node --test` | Lint y 13 pruebas automatizadas |
+| Calidad | oxlint, `node --test` | Lint y pruebas automatizadas |
 
 ### Qué datos salen del navegador
 
 | Dato | ¿Sale? | Hacia dónde |
 |---|---|---|
-| Respuestas del diagnóstico | **No** | Sólo `localStorage` |
+| Respuestas del diagnóstico | **Sólo si pulsa "Afinar mi ruta"**, y sólo las 50 cifras del 1 al 5 | `/api/detonadoras`, que las pasa a Qwen (Alibaba Cloud Model Studio, Singapur). El servidor no las escribe en ningún log |
 | Porcentajes de afinidad | **No** | Se calculan en memoria |
 | Puesto y ubicación escritos en el buscador | Sí, al pulsar "Buscar en LinkedIn" | `linkedin.com/jobs/search` como parámetros GET |
 | Navegación a fuentes oficiales | Sí, al pulsar el enlace | El sitio del proveedor o la empresa |
@@ -96,11 +110,22 @@ sequenceDiagram
    del navegador.
 6. **Recomendación.** Es una **asociación estática**: el área elegida apunta a sus habilidades
    (`roadmap.js`), sus dos credenciales (`credentials.js`) y su perfil profesional (`careers.js`).
-   No hay modelo de IA, ranking aprendido ni predicción de empleabilidad.
+   No hay ranking aprendido ni predicción de empleabilidad, y la IA no recomienda nada: sólo
+   redacta las preguntas del paso 9.
 7. **Exploración.** El estudiante puede abrir cualquiera de las cinco rutas. Cambiar de ruta no
    recalcula ni modifica respuestas.
 8. **Salidas externas.** Comunidad recibe el área por URL (`/comunidad?area=nube#especialidades`).
    LinkedIn recibe sólo puesto y ubicación.
+9. **Afinado (opcional).** Si el estudiante pulsa "Afinar mi ruta", el store envía las 50 cifras a
+   `/api/detonadoras`. La función calcula qué áreas empataron arriba con el mismo `affinity.js`,
+   elige hasta seis enfoques candidatos con `refine.js` y le pide a Qwen dos preguntas de tres
+   opciones, cada una atada a un enfoque del catálogo cerrado (`focuses.js`). La respuesta se
+   revalida en el servidor y otra vez en el navegador; si no pasa, si tarda más de 8 s o si la
+   función no existe, entran las preguntas de respaldo (`fallbackTriggers.js`), marcadas como tales.
+   Con las dos respondidas, `pickFocus` elige el enfoque de forma determinista —votos, luego el
+   promedio de las preguntas del banco que lo alimentan, luego el orden del catálogo— y "Tu primer
+   paso" toma sus habilidades y su primer paso. No cambia ningún porcentaje. Con todo en "Neutral"
+   no se ofrece: no hay un área arriba que afinar.
 
 ## 3. Fórmula de afinidad
 
@@ -143,6 +168,8 @@ erDiagram
   AREA ||--|{ CAREER : "1+ perfiles"
   CAREER }|--|{ SKILL : "skillIds"
   AREA ||--|{ INTEREST : "ideas de comunidad"
+  AREA ||--|{ FOCUS : "3 enfoques"
+  FOCUS }|--|{ QUESTION : "signals"
 ```
 
 - Cada credencial y perfil lleva `sourceUrl` y `reviewedAt`. `tests/professional-route.test.js`
@@ -161,6 +188,9 @@ erDiagram
 | Función de afinidad pura | Cálculo dentro del componente | Se prueba sin navegador y su comportamiento queda documentado por pruebas |
 | Sin librerías de animación | GSAP + ScrollSmoother + Matter.js | El contenido dependía de animaciones para aparecer; quitar 3 dependencias redujo el JS de entrada de 141.9 a 96.0 kB gzip |
 | Búsqueda en LinkedIn por GET | API de empleos o scraping | No requiere credenciales, no copia datos de terceros y funciona sin JavaScript |
+| Función opcional para el afinado | Llamar a Qwen desde el navegador | La llave no puede viajar en el bundle. Opcional para que el sitio siga siendo estático: sin ella, el afinado usa el respaldo |
+| La IA redacta preguntas; el catálogo decide | Que el modelo genere habilidades o credenciales | Un modelo que inventa una certificación cuesta la credibilidad del proyecto. Lo que se lee como ruta lo revisa una persona |
+| Un solo cálculo para navegador y servidor | Recalcular en la función | Dos copias del puntaje terminarían por discrepar en un empate, justo cuando se eligen los candidatos |
 
 ## 6. Arquitectura futura (propuesta, no implementada)
 
@@ -179,8 +209,8 @@ flowchart LR
 Eventos mínimos que podrían registrarse, con consentimiento y retención definidos antes de
 instrumentar: diagnóstico iniciado, diagnóstico completado, ruta explorada, salida a recurso
 externo. **Nunca** respuestas individuales, texto libre ni nombres. Si se instrumenta, debe
-actualizarse la afirmación de que la información permanece únicamente en el navegador, en el pie
-del sitio y en este documento.
+actualizarse la afirmación de cuándo salen las respuestas del navegador, en el pie del sitio y en
+este documento.
 
 Una futura API necesitaría pruebas propias de concurrencia, errores y recuperación; el rendimiento
 del sitio estático (ver `RENDIMIENTO.md`) no dice nada sobre ella.

@@ -52,6 +52,14 @@ En las 60 corridas el bloqueo total del hilo principal (TBT) fue 0 ms.
 | Fragmento de Matter.js (bajo demanda) | 26.2 kB | — |
 | CSS (gzip) | 7.2 kB | 7.9 kB |
 
+**Después de la fusión con las detonadoras** (8 de octubre de 2026, mismo día, sin Lighthouse): el
+JavaScript de entrada pasó de 96.6 a 103.2 kB gzip (+6.6 kB) al compilar la punta de
+`rediseno/guia-editorial` y `main` fusionado con la misma versión de Vite (8.3.4) en el mismo
+equipo. Lo que suma es el catálogo de quince enfoques, las preguntas de respaldo y la lógica de
+`refine.js`, que entran al bundle principal. Sigue dentro del presupuesto de 110 kB. Las cifras de
+Lighthouse de arriba son anteriores a la fusión y no se repitieron; la próxima medición debe
+hacerse sobre `main`.
+
 ## 3. Lo que enseñó la primera medición
 
 La primera versión del rediseño **empeoraba** el primer pintado en móvil: FCP de 2.46 s contra 1.96 s

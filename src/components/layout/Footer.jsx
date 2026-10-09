@@ -59,8 +59,8 @@ function Footer() {
           <div>
             <p className="eyebrow mb-3">Hecho para estudiantes</p>
             <p className="text-sm">
-              Sin registro. Tus respuestas se guardan únicamente en este navegador y no se envían a
-              ningún servidor.
+              Sin registro. Tus respuestas se guardan en este navegador. Sólo se envían si pides
+              afinar tu ruta, y antes de hacerlo te decimos qué sale y a quién.
             </p>
           </div>
         </div>

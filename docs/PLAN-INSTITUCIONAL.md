@@ -18,7 +18,7 @@ Rama IEEE. Los roles deben asignarse a personas reales; si una persona cubre var
 
 | Etapa | Qué se logra | Condición para avanzar |
 |---|---|---|
-| 1. MVP autónomo (hoy) | Sitio estático, estado local, sin registro | Contenido revisado; pruebas y build en verde |
+| 1. MVP autónomo (hoy) | Sitio estático, estado local, sin registro; afinado opcional con IA | Contenido revisado; pruebas y build en verde |
 | 2. Piloto acompañado | Protocolo de `PILOTO.md` ejecutado con interlocutor académico | Cero bloqueos críticos; informe publicado |
 | 3. Operación de comunidad | Acceso a Teams y agenda reales; responsables de moderación | `TEAMS_JOIN_URL` y `EVENTS` con datos confirmados |
 | 4. Infraestructura institucional | Hosting y dominio de la universidad, soporte, respaldo | Requisitos levantados con el área de TI |
@@ -26,13 +26,20 @@ Rama IEEE. Los roles deben asignarse a personas reales; si una persona cubre var
 | 6. Escalamiento | Uso por más generaciones | Prueba de carga contra la meta derivada de la convocatoria |
 
 **Infraestructura.** El sitio es estático: basta un servidor web que publique `dist/` y redirija
-las rutas a `index.html`. No requiere PHP, base de datos ni procesos en el servidor. Una migración a
+las rutas a `index.html`. Así funciona completo, sin PHP, base de datos ni procesos en el servidor;
+el afinado usa ahí sus preguntas de respaldo escritas a mano. Llevar también la redacción con IA
+exige una función equivalente a `/api/detonadoras` (hoy en Vercel), que guarde la llave del modelo
+del lado del servidor. Su contrato está escrito en la cabecera de `api/detonadoras.js` y su lógica
+vive en módulos puros (`affinity.js`, `refine.js`): reimplementarla en PHP es traducir esos
+archivos, no rediseñar el sitio. Una migración a
 PHP y bases de datos locales —contemplada en la memoria descriptiva— sólo tiene sentido si la etapa
 5 se aprueba; no se añade complejidad para que la arquitectura parezca más grande. Supabase y una
 solución institucional se presentan como opciones por decidir.
 
-**Escalabilidad.** Al no haber servidor de aplicación, la carga la absorbe el hosting estático o
-una CDN; el cálculo ocurre en cada navegador. No se afirma "escala a toda la universidad" sin una
+**Escalabilidad.** El diagnóstico y el cálculo ocurren en cada navegador, y la carga la absorbe el
+hosting estático o una CDN. La única llamada a un servidor es la del afinado: una por estudiante que
+la pide, con tope de 8 s y respaldo si falla, así que su costo crece con el uso del modelo y no con
+las visitas. No se afirma "escala a toda la universidad" sin una
 prueba de carga del hosting elegido.
 
 ## 3. Cronograma propuesto
