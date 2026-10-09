@@ -97,6 +97,7 @@ src/
     layout/                 Navbar, Footer, Layout
     motion/RouteTransition  Foco y anclas al cambiar de ruta (ya sin animación)
     results/                SkillPath, CredentialExplorer, CareerExplorer
+    community/Gallery       Galería de Comunidad con vista ampliada al pasar el cursor
     home/Testimonials       Voces del piloto, sólo si existen
     ui/ConfirmButton        Confirmación en dos toques para borrar respuestas
   pages/                    Home, Quiz, Results, Community, NotFound

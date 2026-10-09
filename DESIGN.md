@@ -170,7 +170,7 @@ comunidad) y Linear (jerarquía y agrupación). No se copia ninguna identidad.
 | `.lead` | 1.075rem / 1.75, `Tinta Suave` |
 | Cuerpo | 1rem / 1.65 |
 | `.eyebrow` | 0.72rem / 1.5, 700, 0.14em, mayúsculas, `Ámbar Quemado` |
-| Marca | Sólo texto: "Potro" en `Verde Universitario`, "Path" en oro derivado (60% `Oro Viejo` + 40% `Ámbar Quemado`, 3.26:1 sobre papel); nunca menos de 24px en negrita |
+| Marca | Sólo texto sobre su cápsula verde en el vitral: "Potro" en `Papel`, "Path" en `Oro Claro` (3.5:1 sobre la cápsula, umbral de texto grande); nunca menos de 24px en negrita |
 | Contenedor | `.page-shell`: 1152px con canalón de 24px |
 | Ritmo | `.section-py`: 64px, 96px desde `md` |
 | Radios | 20px tarjeta (`.surface`), 28px panel focal (`.dark-panel`), 12–14px controles internos, píldora para acciones |
@@ -208,8 +208,11 @@ comunidad) y Linear (jerarquía y agrupación). No se copia ninguna identidad.
   (nombres cortos) y las cuatro partes de la ruta; (4) 01 Aprende, 02 Acredita, 03 Conoce el rol y
   04 Busca, cada una con una etiqueta del área explorada; (5) comunidad y reinicio. La barra existe
   porque, ya en credenciales o puestos, era fácil olvidar de qué área era el contenido.
-- **Comunidad:** hero dividido con foto de Talent Land; directorio de cinco intereses ligado a la
-  URL; Rama IEEE con logo, propósito y estado en una tarjeta por sociedad; galería editorial de seis
+- **Comunidad:** hero dividido con foto de Talent Land; un **índice siempre a la vista** —desde
+  1440px, riel vertical `sticky` en el canalón izquierdo, que mide unos 140px y estaba vacío, con
+  número sobre etiqueta y un filete verde en la sección activa; más angosto no cabe ahí y es una
+  barra horizontal pegada arriba, de papel al 94%, que se desplaza de lado en teléfono—; directorio
+  de cinco intereses ligado a la URL; Rama IEEE con logo, propósito y estado en una tarjeta por sociedad; galería editorial de seis
   fotos verificadas; agenda vacía compacta.
 
 ### Movimiento
@@ -223,10 +226,11 @@ contenido depende de una animación para existir.**
 | `.enter` + `--d` | Entrada escalonada del primer pliegue: 620ms, 90ms entre piezas |
 | `.hero-picture img` | La foto se asienta desde 1.06× en 1.2s |
 | `.reveal`, `.reveal-group > *` | Aparición al hacer scroll con `animation-timeline: view()` en los primeros 200px de entrada, dentro de `@supports`: sin soporte, el contenido está quieto y visible. Rango en px y no en %, para que un bloque alto no quede medio transparente mientras se lee |
+| `.gallery-preview` | Vista ampliada de la galería de Comunidad: al detener el cursor 180ms sobre una foto, aparece al centro hasta el 92% del ancho y el 86% del alto, sobre `Tinta` al 55%, con su pie. Se abre despacio y sólo cuando la versión grande ya está decodificada: el velo se funde en 450ms y la foto llega 60ms después desde 0.94×, 12px abajo y con `blur(4px)`, en 650ms; se cierra desvaneciéndose en 280ms. La primera versión (180ms y 260ms desde 0.96×, sin esperar la carga) se sentía brusca. No captura el puntero, así que salir de la miniatura la cierra y pasar a la vecina la cambia. Nunca pasa del tamaño real del archivo. En táctil se abre con un toque y se cierra con el siguiente; con teclado, Enter y Escape |
 | `.swap-in` | Contenido reemplazado en sitio (pregunta, habilidad, puesto, área): la `key` lo remonta y entra en 420ms. `aria-live` va en un contenedor estable, no en el elemento con `key` |
 | Barras de afinidad | Se llenan en orden (1.1s, 90ms entre barras) |
 | Franja del vitral | Se desplaza en 45s, ida y vuelta |
-| Microinteracciones | Flecha de las acciones avanza 3px; chips y botones de selección ceden a 0.98 al pulsar; tarjetas de área se levantan 4px con sombra y acercan su foto; la foto de la Rama IEEE en Inicio crece a 1.08× con sombra en 500ms (`.hero-zoom`, con la propiedad `scale` porque `transform` lo ocupan `.enter` y `settle`). Todo sólo con puntero |
+| Microinteracciones | Flecha de las acciones avanza 3px; chips y botones de selección ceden a 0.98 al pulsar; tarjetas de área se levantan 4px con sombra y acercan su foto; las fotos de hero de Inicio (Rama IEEE) y Comunidad (Talent Land) crecen a 1.08× con sombra en 500ms (`.hero-zoom`, con la propiedad `scale` porque `transform` lo ocupan `.enter` y `settle`). Todo sólo con puntero |
 
 Tokens: `--ease-out` `cubic-bezier(0.22, 1, 0.36, 1)`, `--dur-fast` 180ms, `--dur-enter` 620ms.
 Con `prefers-reduced-motion: reduce`, una regla en `@layer base` apaga todo. Sustituye *Motion* y

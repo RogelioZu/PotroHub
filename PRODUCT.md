@@ -147,8 +147,9 @@ semestre, aquí".
   institucional (`TEAMS_CHANNELS` en `src/data/community.js`). Existir no es lo mismo que tener
   actividad: no hay conteo de miembros ni moderación asignada, y nada de eso se afirma.
 - Cuatro nombres de capítulos IEEE (Computer Society, Robotics and Automation, Power & Energy
-  Society, Women in Engineering) — actualmente marcados en la interfaz como pendientes de confirmar
-  contra los capítulos realmente activos de la rama.
+  Society, Women in Engineering). Computer Society, Robotics and Automation y Women in
+  Engineering tienen grupo de WhatsApp real para unirse (`joinUrl` en `CHAPTERS`); Power & Energy
+  Society sigue marcado en la interfaz como "Próximamente".
 
 **Confirmado como próximo, pero todavía no real.** Cada uno de estos llegará a ser dato real; hasta
 entonces debe presentarse honestamente como pendiente y nunca simularse como si existiera:
