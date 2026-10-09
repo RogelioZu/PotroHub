@@ -63,7 +63,7 @@ npx vercel dev            # sitio + función /api/detonadoras, con las variables
 npm run build             # build de producción
 npm run preview           # previsualizar el build
 npm run lint              # oxlint
-npm test                  # node --test tests/*.test.js (afinidad, datos profesionales, búsqueda)
+npm test                  # node --test tests/*.test.js (afinidad, datos profesionales, búsqueda, detonadoras)
 npm run eval:detonadoras  # perfiles sintéticos contra Qwen (gasta tokens reales; lee .env)
 ```
 

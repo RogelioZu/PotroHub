@@ -160,7 +160,7 @@ npm run preview   # sirve dist/ en http://localhost:4173
 | `npm run build` | Build de producción en `dist/` |
 | `npm run preview` | Sirve el build ya generado (`localhost:4173`), para revisarlo tal como se publicaría |
 | `npm run lint` | oxlint sobre todo el repositorio, con las reglas de `.oxlintrc.json` |
-| `npm test` | Pruebas de afinidad, integridad de datos profesionales y búsqueda (`tests/`) |
+| `npm test` | Pruebas de afinidad, integridad de datos profesionales, búsqueda y detonadoras (`tests/`) |
 | `npx vercel dev` | El sitio más la función `/api/detonadoras`, con las variables de `.env` (`localhost:3000`) |
 | `npm run eval:detonadoras` | Corre diez perfiles sintéticos contra Qwen e imprime las preguntas, para elegir el modelo leyendo. Gasta tokens reales. `QWEN_EVAL_MODELS=qwen3.8-flash,qwen3.7-plus` compara dos |
 
