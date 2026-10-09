@@ -2,10 +2,10 @@ import { useLayoutEffect, useRef } from 'react'
 import { useLocation, useOutlet } from 'react-router-dom'
 
 /**
- * Cambio de ruta sin animación de salida ni de entrada: la vista nueva
- * aparece de inmediato. La versión anterior despedía la vista saliente con
- * GSAP antes de montar la entrante, y eso retrasaba exactamente lo que el
- * estudiante acababa de pedir.
+ * Cambio de ruta sin animación de salida: la vista nueva se monta de
+ * inmediato y entra con un fundido corto de CSS (`.page-enter`). La versión
+ * anterior despedía la vista saliente con GSAP antes de montar la entrante,
+ * y eso retrasaba exactamente lo que el estudiante acababa de pedir.
  *
  * Lo que sí hace es lo que una SPA le quita al navegador:
  *
@@ -39,7 +39,7 @@ function RouteTransition() {
   }, [pathname, hash])
 
   return (
-    <div ref={container} className="flex flex-1 flex-col">
+    <div key={pathname} ref={container} className="page-enter flex flex-1 flex-col">
       {outlet}
     </div>
   )

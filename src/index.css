@@ -42,6 +42,21 @@
     --focus-ring: var(--color-green-mid);
     --line: rgb(37 37 37 / 12%);
     --line-strong: rgb(37 37 37 / 22%);
+
+    /* Movimiento: dos duraciones y una curva de salida suave. */
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --dur-fast: 180ms;
+    --dur-enter: 620ms;
+  }
+
+  /*
+   * Base de 18px en vez de 16px. Casi todo el sistema está en `rem`, así que
+   * texto, controles y espacios crecen en la misma proporción (×1.125) y la
+   * composición no se descuadra. Las media queries en `rem` no cambian: se
+   * resuelven contra el tamaño del navegador, no contra este.
+   */
+  html {
+    font-size: 112.5%;
   }
 
   body {
@@ -125,7 +140,7 @@
    * el contraste de jerarquía lo hacen el tamaño, el peso y el tracking.
    */
   .h1 {
-    font-size: clamp(2.25rem, 5vw, 4.25rem);
+    font-size: clamp(2.1rem, 5vw, 4rem);
     line-height: 1.06;
     letter-spacing: -0.045em;
     font-weight: 600;
@@ -133,7 +148,7 @@
   }
 
   .h2 {
-    font-size: clamp(1.65rem, 3vw, 2.5rem);
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
     line-height: 1.15;
     letter-spacing: -0.035em;
     font-weight: 600;
@@ -155,7 +170,7 @@
 
   /** Etiqueta de contexto: ámbar quemado, el único oro legible sobre papel. */
   .eyebrow {
-    font-size: 0.7rem;
+    font-size: 0.72rem;
     line-height: 1.5;
     letter-spacing: 0.14em;
     font-weight: 700;
@@ -381,13 +396,14 @@
    * así que la franja de lectura de la primera versión dejó de hacer falta.
    */
   /*
-   * La franja usa `vitral-franja.webp` (1600x24, 12 KB), una banda recortada
-   * del vitral, y no el panorámico completo (2736x308, 207 KB): pintar 8px
-   * con la foto entera costaba medio segundo de primer pintado en un
-   * teléfono con 4G lento, medido con Lighthouse (docs/RENDIMIENTO.md).
+   * La franja usa `vitral-franja.webp` (2400x48, 26 KB), una banda recortada
+   * del vitral, y no el panorámico completo (2736x308, 207 KB): pintarla con
+   * la foto entera costaba medio segundo de primer pintado en un teléfono con
+   * 4G lento, medido con Lighthouse (docs/RENDIMIENTO.md). Mide 16px; el
+   * archivo tiene 48px de alto para verse nítido en pantallas 2x y 3x.
    */
   .brand-ribbon {
-    height: 8px;
+    height: 16px;
     background: var(--color-green) url("/images/vitral-franja.webp") center / cover;
   }
 
@@ -544,8 +560,8 @@
     background-image: linear-gradient(
       to bottom,
       rgb(37 37 37 / 0%) 0,
-      rgb(37 37 37 / 72%) 1.5rem,
-      rgb(37 37 37 / 72%) calc(100% - 1.5rem),
+      rgb(37 37 37 / 42%) 1.5rem,
+      rgb(37 37 37 / 42%) calc(100% - 1.5rem),
       rgb(37 37 37 / 0%) 100%
     );
   }
@@ -1415,6 +1431,325 @@
 
     .result-number {
       font-size: 3.5rem;
+    }
+  }
+}
+
+/*
+ * ── Movimiento ─────────────────────────────────────────────────────────
+ *
+ * Todo el movimiento del sitio es CSS. La regla que no se negocia es la que
+ * motivó el rediseño: el contenido no puede depender de una animación para
+ * existir. Por eso:
+ *
+ * - Las entradas (`.enter`) son animaciones CSS que corren al pintar, sin
+ *   esperar a JavaScript, y duran menos de un segundo en total.
+ * - Las apariciones al hacer scroll (`.reveal`) usan `animation-timeline:
+ *   view()` dentro de `@supports`: en un navegador que no lo soporta, el
+ *   contenido simplemente está ahí, quieto.
+ * - Con `prefers-reduced-motion: reduce` la regla de `@layer base` apaga
+ *   todas las animaciones y transiciones.
+ *
+ * Duraciones y curva: `--dur-fast` (180ms) para respuesta a un gesto,
+ * `--dur-enter` (620ms) para entradas, siempre con `--ease-out`.
+ */
+@layer components {
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+  }
+
+  @keyframes fade {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @keyframes settle {
+    from {
+      opacity: 0;
+      transform: scale(1.06);
+    }
+  }
+
+  @keyframes bar-fill {
+    from {
+      transform: scaleX(0);
+    }
+  }
+
+  @keyframes drift {
+    to {
+      background-position: 100% center;
+    }
+  }
+
+  /* Cambio de vista: sólo opacidad, para no transformar un ancestro de la
+     barra fija de Mi ruta. */
+  .page-enter {
+    animation: fade 380ms var(--ease-out);
+  }
+
+  /* Entradas escalonadas del primer pliegue: `--d` es el orden (0, 1, 2…). */
+  .enter {
+    animation: rise var(--dur-enter) var(--ease-out) both;
+    animation-delay: calc(var(--d, 0) * 90ms);
+  }
+
+  /* La foto del hero se asienta: entra apenas ampliada y llega a su tamaño. */
+  .hero-picture img {
+    animation: settle 1200ms var(--ease-out) both;
+  }
+
+  /* Contenido que se reemplaza en sitio (otra habilidad, otro puesto, otra
+     pregunta): la `key` de React lo vuelve a montar y esto lo anuncia. */
+  .swap-in {
+    animation: rise 420ms var(--ease-out) both;
+  }
+
+  @supports (animation-timeline: view()) {
+    .reveal,
+    .reveal-group > * {
+      animation: rise linear both;
+      animation-timeline: view();
+      /* Rango fijo en px y no en % del elemento: en un bloque más alto que
+         la pantalla, un porcentaje lo dejaría medio transparente mientras
+         ya se está leyendo su parte de arriba. */
+      animation-range: entry 0px entry 200px;
+    }
+  }
+
+  /* El vitral de la cabecera se desplaza muy lento, como luz que cambia. */
+  .site-header .brand-ribbon {
+    background-size: 160% auto;
+    background-position: 0% center;
+    animation: drift 45s ease-in-out infinite alternate;
+  }
+
+  /* Las barras de afinidad se llenan en orden al llegar a Mi ruta. */
+  .affinity-fill {
+    animation: bar-fill 1100ms var(--ease-out) both;
+    animation-delay: calc(var(--i, 0) * 90ms + 250ms);
+  }
+
+  .mobile-nav {
+    animation: rise 260ms var(--ease-out);
+  }
+
+  /* Microinteracciones: la flecha de una acción avanza al pasar el cursor. */
+  :is(.btn-green, .btn-light, .btn-outline, .text-link) > span[aria-hidden="true"] {
+    display: inline-block;
+    transition: transform var(--dur-fast) var(--ease-out);
+  }
+
+  :is(.btn-green, .btn-light, .btn-outline, .text-link):hover > span[aria-hidden="true"] {
+    transform: translateX(3px);
+  }
+
+  .choice,
+  .career-button,
+  .interest-button {
+    transition:
+      background-color var(--dur-fast) ease,
+      border-color var(--dur-fast) ease,
+      color var(--dur-fast) ease,
+      transform var(--dur-fast) var(--ease-out);
+  }
+
+  :is(.choice, .career-button, .interest-button):active {
+    transform: scale(0.98);
+  }
+
+  /*
+   * Las tarjetas de área son enlaces a su comunidad: al pasar el cursor se
+   * levantan 4px y su foto se acerca. Es la única sombra fuera de la
+   * fotografía, y sólo existe mientras la tarjeta responde a un gesto.
+   */
+  .area-card {
+    transition:
+      transform 360ms var(--ease-out),
+      box-shadow 360ms var(--ease-out),
+      border-color 360ms ease;
+  }
+
+  .area-card img {
+    transition: transform 700ms var(--ease-out);
+  }
+
+  @media (hover: hover) {
+    .area-card:hover {
+      transform: translateY(-4px);
+      border-color: color-mix(in srgb, var(--color-green-mid) 45%, transparent);
+      box-shadow: 0 22px 44px -28px rgb(37 37 37 / 45%);
+    }
+
+    .area-card:hover img {
+      transform: scale(1.05);
+    }
+  }
+
+  /* ── Mi ruta: barra fija de exploración ─────────────────────────────── */
+
+  /*
+   * Mientras se recorre la ruta, esta barra queda pegada arriba y responde
+   * dos preguntas que antes se perdían al bajar: qué área estoy explorando
+   * y en qué parte de su ruta voy. Cambiar de área desde aquí reemplaza el
+   * contenido de abajo sin mover la página.
+   */
+  .route-zone [id] {
+    scroll-margin-top: 7.5rem;
+  }
+
+  .route-bar {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    border-block: 1px solid var(--line);
+    background: rgb(255 255 255 / 90%);
+    backdrop-filter: saturate(1.4) blur(14px);
+  }
+
+  .route-bar-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    min-height: 72px;
+    padding-block: 10px;
+  }
+
+  .route-bar-areas {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+  }
+
+  .route-bar-areas .choice-group {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .route-bar-areas .choice {
+    flex: none;
+    padding-block: 8px;
+  }
+
+  .route-sections {
+    display: flex;
+    flex: none;
+    gap: 2px;
+  }
+
+  .route-sections a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 44px;
+    padding-inline: 10px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-ink-soft);
+    transition:
+      background-color var(--dur-fast) ease,
+      color var(--dur-fast) ease;
+  }
+
+  .route-sections a:hover {
+    background: var(--color-green-soft);
+    color: var(--color-green);
+  }
+
+  .route-sections span {
+    color: var(--color-gold-dark);
+  }
+
+  /* ── Mi ruta: tu primer paso ────────────────────────────────────────── */
+
+  /*
+   * La síntesis accionable de la ruta en tres pasos, antes del detalle:
+   * qué aprender, qué entregar y con quién compartirlo. Es el principio 2
+   * de PRODUCT.md hecho tarjeta: ningún resultado termina en una etiqueta.
+   */
+  .first-step {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    overflow: hidden;
+    border-radius: 24px;
+    background: var(--color-green-soft);
+  }
+
+  .first-step > li {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: clamp(22px, 3vw, 32px);
+  }
+
+  .first-step > li + li {
+    border-left: 1px solid rgb(37 37 37 / 10%);
+  }
+
+  .first-step-index {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--color-green);
+    color: var(--color-paper);
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
+  .first-step .text-link {
+    margin-top: auto;
+  }
+
+  /* Encabezado de una sección de la ruta con el área explorada al lado. */
+  .route-area-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 10px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: var(--color-green-soft);
+    color: var(--color-green);
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    text-transform: none;
+    vertical-align: middle;
+  }
+
+  @media (width < 64rem) {
+    .route-sections {
+      display: none;
+    }
+  }
+
+  @media (width < 48rem) {
+    .first-step {
+      grid-template-columns: 1fr;
+    }
+
+    .first-step > li + li {
+      border-left: 0;
+      border-top: 1px solid rgb(37 37 37 / 10%);
+    }
+
+    .route-bar-areas > .eyebrow {
+      display: none;
+    }
+
+    .route-bar-inner {
+      min-height: 64px;
     }
   }
 }
