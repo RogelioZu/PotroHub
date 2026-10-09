@@ -99,8 +99,9 @@ cualquiera. Después de un build, `grep -r "DASHSCOPE" dist/` debe salir vacío.
   hace.
 - **Directo en `main`, sin ramas nuevas.** No se crea una rama para un cambio salvo que se pida
   explícitamente.
-- Mensajes en español con prefijo convencional (`feat:`, `fix:`, `docs:`, `chore:`), y un cuerpo que
-  explique **por qué**, igual que los comentarios del código.
+- **Mensajes de una sola línea**, en español y con prefijo convencional (`feat:`, `fix:`, `docs:`,
+  `style:`, `test:`, `chore:`). Sin cuerpo: el porqué vive en los comentarios del código y en los
+  documentos, que es donde lo encuentra quien llega después.
 
 ---
 
