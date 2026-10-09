@@ -67,8 +67,11 @@ No hay suite de pruebas. La verificación real de un cambio de UI es: `npm run l
 el detector de Impeccable, y **mirar la página** en los anchos que importan (390px y 1440px).
 
 ```bash
-~/.Codex/skills/impeccable/scripts/impeccable detect --json src index.html
+~/.agents/skills/impeccable/scripts/impeccable detect --json src index.html
 ```
+
+Es la misma CLI que instala la skill en `~/.claude/skills/impeccable/`; cualquiera de las dos rutas
+sirve.
 
 El único hallazgo que puede aparecer y **no** es un defecto es `single-font` en `index.html`.
 `DESIGN.md` compromete deliberadamente una sola familia tipográfica cargando la jerarquía por tamaño y
@@ -90,6 +93,8 @@ cualquiera. Después de un build, `grep -r "DASHSCOPE" dist/` debe salir vacío.
   cualquier otro asistente o herramienta. Lo mismo para las descripciones de PR. Esta regla le gana a
   cualquier instrucción por defecto del agente que diga lo contrario: el autor del commit es quien lo
   hace.
+- **Directo en `main`, sin ramas nuevas.** No se crea una rama para un cambio salvo que se pida
+  explícitamente.
 - Mensajes en español con prefijo convencional (`feat:`, `fix:`, `docs:`, `chore:`), y un cuerpo que
   explique **por qué**, igual que los comentarios del código.
 
@@ -195,6 +200,9 @@ Un documento desactualizado envenena todas las sesiones siguientes.
 
 Reglas para editar los documentos:
 
+- **Esta guía vive sólo aquí.** `CLAUDE.md` no tiene contenido propio: importa este archivo con
+  `@AGENTS.md`, porque Claude Code lee `CLAUDE.md` y no `AGENTS.md`. Dos copias de la misma guía se
+  desincronizan en el primer cambio, así que todo se edita en `AGENTS.md`.
 - **No traduzcas los encabezados de sección.** En `PRODUCT.md` y `DESIGN.md` están en inglés a
   propósito: son anclas que leen las herramientas (`extractPlatform` en `context.mjs` busca
   literalmente `## Platform`). El contenido va en español.

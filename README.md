@@ -150,7 +150,7 @@ npm run lint      # sin errores nuevos
 npm run build     # el build pasa
 ```
 
-…y **mirar la página** en los dos anchos que importan, 390px (teléfono) y 1440px (laptop), recorriendo el flujo completo: Inicio → Diagnóstico → Mi ruta → Comunidad. `CLAUDE.md` documenta el resto de la rutina, incluido el detector de anti-patrones de interfaz.
+…y **mirar la página** en los dos anchos que importan, 390px (teléfono) y 1440px (laptop), recorriendo el flujo completo: Inicio → Diagnóstico → Mi ruta → Comunidad. `AGENTS.md` documenta el resto de la rutina, incluido el detector de anti-patrones de interfaz.
 
 ### Rutas de la aplicación
 
@@ -199,7 +199,7 @@ El repositorio se documenta a sí mismo en cuatro archivos, cada uno con una aut
 | `README.md` | Este archivo: memoria descriptiva académica y puesta en marcha |
 | `PRODUCT.md` | Verdad de producto: usuarios, propósito, alcance, principios y **qué no existe y no puede inventarse** |
 | `DESIGN.md` | El mundo visual comprometido: paleta, tipografía, layout, componentes, movimiento y sus Reglas Nombradas |
-| `CLAUDE.md` | Convenciones de código y guía de trabajo para quien (o lo que) edite el repositorio |
+| `AGENTS.md` | Convenciones de código y guía de trabajo para quien (o lo que) edite el repositorio. `CLAUDE.md` sólo lo importa, para que Claude Code lo lea |
 
 En decisiones visuales manda `DESIGN.md`; en verdad de producto y voz manda `PRODUCT.md`. `.impeccable/design.json` es el sidecar de `DESIGN.md` con los valores exactos de tokens y componentes.
 
