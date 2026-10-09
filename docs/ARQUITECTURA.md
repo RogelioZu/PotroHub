@@ -152,6 +152,13 @@ probabilidades.
 altera a las demás áreas; un empate parcial devuelve todas las áreas empatadas; los valores
 inválidos no suman.
 
+**Propiedades verificadas por `tests/refine.test.js`:** tres enfoques por área con señales del banco
+de su propia área; las detonadoras de respaldo enfrentan los tres enfoques de su área y pasan la
+validación; sin empate los candidatos son los tres del área ganadora; en un empate de tres áreas el
+recorte a seis conserva la base más alta y no las primeras áreas del catálogo; `validateTriggerSet`
+rechaza cualquier forma que la interfaz no sepa pintar; `pickFocus` no decide con una respuesta
+pendiente y desempata por base y luego por catálogo.
+
 **Límites.** El instrumento mide interés declarado mediante afirmaciones tipo Likert. No ha sido
 validado psicométricamente (confiabilidad, validez de constructo) y no mide aptitud ni dominio. Si
 el banco de preguntas deja de tener la misma cantidad por área, el denominador debe calcularse por
