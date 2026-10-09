@@ -25,7 +25,7 @@ const STATUS = [
  * enlace. Marcar una tercera opción desplaza a la más antigua, para que la
  * comparación nunca quede con tres columnas que no caben en un teléfono.
  */
-function CredentialExplorer({ ids }) {
+function CredentialExplorer({ ids, areaName }) {
   const [selected, setSelected] = useState([])
   const credentials = ids.map((id) => CREDENTIALS[id])
   const comparison = credentials.filter((credential) => selected.includes(credential.id))
@@ -39,7 +39,9 @@ function CredentialExplorer({ ids }) {
     <section id="credenciales" className="route-block" aria-labelledby="credenciales-titulo">
       <div className="section-heading">
         <div>
-          <p className="eyebrow">02 / Dale respaldo a lo que aprendes</p>
+          <p className="eyebrow">
+            02 / Acredita <span className="route-area-tag">{areaName}</span>
+          </p>
           <h2 id="credenciales-titulo" className="h2">
             Una credencial con sentido.
           </h2>
@@ -50,7 +52,7 @@ function CredentialExplorer({ ids }) {
         </p>
       </div>
 
-      <div className="credential-grid">
+      <div className="credential-grid reveal-group">
         {credentials.map((credential) => {
           const isSelected = selected.includes(credential.id)
           return (
@@ -113,7 +115,7 @@ function CredentialExplorer({ ids }) {
       </p>
 
       {comparison.length === 2 && (
-        <div className="comparison" role="region" aria-label="Comparación de credenciales">
+        <div className="comparison swap-in" role="region" aria-label="Comparación de credenciales">
           <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
             <h3 className="h3">Elige por lo que necesitas aprender.</h3>
             <button type="button" className="text-link" onClick={() => setSelected([])}>

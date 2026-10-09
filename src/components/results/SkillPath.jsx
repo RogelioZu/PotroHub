@@ -9,7 +9,7 @@ import { STAGES } from '../../data/roadmap'
  * Seleccionar una habilidad sólo cambia el detalle: no la marca como
  * aprendida. No hay progreso persistente porque explorar no es dominar.
  */
-function SkillPath({ route }) {
+function SkillPath({ route, areaName }) {
   const [selectedId, setSelectedId] = useState(route.learning[0].id)
   const selected = route.learning.find((skill) => skill.id === selectedId) ?? route.learning[0]
 
@@ -17,7 +17,9 @@ function SkillPath({ route }) {
     <section id="habilidades" className="route-block" aria-labelledby="habilidades-titulo">
       <div className="section-heading">
         <div>
-          <p className="eyebrow">01 / Construye tu base</p>
+          <p className="eyebrow">
+            01 / Aprende <span className="route-area-tag">{areaName}</span>
+          </p>
           <h2 id="habilidades-titulo" className="h2">
             Las habilidades, en orden.
           </h2>
@@ -28,7 +30,7 @@ function SkillPath({ route }) {
       </div>
 
       <div className="skill-layout">
-        <div>
+        <div className="reveal">
           {STAGES.map((stage, index) => (
             <div key={stage} className="skill-stage">
               <p className="eyebrow">
@@ -54,18 +56,22 @@ function SkillPath({ route }) {
           ))}
         </div>
 
-        <div id="detalle-habilidad" className="skill-detail" aria-live="polite">
-          <span className="pill bg-paper">
-            Etapa {selected.stage + 1} · {STAGES[selected.stage]}
-          </span>
-          <h3 className="h2 mt-5">{selected.name}</h3>
-          <p className="mt-4 text-sm muted">{selected.purpose}</p>
-          <div className="project-box">
-            <p className="eyebrow">Tu primer entregable</p>
-            <p className="mt-3 text-sm">{selected.project}</p>
-            <p className="source-note mt-4">
-              Actividad sugerida por PotroPath. No es un requisito de contratación.
-            </p>
+        {/* `aria-live` vive en el contenedor estable; la `key` del hijo lo
+            vuelve a montar para animar el cambio sin perder el anuncio. */}
+        <div id="detalle-habilidad" aria-live="polite">
+          <div key={selected.id} className="skill-detail swap-in">
+            <span className="pill bg-paper">
+              Etapa {selected.stage + 1} · {STAGES[selected.stage]}
+            </span>
+            <h3 className="h2 mt-5">{selected.name}</h3>
+            <p className="mt-4 text-sm muted">{selected.purpose}</p>
+            <div className="project-box">
+              <p className="eyebrow">Tu primer entregable</p>
+              <p className="mt-3 text-sm">{selected.project}</p>
+              <p className="source-note mt-4">
+                Actividad sugerida por PotroPath. No es un requisito de contratación.
+              </p>
+            </div>
           </div>
         </div>
       </div>
