@@ -112,7 +112,9 @@ function Quiz() {
         />
       </div>
 
-      <div className="surface panel-pad mt-8">
+      {/* La `key` vuelve a montar la tarjeta en cada pregunta para que la
+          nueva entre con un desplazamiento corto: se nota que avanzaste. */}
+      <div key={question.id} className="surface panel-pad swap-in mt-8">
         <p className="eyebrow mb-4">Piensa en lo que disfrutas, no en lo que ya dominas.</p>
         <h1 ref={heading} tabIndex={-1} id="quiz-prompt" className="h2 focus:outline-none">
           {question.prompt}

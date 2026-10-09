@@ -37,7 +37,9 @@ function CareerExplorer({ areaId }) {
       <section id="puestos" className="route-block" aria-labelledby="puestos-titulo">
         <div className="section-heading">
           <div>
-            <p className="eyebrow">03 / Mira hacia dónde puedes ir</p>
+            <p className="eyebrow">
+              03 / Conoce el rol <span className="route-area-tag">{AREA_BY_ID[areaId].name}</span>
+            </p>
             <h2 id="puestos-titulo" className="h2">
               Así se trabaja en tecnología.
             </h2>
@@ -66,76 +68,82 @@ function CareerExplorer({ areaId }) {
             ))}
           </div>
 
-          <article id="detalle-puesto" className="surface panel-pad" aria-live="polite">
-            <p className="eyebrow">{selected.company} · Perfil de referencia</p>
-            <h3 className="h2 mt-3">{selected.title}</h3>
-            <div className="mt-4 flex flex-wrap gap-2">
-              <span className="pill">{selected.location}</span>
-              <span className="pill">{selected.level}</span>
-            </div>
-            <p className="mt-5 text-sm muted">{selected.summary}</p>
-
-            <h4 className="h3 mt-6 mb-2">En el día a día</h4>
-            <ul className="detail-list">
-              {selected.responsibilities.map((text) => (
-                <li key={text}>{text}</li>
-              ))}
-            </ul>
-
-            <div className="requirements">
-              <div>
-                <h4 className="h3 mb-2">Lo que solicitan</h4>
-                <ul className="detail-list">
-                  {selected.required.map((text) => (
-                    <li key={text}>{text}</li>
-                  ))}
-                </ul>
+          <div id="detalle-puesto" aria-live="polite">
+            <article key={selected.id} className="surface panel-pad swap-in">
+              <p className="eyebrow">{selected.company} · Perfil de referencia</p>
+              <h3 className="h2 mt-3">{selected.title}</h3>
+              <div className="mt-4 flex flex-wrap gap-2">
+                <span className="pill">{selected.location}</span>
+                <span className="pill">{selected.level}</span>
               </div>
-              <div>
-                <h4 className="h3 mb-2">Lo que suma</h4>
-                <ul className="detail-list">
-                  {selected.preferred.map((text) => (
-                    <li key={text}>{text}</li>
-                  ))}
-                </ul>
-              </div>
-            </div>
+              <p className="mt-5 text-sm muted">{selected.summary}</p>
 
-            <div className="rounded-2xl bg-green-soft p-5">
-              <p className="eyebrow">Conecta con tu ruta</p>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {related.map((skill) => (
-                  <span key={skill.id} className="pill bg-paper">
-                    {skill.name}
-                  </span>
+              <h4 className="h3 mt-6 mb-2">En el día a día</h4>
+              <ul className="detail-list">
+                {selected.responsibilities.map((text) => (
+                  <li key={text}>{text}</li>
                 ))}
-              </div>
-              <p className="mt-4 text-sm">{selected.project}</p>
-              <p className="source-note mt-2">
-                Proyecto sugerido por PotroPath, no solicitado por la empresa.
-              </p>
-            </div>
+              </ul>
 
-            <div className="mt-5 flex flex-wrap gap-x-6">
-              <a href={selected.sourceUrl} target="_blank" rel="noreferrer" className="text-link">
-                Consultar ficha original <span aria-hidden="true">↗</span>
-              </a>
-              <a href={similarSearch} target="_blank" rel="noreferrer" className="text-link">
-                Puestos similares en LinkedIn <span aria-hidden="true">↗</span>
-              </a>
-            </div>
-            <p className="source-note mt-2">
-              Revisada el{' '}
-              <time dateTime={selected.reviewedAt}>{formatReviewDate(selected.reviewedAt)}</time>.
-              Resumen de la ficha; su disponibilidad puede cambiar. No representa una asociación con
-              PotroPath.
-            </p>
-          </article>
+              <div className="requirements">
+                <div>
+                  <h4 className="h3 mb-2">Lo que solicitan</h4>
+                  <ul className="detail-list">
+                    {selected.required.map((text) => (
+                      <li key={text}>{text}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="h3 mb-2">Lo que suma</h4>
+                  <ul className="detail-list">
+                    {selected.preferred.map((text) => (
+                      <li key={text}>{text}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              <div className="rounded-2xl bg-green-soft p-5">
+                <p className="eyebrow">Conecta con tu ruta</p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {related.map((skill) => (
+                    <span key={skill.id} className="pill bg-paper">
+                      {skill.name}
+                    </span>
+                  ))}
+                </div>
+                <p className="mt-4 text-sm">{selected.project}</p>
+                <p className="source-note mt-2">
+                  Proyecto sugerido por PotroPath, no solicitado por la empresa.
+                </p>
+              </div>
+
+              <div className="mt-5 flex flex-wrap gap-x-6">
+                <a href={selected.sourceUrl} target="_blank" rel="noreferrer" className="text-link">
+                  Consultar ficha original <span aria-hidden="true">↗</span>
+                </a>
+                <a href={similarSearch} target="_blank" rel="noreferrer" className="text-link">
+                  Puestos similares en LinkedIn <span aria-hidden="true">↗</span>
+                </a>
+              </div>
+              <p className="source-note mt-2">
+                Revisada el{' '}
+                <time dateTime={selected.reviewedAt}>{formatReviewDate(selected.reviewedAt)}</time>.
+                Resumen de la ficha; su disponibilidad puede cambiar. No representa una asociación
+                con PotroPath.
+              </p>
+            </article>
+          </div>
         </div>
       </section>
 
-      <section id="oportunidades" className="dark-panel my-10" aria-labelledby="oportunidades-titulo">
-        <p className="eyebrow">04 / Explora el mercado</p>
+      <section
+        id="oportunidades"
+        className="dark-panel reveal my-10"
+        aria-labelledby="oportunidades-titulo"
+      >
+        <p className="eyebrow">04 / Busca</p>
         <h2 id="oportunidades-titulo" className="h2 mt-3">
           Tu próxima búsqueda empieza aquí.
         </h2>

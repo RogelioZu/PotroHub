@@ -163,12 +163,14 @@ comunidad) y Linear (jerarquía y agrupación). No se copia ninguna identidad.
 | Elemento | Valor |
 |---|---|
 | Colores | Los cinco oficiales y sus derivados, sin cambios (ver *Colors*) |
-| `.h1` | `clamp(2.25rem, 5vw, 4.25rem)` / 1.06, 600, −0.045em, `text-wrap: balance` |
-| `.h2` | `clamp(1.65rem, 3vw, 2.5rem)` / 1.15, 600, −0.035em |
+| Base | `html { font-size: 112.5% }`: 18px. Todo lo que está en `rem` crece ×1.125 en proporción |
+| `.h1` | `clamp(2.1rem, 5vw, 4rem)` / 1.06, 600, −0.045em, `text-wrap: balance` |
+| `.h2` | `clamp(1.6rem, 3vw, 2.4rem)` / 1.15, 600, −0.035em |
 | `.h3` | 1.125rem / 1.4, 600, −0.015em |
 | `.lead` | 1.075rem / 1.75, `Tinta Suave` |
 | Cuerpo | 1rem / 1.65 |
-| `.eyebrow` | 0.7rem / 1.5, 700, 0.14em, mayúsculas, `Ámbar Quemado` |
+| `.eyebrow` | 0.72rem / 1.5, 700, 0.14em, mayúsculas, `Ámbar Quemado` |
+| Marca | Sólo texto: "Potro" en `Verde Universitario`, "Path" en oro derivado (60% `Oro Viejo` + 40% `Ámbar Quemado`, 3.26:1 sobre papel); nunca menos de 24px en negrita |
 | Contenedor | `.page-shell`: 1152px con canalón de 24px |
 | Ritmo | `.section-py`: 64px, 96px desde `md` |
 | Radios | 20px tarjeta (`.surface`), 28px panel focal (`.dark-panel`), 12–14px controles internos, píldora para acciones |
@@ -179,14 +181,15 @@ comunidad) y Linear (jerarquía y agrupación). No se copia ninguna identidad.
 
 ### Estructura
 
-- **Cabecera de papel** con franja de vitral de 8px como firma, marca compacta (`p↗` + PotroPath +
-  "INGENIERÍA · UAEMÉX"), cuatro destinos —Inicio, Diagnóstico, Mi ruta, Comunidad— y un CTA que
+- **Cabecera de papel** con franja de vitral de 16px que se desplaza muy lento (`vitral-franja.webp`,
+  26 KB), marca de puro texto verde y oro, cuatro destinos —Inicio, Diagnóstico, Mi ruta, Comunidad— y un CTA que
   cambia con el avance guardado. Bajo 1024px, menú desplegable que cierra con Escape y al navegar.
   Enlace "Saltar al contenido".
-- **Pie verde profundo** con marca, recorrido, nota de privacidad y la aclaración de que empresas y
-  credenciales citadas son referencias. Franja de vitral al final.
-- **El texto ya no cae sobre el vitral.** Por eso se retiraron `VitralBackdrop` y la franja de
-  lectura `.vitral-scrim`: el problema de contraste que resolvían dejó de existir.
+- **Pie sobre el vitral completo**, con el filete dorado de 2px arriba, como en la primera versión.
+  El texto se apoya en `.footer-scrim` (tinta al 72%, desvanecida en los 24px de arriba y abajo):
+  es *La regla de la Franja de Lectura* aplicada de nuevo. Todo el texto pequeño va en `Papel` a
+  opacidad plena; `Oro Claro` sólo en "Path", que a 24px en negrita es texto grande. La foto es un
+  `<img loading="lazy">` porque siempre está bajo el pliegue y pesa 207 KB.
 
 ### Vistas
 
@@ -197,26 +200,42 @@ comunidad) y Linear (jerarquía y agrupación). No se copia ninguna identidad.
 - **Diagnóstico:** columna de 720px, radios nativos en filas de 58px, progreso por respuestas
   guardadas, atajos 1–5 y Enter en laptop, "Ir a la primera pendiente" al final si falta alguna,
   reinicio confirmado.
-- **Resultados:** panel focal con el resultado o el empate reconocido; comparación de cinco áreas
-  con marca del 60%; "Cómo se calcula" desplegable; selector de las cinco rutas; habilidades por
-  etapas; comparación de dos credenciales; perfiles con requisitos mínimos y deseables; búsqueda en
-  LinkedIn; enlace a la comunidad del área explorada.
+- **Resultados**, en el orden en que se lee: (1) panel focal con el resultado o el empate reconocido
+  junto a la comparación de cinco áreas con marca del 60%; (2) **Tu primer paso**, tres acciones
+  —aprende, practica, comparte— tomadas de la ruta; (3) una **barra fija** con el área explorada
+  (nombres cortos) y las cuatro partes de la ruta; (4) 01 Aprende, 02 Acredita, 03 Conoce el rol y
+  04 Busca, cada una con una etiqueta del área explorada; (5) comunidad y reinicio. La barra existe
+  porque, ya en credenciales o puestos, era fácil olvidar de qué área era el contenido.
 - **Comunidad:** hero dividido con foto de Talent Land; directorio de cinco intereses ligado a la
   URL; Rama IEEE con logo, propósito y estado en una tarjeta por sociedad; galería editorial de seis
   fotos verificadas; agenda vacía compacta.
 
 ### Movimiento
 
-Scroll nativo y contenido inmediato. No hay GSAP, Matter.js, ScrollSmoother ni revelados: las
-dependencias se quitaron de `package.json`. El único movimiento son transiciones de color de
-140–280ms y el llenado de la barra de progreso, todo anulado bajo `prefers-reduced-motion`. Esto
-sustituye *Motion* y sus reglas del `from` y del Único Rebote, que quedan como historia.
+Todo es CSS; no hay GSAP, Matter.js ni ScrollSmoother. La regla que no se negocia: **ningún
+contenido depende de una animación para existir.**
+
+| Pieza | Comportamiento |
+|---|---|
+| `.page-enter` | Fundido de 380ms al cambiar de vista (sólo opacidad, para no transformar el ancestro de la barra fija) |
+| `.enter` + `--d` | Entrada escalonada del primer pliegue: 620ms, 90ms entre piezas |
+| `.hero-picture img` | La foto se asienta desde 1.06× en 1.2s |
+| `.reveal`, `.reveal-group > *` | Aparición al hacer scroll con `animation-timeline: view()` en los primeros 200px de entrada, dentro de `@supports`: sin soporte, el contenido está quieto y visible. Rango en px y no en %, para que un bloque alto no quede medio transparente mientras se lee |
+| `.swap-in` | Contenido reemplazado en sitio (pregunta, habilidad, puesto, área): la `key` lo remonta y entra en 420ms. `aria-live` va en un contenedor estable, no en el elemento con `key` |
+| Barras de afinidad | Se llenan en orden (1.1s, 90ms entre barras) |
+| Franja del vitral | Se desplaza en 45s, ida y vuelta |
+| Microinteracciones | Flecha de las acciones avanza 3px; chips y botones de selección ceden a 0.98 al pulsar; tarjetas de área se levantan 4px con sombra y acercan su foto, sólo con puntero |
+
+Tokens: `--ease-out` `cubic-bezier(0.22, 1, 0.36, 1)`, `--dur-fast` 180ms, `--dur-enter` 620ms.
+Con `prefers-reduced-motion: reduce`, una regla en `@layer base` apaga todo. Sustituye *Motion* y
+sus reglas del `from` y del Único Rebote, que quedan como historia; la regla de *botones que no se
+mueven* se relaja sólo en la flecha y en la presión de los chips.
 
 ### Retirado, para no reintroducirlo por accidente
 
-Mosaico con física, tarjetas y filas que voltean, carruseles, `SectionDivider` animado, vitral como
-fondo de texto, `HeroMosaic`, `PhotoCard`, `Reveal`, `SmoothScroller`, `src/lib/gsap.js`,
-`src/lib/motion.js`. Todo está en el historial de git.
+Mosaico con física, tarjetas y filas que voltean, carruseles, `SectionDivider` animado, el símbolo
+`p↗` de la marca, `HeroMosaic`, `PhotoCard`, `Reveal`, `SmoothScroller`, `VitralBackdrop`,
+`src/lib/gsap.js`, `src/lib/motion.js`. Todo está en el historial de git.
 
 ## Overview
 
