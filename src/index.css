@@ -391,19 +391,21 @@
   /* ── Cabecera y pie ─────────────────────────────────────────────────── */
 
   /*
-   * El vitral real de la biblioteca sobrevive como firma: una franja de 24px
-   * arriba de la cabecera. Ya no hay texto encima del vidrio,
-   * así que la franja de lectura de la primera versión dejó de hacer falta.
+   * El vitral real de la biblioteca es el fondo de la barra de navegación:
+   * una banda de 90px con la marca, los cuatro destinos y el CTA encima.
    */
   /*
-   * La franja usa `vitral-franja.webp` (2400x48, 26 KB), una banda recortada
+   * La franja usa `vitral-franja.webp` (2304x152, 56 KB), una banda recortada
    * del vitral, y no el panorámico completo (2736x308, 207 KB): pintarla con
    * la foto entera costaba medio segundo de primer pintado en un teléfono con
-   * 4G lento, medido con Lighthouse (docs/RENDIMIENTO.md). Mide 24px; el
-   * archivo tiene 48px de alto, justo lo que pide una pantalla 2x.
+   * 4G lento, medido con Lighthouse (docs/RENDIMIENTO.md). Mide 90px; el
+   * archivo conserva los 180px de alto de la banda original reducidos a 152,
+   * lo más nítido que da el panorámico: en pantallas 2x se ve algo suave.
    */
   .brand-ribbon {
-    height: 24px;
+    position: absolute;
+    inset: 0;
+    z-index: -1;
     background: var(--color-green) url("/images/vitral-franja.webp") center / cover;
   }
 
@@ -413,32 +415,64 @@
     border-bottom: 1px solid var(--line);
   }
 
+  /* `overflow: hidden` recorta el halo de la marca en el borde del vidrio:
+     sin él, la sombra verde se derrama sobre el papel de abajo. */
+  .nav-band {
+    --focus-ring: var(--color-gold-light);
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+  }
+
   .nav-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 24px;
-    min-height: 84px;
+    min-height: 90px;
   }
 
   /*
-   * Marca de texto: "Potro" en Verde Universitario y "Path" en oro.
-   *
-   * El oro oficial (#ca9e52) sobre papel mide 2.46:1, por debajo incluso del
-   * 3:1 de texto grande. "Path" usa un oro derivado —60% oro oficial, 40%
-   * Ámbar Quemado, los dos de la paleta— que mide 3.26:1 y se sigue leyendo
-   * dorado; Ámbar Quemado solo (5.17:1) ya se lee café. Ese 3.26:1 sólo
-   * alcanza para texto grande, así que la marca nunca baja de 24px en negrita.
+   * Cápsula de vidrio verde: Verde Profundo, el del CTA, al 80%. No es el 72%
+   * de la Franja de Lectura porque el verde es más claro que la tinta: al 72%
+   * Oro Claro caía a 2.7:1 sobre un panel de vidrio blanco; al 80% vuelve a
+   * 3.5:1 y Papel queda en 6:1. El desenfoque sólo calma el dibujo del vitral
+   * detrás de las letras, no aporta contraste.
+   */
+  .nav-chip {
+    border: 1px solid color-mix(in srgb, var(--color-paper) 18%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--color-green) 80%, transparent);
+    backdrop-filter: blur(6px);
+  }
+
+  /*
+   * La marca se difumina en el vidrio: sin filete, con más desenfoque y un
+   * halo del mismo verde que se desvanece hacia afuera. El halo cae fuera de
+   * las letras, así que el contraste lo sigue dando el fondo al 80%.
+   */
+  .brand.nav-chip {
+    border-color: transparent;
+    backdrop-filter: blur(14px);
+    box-shadow: 0 0 28px 10px color-mix(in srgb, var(--color-green) 60%, transparent);
+  }
+
+  /*
+   * Marca de texto sobre la cápsula: "Potro" en Papel y "Path" en Oro Claro,
+   * el reparto que el sistema usa sobre el vidrio. Oro Claro mide 3.6:1 sobre
+   * la cápsula, que sólo alcanza para texto grande, así que la marca nunca
+   * baja de 24px en negrita.
    */
   .brand {
     display: inline-flex;
     align-items: center;
-    min-height: 44px;
+    min-height: 52px;
+    padding-inline: 20px;
     font-size: 1.75rem;
     line-height: 1;
     font-weight: 700;
     letter-spacing: -0.035em;
-    color: var(--color-green-mid);
+    color: var(--color-paper);
   }
 
   @media (width >= 48rem) {
@@ -448,13 +482,35 @@
   }
 
   .brand-gold {
-    color: color-mix(in srgb, var(--color-gold) 60%, var(--color-gold-dark));
+    color: var(--color-gold-light);
   }
 
   .desktop-nav {
     display: flex;
     align-items: center;
     gap: 4px;
+    padding: 4px;
+  }
+
+  /* Dentro de la cápsula, Papel; el activo invierte a papel con verde, que
+     se distingue sin depender del oro en texto pequeño. */
+  .nav-band .nav-link {
+    color: var(--color-paper);
+  }
+
+  .nav-band .nav-link:hover {
+    background: color-mix(in srgb, var(--color-paper) 14%, transparent);
+    color: var(--color-paper);
+  }
+
+  .nav-band .nav-link[aria-current="page"] {
+    background: var(--color-paper);
+    color: var(--color-green);
+  }
+
+  /* El CTA ya es un sólido verde; el filete de papel lo despega del vidrio. */
+  .nav-band .nav-cta {
+    border-color: color-mix(in srgb, var(--color-paper) 30%, transparent);
   }
 
   .nav-link {
@@ -487,10 +543,9 @@
     gap: 8px;
     min-height: 44px;
     padding: 8px 16px;
-    border: 1px solid var(--line-strong);
-    border-radius: 999px;
     font-size: 0.875rem;
     font-weight: 600;
+    color: var(--color-paper);
   }
 
   .mobile-nav {
@@ -1339,10 +1394,6 @@
       display: inline-flex;
     }
 
-    .nav-row {
-      min-height: 76px;
-    }
-
     .editorial-hero {
       gap: 32px;
     }
@@ -1522,9 +1573,9 @@
   }
 
   /* El vitral de la cabecera se desplaza muy lento, como luz que cambia.
-     El piso de 1500px existe porque el archivo es 50:1: a 160% de un
-     teléfono de 390px la imagen mediría 12px de alto y dejaría ver el verde
-     de fondo bajo una franja de 24px. */
+     El piso de 1500px existe porque el archivo es 15:1: a 160% de un
+     teléfono de 390px la imagen mediría 41px de alto y dejaría ver el verde
+     de fondo bajo una franja de 90px. */
   .site-header .brand-ribbon {
     background-size: max(160%, 1500px) auto;
     background-position: 0% center;
@@ -1581,7 +1632,28 @@
     transition: transform 700ms var(--ease-out);
   }
 
+  /*
+   * La foto de la Rama IEEE en Inicio crece al pasar el cursor. Usa la
+   * propiedad `scale` y no `transform`: `.enter` y `settle` animan
+   * `transform` con relleno `both`, y una animación le gana a cualquier
+   * declaración normal, así que un `transform` en hover nunca se vería.
+   * `scale` se compone aparte. Crece la figura entera, con su esquina
+   * redondeada, y no sólo la imagen dentro del recorte.
+   */
+  .hero-zoom {
+    position: relative;
+    transition:
+      scale 500ms var(--ease-out),
+      box-shadow 500ms var(--ease-out);
+  }
+
   @media (hover: hover) {
+    .hero-zoom:hover {
+      z-index: 1;
+      scale: 1.08;
+      box-shadow: 0 28px 56px -30px rgb(37 37 37 / 50%);
+    }
+
     .area-card:hover {
       transform: translateY(-4px);
       border-color: color-mix(in srgb, var(--color-green-mid) 45%, transparent);

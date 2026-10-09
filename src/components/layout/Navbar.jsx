@@ -50,36 +50,40 @@ function Navbar() {
       <a href="#contenido" className="skip-link">
         Saltar al contenido
       </a>
-      <div className="brand-ribbon" aria-hidden="true" />
+      {/* La barra vive sobre el vitral. Cada pieza lleva su propia cápsula de
+          tinta en lugar de un velo corrido: el vidrio se ve entero entre ellas. */}
+      <div className="nav-band">
+        <div className="brand-ribbon" aria-hidden="true" />
 
-      <div className="page-shell nav-row">
-        {/* La marca es sólo el nombre, partido en los dos colores principales
-            de la UAEMéx: verde en "Potro", oro en "Path". */}
-        <Link to="/" className="brand" aria-label="PotroPath, ir al inicio">
-          Potro<span className="brand-gold">Path</span>
-        </Link>
+        <div className="page-shell nav-row">
+          {/* La marca es sólo el nombre, partido en los dos colores principales
+              de la UAEMéx sobre el vidrio: papel en "Potro", oro claro en "Path". */}
+          <Link to="/" className="brand nav-chip" aria-label="PotroPath, ir al inicio">
+            Potro<span className="brand-gold">Path</span>
+          </Link>
 
-        <nav aria-label="Principal" className="desktop-nav">
-          {links.map((link) => (
-            <NavLink key={link.to} to={link.to} end={link.end} className={navClass}>
-              {link.label}
-            </NavLink>
-          ))}
-        </nav>
+          <nav aria-label="Principal" className="desktop-nav nav-chip">
+            {links.map((link) => (
+              <NavLink key={link.to} to={link.to} end={link.end} className={navClass}>
+                {link.label}
+              </NavLink>
+            ))}
+          </nav>
 
-        <Link to={cta.to} className="btn-green nav-cta">
-          {cta.label} <span aria-hidden="true">↗</span>
-        </Link>
+          <Link to={cta.to} className="btn-green nav-cta">
+            {cta.label} <span aria-hidden="true">↗</span>
+          </Link>
 
-        <button
-          type="button"
-          className="menu-button"
-          aria-expanded={open}
-          aria-controls="menu-movil"
-          onClick={() => setOpenOn(open ? null : pathname)}
-        >
-          {open ? 'Cerrar' : 'Menú'} <span aria-hidden="true">{open ? '×' : '☰'}</span>
-        </button>
+          <button
+            type="button"
+            className="menu-button nav-chip"
+            aria-expanded={open}
+            aria-controls="menu-movil"
+            onClick={() => setOpenOn(open ? null : pathname)}
+          >
+            {open ? 'Cerrar' : 'Menú'} <span aria-hidden="true">{open ? '×' : '☰'}</span>
+          </button>
+        </div>
       </div>
 
       {open && (

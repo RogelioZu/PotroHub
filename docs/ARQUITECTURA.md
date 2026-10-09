@@ -148,7 +148,7 @@ erDiagram
 - Cada credencial y perfil lleva `sourceUrl` y `reviewedAt`. `tests/professional-route.test.js`
   falla si un perfil apunta a una habilidad inexistente, si falta una fuente o si una foto de la
   galería no tiene pie o texto alternativo.
-- Lo pendiente es dato explícito: `TEAMS_JOIN_URL = null`, `EVENTS = []`, `TESTIMONIALS = []`. La
+- Lo pendiente es dato explícito: `EVENTS = []`, `TESTIMONIALS = []`. `TEAMS_CHANNELS` ya tiene un canal real por área, y la prueba falla si falta uno, si no es de Teams o si dos áreas lo comparten. La
   interfaz muestra un estado honesto en vez de un control que no hace nada.
 
 ## 5. Decisiones de arquitectura

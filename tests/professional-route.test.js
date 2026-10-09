@@ -2,7 +2,7 @@ import assert from 'node:assert/strict'
 import test from 'node:test'
 import { AREAS } from '../src/data/areas.js'
 import { CAREERS } from '../src/data/careers.js'
-import { CHAPTERS, GALLERY, INTERESTS } from '../src/data/community.js'
+import { CHAPTERS, GALLERY, INTERESTS, TEAMS_CHANNELS } from '../src/data/community.js'
 import { CREDENTIALS } from '../src/data/credentials.js'
 import { ROADMAP, STAGES } from '../src/data/roadmap.js'
 import { formatReviewDate } from '../src/lib/format.js'
@@ -69,6 +69,19 @@ test('la comunidad sólo publica fotos con pie y texto alternativo, e ideas para
   assert.ok(!GALLERY.some((photo) => photo.src.includes('explora-hackathon')))
   assert.equal(CHAPTERS.length, 4)
   for (const area of AREAS) assert.ok(INTERESTS[area.id]?.length, area.id)
+})
+
+test('cada especialidad tiene su propio canal de Teams', () => {
+  assert.deepEqual(Object.keys(TEAMS_CHANNELS).sort(), AREAS.map((area) => area.id).sort())
+  for (const [id, url] of Object.entries(TEAMS_CHANNELS)) {
+    assert.ok(url, `${id}: falta el canal`)
+    const parsed = new URL(url)
+    assert.equal(parsed.protocol, 'https:', id)
+    assert.match(parsed.hostname, /(^|\.)(teams\.microsoft\.com|teams\.cloud\.microsoft|teams\.live\.com)$/, id)
+  }
+  // Dos áreas con el mismo enlace serían un canal general disfrazado.
+  const urls = Object.values(TEAMS_CHANNELS)
+  assert.equal(new Set(urls).size, urls.length)
 })
 
 test('LinkedIn conserva acentos y caracteres especiales sin inyectar parámetros', () => {

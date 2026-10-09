@@ -1,6 +1,6 @@
 import { Link, useSearchParams } from 'react-router-dom'
 import { AREAS, AREA_BY_ID } from '../data/areas'
-import { CHAPTERS, EVENTS, GALLERY, INTERESTS, TEAMS_JOIN_URL } from '../data/community'
+import { CHAPTERS, EVENTS, GALLERY, INTERESTS, TEAMS_CHANNELS } from '../data/community'
 import { useDocumentTitle } from '../lib/useDocumentTitle'
 
 /**
@@ -98,7 +98,7 @@ function Community() {
             </h2>
           </div>
           <p className="section-note">
-            Elige una especialidad para ver ideas de aprendizaje en equipo y el estado de su acceso.
+            Elige una especialidad para ver ideas de aprendizaje en equipo y entrar a su canal de Teams.
           </p>
         </div>
 
@@ -143,24 +143,18 @@ function Community() {
 
             <div className="mt-8 border-t border-paper/20 pt-6">
               <p className="text-sm font-semibold">Canal de Microsoft Teams</p>
-              {TEAMS_JOIN_URL ? (
-                <a
-                  href={TEAMS_JOIN_URL}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="btn-light mt-4"
-                >
-                  Abrir el acceso en Teams <span aria-hidden="true">↗</span>
-                </a>
-              ) : (
-                <>
-                  <span className="status-pending mt-3 text-gold-light">Acceso en preparación</span>
-                  <p className="mt-3 text-xs text-paper/80">
-                    Publicaremos aquí el acceso, con tu cuenta institucional, cuando esté
-                    confirmado. Las ideas de arriba son sugerencias, no actividades programadas.
-                  </p>
-                </>
-              )}
+              <a
+                href={TEAMS_CHANNELS[selected.id]}
+                target="_blank"
+                rel="noreferrer"
+                className="btn-light mt-4"
+              >
+                Abrir el canal en Teams <span aria-hidden="true">↗</span>
+              </a>
+              <p className="mt-3 text-xs text-paper/80">
+                Entras con tu cuenta institucional. Las ideas de arriba son sugerencias, no
+                actividades programadas.
+              </p>
             </div>
           </div>
         </div>
@@ -248,8 +242,8 @@ function Community() {
               Mantén la curiosidad en movimiento.
             </h2>
             <p className="mt-4 text-sm muted">
-              Mientras se confirman los accesos, puedes empezar con el primer entregable de tu ruta
-              y compartirlo con compañeros de clase.
+              Empieza con el primer entregable de tu ruta y compártelo en el canal de Teams de tu
+              especialidad.
             </p>
             <Link to="/resultados" className="btn-green mt-6">
               Volver a mi ruta <span aria-hidden="true">↗</span>

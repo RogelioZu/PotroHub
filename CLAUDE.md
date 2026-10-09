@@ -35,8 +35,8 @@ Todo lo demás está en los documentos. Estos cuatro se equivocan rápido y cues
 
 1. **Nunca fabriques un dato institucional.** No hay testimonios, ni conteos de usuarios, ni cifras
    de adopción, ni convenios, ni aprobación de la UAEMéx. Ningún estudiante ha usado esto todavía.
-   Lo pendiente se declara pendiente — los canales de Teams, los eventos IEEE, la estadística de
-   titulación.
+   Lo pendiente se declara pendiente — los eventos IEEE, la estadística de titulación. Los canales
+   de Teams ya existen, pero eso no dice nada de cuánta gente hay en ellos.
    Un placeholder disfrazado de dato real destruye exactamente la credibilidad que el proyecto
    existe para ganarse. Ver `PRODUCT.md` → *Evidence on Hand*.
 2. **La paleta es cerrada.** Cinco colores del manual de identidad de la UAEMéx más sus tintes
@@ -85,7 +85,7 @@ src/
     roadmap.js              Habilidades por etapas, entregables y credenciales por área
     credentials.js          Diez credenciales con tipo, nivel, fuente y fecha de revisión
     careers.js              Cinco perfiles profesionales con requisitos y fuente
-    community.js            Teams (null), eventos (vacío), capítulos IEEE, galería, intereses
+    community.js            Teams (un canal por área), eventos (vacío), capítulos IEEE, galería, intereses
     testimonials.js         Citas del piloto (vacío hasta tener autorizaciones) y estado del piloto
   store/quizStore.js        Zustand persistido en localStorage, clave `potropath-quiz`
   lib/
@@ -104,7 +104,7 @@ tests/                      Pruebas con el runner nativo de Node (`npm test`)
 docs/                       Arquitectura, rendimiento, piloto, plan institucional, comparativa
 assets-src/                 Masters. Fuera de public/, no entran al build. Su README.md lleva la
                             procedencia de cada fotografía — y ahí importa tanto como la imagen
-public/images/              inicio-rama-ieee.webp (hero de Inicio), vitral (franja de 24px),
+public/images/              inicio-rama-ieee.webp (hero de Inicio), vitral (franja de 90px),
                             mascota, areas/*.webp y og-potropath.png. Ver su README.md
 public/images/comunidad/    Fotos de /comunidad. Su README.md manda: qué archivo va dónde y
                             cuáles ya no se muestran (U-HACKS no es de la UAEMéx)
@@ -141,7 +141,7 @@ Un documento desactualizado envenena todas las sesiones siguientes.
 |---|---|
 | Color, tipografía, espaciado, forma, componente o movimiento | `DESIGN.md` **y** `.impeccable/design.json` (deben coincidir) |
 | Usuarios, alcance, capacidades, restricciones o principios | `PRODUCT.md` |
-| Algo pendiente que se vuelve real (los canales de Teams, eventos IEEE, la estadística, Supabase) | `PRODUCT.md` → *Evidence on Hand*, **y** quita el estado vacío honesto que lo suplía |
+| Algo pendiente que se vuelve real (eventos IEEE, la estadística, Supabase) | `PRODUCT.md` → *Evidence on Hand*, **y** quita el estado vacío honesto que lo suplía |
 | Un testimonio o resultado del piloto | Sólo con autorización registrada fuera del repo. Ver `docs/PILOTO.md` |
 | Rutas, dependencias, scripts o estructura de carpetas | Este archivo |
 | Una Regla Nombrada que el código deja de cumplir | `DESIGN.md`: o corriges el código, o escribes la deuda explícitamente. Nunca la dejes callada |

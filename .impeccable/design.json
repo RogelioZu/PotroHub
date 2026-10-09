@@ -322,7 +322,7 @@
         "sectionY": "64px / 96px desde md",
         "cardRadius": "20px",
         "focalRadius": "28px",
-        "header": "papel, marca de texto y franja de vitral de 24px con desplazamiento lento",
+        "header": "barra sobre franja de vitral de 90px con desplazamiento lento; marca, destinos y menú en cápsulas de verde profundo al 80%",
         "footer": "vitral completo con filete dorado de 2px y franja de lectura al 72%"
       },
       "tokens": {
@@ -356,6 +356,7 @@
         "swapIn": "420ms al remontar por key",
         "bars": "1.1s, 90ms entre barras",
         "ribbon": "45s alternate",
+        "heroZoom": "foto de Inicio a scale 1.08 en 500ms al pasar el cursor, con la propiedad scale para no chocar con las animaciones de transform",
         "reducedMotion": "apaga todo desde @layer base"
       },
       "retired": [
@@ -454,9 +455,9 @@
       "name": "Navegación sobre Vitral",
       "kind": "nav",
       "refersTo": null,
-      "description": "Enlaces sobre la fotografía del vitral, apoyados en la franja de lectura (Tinta al 72%, desvanecida en los canalones) y, encima, en text-shadow. El activo va en Oro Claro y negrita a 20px —el único umbral que ese oro alcanza sobre la franja, 3.63:1— y un solo subrayado de Oro Claro viaja hasta él.",
-      "html": "<nav class=\"ds-nav\">\n  <a class=\"ds-nav-link\" href=\"#\">Inicio</a>\n  <a class=\"ds-nav-link is-active\" href=\"#\">Diagnóstico<span class=\"ds-nav-indicator\"></span></a>\n  <a class=\"ds-nav-link\" href=\"#\">Comunidad</a>\n</nav>",
-      "css": ".ds-nav{position:relative;display:flex;align-items:center;gap:32px;font-family:var(--font-sans, 'DM Sans', Inter, system-ui, sans-serif);background:linear-gradient(135deg,var(--color-green, #384033),var(--color-green-mid, #526855) 45%,var(--color-gold-dark, #a15c17));padding:24px;border-radius:12px;}\n.ds-nav::before{content:'';position:absolute;inset:0;border-radius:12px;pointer-events:none;background-image:linear-gradient(to bottom,rgb(37 37 37 / 0%) 0,rgb(37 37 37 / 72%) 1.5rem,rgb(37 37 37 / 72%) calc(100% - 1.5rem),rgb(37 37 37 / 0%) 100%);}\n.ds-nav-link{position:relative;z-index:1;display:inline-flex;align-items:center;padding-bottom:4px;font-size:1.25rem;font-weight:500;text-decoration:none;color:var(--color-paper, #ffffff);text-shadow:0 1px 6px rgb(0 0 0 / 75%);transition:color .2s;}\n.ds-nav-link:hover{color:var(--color-gold-light, #e3c48a);}\n.ds-nav-link.is-active{color:var(--color-gold-light, #e3c48a);font-weight:700;}\n.ds-nav-indicator{position:absolute;left:0;bottom:0;height:2px;width:100%;border-radius:9999px;background:var(--color-gold-light, #e3c48a);box-shadow:0 1px 6px rgb(0 0 0 / 60%);}"
+      "description": "La barra entera sobre la franja de vitral de 90px. Marca, lista y menú van cada uno en una cápsula de Verde Profundo al 80% con blur(6px) y filete de Papel al 18%: una por pieza, no un velo corrido. La de la marca se difumina: sin filete, blur(14px) y halo verde. Enlaces en Papel; el activo se invierte a Papel con texto verde en negrita. El CTA es btn-green con filete de Papel al 30%.",
+      "html": "<div class=\"ds-nav-band\">\n  <a class=\"ds-nav-chip ds-nav-brand\" href=\"#\">Potro<span>Path</span></a>\n  <nav class=\"ds-nav-chip ds-nav\">\n    <a class=\"ds-nav-link\" href=\"#\">Inicio</a>\n    <a class=\"ds-nav-link is-active\" href=\"#\" aria-current=\"page\">Diagnóstico</a>\n    <a class=\"ds-nav-link\" href=\"#\">Comunidad</a>\n  </nav>\n</div>",
+      "css": ".ds-nav-band{display:flex;align-items:center;justify-content:space-between;gap:24px;min-height:90px;padding-inline:24px;font-family:var(--font-sans, 'DM Sans', Inter, system-ui, sans-serif);background:var(--color-green, #384033) url('/images/vitral-franja.webp') center / cover;}\n.ds-nav-chip{border:1px solid color-mix(in srgb, var(--color-paper, #ffffff) 18%, transparent);border-radius:999px;background:color-mix(in srgb, var(--color-green, #384033) 80%, transparent);backdrop-filter:blur(6px);}\n.ds-nav-brand.ds-nav-chip{border-color:transparent;backdrop-filter:blur(14px);box-shadow:0 0 28px 10px color-mix(in srgb, var(--color-green, #384033) 60%, transparent);}\n.ds-nav-brand{display:inline-flex;align-items:center;min-height:52px;padding-inline:20px;font-size:1.75rem;font-weight:700;letter-spacing:-0.035em;color:var(--color-paper, #ffffff);text-decoration:none;}\n.ds-nav-brand span{color:var(--color-gold-light, #e3c48a);}\n.ds-nav{display:flex;gap:4px;padding:4px;}\n.ds-nav-link{display:inline-flex;align-items:center;min-height:44px;padding-inline:14px;border-radius:999px;font-size:.875rem;font-weight:500;color:var(--color-paper, #ffffff);text-decoration:none;transition:background-color .16s,color .16s;}\n.ds-nav-link:hover{background:color-mix(in srgb, var(--color-paper, #ffffff) 14%, transparent);}\n.ds-nav-link.is-active{background:var(--color-paper, #ffffff);color:var(--color-green, #384033);font-weight:700;}"
     },
     {
       "name": "Botón Final de Tarea",

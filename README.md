@@ -211,11 +211,10 @@ En decisiones visuales manda `DESIGN.md`; en verdad de producto y voz manda `PRO
 
 ## Estado del proyecto
 
-**Real y utilizable hoy:** el banco de 50 preguntas y su escala; 25 habilidades con entregables, 10 credenciales y 5 perfiles profesionales con fuente y fecha de revisión; seis fotografías verificadas de estudiantes de la facultad; el vitral y la mascota; y el sitio completo navegable de punta a punta, con pruebas automatizadas.
+**Real y utilizable hoy:** el banco de 50 preguntas y su escala; 25 habilidades con entregables, 10 credenciales y 5 perfiles profesionales con fuente y fecha de revisión; seis fotografías verificadas de estudiantes de la facultad; cinco canales de Microsoft Teams, uno por especialidad; el vitral y la mascota; y el sitio completo navegable de punta a punta, con pruebas automatizadas.
 
 **Pendiente, declarado como pendiente en la propia interfaz** — ninguno de estos se simula como si ya existiera:
 
-- El acceso a los canales de Microsoft Teams (`TEAMS_JOIN_URL` en `src/data/community.js` es `null`).
 - La prueba piloto con estudiantes y, después de ella, los testimonios autorizados (protocolo en `docs/PILOTO.md`).
 - La agenda real de eventos de la Rama IEEE y la confirmación de sus capítulos activos.
 - La estadística de titulación de la UAEMéx que sustentará el planteamiento.
