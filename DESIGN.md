@@ -217,8 +217,10 @@ comunidad) y Linear (jerarquía y agrupación). No se copia ninguna identidad.
 
 ### Estructura
 
-- **Cabecera de papel** con franja de vitral de 24px que se desplaza muy lento (`vitral-franja.webp`,
-  26 KB), marca de puro texto verde y oro, cuatro destinos —Inicio, Diagnóstico, Mi ruta, Comunidad— y un CTA que
+- **Cabecera sobre el vitral**: la barra entera vive dentro de una franja de 90px que se desplaza muy lento
+  (`vitral-franja.webp`, 56 KB). Marca, destinos y menú van cada uno en una cápsula de Verde Profundo al
+  80% con desenfoque (`.nav-chip`); la de la marca, sin filete y con un halo verde que la difumina; el CTA es su propio sólido verde con filete de papel. Marca de puro
+  texto papel y oro claro, cuatro destinos —Inicio, Diagnóstico, Mi ruta, Comunidad— y un CTA que
   cambia con el avance guardado. Bajo 1024px, menú desplegable que cierra con Escape y al navegar.
   Enlace "Saltar al contenido".
 - **Pie sobre el vitral completo**, con el filete dorado de 2px arriba, como en la primera versión.
@@ -355,7 +357,7 @@ contenido depende de una animación para existir.**
 | `.swap-in` | Contenido reemplazado en sitio (pregunta, habilidad, puesto, área): la `key` lo remonta y entra en 420ms. `aria-live` va en un contenedor estable, no en el elemento con `key` |
 | Barras de afinidad | Se llenan en orden (1.1s, 90ms entre barras) |
 | Franja del vitral | Se desplaza en 45s, ida y vuelta |
-| Microinteracciones | Flecha de las acciones avanza 3px; chips y botones de selección ceden a 0.98 al pulsar; tarjetas de área se levantan 4px con sombra y acercan su foto, sólo con puntero |
+| Microinteracciones | Flecha de las acciones avanza 3px; chips y botones de selección ceden a 0.98 al pulsar; tarjetas de área se levantan 4px con sombra y acercan su foto; la foto de la Rama IEEE en Inicio crece a 1.08× con sombra en 500ms (`.hero-zoom`, con la propiedad `scale` porque `transform` lo ocupan `.enter` y `settle`). Todo sólo con puntero |
 
 Tokens: `--ease-out` `cubic-bezier(0.22, 1, 0.36, 1)`, `--dur-fast` 180ms, `--dur-enter` 620ms.
 Con `prefers-reduced-motion: reduce`, una regla en `@layer base` apaga todo. Sustituye *Motion* y
@@ -876,26 +878,25 @@ nueva y devuelve la tabulación a su principio.
 
 ### Navigation
 
-- **Escritorio (`lg` en adelante):** lista horizontal sobre el vitral, `gap-8`, `text-xl`, con
-  `text-shadow`. El enlace activo es `Oro Claro` **en negrita**; los demás, `Papel` en `medium`, y
-  pasan a `Oro Claro` en hover. La negrita no es énfasis decorativo: a 20px y peso 700 el enlace
-  activo califica como texto grande, que es el único umbral que `Oro Claro` alcanza sobre la franja
-  de tinta (**3.63:1**). Ver *La regla de la Franja de Lectura*.
-- **Indicador:** una sola barra de `Oro Claro` de `2px` que *viaja* hasta el enlace activo con
-  `transform`, en lugar de dos bordes que se encienden y se apagan. La primera colocación es
-  instantánea: el subrayado no "llega" a la página, ya estaba ahí. Era `Oro Viejo` y medía
-  **2.47:1** sobre el vitral, por debajo del mínimo no textual de 3:1; `Oro Claro` da **3.63:1** y
-  es además el oro que el sistema reserva para el vidrio. En móvil no existe — una lista vertical no
-  tiene a dónde viajar.
+- **Escritorio (`lg` en adelante):** marca, lista y CTA sobre la franja de vitral de 90px. Cada
+  pieza lleva su propia cápsula (`.nav-chip`): `Verde Profundo` —el del CTA— al **80%**, `blur(6px)`
+  y un filete de `Papel` al 18%. Es una cápsula por pieza y no un velo corrido, para que el vidrio se
+  vea entero entre ellas. No es el 72% de *La regla de la Franja de Lectura* porque el verde es más
+  claro que la tinta: al 72% `Oro Claro` caía a **2.7:1** sobre vidrio blanco puro; al 80% da
+  **3.5:1** y `Papel` **6:1**. La cápsula de la marca se difumina: sin filete, `blur(14px)` y un halo
+  verde de `28px` que la banda recorta con `overflow: hidden` para que no manche el papel. Los enlaces van en `Papel`; el activo se invierte a `Papel` con
+  texto verde en negrita, que se distingue sin pedirle al oro un umbral de texto pequeño que no
+  alcanza. El hover es `Papel` al 14% de fondo.
+- **CTA:** `btn-green` sólido con un filete de `Papel` al 30%, que lo despega del vidrio.
 - **Móvil (bajo `lg`):** hamburguesa de tres barras que se cierran en X, y un panel que se abre
   animando `grid-template-rows` de `0fr` a `1fr` — no `max-height`, para no tener que adivinar una
   altura de destino. El panel lleva `inert` mientras está cerrado: sin eso sus tres enlaces siguen
   en el orden de tabulación aunque midan cero de alto, y el teclado se pierde en un panel invisible
   antes de llegar al contenido. Los enlaces miden `52px` de alto y el canalón inferior es `pb-6`,
   el mínimo que exige el corolario de la franja.
-- **Marca:** "Potro" en `Papel` y "Path" en `Oro Claro`, siempre partida así, en header y footer. En
-  el footer va a `20px` en negrita —estaba a `18px`— porque por debajo de `18.66px` dejaría de
-  calificar como texto grande y `Oro Claro` no llegaría a su umbral.
+- **Marca:** "Potro" en `Papel` y "Path" en `Oro Claro`, en su cápsula en el header y sobre la franja
+  de lectura en el footer. `Oro Claro` sólo alcanza el umbral de texto grande, así que la marca no baja
+  de `24px` en negrita en el header ni de `20px` en el footer.
 
 ### Anillo de foco
 

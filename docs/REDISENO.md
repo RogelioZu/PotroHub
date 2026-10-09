@@ -20,7 +20,7 @@ Se reimplementó por componentes, conservando las decisiones y el contenido veri
 | Superficie | Antes | Ahora |
 |---|---|---|
 | Carga | Titular y tarjetas ocultos hasta que GSAP los revelaba | Contenido inmediato; sin GSAP, Matter.js ni ScrollSmoother |
-| Navegación | Sin "Mi ruta"; texto sobre el vitral | Cuatro destinos, CTA según avance, cabecera de papel, menú móvil con Escape, salto al contenido |
+| Navegación | Sin "Mi ruta"; texto sobre el vitral | Cuatro destinos, CTA según avance, cabecera sobre el vitral, menú móvil con Escape, salto al contenido |
 | Inicio | Mosaico con física y fotos de banco; áreas detrás de giros 3D | Foto real de la Rama IEEE con pie, tres pasos, áreas con descripción visible, testimonios sólo si son reales |
 | Diagnóstico | Botones con `role="radio"`; progreso por posición | Radios nativos, progreso por respuestas guardadas, atajos 1–5 y Enter, "ir a la primera pendiente" |
 | Resultados | Ganador arbitrario en empate; 5 habilidades y 3 certificaciones como listas | Empates y caso neutral reconocidos, marca del 60%, cinco rutas explorables, habilidades por etapas, comparación de credenciales, perfiles con requisitos, LinkedIn |

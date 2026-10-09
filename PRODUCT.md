@@ -182,6 +182,9 @@ semestre, aquí".
   versión listaba unas cuarenta sin fuente ni fecha de revisión, y se retiraron. Las credenciales
   son las diez del área, que sí las tienen.
 - La fotografía del vitral y la mascota (rutas arriba).
+- Cinco canales de Microsoft Teams, uno por especialidad, en un mismo equipo y con acceso por cuenta
+  institucional (`TEAMS_CHANNELS` en `src/data/community.js`). Existir no es lo mismo que tener
+  actividad: no hay conteo de miembros ni moderación asignada, y nada de eso se afirma.
 - Cuatro nombres de capítulos IEEE (Computer Society, Robotics and Automation, Power & Energy
   Society, Women in Engineering) — actualmente marcados en la interfaz como pendientes de confirmar
   contra los capítulos realmente activos de la rama.
@@ -189,7 +192,6 @@ semestre, aquí".
 **Confirmado como próximo, pero todavía no real.** Cada uno de estos llegará a ser dato real; hasta
 entonces debe presentarse honestamente como pendiente y nunca simularse como si existiera:
 
-- El acceso a los canales de Microsoft Teams (`TEAMS_JOIN_URL` en `src/data/community.js` es `null`).
 - La lista confirmada de capítulos IEEE y una agenda real de eventos (`EVENTS` está vacío).
 - La prueba piloto con estudiantes: protocolo listo en `docs/PILOTO.md`, sin ejecutar. Hasta que haya
   citas reales y autorizadas, `TESTIMONIALS` en `src/data/testimonials.js` está vacío e Inicio no

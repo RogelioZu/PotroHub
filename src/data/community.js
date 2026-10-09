@@ -4,15 +4,27 @@
  *
  * Lo pendiente se declara pendiente (ver PRODUCT.md → Evidence on Hand):
  *
- * - `TEAMS_JOIN_URL` es `null` hasta que exista un acceso institucional
- *   real. Mientras sea `null` la página muestra "Acceso en preparación" y
- *   nunca un botón de "Unirme" que no lleva a ningún lado.
+ * - `TEAMS_CHANNELS` tiene el canal real de Microsoft Teams de cada
+ *   especialidad, todos del mismo equipo. Un canal por área, y no un acceso
+ *   general, porque el canal es lo que junta a quien comparte el interés.
+ *   Si un canal desaparece, su enlace se sustituye; no se vuelve a un
+ *   "Acceso en preparación" disfrazado.
  * - `EVENTS` está vacío hasta que la rama publique una agenda confirmada.
  * - Los capítulos IEEE son las sociedades de referencia; su actividad local
  *   sigue pendiente de confirmar y la interfaz lo dice en cada tarjeta.
  */
 
-export const TEAMS_JOIN_URL = null
+/** Enlace al canal de Microsoft Teams de cada especialidad, por id de área. */
+export const TEAMS_CHANNELS = {
+  ia: 'https://teams.microsoft.com/l/channel/19%3Ac7730262a8bc4404bfac34bebdefd5d0%40thread.tacv2/Inteligencia%20Artificial?groupId=d1f11d6f-cfea-4f6c-96da-b66d61c5c3d6&tenantId=a9e17f9e-90be-41d0-84eb-6a48ebe9fec0',
+  ciberseguridad:
+    'https://teams.microsoft.com/l/channel/19%3A6c5c2a40dea14cd29cadce8ac604c64a%40thread.tacv2/Ciberseguridad?groupId=d1f11d6f-cfea-4f6c-96da-b66d61c5c3d6&tenantId=a9e17f9e-90be-41d0-84eb-6a48ebe9fec0',
+  nube: 'https://teams.microsoft.com/l/channel/19%3A139ad4f1927c45fe94a930d063e9298a%40thread.tacv2/Computo%20en%20la%20Nube?groupId=d1f11d6f-cfea-4f6c-96da-b66d61c5c3d6&tenantId=a9e17f9e-90be-41d0-84eb-6a48ebe9fec0',
+  'ciencia-datos':
+    'https://teams.microsoft.com/l/channel/19%3A0491eddd81f9412a902b52baca9bb66d%40thread.tacv2/Ciencia%20de%20Datos?groupId=d1f11d6f-cfea-4f6c-96da-b66d61c5c3d6&tenantId=a9e17f9e-90be-41d0-84eb-6a48ebe9fec0',
+  software:
+    'https://teams.microsoft.com/l/channel/19%3A9134d3dd0f804bda8d57dfb010f2a4d0%40thread.tacv2/Desarrollo%20de%20Software?groupId=d1f11d6f-cfea-4f6c-96da-b66d61c5c3d6&tenantId=a9e17f9e-90be-41d0-84eb-6a48ebe9fec0',
+}
 
 /** Cada evento confirmado: { name, date (AAAA-MM-DD), place, url? }. */
 export const EVENTS = []

@@ -12,7 +12,7 @@ Rama IEEE. Los roles deben asignarse a personas reales; si una persona cubre var
 | Responsable de contenido | Revisar credenciales y perfiles (fuentes y fechas) cada semestre; galería y procedencia de fotos | Por asignar |
 | Responsable de investigación | Protocolo del piloto, datos, informe | Por asignar |
 | Enlace académico | Convocatoria, espacios, periodo del piloto | Por confirmar con la Facultad |
-| Enlace de comunidad | Acceso a Teams, agenda IEEE, moderación | Por confirmar con la Rama IEEE |
+| Enlace de comunidad | Agenda IEEE y moderación de los canales de Teams (ya creados) | Por confirmar con la Rama IEEE |
 
 ## 2. Etapas
 
@@ -20,7 +20,7 @@ Rama IEEE. Los roles deben asignarse a personas reales; si una persona cubre var
 |---|---|---|
 | 1. MVP autónomo (hoy) | Sitio estático, estado local, sin registro; afinado opcional con IA | Contenido revisado; pruebas y build en verde |
 | 2. Piloto acompañado | Protocolo de `PILOTO.md` ejecutado con interlocutor académico | Cero bloqueos críticos; informe publicado |
-| 3. Operación de comunidad | Acceso a Teams y agenda reales; responsables de moderación | `TEAMS_JOIN_URL` y `EVENTS` con datos confirmados |
+| 3. Operación de comunidad | Agenda real y responsables de moderación (los canales de Teams ya existen) | `EVENTS` con datos confirmados y moderación asignada |
 | 4. Infraestructura institucional | Hosting y dominio de la universidad, soporte, respaldo | Requisitos levantados con el área de TI |
 | 5. Servicios opcionales | Analítica agregada o gestión editorial | Necesidad demostrada en el piloto y responsable de datos |
 | 6. Escalamiento | Uso por más generaciones | Prueba de carga contra la meta derivada de la convocatoria |

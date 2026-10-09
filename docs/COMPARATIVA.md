@@ -29,7 +29,7 @@ flowchart LR
 | Ruta de aprendizaje | No declarada | Sí: 31 por rol y 59 por habilidad | Por programa | No | Sí: 3 etapas y un entregable por habilidad |
 | Compara credenciales | No declarada | No | Sólo las propias | No | Sí: dos programas de distintos proveedores por las mismas dimensiones |
 | Perfiles laborales | Análisis del mercado laboral | No | No | Sí, en vivo | Ejemplos documentados con requisitos y fuente; enlaza a LinkedIn |
-| Comunidad local | No declarada | Discord global | No | Red profesional global | Rama IEEE UAEMéx y espacios por especialidad (acceso de Teams pendiente) |
+| Comunidad local | No declarada | Discord global | No | Red profesional global | Rama IEEE UAEMéx y un canal de Teams por especialidad |
 | Registro para usarlo | No declarado | No para ver; sí para seguir avance | Sí para cursar | Puede pedir sesión | No |
 | Idioma | Español | Inglés | Variable | Variable | Español |
 | Plataforma | App iOS y Android | Web | Web | Web y app | Web, pensada para teléfono |

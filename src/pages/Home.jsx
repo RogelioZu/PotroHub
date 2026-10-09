@@ -91,7 +91,7 @@ function Home() {
           </p>
         </div>
 
-        <figure className="hero-picture enter" style={{ '--d': 2 }}>
+        <figure className="hero-picture hero-zoom enter" style={{ '--d': 2 }}>
           <img
             src="/images/inicio-rama-ieee.webp"
             srcSet="/images/inicio-rama-ieee-720.webp 720w, /images/inicio-rama-ieee.webp 1200w"
