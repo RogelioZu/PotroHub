@@ -181,7 +181,7 @@ comunidad) y Linear (jerarquía y agrupación). No se copia ninguna identidad.
 
 ### Estructura
 
-- **Cabecera de papel** con franja de vitral de 16px que se desplaza muy lento (`vitral-franja.webp`,
+- **Cabecera de papel** con franja de vitral de 24px que se desplaza muy lento (`vitral-franja.webp`,
   26 KB), marca de puro texto verde y oro, cuatro destinos —Inicio, Diagnóstico, Mi ruta, Comunidad— y un CTA que
   cambia con el avance guardado. Bajo 1024px, menú desplegable que cierra con Escape y al navegar.
   Enlace "Saltar al contenido".

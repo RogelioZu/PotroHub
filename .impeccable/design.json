@@ -322,7 +322,7 @@
         "sectionY": "64px / 96px desde md",
         "cardRadius": "20px",
         "focalRadius": "28px",
-        "header": "papel, marca de texto y franja de vitral de 16px con desplazamiento lento",
+        "header": "papel, marca de texto y franja de vitral de 24px con desplazamiento lento",
         "footer": "vitral completo con filete dorado de 2px y franja de lectura al 72%"
       },
       "tokens": {
