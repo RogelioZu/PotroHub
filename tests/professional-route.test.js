@@ -64,10 +64,18 @@ test('la comunidad sólo publica fotos con pie y texto alternativo, e ideas para
   assert.ok(GALLERY.length > 0)
   for (const photo of GALLERY) {
     assert.ok(photo.caption && photo.alt && photo.src.startsWith('/images/comunidad/'), photo.src)
+    assert.ok(photo.large?.src.startsWith('/images/comunidad/'), `${photo.src}: falta la versión ampliada`)
+    assert.ok(photo.large.width > 0 && photo.large.height > 0, photo.large.src)
   }
   // La foto de U-HACKS es de UPIITA-IPN: no puede aparecer como experiencia local.
   assert.ok(!GALLERY.some((photo) => photo.src.includes('explora-hackathon')))
   assert.equal(CHAPTERS.length, 4)
+  for (const chapter of CHAPTERS) {
+    if (chapter.joinUrl === null) continue
+    const parsed = new URL(chapter.joinUrl)
+    assert.equal(parsed.origin, 'https://chat.whatsapp.com', chapter.name)
+    assert.ok(parsed.pathname.length > 1, `${chapter.name}: falta el código de invitación`)
+  }
   for (const area of AREAS) assert.ok(INTERESTS[area.id]?.length, area.id)
 })
 

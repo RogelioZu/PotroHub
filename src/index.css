@@ -597,6 +597,110 @@
     margin-right: 8px;
   }
 
+  .anchor-nav a[aria-current] {
+    color: var(--color-green);
+    text-decoration: underline 2px var(--color-gold-dark);
+    text-underline-offset: 6px;
+  }
+
+  /*
+   * Índice de Comunidad, siempre a la vista. Bajo 1440px es la barra
+   * horizontal pegada arriba: papel casi opaco para que el contenido que
+   * pasa por debajo no se lea a través, y desplazamiento lateral en vez de
+   * dos renglones en teléfono.
+   */
+  .community-page {
+    position: relative;
+  }
+
+  .community-page [id] {
+    scroll-margin-top: 5.5rem;
+  }
+
+  .anchor-bar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: color-mix(in srgb, var(--color-paper) 94%, transparent);
+    backdrop-filter: blur(8px);
+  }
+
+  .anchor-bar .anchor-nav {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .anchor-bar .anchor-nav a {
+    flex: none;
+  }
+
+  .section-rail {
+    display: none;
+  }
+
+  /*
+   * Desde 1440px el canalón izquierdo mide unos 140px y está vacío: ahí vive
+   * el índice como riel vertical. El aside ocupa todo el alto de la página y
+   * el nav va `sticky` dentro, así que el riel acompaña el scroll y se
+   * detiene antes del pie en lugar de flotar sobre el vitral. El número va
+   * arriba de la etiqueta porque en una línea "Por especialidad" no cabe.
+   */
+  @media (width >= 90rem) {
+    .anchor-bar {
+      display: none;
+    }
+
+    .community-page [id] {
+      scroll-margin-top: 1.5rem;
+    }
+
+    .section-rail {
+      display: block;
+      position: absolute;
+      inset-block: 0;
+      left: 0;
+      width: calc((100% - 1152px) / 2);
+    }
+
+    .section-rail-nav {
+      position: sticky;
+      top: calc(50svh - 120px);
+      display: grid;
+      gap: 4px;
+      padding: 0 8px 0 20px;
+    }
+
+    .section-rail-nav a {
+      display: grid;
+      gap: 2px;
+      min-height: 44px;
+      padding: 8px 0 8px 12px;
+      border-left: 2px solid var(--line);
+      font-size: 0.8rem;
+      font-weight: 600;
+      line-height: 1.3;
+      color: var(--color-ink-soft);
+      transition:
+        color var(--dur-fast) ease,
+        border-color var(--dur-fast) ease;
+    }
+
+    .section-rail-nav a:hover {
+      color: var(--color-green-mid);
+    }
+
+    .section-rail-nav span {
+      font-size: 0.7rem;
+      color: var(--color-gold-dark);
+    }
+
+    .section-rail-nav a[aria-current] {
+      border-left-color: var(--color-green-mid);
+      color: var(--color-green);
+    }
+  }
+
   /* ── Cabecera y pie ─────────────────────────────────────────────────── */
 
   /*
@@ -1524,6 +1628,8 @@
     gap: 16px;
   }
 
+  /* Columna flexible para que "Unirme" quede al pie de cada tarjeta y los
+     botones se alineen aunque un propósito ocupe más líneas que otro. */
   .chapter-card {
     display: flex;
     flex-direction: column;
@@ -1533,11 +1639,7 @@
     color: var(--color-ink);
   }
 
-  /*
-   * Las descripciones miden una, dos o tres líneas; sin esto, "Actividad
-   * local por confirmar" quedaba a una altura distinta en cada tarjeta.
-   */
-  .chapter-card > :last-child {
+  .chapter-join {
     margin-top: auto;
     padding-top: 16px;
   }
@@ -1605,6 +1707,67 @@
   .gallery-grid figcaption {
     padding-top: 10px;
     font-size: var(--text-caption);
+    line-height: 1.5;
+  }
+
+  /* La miniatura es un botón para que Enter y el toque también la amplíen. */
+  .gallery-zoom {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    border-radius: 16px;
+    background: none;
+    cursor: zoom-in;
+  }
+
+  .gallery-grid figure:first-child .gallery-zoom {
+    height: calc(100% - 64px);
+  }
+
+  .gallery-grid figure:first-child .gallery-zoom img {
+    height: 100%;
+  }
+
+  /*
+   * Vista ampliada de la galería. Ocupa buena parte de la pantalla sin
+   * taparla entera: hasta el 92% del ancho y el 86% del alto, menos el pie.
+   * La imagen nunca pasa de su tamaño real (`width/height: auto` con
+   * máximos), así que una foto chica se ve más chica en vez de borrosa.
+   * `pointer-events: none` deja el cursor sobre la miniatura: salir de ella
+   * cierra la vista, y entrar a la de al lado la cambia.
+   */
+  .gallery-preview {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    background: color-mix(in srgb, var(--color-ink) 55%, transparent);
+    pointer-events: none;
+  }
+
+  .gallery-preview figure {
+    margin: 0;
+    padding: 12px;
+    border-radius: 24px;
+    background: var(--color-paper);
+    box-shadow: 0 30px 80px -30px rgb(0 0 0 / 60%);
+  }
+
+  .gallery-preview img {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: min(calc(92vw - 24px), 1256px);
+    max-height: calc(86svh - 96px);
+    border-radius: 14px;
+  }
+
+  .gallery-preview figcaption {
+    padding: 12px 6px 2px;
+    font-size: 0.9rem;
     line-height: 1.5;
   }
 
@@ -1763,6 +1926,51 @@
     animation-delay: calc(var(--d, 0) * 90ms);
   }
 
+  /*
+   * La vista ampliada de la galería entra despacio: el velo se funde en
+   * 450ms y la foto llega 60ms después desde 0.94×, 12px abajo y apenas
+   * desenfocada, en 650ms. La primera versión (180ms y 260ms desde 0.96×) se
+   * sentía brusca: la foto aparecía antes de que el ojo notara el velo. Al
+   * cerrar, todo se desvanece en 280ms (CLOSE_MS en Gallery.jsx). Al cambiar
+   * de foto, la `key` remonta la figura y vuelve a entrar.
+   */
+  .gallery-preview {
+    animation: fade 450ms ease-out both;
+  }
+
+  .gallery-preview figure {
+    animation: preview-in 650ms var(--ease-out) 60ms both;
+  }
+
+  .gallery-preview.is-closing {
+    animation: fade-out 280ms ease-in both;
+  }
+
+  .gallery-preview.is-closing figure {
+    animation: preview-out 280ms ease-in both;
+  }
+
+  @keyframes preview-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px) scale(0.94);
+      filter: blur(4px);
+    }
+  }
+
+  @keyframes preview-out {
+    to {
+      opacity: 0;
+      transform: scale(0.97);
+    }
+  }
+
+  @keyframes fade-out {
+    to {
+      opacity: 0;
+    }
+  }
+
   /* La foto del hero se asienta: entra apenas ampliada y llega a su tamaño. */
   .hero-picture img {
     animation: settle 1200ms var(--ease-out) both;
@@ -1861,7 +2069,8 @@
   }
 
   /*
-   * La foto de la Rama IEEE en Inicio crece al pasar el cursor. Usa la
+   * Las fotos de hero de Inicio (Rama IEEE) y Comunidad (Talent Land)
+   * crecen al pasar el cursor. Usan la
    * propiedad `scale` y no `transform`: `.enter` y `settle` animan
    * `transform` con relleno `both`, y una animación le gana a cualquier
    * declaración normal, así que un `transform` en hover nunca se vería.

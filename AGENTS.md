@@ -136,6 +136,7 @@ src/
     motion/RouteTransition  Foco y anclas al cambiar de ruta (ya sin animación)
     results/                SkillPath, CredentialExplorer, CareerExplorer y RefinePanel
                             ("Afina tu ruta", que alimenta "Tu primer paso")
+    community/Gallery       Galería de Comunidad con vista ampliada al pasar el cursor
     home/Testimonials       Voces del piloto, sólo si existen
     ui/ConfirmButton        Confirmación en dos toques para borrar respuestas
     ui/Icon                 Los seis íconos de trazo del sitio (flechas, menú, cerrar); no glifos

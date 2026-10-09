@@ -411,7 +411,8 @@
         "swapIn": "420ms al remontar por key",
         "bars": "1.1s, 90ms entre barras",
         "ribbon": "45s alternate",
-        "heroZoom": "foto de Inicio a scale 1.08 en 500ms al pasar el cursor, con la propiedad scale para no chocar con las animaciones de transform",
+        "galleryPreview": "vista ampliada de la galería: 180ms de espera y apertura sólo con la imagen decodificada, hasta 92vw × 86svh sin pasar del tamaño real, velo de tinta al 55% en 450ms, foto desde scale 0.94 + 12px + blur(4px) en 650ms con 60ms de retraso, salida en 280ms",
+        "heroZoom": "fotos de hero de Inicio y Comunidad a scale 1.08 en 500ms al pasar el cursor, con la propiedad scale para no chocar con las animaciones de transform",
         "reducedMotion": "apaga todo desde @layer base"
       },
       "retired": [
@@ -428,10 +429,15 @@
       "status": "Implementado y verificado a 390px y 1440px el 8 de octubre de 2026",
       "brand": {
         "type": "Sólo texto",
-        "potro": "#526855",
-        "path": "color-mix(in srgb, #ca9e52 60%, #a15c17) ≈ #ba843a, 3.26:1 sobre papel",
+        "potro": "#ffffff sobre la cápsula verde del vitral",
+        "path": "#e3c48a (Oro Claro), 3.5:1 sobre la cápsula",
         "minSize": "24px, 700"
       },
+      "community": [
+        "Hero dividido con Talent Land",
+        "Índice siempre a la vista: riel vertical sticky en el canalón izquierdo desde 1440px; barra horizontal pegada arriba por debajo",
+        "01 Especialidades · 02 Rama IEEE · 03 Experiencias · 04 Participar"
+      ],
       "results": [
         "Resultado y panorama",
         "Tu primer paso (aprende, practica, comparte)",

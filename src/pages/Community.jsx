@@ -1,8 +1,10 @@
+import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import Icon from '../components/ui/Icon'
 import { AREAS, AREA_BY_ID } from '../data/areas'
 import { CHAPTERS, EVENTS, GALLERY, INTERESTS, TEAMS_CHANNELS } from '../data/community'
 import { useDocumentTitle } from '../lib/useDocumentTitle'
+import Gallery from '../components/community/Gallery'
 
 /**
  * Comunidad: la página que existe para probar que la comunidad es real.
@@ -40,15 +42,87 @@ function logoWidth({ width, height }) {
   return `${Math.round(Math.min(Math.sqrt(LOGO_AREA * ratio), LOGO_MAX_HEIGHT * ratio))}px`
 }
 
+/** Las cuatro secciones del índice, en el orden de la página. */
+const SECTIONS = [
+  { id: 'especialidades', label: 'Por especialidad' },
+  { id: 'ieee', label: 'Rama IEEE' },
+  { id: 'experiencias', label: 'Experiencias' },
+  { id: 'participar', label: 'Cómo participar' },
+]
+const SECTION_IDS = SECTIONS.map((section) => section.id)
+
+/**
+ * La sección que ocupa la franja central de la pantalla. El margen deja una
+ * banda del 40% al 45% del alto: una sección se vuelve activa cuando su
+ * contenido llega a la altura de la vista, no cuando asoma su borde.
+ */
+function useActiveSection(ids) {
+  const [active, setActive] = useState(null)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.find((entry) => entry.isIntersecting)
+        if (visible) setActive(visible.target.id)
+      },
+      { rootMargin: '-40% 0px -55% 0px' },
+    )
+    for (const id of ids) {
+      const element = document.getElementById(id)
+      if (element) observer.observe(element)
+    }
+    return () => observer.disconnect()
+  }, [ids])
+
+  return active
+}
+
+/** Enlaces del índice; la misma lista sirve al riel y a la barra. */
+function SectionLinks({ active }) {
+  return SECTIONS.map((section, index) => (
+    <a
+      key={section.id}
+      href={`#${section.id}`}
+      aria-current={active === section.id ? 'true' : undefined}
+    >
+      <span>0{index + 1}</span>
+      {section.label}
+    </a>
+  ))
+}
+
 function Community() {
   useDocumentTitle('Comunidad — Aprende con otros · PotroPath')
   const [params, setParams] = useSearchParams()
   const selected = AREA_BY_ID[params.get('area')] ?? AREAS[0]
 
   const selectArea = (id) => setParams({ area: id }, { replace: true, preventScrollReset: true })
+  const active = useActiveSection(SECTION_IDS)
+
+  // En teléfono la barra se desplaza de lado; el enlace activo no debe
+  // quedar fuera de ella. Se mueve la barra, no la página.
+  useEffect(() => {
+    const bar = document.querySelector('.anchor-bar .anchor-nav')
+    const link = bar?.querySelector('a[aria-current]')
+    if (!bar || !link) return
+    const left = link.offsetLeft - bar.offsetLeft - 24
+    bar.scrollTo({ left: Math.max(0, left), behavior: 'smooth' })
+  }, [active])
 
   return (
-    <>
+    <div className="community-page">
+      {/*
+        El índice queda siempre a la vista. Con margen de sobra (desde 1440px)
+        es un riel vertical en el canalón izquierdo, que el diseño deja vacío;
+        más angosto no cabe ahí, y es una barra pegada arriba. Las dos son la
+        misma lista y sólo una se muestra a la vez.
+      */}
+      <aside className="section-rail">
+        <nav className="section-rail-nav" aria-label="Secciones de la comunidad">
+          <SectionLinks active={active} />
+        </nav>
+      </aside>
+
       <section className="page-shell editorial-hero">
         <div>
           <p className="eyebrow enter">La comunidad de tu facultad</p>
@@ -72,7 +146,7 @@ function Community() {
             </a>
           </div>
         </div>
-        <figure className="hero-picture enter" style={{ '--d': 2 }}>
+        <figure className="hero-picture hero-zoom enter" style={{ '--d': 2 }}>
           <img
             src="/images/comunidad/quienes-somos.webp"
             srcSet="/images/comunidad/quienes-somos-720.webp 720w, /images/comunidad/quienes-somos.webp 1216w"
@@ -88,21 +162,12 @@ function Community() {
         </figure>
       </section>
 
-      <div className="page-shell">
-        <nav className="anchor-nav" aria-label="Secciones de la comunidad">
-          <a href="#especialidades">
-            <span>01</span>Por especialidad
-          </a>
-          <a href="#ieee">
-            <span>02</span>Rama IEEE
-          </a>
-          <a href="#experiencias">
-            <span>03</span>Experiencias
-          </a>
-          <a href="#participar">
-            <span>04</span>Cómo participar
-          </a>
-        </nav>
+      <div className="anchor-bar">
+        <div className="page-shell">
+          <nav className="anchor-nav" aria-label="Secciones de la comunidad">
+            <SectionLinks active={active} />
+          </nav>
+        </div>
       </div>
 
       <section
@@ -195,8 +260,8 @@ function Community() {
                   conocer la vida estudiantil más allá de tus materias.
                 </p>
                 <p className="mt-3 text-xs text-paper/80">
-                  Las sociedades de abajo son referencias del IEEE. Su actividad local y la forma de
-                  incorporarse están pendientes de confirmación.
+                  Las sociedades de abajo son referencias del IEEE. Las que tienen botón ya tienen
+                  grupo para unirte; en las demás, la forma de incorporarse sigue por confirmar.
                 </p>
               </div>
             </div>
@@ -216,7 +281,27 @@ function Community() {
                   </div>
                   <h3 className="h3">{chapter.name}</h3>
                   <p className="mt-2 text-sm muted">{chapter.focus}</p>
-                  <p className="source-note">Actividad local por confirmar</p>
+                  {/* Sin enlace todavía, el botón ocupa su lugar deshabilitado y dice
+                      "Próximamente": un "Unirme" activo que no abre nada sería la
+                      promesa rota que este sitio no hace. */}
+                  <div className="chapter-join">
+                    {chapter.joinUrl ? (
+                      <a
+                        href={chapter.joinUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="btn-green"
+                        aria-label={`Unirme al grupo de WhatsApp de ${chapter.name}`}
+                      >
+                        Unirme <Icon name="arrow-up-right" />
+                      </a>
+                    ) : (
+                      <button type="button" className="btn-green" disabled>
+                        Próximamente
+                      </button>
+                    )}
+                    <p className="source-note mt-2">Grupo de WhatsApp</p>
+                  </div>
                 </article>
               ))}
             </div>
@@ -242,17 +327,7 @@ function Community() {
           </p>
         </div>
 
-        <div className="gallery-grid reveal-group">
-          {GALLERY.map((photo) => (
-            <figure key={photo.src}>
-              <img src={photo.src} alt={photo.alt} loading="lazy" />
-              <figcaption>
-                <strong className="block">{photo.caption}</strong>
-                <span className="muted">{photo.description}</span>
-              </figcaption>
-            </figure>
-          ))}
-        </div>
+        <Gallery photos={GALLERY} />
       </section>
 
       <section id="participar" className="page-shell pb-16" aria-labelledby="participar-titulo">
@@ -297,7 +372,7 @@ function Community() {
           </div>
         </div>
       </section>
-    </>
+    </div>
   )
 }
 
