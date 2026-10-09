@@ -109,23 +109,6 @@
           "oklch(95.0% 0.003 139.4)"
         ]
       },
-      "oro-bruma": {
-        "role": "neutral",
-        "displayName": "Oro Bruma",
-        "canonical": "oklch(96.1% 0.015 77.1)",
-        "tonalRamp": [
-          "oklch(15.0% 0.005 77.1)",
-          "oklch(26.4% 0.005 77.1)",
-          "oklch(37.9% 0.009 77.1)",
-          "oklch(49.3% 0.013 77.1)",
-          "oklch(60.7% 0.013 77.1)",
-          "oklch(72.1% 0.009 77.1)",
-          "oklch(83.6% 0.005 77.1)",
-          "oklch(95.0% 0.005 77.1)"
-        ],
-        "derivation": "color-mix(in srgb, #ca9e52 14%, #ffffff)",
-        "purpose": "Fondo de la banda 'Acredita' de Mi ruta: papel de diploma. Superficie, nunca firma ni dato. Tinta Suave 5.96:1, Ámbar Hondo 5.18:1."
-      },
       "oro-claro": {
         "role": "neutral",
         "displayName": "Oro Claro",
@@ -382,7 +365,7 @@
         "lineStrong": "rgb(37 37 37 / 22%)",
         "minTarget": "44px (controles), 48px (botones de acción)",
         "neutralMarker": "60% sobre cada barra de afinidad",
-        "eyebrowOnTint": "--eyebrow: Ámbar Hondo en .band-mist, .band-gold y .bg-green-soft",
+        "eyebrowOnTint": "--eyebrow: Ámbar Hondo en .band-mist y .bg-green-soft",
         "caveatNote": ".source-note.caveat-note: itálica + '*' generado (content: \"*\" / \"\") en var(--eyebrow); sólo letra pequeña que acota lo que algo no es. En Mi ruta: secuencia orientativa, entregable sugerido, condiciones de credenciales, proyecto sugerido del perfil y 'Tus intereses pueden cambiar'."
       },
       "components": [
@@ -441,7 +424,7 @@
       "results": [
         "Resultado y panorama",
         "Tu primer paso (aprende, practica, comparte)",
-        "Barra fija de exploración con nombres cortos",
+        "Barra fija de exploración con nombres cortos; desde 64rem en dos renglones (áreas centradas arriba, partes de la ruta abajo en cuatro columnas)",
         "01 Aprende · 02 Acredita · 03 Conoce el rol · 04 Busca",
         "Comunidad y reinicio"
       ],
@@ -475,8 +458,9 @@
           },
           {
             "band": "02 Acredita",
-            "tone": "oro-bruma",
-            "class": ".band.band-gold"
+            "tone": "verde-bruma",
+            "class": ".band.band-mist.band-mist-closed",
+            "treatment": "filete arriba y abajo; la etiqueta del área (.route-area-tag) pasa a papel. Antes oro-bruma, retirado por decisión"
           },
           {
             "band": "03 Conoce el rol",
@@ -495,11 +479,10 @@
           }
         ],
         "edges": {
-          "mist": "border-top 1px color-mix(in srgb, #526855 25%, #e8ece7)",
-          "gold": "border-block 1px color-mix(in srgb, #ca9e52 40%, #f8f1e7)",
+          "mist": "border-top 1px color-mix(in srgb, #526855 25%, #e8ece7); .band-mist-closed añade el mismo filete abajo",
           "deep": "sin filete"
         },
-        "why": "Sobre papel blanco con filetes al 12% las cuatro partes de la ruta se fundían; el tono dice qué clase de bloque es: verde bruma lo que haces, oro bruma lo que acredita, verde profundo los momentos focales que abren y cierran la ruta, papel la lectura."
+        "why": "Sobre papel blanco con filetes al 12% las cuatro partes de la ruta se fundían; el tono dice qué clase de bloque es: verde bruma lo que haces (esta semana y lo que acredita), verde profundo los momentos focales que abren y cierran la ruta, papel la lectura."
       }
     }
   },
@@ -653,8 +636,8 @@
       "kind": "section",
       "refersTo": "band",
       "description": "Sección a lo ancho con su propio tono; el contenido va en .page-shell. Dos bandas contiguas nunca comparten tono.",
-      "html": "<section class=\"ds-band ds-band-gold\"><div class=\"ds-shell\"><p class=\"ds-eyebrow\">02 / Acredita</p><h2>Una credencial con sentido.</h2></div></section>",
-      "css": ".ds-band{padding-block:64px;}\n@media (min-width:768px){.ds-band{padding-block:80px;}}\n.ds-shell{width:min(100%,1152px);margin-inline:auto;padding-inline:24px;}\n.ds-band-mist{--eyebrow:#91581b;background:#e8ece7;border-top:1px solid color-mix(in srgb,#526855 25%,#e8ece7);}\n.ds-band-gold{--eyebrow:#91581b;background:#f8f1e7;border-block:1px solid color-mix(in srgb,#ca9e52 40%,#f8f1e7);}\n.ds-band-deep{background:#384033;color:#ffffff;--eyebrow:#e3c48a;}\n.ds-eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--eyebrow,#a15c17);}"
+      "html": "<section class=\"ds-band ds-band-mist ds-band-mist-closed\"><div class=\"ds-shell\"><p class=\"ds-eyebrow\">02 / Acredita</p><h2>Una credencial con sentido.</h2></div></section>",
+      "css": ".ds-band{padding-block:64px;}\n@media (min-width:768px){.ds-band{padding-block:80px;}}\n.ds-shell{width:min(100%,1152px);margin-inline:auto;padding-inline:24px;}\n.ds-band-mist{--eyebrow:#91581b;background:#e8ece7;border-top:1px solid color-mix(in srgb,#526855 25%,#e8ece7);}\n.ds-band-mist-closed{border-bottom:1px solid color-mix(in srgb,#526855 25%,#e8ece7);}\n.ds-band-deep{background:#384033;color:#ffffff;--eyebrow:#e3c48a;}\n.ds-eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--eyebrow,#a15c17);}"
     }
   ],
   "narrative": {

@@ -9,7 +9,6 @@ colors:
   papel: "#ffffff"
   papel-gris: "#f2f2f2"
   verde-bruma: "#e8ece7"
-  oro-bruma: "#f8f1e7"
   oro-claro: "#e3c48a"
   ambar-hondo: "#91581b"
   tinta: "#252525"
@@ -189,7 +188,7 @@ comunidad) y Linear (jerarquía y agrupación). No se copia ninguna identidad.
 
 | Elemento | Valor |
 |---|---|
-| Colores | Los cinco oficiales y sus derivados (ver *Colors*). Dos derivados nuevos para las bandas de Mi ruta: `Oro Bruma` y `Ámbar Hondo` (ver *La regla de las Bandas*) |
+| Colores | Los cinco oficiales y sus derivados (ver *Colors*). Un derivado nuevo para las bandas de Mi ruta: `Ámbar Hondo` (ver *La regla de las Bandas*) |
 | Base | `html { font-size: 112.5% }`: 18px. Todo lo que está en `rem` crece ×1.125 en proporción |
 | Escala tipográfica | Once pasos, uno por rol, como tokens `--text-*` en `@theme` (ver *La regla de la Escala Cerrada*) |
 | `display` · `.h1` | `clamp(2.1rem, 5vw, 4rem)` / 1.06, 600, −0.045em, `word-spacing: 0.03em`, `text-wrap: balance` |
@@ -244,7 +243,8 @@ comunidad) y Linear (jerarquía y agrupación). No se copia ninguna identidad.
   junto a la comparación de cinco áreas con marca del 60%; (2) **Afina tu ruta**, opcional (ver
   abajo); (3) **Tu primer paso**, tres acciones —aprende, practica, comparte— tomadas de la ruta o,
   con un enfoque elegido y explorando su área, del enfoque; (4) una **barra fija** con el área
-  explorada (nombres cortos) y las cuatro partes de la ruta; (5) 01 Aprende, 02 Acredita, 03 Conoce
+  explorada (nombres cortos) y las cuatro partes de la ruta —desde 64rem en dos renglones, áreas centradas, porque
+  en uno no caben y se amontonaban—; (5) 01 Aprende, 02 Acredita, 03 Conoce
   el rol y 04 Busca, cada una con una etiqueta del área explorada; (6) comunidad y reinicio. La
   barra existe porque, ya en credenciales o puestos, era fácil olvidar de qué área era el
   contenido. Del paso (2) en adelante, cada parte es una banda a lo ancho con su propio tono (ver
@@ -316,7 +316,7 @@ El tono no es una alternancia mecánica; dice qué clase de bloque es:
 | Para esta semana (Afina tu ruta + Tu primer paso) | `Verde Bruma` (`.band-mist`) | Lo que el estudiante hace. Van juntos porque el afinado reescribe el primer paso que tiene debajo |
 | Apertura "Tu ruta en …" | `Verde Profundo` (`.band-deep .route-opening`) | Abre el capítulo de la ruta. Comparte tono con el panel del resultado y con "Busca", así que la distingue la jerarquía: el nombre del área a tamaño `.h1`, la frase de la ruta como subtítulo `.h3`, la etiqueta en píldora de `Oro Claro` con texto `Verde Profundo` (6.43:1) y la foto con anillo de 2px del mismo oro. Se probó en `Verde Universitario` y se volvió al profundo por decisión |
 | 01 Aprende | `Papel` | Lectura |
-| 02 Acredita | `Oro Bruma` (`.band-gold`) | Papel de diploma: el tono de lo que acredita |
+| 02 Acredita | `Verde Bruma` (`.band-mist .band-mist-closed`) | Lo que el estudiante hace: acreditarse es una acción, como el primer paso. Fue `Oro Bruma` (papel de diploma) y se cambió por decisión del equipo. Al ir entre dos bandas de papel lleva filete arriba y abajo, y la etiqueta del área pasa a `Papel` para no fundirse |
 | 03 Conoce el rol | `Papel` | Lectura |
 | 04 Busca | `Verde Profundo` (`.band-deep`) | Momento focal: cierra la ruta con la acción hacia fuera |
 | Comunidad y reinicio | `Papel`, con la invitación en tarjeta `Verde Bruma` | Lo que haces, otra vez en verde bruma |
@@ -324,14 +324,14 @@ El tono no es una alternancia mecánica; dice qué clase de bloque es:
 Dos detalles que conviene no deshacer:
 
 - **El filete de un tinte sale de su propio color, no de un gris**: verde bruma lleva arriba un
-  filete de `Verde Universitario` al 25% sobre su fondo, y oro bruma lleva arriba y abajo uno de
-  `Oro Viejo` al 40%. El cambio de tono solo (1.19:1 y 1.12:1 contra el papel) se percibe, pero
-  el filete es lo que lo vuelve una división decidida. Verde bruma no lleva filete abajo porque ahí
-  empieza la barra fija, que ya trae el suyo.
+  filete de `Verde Universitario` al 25% sobre su fondo. El cambio de tono solo (1.19:1 contra el
+  papel) se percibe, pero el filete es lo que lo vuelve una división decidida. "Para esta semana"
+  no lleva filete abajo porque ahí empieza la barra fija, que ya trae el suyo; "Acredita" sí
+  (`.band-mist-closed`), porque la sigue una banda de papel.
 - **Sobre un tinte, la etiqueta usa `Ámbar Hondo`.** `Ámbar Quemado` sobre verde bruma da
   **4.33:1**, por debajo del 4.5:1 que pide texto de 13px; el fallo ya existía en la caja "Conecta
   con tu ruta" y las bandas lo habrían multiplicado. Las superficies teñidas (`.band-mist`,
-  `.band-gold`, `.bg-green-soft`) redefinen `--eyebrow`, y `.eyebrow` lo lee.
+  `.bg-green-soft`) redefinen `--eyebrow`, y `.eyebrow` lo lee.
 
 Las tarjetas que viven en una banda teñida pasan a `Papel`: "Tu primer paso" era verde bruma y
 sobre la banda del mismo tono habría desaparecido. Las bandas son de Mi ruta; si otra página las
@@ -473,9 +473,6 @@ sin un solo color puro ni saturado en todo el sistema.
 - **Verde Bruma** (`#e8ece7`): la tercera capa, teñida. Bloques que deben leerse como nota o aparte
   (privacidad y moderación en Comunidad), y el relleno de una opción seleccionada en el
   cuestionario.
-- **Oro Bruma** (`#f8f1e7`): 14% `Oro Viejo` sobre `Papel`. Sólo el fondo de la banda "Acredita" de
-  Mi ruta (ver *La regla de las Bandas*). Es superficie, no firma ni dato: nada que se pulse es de
-  este tono. `Tinta Suave` da **5.96:1** encima y `Ámbar Hondo` **5.18:1**.
 - **Ámbar Hondo** (`#91581b`): 85% `Ámbar Quemado` + 15% `Verde Profundo`. El ámbar de las etiquetas
   sobre un tinte: **4.86:1** sobre `Verde Bruma`, donde `Ámbar Quemado` se queda en 4.33:1.
 - **Oro Claro** (`#e3c48a`): oro sobre fondo oscuro. Existe únicamente para el vitral: la mitad
@@ -491,7 +488,7 @@ sin un solo color puro ni saturado en todo el sistema.
 ### Named Rules
 
 **La regla de la Paleta Cerrada.** Los cinco colores del manual de identidad de la UAEMéx son la
-paleta completa. Los derivados (`Papel`, `Papel Gris`, `Verde Bruma`, `Oro Bruma`, `Oro Claro`,
+paleta completa. Los derivados (`Papel`, `Papel Gris`, `Verde Bruma`, `Oro Claro`,
 `Ámbar Hondo`, `Tinta`, `Tinta Suave`) existen solo como tintes y textos derivados de esos cinco. Nunca se
 introduce un color suelto: si hace falta un matiz nuevo, se deriva, no se inventa.
 

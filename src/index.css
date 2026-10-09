@@ -33,8 +33,6 @@
   --color-paper: #ffffff;
   --color-green-soft: #e8ece7;
   --color-gold-light: #e3c48a;
-  /* 14% Oro Viejo sobre Papel: papel de diploma, la banda de "Acredita". */
-  --color-gold-soft: #f8f1e7;
   /* 85% Ámbar Quemado + 15% Verde Profundo: el ámbar legible sobre los tintes.
      Ámbar Quemado sobre Verde Bruma da 4.33:1; éste da 4.86:1. */
   --color-amber-deep: #91581b;
@@ -480,10 +478,10 @@
    * comparten tono. Sobre papel blanco con filetes al 12%, las cuatro partes
    * de la ruta se fundían y no se sabía dónde terminaba una.
    *
-   * El tono dice qué clase de bloque es: verde bruma, lo que haces esta
-   * semana; oro bruma, lo que acredita (papel de diploma); verde profundo,
-   * los momentos focales que abren y cierran la ruta; papel, la lectura. El
-   * filete de cada tinte sale de su propio color, no de un gris.
+   * El tono dice qué clase de bloque es: verde bruma, lo que haces —esta
+   * semana y lo que acreditas—; verde profundo, los momentos focales que
+   * abren y cierran la ruta; papel, la lectura. El filete de cada tinte sale
+   * de su propio color, no de un gris.
    */
   .band {
     padding-block: 64px;
@@ -505,10 +503,15 @@
     background: var(--color-green-soft);
   }
 
-  .band-gold {
-    --eyebrow: var(--color-amber-deep);
-    border-block: 1px solid color-mix(in srgb, var(--color-gold) 40%, var(--color-gold-soft));
-    background: var(--color-gold-soft);
+  /* "Acredita" va entre dos bandas de papel y necesita filete también abajo;
+     la de "Para esta semana" no, porque ahí empieza la barra fija. */
+  .band-mist-closed {
+    border-bottom: 1px solid color-mix(in srgb, var(--color-green-mid) 25%, var(--color-green-soft));
+  }
+
+  /* La etiqueta del área es verde bruma: sobre su propia banda desaparecería. */
+  .band-mist .route-area-tag {
+    background: var(--color-paper);
   }
 
   /*
@@ -1349,14 +1352,20 @@
 
   .route-intro {
     display: grid;
-    grid-template-columns: 1fr 240px;
+    grid-template-columns: 1fr clamp(240px, 30vw, 360px);
     gap: 32px;
     align-items: center;
   }
 
+  /*
+   * El marco lo fijan la columna y el `aspect-ratio`, no la foto: las cinco
+   * llegan a 1200px de ancho pero con altos distintos (833 a 863), y así
+   * todas las áreas ocupan exactamente el mismo recuadro al cambiar.
+   */
   .route-intro img {
-    width: 240px;
-    height: 160px;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 2;
     object-fit: cover;
     border-radius: var(--radius-md);
   }
@@ -1646,10 +1655,12 @@
 
   /*
    * La tarjeta es papel dentro de un panel verde profundo, así que tiene que
-   * devolver el texto a tinta: las reglas `.dark-panel .h3` y
-   * `.dark-panel .source-note` lo pintarían blanco sobre blanco.
+   * devolver el texto a tinta: las reglas `.dark-panel .h3`,
+   * `.dark-panel .muted` y `.dark-panel .source-note` lo pintarían blanco
+   * sobre blanco. El propósito va en tinta plena, no en tinta suave: es el
+   * único texto que distingue una sociedad de otra.
    */
-  .dark-panel .chapter-card .h3 {
+  .dark-panel .chapter-card :is(.h3, .muted) {
     color: var(--color-ink);
   }
 
@@ -2239,6 +2250,41 @@
     letter-spacing: 0.04em;
     text-transform: none;
     vertical-align: middle;
+  }
+
+  /*
+   * Desde 64rem la barra va en dos renglones: áreas arriba, partes de la
+   * ruta abajo, repartidas en cuatro columnas iguales. En uno solo, los
+   * cinco nombres y las cuatro partes piden unos 1130px y el contenido mide
+   * 1104px como máximo: se amontonaban aun a 1440px y el selector de áreas
+   * se recortaba en su propio desplazamiento horizontal.
+   */
+  @media (width >= 64rem) {
+    .route-zone [id] {
+      scroll-margin-top: 9rem;
+    }
+
+    .route-bar-inner {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 8px;
+    }
+
+    .route-bar-areas {
+      justify-content: center;
+    }
+
+    .route-sections {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      padding-top: 8px;
+      border-top: 1px solid var(--line);
+    }
+
+    .route-sections a {
+      justify-content: center;
+      min-height: 40px;
+    }
   }
 
   @media (width < 64rem) {

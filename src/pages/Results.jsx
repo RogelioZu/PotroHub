@@ -344,7 +344,7 @@ function ResultsView({ results, answers, chosenFocus, onRetake }) {
           pega mientras su contenedor sigue en pantalla, y se suelta al
           llegar a la invitación final. Dentro, cada parte es una banda a lo
           ancho (ver `.band` en index.css): la apertura y "Busca" en verde
-          profundo, "Acredita" en oro bruma, y la lectura en papel. */}
+          profundo, "Acredita" en verde bruma, y la lectura en papel. */}
       <div id="ruta" className="route-zone">
         <RouteBar exploringId={exploringId} onExplore={setExploringId} />
 

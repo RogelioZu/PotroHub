@@ -37,7 +37,7 @@ function CredentialExplorer({ ids, areaName }) {
     )
 
   return (
-    <section id="credenciales" className="band band-gold" aria-labelledby="credenciales-titulo">
+    <section id="credenciales" className="band band-mist band-mist-closed" aria-labelledby="credenciales-titulo">
       <div className="page-shell">
         <div className="section-heading">
           <div>
