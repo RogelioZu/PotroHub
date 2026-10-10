@@ -1,8 +1,136 @@
+<div align="center">
+
 # PotroPath
 
-Plataforma interactiva diseñada para acelerar el desarrollo profesional de los estudiantes de Ingeniería en Computación. Mediante un cuestionario de perfilamiento vocacional, el sistema identifica la afinidad del alumno con las áreas tecnológicas de mayor demanda actual. A partir de este diagnóstico, se genera una ruta de crecimiento personalizada que conecta la academia con la industria: muestra las exigencias del mercado laboral para ese perfil, certificaciones clave y recursos recomendados por la comunidad. Finalmente, la plataforma fomenta una cultura de ingeniería activa integrando a los estudiantes en comunidades moderadas por mentores, impulsando la colaboración en proyectos, la participación en hackathones y la transformación de un interés genuino en perfiles de egreso altamente competitivos.
+**Ya elegiste Computación. Ahora encuentra tu camino.**
 
-## Datos generales
+Diagnóstico de afinidad vocacional *dentro* de Ingeniería en Computación,
+para estudiantes de la Facultad de Ingeniería de la UAEMéx.
+
+50 afirmaciones · 5 especialidades · sin registro · sin datos personales
+
+</div>
+
+![Página de inicio de PotroPath: el titular «Ya elegiste Computación. Ahora encuentra tu camino.» junto a una fotografía de la Rama Estudiantil IEEE UAEMéx](docs/capturas/inicio.webp)
+
+**Contenido:** [Qué es](#qué-es) · [Cómo se usa](#cómo-se-usa) · [Qué sale de tu navegador](#qué-sale-de-tu-navegador) · [Correrlo en tu equipo](#correrlo-en-tu-equipo) · [Memoria descriptiva](#memoria-descriptiva) · [Referencia técnica](#referencia-técnica) · [Estado del proyecto](#estado-del-proyecto)
+
+---
+
+## Qué es
+
+Un test vocacional te ayuda a elegir carrera. PotroPath empieza donde ese test termina: da por hecho que ya estudias Ingeniería en Computación y responde la pregunta siguiente — cuál de sus especializaciones es la tuya, y qué pide hoy la industria para ella.
+
+Respondes 50 afirmaciones sobre lo que disfrutas —no sobre lo que ya dominas— y PotroPath mide tu afinidad con cinco áreas: **Inteligencia Artificial**, **Ciberseguridad**, **Cloud Computing**, **Ciencia de Datos** y **Desarrollo de Software**. El resultado no se queda en una etiqueta:
+
+- **Tu afinidad en las cinco áreas**, no sólo la ganadora. Un empate se nombra como empate, y si respondes «Neutral» a todo, el sitio no inventa un ganador.
+- **Un primer paso para esta semana:** la primera habilidad que aprender, un entregable para practicarla y la comunidad con quien compartirlo.
+- **La ruta completa de cualquier área:** cinco habilidades en tres etapas, dos credenciales comparables y un perfil profesional publicado por una empresa tecnológica, cada uno con su fuente oficial y la fecha en que se revisó.
+- **Tu comunidad dentro de la facultad:** un canal de Microsoft Teams por especialidad, al que se entra con la cuenta institucional, y los capítulos de la Rama Estudiantil IEEE UAEMéx.
+
+## Cómo se usa
+
+> Las capturas son del sitio real, tomadas del build de producción con un perfil de respuestas de ejemplo inclinado a Ciberseguridad. No corresponden a ningún estudiante.
+
+### 1. Responde el diagnóstico
+
+![Pantalla del diagnóstico en la pregunta 14 de 50: la afirmación «Disfruto configurar firewalls, VPNs u otras herramientas de protección» con las cinco opciones de la escala y «Totalmente de acuerdo» marcada](docs/capturas/diagnostico.webp)
+
+Una afirmación por pantalla, en una escala de «Totalmente en desacuerdo» a «Totalmente de acuerdo». Son diez por área, cincuenta en total, y la barra de arriba dice cuántas llevas. No hay respuestas correctas: piensa en lo que disfrutas, no en lo que ya sabes hacer.
+
+Tu avance se guarda en el navegador, así que puedes cerrar la pestaña entre clases y seguir después donde te quedaste. Con teclado, <kbd>1</kbd>–<kbd>5</kbd> responden y <kbd>Enter</kbd> avanza.
+
+### 2. Lee tu resultado
+
+![Resultados: a la izquierda, «Tu mayor afinidad: Ciberseguridad, 94%»; a la derecha, las cinco áreas con su barra de porcentaje y la línea del punto neutral](docs/capturas/resultados.webp)
+
+A la izquierda, el área con más afinidad; a la derecha, las cinco con su porcentaje. Cada área suma sus diez respuestas sobre un máximo de 50 puntos, así que la escala va de 20% a 100%, y la línea blanca marca 60%, el punto neutral. Los porcentajes no suman 100: miden afinidad con lo que te interesa, no tu nivel ni tu probabilidad de conseguir empleo.
+
+### 3. Afina tu ruta (opcional)
+
+![Bloque «Afina tu ruta» con dos preguntas de opción múltiple respondidas y, debajo, el enfoque elegido: Seguridad ofensiva](docs/capturas/afina.webp)
+
+Cada área se divide en tres enfoques; en Ciberseguridad, por ejemplo, seguridad ofensiva, defensa y respuesta, o AppSec y criptografía. Si pulsas **«Afinar mi ruta»**, dos preguntas más eligen el tuyo.
+
+Las redacta Qwen, un modelo de IA de Alibaba Cloud, a partir de tus 50 respuestas numéricas, y cambian en cada intento. Lo que no cambia es el catálogo: cada opción está atada a uno de quince enfoques escritos y revisados por personas, y la cuenta que elige el enfoque es determinista. La IA redacta las preguntas; no decide tu ruta. Si el modelo no responde en 8 segundos, entran dos preguntas escritas a mano y la interfaz lo dice — es lo que muestra esta captura.
+
+### 4. Da tu primer paso
+
+![«Tu primer paso en Seguridad ofensiva»: tres tarjetas — Aprende (Linux y redes TCP/IP), Practica (tu primer entregable) y Comparte (ir a la comunidad)](docs/capturas/primer-paso.webp)
+
+Tres acciones para esta semana: qué aprender, qué entregable hacer para practicarlo y con quién compartirlo. Si afinaste tu ruta, salen de tu enfoque; si no, del área completa.
+
+### 5. Explora la ruta completa
+
+![Sección «Las habilidades, en orden»: habilidades de Ciberseguridad agrupadas en tres etapas y, a la derecha, el detalle de «Redes y Linux» con su primer entregable](docs/capturas/habilidades.webp)
+
+Debajo está la ruta del área en cuatro partes:
+
+| Parte | Qué encuentras |
+| --- | --- |
+| **Aprende** | Cinco habilidades en tres etapas, cada una con para qué sirve y un primer entregable |
+| **Acredita** | Dos credenciales comparables lado a lado: tipo, nivel, preparación y enfoque, con enlace al programa oficial |
+| **Conoce el rol** | Un perfil profesional publicado por una empresa tecnológica, con requisitos mínimos y deseables separados |
+| **Busca** | Una búsqueda de puestos similares en LinkedIn, con el puesto y la ubicación que tú eliges |
+
+La barra fija de arriba te deja cambiar a cualquiera de las cinco áreas sin tocar tus respuestas: tu resultado ordena la ruta, no te encierra en ella.
+
+<details>
+<summary><strong>Ver las credenciales y el perfil profesional</strong></summary>
+
+<br>
+
+![Sección «Una credencial con sentido»: Google Cybersecurity Certificate y Microsoft Security, Compliance, and Identity Fundamentals, con preparación, enfoque y fecha de revisión](docs/capturas/credenciales.webp)
+
+![Sección «Así se trabaja en tecnología»: lista de perfiles de referencia y el detalle de Security Engineer en Amazon, con lo que solicitan, lo que suma y cómo conecta con la ruta](docs/capturas/puestos.webp)
+
+</details>
+
+### 6. Encuentra con quién avanzar
+
+![Comunidad, «Empieza por lo que te interesa»: las cinco especialidades y, a la derecha, ideas para aprender en equipo y el botón para abrir el canal de Teams](docs/capturas/comunidad-especialidades.webp)
+
+En **Comunidad** eliges una especialidad y entras a su canal de Microsoft Teams con tu cuenta institucional: compartes el espacio con compañeros de tu propia facultad, no con desconocidos.
+
+![Rama Estudiantil IEEE UAEMéx: tarjetas de Computer Society, Robotics and Automation, Power & Energy Society y Women in Engineering](docs/capturas/comunidad-ieee.webp)
+
+También están los capítulos de la Rama Estudiantil IEEE UAEMéx —tres ya tienen grupo para unirte; el cuarto se marca como «Próximamente»— y una galería de experiencias de estudiantes de la facultad fuera del salón.
+
+### En el teléfono
+
+![Cuatro pantallas del sitio a 390 px de ancho: Inicio, Diagnóstico, Resultados y Comunidad](docs/capturas/movil.webp)
+
+Abrirlo en el teléfono, en un rato libre entre clases y con la red del campus, es uno de los usos principales, así que el recorrido completo funciona igual a 390 px de ancho.
+
+## Qué sale de tu navegador
+
+No hay cuentas, ni correo, ni base de datos. Tus respuestas se guardan sólo en tu navegador (`localStorage`) y salen únicamente en dos casos que tú disparas:
+
+| Cuándo | Qué se envía | A dónde |
+| --- | --- | --- |
+| Pulsas «Afinar mi ruta» | Las 50 respuestas numéricas, del 1 al 5. Nada que te identifique | La función `/api/detonadoras`, que se las pasa a Qwen (Alibaba Cloud) y no las escribe en ningún log |
+| Buscas puestos similares | El puesto y la ubicación que escribes en el formulario | LinkedIn |
+
+El aviso de qué se envía está escrito encima del botón de afinar, antes de pulsarlo. Para borrar tus respuestas: «Empezar de nuevo» en el diagnóstico o «Repetir diagnóstico» en tus resultados.
+
+## Correrlo en tu equipo
+
+Necesitas [Node.js](https://nodejs.org/) `^20.19.0` o `>=22.12.0` (trae npm). No hay base de datos ni servicio que levantar:
+
+```bash
+git clone https://github.com/RogelioZu/PotroHub.git
+cd PotroHub
+npm ci
+npm run dev       # http://localhost:5173
+```
+
+Con eso corre el sitio completo. Como Vite no sirve la función de `/api`, «Afinar mi ruta» usa ahí las preguntas de respaldo, que es exactamente lo que pasa en producción cuando el modelo no responde. Para probar el afinado con Qwen, el build de producción, los comandos y la verificación de un cambio, ve a [Puesta en marcha detallada](#puesta-en-marcha-detallada).
+
+---
+
+## Memoria descriptiva
+
+### Datos generales
 
 | Campo              | Valor                                             |
 | ------------------ | -------------------------------------------------- |
@@ -12,11 +140,9 @@ Plataforma interactiva diseñada para acelerar el desarrollo profesional de los 
 | Tipo de solución    | Software / Plataforma Web                          |
 | Despliegue          | Local o en la nube, totalmente navegable           |
 
-### Entregable fase 1
+#### Entregable fase 1
 
 Valoración técnica y presentación de propuesta. Esta etapa inicial se gestiona de forma remota a través del portal de inscripción y representa el 50% de la ponderación global. Es imperativo que los integrantes suban documentación nítida, íntegra y sustentable.
-
-## Memoria descriptiva
 
 ### 1. Planteamiento
 
@@ -86,7 +212,11 @@ flowchart LR
 
 **Ningún resultado del piloto se presenta como obtenido antes de ejecutarlo.** Los testimonios de Inicio aparecerán sólo con citas reales y autorización de cada participante.
 
-## Stack técnico
+---
+
+## Referencia técnica
+
+### Stack técnico
 
 Las versiones exactas las fija `package-lock.json`; `npm ci` las reproduce tal cual.
 
@@ -105,9 +235,9 @@ Las versiones exactas las fija `package-lock.json`; `npm ci` las reproduce tal c
 
 Tailwind v4 se configura **en CSS** (bloque `@theme` en `src/index.css`): no existe `tailwind.config.js` y no debe crearse.
 
-## Puesta en marcha
+### Puesta en marcha detallada
 
-### Requisitos
+#### Requisitos
 
 | Requisito | Versión | Por qué |
 | --- | --- | --- |
@@ -115,27 +245,16 @@ Tailwind v4 se configura **en CSS** (bloque `@theme` en `src/index.css`): no exi
 | npm | 10 o superior (viene con Node) | El repositorio usa `package-lock.json` v3 |
 | Git | cualquiera reciente | Sólo para clonar |
 
-Para todo salvo el afinado con IA no hace falta nada más: **no hay base de datos ni servicio que levantar.** `npm run dev` corre el sitio completo; como Vite no sirve la función de `/api`, "Afinar mi ruta" usa ahí las preguntas de respaldo, que es exactamente lo que pasa en producción cuando el modelo no responde.
-
-Para probar el afinado con Qwen hacen falta una llave de [Alibaba Cloud Model Studio](https://www.alibabacloud.com/help/en/model-studio/) en la región Singapur y la CLI de Vercel:
-
-```bash
-cp .env.example .env   # y llenar DASHSCOPE_API_KEY y DASHSCOPE_BASE_URL
-npx vercel dev         # http://localhost:3000, sitio y función juntos
-```
-
-Ninguna variable lleva el prefijo `VITE_`: Vite mete al bundle del navegador toda variable que empiece así, y la llave no puede llegar ahí. `.env` está en `.gitignore`.
-
 ```bash
 node -v   # debe imprimir v20.19+ o v22.12+
 npm -v
 ```
 
-### Instalación y arranque
+#### Instalación y arranque
 
 ```bash
-git clone <url-del-repositorio>
-cd potropath
+git clone https://github.com/RogelioZu/PotroHub.git
+cd PotroHub
 
 npm ci            # instalación reproducible desde package-lock.json (recomendada)
 # npm install     # alternativa: resuelve el rango de versiones de package.json
@@ -145,14 +264,25 @@ npm run dev       # http://localhost:5173
 
 `npm run dev` deja el servidor en marcha con recarga en caliente y se detiene con `Ctrl+C`. Si el puerto 5173 está ocupado, Vite toma el siguiente libre e imprime la dirección real en la terminal: hay que abrir esa, no la de este documento.
 
-### Ver el build de producción
+#### Probar el afinado con Qwen
+
+Hacen falta una llave de [Alibaba Cloud Model Studio](https://www.alibabacloud.com/help/en/model-studio/) en la región Singapur y la CLI de Vercel:
+
+```bash
+cp .env.example .env   # y llenar DASHSCOPE_API_KEY y DASHSCOPE_BASE_URL
+npx vercel dev         # http://localhost:3000, sitio y función juntos
+```
+
+Ninguna variable lleva el prefijo `VITE_`: Vite mete al bundle del navegador toda variable que empiece así, y la llave no puede llegar ahí. `.env` está en `.gitignore`.
+
+#### Ver el build de producción
 
 ```bash
 npm run build     # genera dist/ (no se versiona, está en .gitignore)
 npm run preview   # sirve dist/ en http://localhost:4173
 ```
 
-### Comandos disponibles
+#### Comandos disponibles
 
 | Comando | Qué hace |
 | --- | --- |
@@ -164,17 +294,17 @@ npm run preview   # sirve dist/ en http://localhost:4173
 | `npx vercel dev` | El sitio más la función `/api/detonadoras`, con las variables de `.env` (`localhost:3000`) |
 | `npm run eval:detonadoras` | Corre diez perfiles sintéticos contra Qwen e imprime las preguntas, para elegir el modelo leyendo. Gasta tokens reales. `QWEN_EVAL_MODELS=qwen3.8-flash,qwen3.7-plus` compara dos |
 
-### Casos frecuentes
+#### Casos frecuentes
 
 ```bash
-npm run dev -- --port 3000   # el puerto 5173 está ocupado
-npm run dev -- --host        # abrir el sitio desde otro dispositivo de la misma red (teléfono)
+npm run dev -- --port 3000     # el puerto 5173 está ocupado
+npm run dev -- --host          # abrir el sitio desde otro dispositivo de la misma red (teléfono)
 rm -rf node_modules && npm ci  # instalación en un estado raro
 ```
 
 Probar en un teléfono real vale la pena: el teléfono con red de campus mala es un caso de uso primario del producto, no un respaldo.
 
-### Verificación de un cambio
+#### Verificación de un cambio
 
 ```bash
 npm run lint      # sin errores ni advertencias
@@ -182,7 +312,7 @@ npm test          # todas las pruebas en verde
 npm run build     # el build pasa
 ```
 
-…y **mirar la página** en los dos anchos que importan, 390px (teléfono) y 1440px (laptop), recorriendo el flujo completo: Inicio → Diagnóstico → Mi ruta → Comunidad. `AGENTS.md` documenta el resto de la rutina, incluido el detector de anti-patrones de interfaz.
+…y **mirar la página** en los dos anchos que importan, 390px (teléfono) y 1440px (laptop), recorriendo el flujo completo: Inicio → Diagnóstico → Mi ruta → Comunidad. `AGENTS.md` documenta el resto de la rutina, incluido el detector de anti-patrones de interfaz. Si el cambio altera lo que se ve en [Cómo se usa](#cómo-se-usa), las capturas de `docs/capturas/` se vuelven a tomar en esos mismos dos anchos.
 
 ### Rutas de la aplicación
 
@@ -196,7 +326,7 @@ npm run build     # el build pasa
 
 Además, `POST /api/detonadoras` es la función del afinado. Su contrato está escrito en la cabecera de `api/detonadoras.js`, pensado para que un reemplazo en PHP pueda cumplirlo tal cual.
 
-## Estructura del repositorio
+### Estructura del repositorio
 
 ```
 src/
@@ -208,30 +338,33 @@ src/
   store/quizStore.js        Zustand persistido en localStorage (clave `potropath-quiz`)
   lib/                      Afinidad y detonadoras (funciones puras), búsqueda LinkedIn,
                             formato y título
-  components/               layout/ · results/ · home/ · ui/ · motion/
+  components/               layout/ · results/ · home/ · community/ · ui/ · motion/
   pages/                    Home, Quiz, Results, Community, NotFound
 api/                        La función de Vercel del afinado y su conversación con Qwen
 scripts/                    Evaluación manual de las preguntas detonadoras
 tests/                      Pruebas con `node --test`
 docs/                       Arquitectura, rendimiento, piloto, plan institucional,
                             comparativa y bitácora del rediseño
+  capturas/                 Capturas de este README (build de producción, 1440 y 390 px)
 public/images/              Activos publicados; sus README documentan procedencia
 assets-src/                 Masters sin comprimir; fuera de public/, no entran al build
 dist/                       Salida de `npm run build` (ignorada por Git)
 ```
 
-## Documentación del proyecto
+### Documentación del proyecto
 
 El repositorio se documenta a sí mismo en cuatro archivos, cada uno con una autoridad distinta:
 
 | Archivo | Qué manda |
 | --- | --- |
-| `README.md` | Este archivo: memoria descriptiva académica y puesta en marcha |
+| `README.md` | Este archivo: qué es y cómo se usa, memoria descriptiva académica y puesta en marcha |
 | `PRODUCT.md` | Verdad de producto: usuarios, propósito, alcance, principios y **qué no existe y no puede inventarse** |
 | `DESIGN.md` | El mundo visual comprometido: paleta, tipografía, layout, componentes, movimiento y sus Reglas Nombradas |
 | `AGENTS.md` | Convenciones de código y guía de trabajo para quien (o lo que) edite el repositorio. `CLAUDE.md` sólo lo importa, para que Claude Code lo lea |
 
 En decisiones visuales manda `DESIGN.md`; en verdad de producto y voz manda `PRODUCT.md`. `.impeccable/design.json` es el sidecar de `DESIGN.md` con los valores exactos de tokens y componentes.
+
+---
 
 ## Estado del proyecto
 

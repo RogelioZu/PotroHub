@@ -25,7 +25,7 @@ desactualiza y una mentira en el contexto es peor que un contexto ausente.
 | `.impeccable/design.json` | Sidecar de `DESIGN.md`: rampas tonales, sombras, tokens de movimiento y componentes con HTML/CSS listos | Necesitar valores exactos que el frontmatter no cabe |
 | `.impeccable/critique/` | Críticas archivadas con puntaje heurístico y problemas priorizados. La de septiembre es anterior al rediseño: coteja con el código antes de reutilizarla | Buscar qué está roto y con qué prioridad |
 | `docs/` | Arquitectura y procesamiento, rendimiento medido, protocolo del piloto, plan institucional, comparativa y bitácora del rediseño | Hablar de evidencia, métricas, validación o adopción |
-| `README.md` | La memoria descriptiva académica (planteamiento, alcance, entregables de fase) y la puesta en marcha (requisitos, comandos, rutas, estructura) | Contexto institucional del proyecto, o levantarlo desde cero |
+| `README.md` | Qué es y cómo se usa, paso a paso con capturas de `docs/capturas/`; la memoria descriptiva académica (planteamiento, alcance, entregables de fase) y la puesta en marcha (requisitos, comandos, rutas, estructura) | Contexto institucional del proyecto, o levantarlo desde cero |
 
 **Regla de precedencia:** en decisiones visuales manda `DESIGN.md`. En verdad de producto y voz
 manda `PRODUCT.md`. Si algo del código contradice a cualquiera de los dos, el documento gana y el
@@ -149,6 +149,8 @@ scripts/eval-detonadoras.mjs  Evaluación manual de modelos con perfiles sintét
 vercel.json                 Rewrite de SPA: todo lo que no es /api va a index.html
 tests/                      Pruebas con el runner nativo de Node (`npm test`)
 docs/                       Arquitectura, rendimiento, piloto, plan institucional, comparativa
+  capturas/                 Capturas del README, del build de producción a 1440 y 390 px con
+                            un perfil de ejemplo. Si la UI cambia lo que muestran, se retoman
 assets-src/                 Masters. Fuera de public/, no entran al build. Su README.md lleva la
                             procedencia de cada fotografía — y ahí importa tanto como la imagen
 public/images/              inicio-rama-ieee.webp (hero de Inicio), vitral (franja de 90px),
