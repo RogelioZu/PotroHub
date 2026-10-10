@@ -90,7 +90,7 @@ export const GALLERY = [
     src: '/images/comunidad/galeria-rama-ieee.webp',
     large: { src: '/images/comunidad/galeria-rama-ieee-grande.webp', width: 1600, height: 1200 },
     caption: 'Rama Estudiantil IEEE UAEMéx',
-    description: 'Integrantes de la rama con un vehículo construido por el equipo.',
+    description: 'Integrantes de la rama junto con otro Capítulo Estudiantil de la Facultad de Ingeniería.',
     alt: 'Integrantes de la Rama Estudiantil IEEE de la UAEMéx junto a un vehículo todo terreno construido por el equipo',
   },
   {
@@ -104,7 +104,7 @@ export const GALLERY = [
     src: '/images/comunidad/galeria-wie.webp',
     large: { src: '/images/comunidad/galeria-wie-grande.webp', width: 1600, height: 785 },
     caption: 'Women in Engineering',
-    description: 'El capítulo de la facultad con un reconocimiento.',
+    description: 'El capítulo de la facultad después de una charla de mujeres en STEM.',
     alt: 'Integrantes del capítulo Women in Engineering de la facultad con un reconocimiento',
   },
   {
@@ -125,7 +125,7 @@ export const GALLERY = [
     src: '/images/comunidad/explora-poli-hacks.webp',
     large: { src: '/images/comunidad/explora-poli-hacks-grande.webp', width: 620, height: 827 },
     caption: 'PoliHacks, sede UPIITA-IPN',
-    description: 'Dos estudiantes de la facultad con su trofeo.',
+    description: 'Dos estudiantes de la facultad ganando un Hackathon en la UPIITA-IPN.',
     alt: 'Dos estudiantes de la facultad con su trofeo del hackatón PoliHacks',
   },
 ]
