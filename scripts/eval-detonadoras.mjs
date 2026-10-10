@@ -1,17 +1,23 @@
 /**
  * Evaluación manual de las detonadoras: corre perfiles sintéticos contra uno
- * o varios modelos de Qwen e imprime lo que cada uno redactó, para elegir
- * `QWEN_MODEL` leyendo y no adivinando.
+ * o varios modelos de Cerebras, con uno o varios esfuerzos de razonamiento, e
+ * imprime lo que cada combinación redactó, para elegir `QWEN_MODEL` y
+ * `REASONING_EFFORT` leyendo y no adivinando.
  *
  *   npm run eval:detonadoras
- *   QWEN_EVAL_MODELS=qwen3.8-flash,qwen3.7-plus npm run eval:detonadoras
+ *   QWEN_EVAL_EFFORTS=none,low,medium npm run eval:detonadoras
+ *   QWEN_EVAL_MODELS=qwen-3.8-27b,gpt-oss-120b npm run eval:detonadoras
  *
  * Usa `api/_qwen.js` tal cual, así que prueba exactamente el prompt, el
- * esquema y la validación de producción. Lo que no puede medir por ti es lo
+ * esquema, la validación y el reintento de producción. Un caso que necesitó
+ * reintento cuenta como válido, pero se marca: ese reintento va sin
+ * razonamiento, así que no dice nada del esfuerzo que se está evaluando. Lo que no puede medir por ti es lo
  * que importa: si el español suena a alguien que le habla a un futuro
  * profesional, y si las tres opciones de verdad obligan a elegir.
  *
- * Cada corrida gasta tokens reales (~3.5K por perfil y modelo).
+ * Cada corrida gasta saldo real: ~1.6K tokens de entrada por perfil, más la
+ * salida, que con razonamiento `low` ronda los 2K.
+ * gpt-oss-120b no acepta el esfuerzo `none`.
  */
 import { QUESTIONS } from '../src/data/questions.js'
 import { candidateFocuses } from '../src/lib/refine.js'
@@ -55,14 +61,22 @@ const models = (process.env.QWEN_EVAL_MODELS || process.env.QWEN_MODEL || '')
   .map((model) => model.trim())
   .filter(Boolean)
 
-if (!process.env.DASHSCOPE_API_KEY || !process.env.DASHSCOPE_BASE_URL || models.length === 0) {
-  console.error('Faltan DASHSCOPE_API_KEY, DASHSCOPE_BASE_URL o QWEN_MODEL en .env (ver .env.example).')
+/** Sin `QWEN_EVAL_EFFORTS`, `undefined` deja el esfuerzo de producción. */
+const efforts = (process.env.QWEN_EVAL_EFFORTS || '')
+  .split(',')
+  .map((effort) => effort.trim())
+  .filter(Boolean)
+
+if (!process.env.CEREBRAS_API_KEY || models.length === 0) {
+  console.error('Faltan CEREBRAS_API_KEY o QWEN_MODEL en .env (ver .env.example).')
   process.exit(1)
 }
 
-for (const model of models) {
-  console.log(`\n══════ ${model} ══════`)
+for (const model of models) for (const reasoningEffort of efforts.length > 0 ? efforts : [undefined]) {
+  const label = reasoningEffort ? `${model} · razonamiento ${reasoningEffort}` : model
+  console.log(`\n══════ ${label} ══════`)
   let failures = 0
+  let retries = 0
   let totalMs = 0
 
   for (const [label, answers] of PROFILES) {
@@ -71,10 +85,14 @@ for (const model of models) {
 
     const started = performance.now()
     try {
-      const { questions, usage } = await generateTriggers(answers, { model })
+      const { questions, usage, attempts } = await generateTriggers(answers, { model, reasoningEffort })
       const ms = Math.round(performance.now() - started)
       totalMs += ms
-      console.log(`  ${ms} ms · tokens: ${usage?.prompt_tokens ?? '?'} entrada, ${usage?.completion_tokens ?? '?'} salida`)
+      if (attempts > 1) retries += 1
+      const reasoning = usage?.completion_tokens_details?.reasoning_tokens ?? '?'
+      console.log(
+        `  ${ms} ms · tokens: ${usage?.prompt_tokens ?? '?'} entrada, ${usage?.completion_tokens ?? '?'} salida (${reasoning} de razonamiento)${attempts > 1 ? ' · ↻ reintento' : ''}`,
+      )
       for (const question of questions) {
         console.log(`  ¿ ${question.prompt}`)
         for (const option of question.options) console.log(`     · [${option.focusId}] ${option.text}`)
@@ -86,5 +104,7 @@ for (const model of models) {
   }
 
   const ok = PROFILES.length - failures
-  console.log(`\n${model}: ${ok}/${PROFILES.length} válidas · promedio ${ok ? Math.round(totalMs / ok) : '—'} ms`)
+  console.log(
+    `\n${label}: ${ok}/${PROFILES.length} válidas (${retries} con reintento) · promedio ${ok ? Math.round(totalMs / ok) : '—'} ms`,
+  )
 }

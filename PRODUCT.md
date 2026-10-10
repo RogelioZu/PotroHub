@@ -76,7 +76,7 @@ semestre, aquí".
   ruta" ofrece dos preguntas más, las *detonadoras*, que eligen uno de los tres enfoques del área; el
   enfoque elegido pasa a "Tu primer paso" con sus habilidades y su primer paso de la semana. Se
   ofrece, no se cobra: el resultado de las cincuenta ya está en pantalla, y quien no quiera afinar
-  no pierde nada. Las preguntas las redacta un modelo de IA (Qwen, de Alibaba Cloud) a partir de las
+  no pierde nada. Las preguntas las redacta un modelo de IA (Qwen, servido por Cerebras) a partir de las
   50 respuestas, así que cambian en cada intento; lo que no cambia es el catálogo de enfoques ni la
   regla con que se cuentan. Ver *Capabilities and Constraints*.
 - **El diagnóstico son 50 preguntas**, 10 por área, cada una en una escala de acuerdo de 1 a 5, una
@@ -107,7 +107,7 @@ semestre, aquí".
     primer paso son siempre contenido revisado por personas.
   - **Nunca es indispensable.** Si el modelo falla, no responde en 8 segundos o la función no existe
     —un hosting estático, `npm run dev`—, entran dos preguntas de respaldo escritas a mano, y la
-    interfaz dice que son de respaldo. El sitio funciona completo sin Alibaba Cloud y sin la
+    interfaz dice que son de respaldo. El sitio funciona completo sin Cerebras y sin la
     función — también frente al jurado.
 - **El contenido son módulos de datos estáticos**, no un CMS: preguntas, áreas y ruta viven en
   `src/data/`. Cambiarlos es un cambio de código.
@@ -237,9 +237,10 @@ cierra.
   y las pocas transiciones de color se anulan con `prefers-reduced-motion`; es un requisito
   permanente, no una mejora opcional.
 - **Los teléfonos con una red de campus posiblemente mala son un caso primario**, no un respaldo. El
-  peso y la respuesta son requisitos de producto, no pulido. Por eso el modelo de las detonadoras es
-  de la familia rápida (Flash) y sin razonamiento, y por eso la espera tiene un tope de 8 segundos
-  antes del respaldo.
+  peso y la respuesta son requisitos de producto, no pulido. Por eso el modelo de las detonadoras
+  corre en Cerebras (~1,850 tokens por segundo): ahí un razonamiento breve cabe en la espera, y si la
+  respuesta no sirve queda tiempo para un reintento sin razonamiento. La espera tiene un tope de 8
+  segundos antes del respaldo.
 - **Sin decidir:** si la adopción oficial de la UAEMéx impondría un estándar formal de accesibilidad
   (un nivel WCAG específico, por ejemplo). No se ha establecido tal requisito — no asumir ninguno, y
   no declarar una conformidad que no se ha probado.

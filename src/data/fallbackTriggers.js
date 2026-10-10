@@ -4,7 +4,7 @@
  *
  * Existen porque la llamada a Qwen puede fallar por razones que el estudiante
  * no controla —la red del campus, la cuota agotada, el servicio caído— y el
- * afinado no puede depender de eso. Tampoco el jurado: si Alibaba no responde
+ * afinado no puede depender de eso. Tampoco el jurado: si Cerebras no responde
  * a mitad de una evaluación, el sitio sigue completo.
  *
  * No son las de la IA disfrazadas. La interfaz dice cuáles son de respaldo, y

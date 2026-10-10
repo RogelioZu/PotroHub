@@ -1,7 +1,7 @@
 /**
  * POST /api/detonadoras — la única ida y vuelta al servidor de todo el sitio.
  *
- * Existe porque la llave de Model Studio no puede viajar en el bundle: lo que
+ * Existe porque la llave de Cerebras no puede viajar en el bundle: lo que
  * llega al navegador lo puede leer cualquiera. Todo lo demás sigue del lado
  * del cliente, y esta llamada sólo ocurre cuando el estudiante pulsa "Afinar
  * mi ruta" después de leer qué se envía.
@@ -70,8 +70,8 @@ export async function POST(request) {
   const answers = parseAnswers(body)
   if (!answers) return reply({ error: 'respuestas-invalidas' }, 400)
 
-  const { DASHSCOPE_API_KEY, DASHSCOPE_BASE_URL, QWEN_MODEL } = process.env
-  if (!DASHSCOPE_API_KEY || !DASHSCOPE_BASE_URL || !QWEN_MODEL) return reply({ error: 'sin-configurar' }, 503)
+  const { CEREBRAS_API_KEY, QWEN_MODEL } = process.env
+  if (!CEREBRAS_API_KEY || !QWEN_MODEL) return reply({ error: 'sin-configurar' }, 503)
 
   try {
     const { questions } = await generateTriggers(answers)

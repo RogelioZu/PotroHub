@@ -83,8 +83,8 @@ function RefinePanel({ areas, focus }) {
             </p>
             <p className="source-note mt-3">
               Para redactarlas, tus 50 respuestas —sólo los números del 1 al 5, nada que te
-              identifique— se envían a Qwen, un modelo de IA de Alibaba Cloud. Si no responde a
-              tiempo, usamos dos preguntas escritas a mano.
+              identifique— se envían a Cerebras, que ejecuta Qwen, un modelo de IA de Alibaba. Si
+              no responde a tiempo, usamos dos preguntas escritas a mano.
             </p>
           </div>
           {/*

@@ -12,7 +12,7 @@ dist
 dist-ssr
 *.local
 
-# Llaves de Model Studio y el enlace local de Vercel: nunca al repositorio
+# Llaves de Cerebras y el enlace local de Vercel: nunca al repositorio
 .env
 .env.*
 !.env.example

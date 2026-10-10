@@ -39,7 +39,7 @@ flowchart LR
   UI -- GET puesto + ubicación --> LI[LinkedIn Jobs]
   H[Servidor estático] -- HTML, CSS, JS, imágenes --> UI
   S -. "POST 50 cifras, sólo con «Afinar mi ruta»" .-> API[Función opcional<br/>/api/detonadoras]
-  API -. prompt .-> QW[Qwen<br/>Alibaba Cloud Model Studio]
+  API -. prompt .-> QW[Qwen 3.8 27B<br/>Cerebras]
   API -. preguntas validadas .-> S
   S --> RF
   D --> RF
@@ -52,7 +52,7 @@ flowchart LR
 | Estado | Zustand 5 + `persist` | Respuestas e índice de pregunta; saneamiento al rehidratar |
 | Persistencia | `localStorage` | Sobrevive al cierre de pestaña; nunca sale del navegador |
 | Lógica | `src/lib/affinity.js`, `src/lib/refine.js` | Afinidad, empates y caso neutral; candidatos, validación y decisión de las detonadoras. Puros: los comparten el navegador y la función |
-| Función opcional | Vercel Functions (`api/`) | Guarda la llave de Model Studio, arma el prompt y revalida la respuesta de Qwen |
+| Función opcional | Vercel Functions (`api/`) | Guarda la llave de Cerebras, arma el prompt y revalida la respuesta de Qwen |
 | Contenido | `src/data/*.js` | Datos estáticos versionados con el código, con fuente y fecha de revisión |
 | Build | Vite 8 | Empaquetado y optimización; salida en `dist/` |
 | Calidad | oxlint, `node --test` | Lint y pruebas automatizadas |
@@ -61,7 +61,7 @@ flowchart LR
 
 | Dato | ¿Sale? | Hacia dónde |
 |---|---|---|
-| Respuestas del diagnóstico | **Sólo si pulsa "Afinar mi ruta"**, y sólo las 50 cifras del 1 al 5 | `/api/detonadoras`, que las pasa a Qwen (Alibaba Cloud Model Studio, Singapur). El servidor no las escribe en ningún log |
+| Respuestas del diagnóstico | **Sólo si pulsa "Afinar mi ruta"**, y sólo las 50 cifras del 1 al 5 | `/api/detonadoras`, que las pasa a Qwen en Cerebras. El servidor no las escribe en ningún log. Qué retiene Cerebras y en qué región procesa está por verificar en [sus políticas](https://www.cerebras.ai/policies) |
 | Porcentajes de afinidad | **No** | Se calculan en memoria |
 | Puesto y ubicación escritos en el buscador | Sí, al pulsar "Buscar en LinkedIn" | `linkedin.com/jobs/search` como parámetros GET |
 | Navegación a fuentes oficiales | Sí, al pulsar el enlace | El sitio del proveedor o la empresa |
@@ -120,8 +120,10 @@ sequenceDiagram
    `/api/detonadoras`. La función calcula qué áreas empataron arriba con el mismo `affinity.js`,
    elige hasta seis enfoques candidatos con `refine.js` y le pide a Qwen dos preguntas de tres
    opciones, cada una atada a un enfoque del catálogo cerrado (`focuses.js`). La respuesta se
-   revalida en el servidor y otra vez en el navegador; si no pasa, si tarda más de 8 s o si la
-   función no existe, entran las preguntas de respaldo (`fallbackTriggers.js`), marcadas como tales.
+   revalida en el servidor y otra vez en el navegador. Si la primera respuesta no pasa y quedan al
+   menos 2 s, el servidor reintenta una vez sin razonamiento; si tampoco pasa, si tarda más de 8 s o
+   si la función no existe, entran las preguntas de respaldo (`fallbackTriggers.js`), marcadas como
+   tales.
    Con las dos respondidas, `pickFocus` elige el enfoque de forma determinista —votos, luego el
    promedio de las preguntas del banco que lo alimentan, luego el orden del catálogo— y "Tu primer
    paso" toma sus habilidades y su primer paso. No cambia ningún porcentaje. Con todo en "Neutral"
@@ -196,6 +198,7 @@ erDiagram
 | Sin librerías de animación | GSAP + ScrollSmoother + Matter.js | El contenido dependía de animaciones para aparecer; quitar 3 dependencias redujo el JS de entrada de 141.9 a 96.0 kB gzip |
 | Búsqueda en LinkedIn por GET | API de empleos o scraping | No requiere credenciales, no copia datos de terceros y funciona sin JavaScript |
 | Función opcional para el afinado | Llamar a Qwen desde el navegador | La llave no puede viajar en el bundle. Opcional para que el sitio siga siendo estático: sin ella, el afinado usa el respaldo |
+| Qwen en Cerebras, prepagado y sin recarga automática | Alibaba Cloud Model Studio, pago por uso | A ~1,850 tokens/s el razonamiento cabe en los 7 s de espera; en Model Studio había que apagarlo. El endpoint es público y sin sesión: el saldo cargado es el tope de lo que alguien puede gastar llamándolo en bucle |
 | La IA redacta preguntas; el catálogo decide | Que el modelo genere habilidades o credenciales | Un modelo que inventa una certificación cuesta la credibilidad del proyecto. Lo que se lee como ruta lo revisa una persona |
 | Un solo cálculo para navegador y servidor | Recalcular en la función | Dos copias del puntaje terminarían por discrepar en un empate, justo cuando se eligen los candidatos |
 

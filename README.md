@@ -52,7 +52,7 @@ A la izquierda, el área con más afinidad; a la derecha, las cinco con su porce
 
 Cada área se divide en tres enfoques; en Ciberseguridad, por ejemplo, seguridad ofensiva, defensa y respuesta, o AppSec y criptografía. Si pulsas **«Afinar mi ruta»**, dos preguntas más eligen el tuyo.
 
-Las redacta Qwen, un modelo de IA de Alibaba Cloud, a partir de tus 50 respuestas numéricas, y cambian en cada intento. Lo que no cambia es el catálogo: cada opción está atada a uno de quince enfoques escritos y revisados por personas, y la cuenta que elige el enfoque es determinista. La IA redacta las preguntas; no decide tu ruta. Si el modelo no responde en 8 segundos, entran dos preguntas escritas a mano y la interfaz lo dice — es lo que muestra esta captura.
+Las redacta Qwen, un modelo de IA de Alibaba que corre en Cerebras, a partir de tus 50 respuestas numéricas, y cambian en cada intento. Lo que no cambia es el catálogo: cada opción está atada a uno de quince enfoques escritos y revisados por personas, y la cuenta que elige el enfoque es determinista. La IA redacta las preguntas; no decide tu ruta. Si el modelo no responde en 8 segundos, entran dos preguntas escritas a mano y la interfaz lo dice — es lo que muestra esta captura.
 
 ### 4. Da tu primer paso
 
@@ -108,7 +108,7 @@ No hay cuentas, ni correo, ni base de datos. Tus respuestas se guardan sólo en 
 
 | Cuándo | Qué se envía | A dónde |
 | --- | --- | --- |
-| Pulsas «Afinar mi ruta» | Las 50 respuestas numéricas, del 1 al 5. Nada que te identifique | La función `/api/detonadoras`, que se las pasa a Qwen (Alibaba Cloud) y no las escribe en ningún log |
+| Pulsas «Afinar mi ruta» | Las 50 respuestas numéricas, del 1 al 5. Nada que te identifique | La función `/api/detonadoras`, que se las pasa a Qwen en Cerebras y no las escribe en ningún log |
 | Buscas puestos similares | El puesto y la ubicación que escribes en el formulario | LinkedIn |
 
 El aviso de qué se envía está escrito encima del botón de afinar, antes de pulsarlo. Para borrar tus respuestas: «Empezar de nuevo» en el diagnóstico o «Repetir diagnóstico» en tus resultados.
@@ -159,7 +159,7 @@ PotroPath se presentará como un Producto Mínimo Viable (MVP) sin fricción de 
 
 - **Motor de Diagnóstico Situacional:** cuestionario de 50 preguntas (10 por área de especialización) basadas en escenarios prácticos de la industria, evaluando afinidad hacia Inteligencia Artificial, Ciberseguridad, Cloud Computing, Ciencia de Datos y Desarrollo de Software.
 - **Dashboard de Resultados y Ruta:** interfaz dinámica que, tras finalizar el test, muestra la rama de mayor compatibilidad, habilidades demandadas en el mercado laboral y certificaciones clave para ese perfil.
-- **Afinado con preguntas detonadoras (opcional):** dentro de los resultados, dos preguntas más redactadas por un modelo de IA (Qwen, en Alibaba Cloud Model Studio) a partir de las 50 respuestas eligen uno de los tres enfoques del área —por ejemplo, dentro de Ciberseguridad: seguridad ofensiva, defensa y respuesta, o AppSec y criptografía— con sus habilidades y un primer paso para esa semana, que pasan al bloque «Tu primer paso». Las preguntas cambian en cada intento; el catálogo de enfoques es cerrado y revisado por personas.
+- **Afinado con preguntas detonadoras (opcional):** dentro de los resultados, dos preguntas más redactadas por un modelo de IA (Qwen, servido por Cerebras) a partir de las 50 respuestas eligen uno de los tres enfoques del área —por ejemplo, dentro de Ciberseguridad: seguridad ofensiva, defensa y respuesta, o AppSec y criptografía— con sus habilidades y un primer paso para esa semana, que pasan al bloque «Tu primer paso». Las preguntas cambian en cada intento; el catálogo de enfoques es cerrado y revisado por personas.
 - **Sección de Inmersión Universitaria (IEEE):** apartado dedicado a conectar al estudiante con la Rama Estudiantil IEEE UAEMéx, visibilizando los capítulos técnicos y eventos presenciales de la facultad.
 - **Módulo de Comunidad Segura:** integración con canales de Microsoft Teams estructurados por especialidad, a los que se entra con la cuenta institucional — así cada estudiante sabe que comparte el espacio con compañeros de su propia facultad y no con desconocidos —, para fomentar el networking técnico y la formación de equipos, garantizando la privacidad de los datos personales.
 
@@ -185,7 +185,7 @@ flowchart LR
   V --> X[Enlaces a fuentes oficiales]
   V --> LI[Búsqueda externa en LinkedIn]
   V -. sólo con «Afinar mi ruta» .-> API[Función /api/detonadoras]
-  API -.-> QW[Qwen · Alibaba Cloud]
+  API -.-> QW[Qwen · Cerebras]
   K[Enfoques y preguntas de respaldo] --> V
 ```
 
@@ -194,7 +194,7 @@ flowchart LR
 - **Frontend:** **React 19** y **Vite**, estilizado con **Tailwind CSS v4** sobre un sistema editorial propio. Opera del lado del cliente; sin librerías de animación —el contenido nunca espera a una animación para aparecer—.
 - **Gestión de datos locales:** preguntas, áreas, ruta de habilidades, credenciales, perfiles profesionales, enfoques y comunidad son módulos JavaScript estáticos en `src/data/`. El estado del cuestionario lo administra **Zustand** y persiste en `localStorage` (clave `potropath-quiz`), saneado al rehidratar.
 - **Procesamiento:** cada respuesta (1–5) suma sólo a su área; el total se expresa como porcentaje del máximo de 50 puntos. Con el diagnóstico completo la escala va de 20% a 100% y 60% es el punto neutral. Los empates se reconocen y responder "Neutral" a todo no produce un ganador. Las recomendaciones son asociaciones estáticas área → habilidades → credenciales → perfiles: **la IA no recomienda nada ni predice empleabilidad.** La función es pura (`src/lib/affinity.js`) y está cubierta por pruebas.
-- **Afinado con IA (función opcional):** una sola función de Vercel, `POST /api/detonadoras`, guarda la llave de Alibaba Cloud Model Studio y arma el prompt. Sólo se llama cuando el estudiante pulsa "Afinar mi ruta", después de leer en pantalla qué se envía: exclusivamente las 50 respuestas numéricas, sin ningún dato que lo identifique. Qwen (`qwen3.8-flash`, sin modo de razonamiento y con salida validada contra un esquema JSON) redacta dos preguntas; cada opción queda atada a uno de los quince enfoques del catálogo, y la cuenta que elige el enfoque es determinista. Si el modelo falla, tarda más de 8 segundos o la función no existe, el sitio usa dos preguntas de respaldo escritas a mano y lo dice.
+- **Afinado con IA (función opcional):** una sola función de Vercel, `POST /api/detonadoras`, guarda la llave de Cerebras y arma el prompt. Sólo se llama cuando el estudiante pulsa "Afinar mi ruta", después de leer en pantalla qué se envía: exclusivamente las 50 respuestas numéricas, sin ningún dato que lo identifique. Qwen 3.8 27B (`qwen-3.8-27b`, con razonamiento de esfuerzo bajo y salida validada contra un esquema JSON) redacta dos preguntas; si la respuesta no pasa la validación y queda tiempo, se reintenta una vez sin razonamiento; cada opción queda atada a uno de los quince enfoques del catálogo, y la cuenta que elige el enfoque es determinista. Si el modelo falla, tarda más de 8 segundos o la función no existe, el sitio usa dos preguntas de respaldo escritas a mano y lo dice.
 - **Calidad:** pruebas automatizadas (`npm test`), lint sin advertencias y verificación en navegador a 390 y 1440 px. Rendimiento medido con Lighthouse en [`docs/RENDIMIENTO.md`](docs/RENDIMIENTO.md).
 - **Backend y base de datos (analíticas anónimas):** ⏳ *pendiente de decidir tras el piloto* — se contempla **Supabase** (PostgreSQL) o la infraestructura que defina la universidad, sólo para eventos agregados y sin perfiles de usuario. Ver [`docs/PLAN-INSTITUCIONAL.md`](docs/PLAN-INSTITUCIONAL.md).
 - **Proyección institucional y escalabilidad:** al ser un sitio estático, puede alojarse en cualquier servidor web de la UAEMéx sin dependencias de ejecución; ahí el afinado funciona con las preguntas de respaldo. Llevar también la IA exige una función equivalente a `/api/detonadoras`, cuyo contrato está escrito para poder reimplementarse en PHP. Una migración a PHP y bases de datos locales sólo se justifica si un servicio de datos llega a ser necesario; el plan por etapas está en el documento institucional.
@@ -230,7 +230,7 @@ Las versiones exactas las fija `package-lock.json`; `npm ci` las reproduce tal c
 | Linter                    | [oxlint](https://oxc.rs/docs/guide/usage/linter)     | 1       | ✅ Configurado |
 | Pruebas                   | Runner nativo de Node (`node --test`)                | 20+     | ✅ Configurado |
 | Función del afinado       | [Vercel Functions](https://vercel.com/docs/functions) | —       | ✅ Configurado |
-| Modelo de las detonadoras | [Qwen en Alibaba Cloud Model Studio](https://www.alibabacloud.com/help/en/model-studio/models) | 3.8 Flash | ⏳ Por evaluar contra 3.7 Plus |
+| Modelo de las detonadoras | [Qwen 3.8 27B en Cerebras](https://inference-docs.cerebras.ai/models/qwen-3.8-27b) | 3.8 27B | ✅ Configurado |
 | Backend / DB analítica    | [Supabase](https://supabase.com/)                    | —       | ⏳ Pendiente   |
 
 Tailwind v4 se configura **en CSS** (bloque `@theme` en `src/index.css`): no existe `tailwind.config.js` y no debe crearse.
@@ -266,10 +266,10 @@ npm run dev       # http://localhost:5173
 
 #### Probar el afinado con Qwen
 
-Hacen falta una llave de [Alibaba Cloud Model Studio](https://www.alibabacloud.com/help/en/model-studio/) en la región Singapur y la CLI de Vercel:
+Hacen falta una llave de [Cerebras](https://cloud.cerebras.ai) —cuenta prepagada, con la recarga automática apagada— y la CLI de Vercel:
 
 ```bash
-cp .env.example .env   # y llenar DASHSCOPE_API_KEY y DASHSCOPE_BASE_URL
+cp .env.example .env   # y llenar CEREBRAS_API_KEY
 npx vercel dev         # http://localhost:3000, sitio y función juntos
 ```
 
@@ -292,7 +292,7 @@ npm run preview   # sirve dist/ en http://localhost:4173
 | `npm run lint` | oxlint sobre todo el repositorio, con las reglas de `.oxlintrc.json` |
 | `npm test` | Pruebas de afinidad, integridad de datos profesionales, búsqueda y detonadoras (`tests/`) |
 | `npx vercel dev` | El sitio más la función `/api/detonadoras`, con las variables de `.env` (`localhost:3000`) |
-| `npm run eval:detonadoras` | Corre diez perfiles sintéticos contra Qwen e imprime las preguntas, para elegir el modelo leyendo. Gasta tokens reales. `QWEN_EVAL_MODELS=qwen3.8-flash,qwen3.7-plus` compara dos |
+| `npm run eval:detonadoras` | Corre diez perfiles sintéticos contra Qwen e imprime las preguntas, para elegir el modelo y el esfuerzo de razonamiento leyendo. Gasta saldo real. `QWEN_EVAL_EFFORTS=none,low,medium` compara esfuerzos; `QWEN_EVAL_MODELS`, modelos |
 
 #### Casos frecuentes
 
@@ -376,6 +376,6 @@ En decisiones visuales manda `DESIGN.md`; en verdad de producto y voz manda `PRO
 - La agenda real de eventos de la Rama IEEE y la confirmación de sus capítulos activos.
 - La estadística de titulación de la UAEMéx que sustentará el planteamiento.
 - El backend de analíticas anónimas en Supabase.
-- La elección final del modelo de Qwen (`npm run eval:detonadoras`) y la confirmación de que Model Studio acepta JSON Schema en la región Singapur; mientras tanto, `QWEN_RESPONSE_FORMAT=json_object` es la salida de emergencia.
+- Qué retiene Cerebras de las llamadas del afinado y en qué región las procesa: sus [políticas](https://www.cerebras.ai/policies) no lo dicen de forma verificable todavía.
 
 **Ningún estudiante ha usado todavía el producto fuera de las pruebas de desarrollo.** No hay testimonios, conteos de usuarios, cifras de adopción, convenios ni aprobación institucional, y nada de eso debe aparecer como contenido del sitio.

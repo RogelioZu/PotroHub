@@ -8,8 +8,8 @@ cliente.
 React 19 + Vite + Tailwind CSS v4 + React Router + Zustand (persistido). Español (es-MX).
 Sin librerías de animación: scroll nativo y contenido inmediato (ver `DESIGN.md` → *Redesign 2026-10*).
 Una sola función de servidor, opcional (Vercel, `api/detonadoras.js`), para las dos preguntas
-detonadoras que redacta Qwen — y sólo cuando el estudiante pulsa "Afinar mi ruta". Sin ella, el
-afinado usa preguntas de respaldo y el sitio funciona completo.
+detonadoras que redacta Qwen en Cerebras — y sólo cuando el estudiante pulsa "Afinar mi ruta". Sin
+ella, el afinado usa preguntas de respaldo y el sitio funciona completo.
 
 ---
 
@@ -83,10 +83,16 @@ peso.
 
 ### Variables de entorno (sólo la función de `/api`)
 
-`.env.example` las lista: `DASHSCOPE_API_KEY`, `DASHSCOPE_BASE_URL`, `QWEN_MODEL`,
-`QWEN_RESPONSE_FORMAT` y `ALLOWED_ORIGIN`. **Ninguna lleva prefijo `VITE_`, y ninguna debe llevarlo
-nunca:** Vite mete al bundle toda variable con ese prefijo, y la llave quedaría a la vista de
-cualquiera. Después de un build, `grep -r "DASHSCOPE" dist/` debe salir vacío.
+`.env.example` las lista: `CEREBRAS_API_KEY`, `QWEN_MODEL` y `ALLOWED_ORIGIN`. **Ninguna lleva
+prefijo `VITE_`, y ninguna debe llevarlo nunca:** Vite mete al bundle toda variable con ese prefijo,
+y la llave quedaría a la vista de cualquiera. Después de un build, `grep -r "CEREBRAS" dist/` debe
+salir vacío.
+
+La cuenta de Cerebras es prepagada y **la recarga automática va apagada**. `/api/detonadoras` es
+público y sin sesión, así que el saldo cargado es el tope de lo que cualquiera puede gastar
+llamándolo en bucle; con el saldo en cero, Cerebras rechaza la llamada y el afinado usa el respaldo.
+El esquema que se le manda debe quedarse en el subconjunto estricto de Cerebras (sin `minItems`,
+`maxItems` ni `maxLength`): `tests/qwen.test.js` lo vigila.
 
 ---
 
@@ -143,7 +149,7 @@ src/
   pages/                    Home, Quiz, Results, Community, NotFound
 api/
   detonadoras.js            POST /api/detonadoras (Vercel). Su cabecera es el contrato
-  _qwen.js                  Prompt, esquema y llamada a Model Studio. El `_` evita que Vercel
+  _qwen.js                  Prompt, esquema y llamada a Cerebras. El `_` evita que Vercel
                             lo publique como función
 scripts/eval-detonadoras.mjs  Evaluación manual de modelos con perfiles sintéticos
 vercel.json                 Rewrite de SPA: todo lo que no es /api va a index.html
