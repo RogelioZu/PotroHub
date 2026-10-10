@@ -188,7 +188,7 @@ function Community() {
         </div>
 
         <div className="community-directory">
-          <div className="reveal-group grid gap-3" role="group" aria-label="Especialidades">
+          <div className="reveal-group interest-list" role="group" aria-label="Especialidades">
             {AREAS.map((area, index) => (
               <button
                 key={area.id}
@@ -201,7 +201,7 @@ function Community() {
                 <img src={area.image} alt="" loading="lazy" />
                 <span className="min-w-0 flex-1">
                   <span className="source-note block">Especialidad · 0{index + 1}</span>
-                  <span className="text-sm font-semibold">{area.name}</span>
+                  <span className="mt-1 block font-semibold">{area.name}</span>
                 </span>
               </button>
             ))}

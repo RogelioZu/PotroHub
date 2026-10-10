@@ -1588,19 +1588,33 @@
 
   /* ── Comunidad ──────────────────────────────────────────────────────── */
 
+  /*
+   * Las dos columnas miden lo mismo: la lista se estira al alto del panel y
+   * lo reparte en cinco filas iguales (`1fr`). Con `align-items: start`
+   * cada columna medía lo que su contenido y bajo la lista quedaba un hueco
+   * del alto de dos tarjetas. En una sola columna (teléfono) las filas
+   * vuelven a su alto natural.
+   */
   .community-directory {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 24px;
-    align-items: start;
+    align-items: stretch;
+  }
+
+  .interest-list {
+    display: grid;
+    grid-template-rows: repeat(5, 1fr);
+    gap: 16px;
   }
 
   .interest-button {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 20px;
     width: 100%;
-    padding: 14px;
+    height: 100%;
+    padding: 16px 22px;
     text-align: left;
     transition:
       background-color var(--dur-fast) ease,
@@ -1618,8 +1632,8 @@
 
   .interest-button img {
     flex: none;
-    width: 56px;
-    height: 56px;
+    width: 68px;
+    height: 68px;
     border-radius: var(--radius-sm);
     object-fit: cover;
   }
@@ -1816,6 +1830,11 @@
     .requirements,
     .route-intro {
       grid-template-columns: 1fr;
+    }
+
+    .interest-list {
+      grid-template-rows: none;
+      gap: 12px;
     }
 
     .editorial-hero {
